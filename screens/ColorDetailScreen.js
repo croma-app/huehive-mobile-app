@@ -1,17 +1,18 @@
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import { ExpoLinksView } from '@expo/samples';
+import { ColorDetail } from '../components/ColorDetails';
 
-export default function LinksScreen() {
+export default function ColorDetailScreen(props) {
+  console.log(props)
   return (
     <ScrollView style={styles.container}>
-      
+      <ColorDetail color="#FFF">Color</ColorDetail>
     </ScrollView>
   );
 }
 
-LinksScreen.navigationOptions = {
-  title: 'Links',
+ColorDetailScreen.navigationOptions = {
+  title: 'Color',
 };
 
 const styles = StyleSheet.create({
