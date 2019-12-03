@@ -6,7 +6,7 @@ export default function ColorDetailScreen(props) {
   console.log(props)
   return (
     <ScrollView style={styles.container}>
-      <ColorDetail color="#FFF">Color</ColorDetail>
+      <ColorDetail color="skyblue">Color</ColorDetail>
     </ScrollView>
   );
 }
