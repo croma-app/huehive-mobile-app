@@ -20,7 +20,7 @@ export function ColorDetail(props) {
   const color = new Color(props.color);
   let items = 
     [
-      { key: 'HEX', value: props.color },
+      { key: 'HEX', value: color.tohex() },
       { key: 'RGB', value: color.torgb() },
       { key: 'HSL', value: color.tohsl() },
       { key: 'HSV', value: color.tohsv() },
@@ -30,7 +30,7 @@ export function ColorDetail(props) {
       { key: 'Luminance', value: (color.luminance() * 100).toFixed(2) + '%' },
       { key: 'Darkness', value: (color.darkness() * 100).toFixed(2) + '%' },
     ];
-  this._copyToClipboard = function(value) {
+  let writeToClipboard = function(value) {
     
   }
   return (
@@ -41,18 +41,12 @@ export function ColorDetail(props) {
         {items.map(item => (
           <TouchableNativeFeedback
            key={item.key}
-           onPress={() => this._copyToClipboard(item.value)}
+           onPress={() => this.writeToClipboard(item.value)}
           >  
             <View style={styles.info}>
-              
               <Text>{item.key}</Text>
-              <Text>:</Text
-              ><Text>{item.value}</Text>
-              <Button
-                onPress={this.writeToClipboard}
-                title="Read from Clipboard"
-              />
-              
+              <Text>:</Text>
+              <Text>{item.value}</Text>
             </View>
           </TouchableNativeFeedback>
         ))}

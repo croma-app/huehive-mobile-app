@@ -1,18 +1,19 @@
 import React from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { ColorDetail } from '../components/ColorDetails';
+import Colors from '../constants/Colors'
 
 export default function ColorDetailScreen(props) {
   console.log(props)
   return (
     <ScrollView style={styles.container}>
-      <ColorDetail color="skyblue">Color</ColorDetail>
+      <ColorDetail color={Colors.primary}>{Colors.primary}</ColorDetail>
     </ScrollView>
   );
 }
 
 ColorDetailScreen.navigationOptions = {
-  title: 'Color',
+  title: Colors.primary
 };
 
 const styles = StyleSheet.create({
