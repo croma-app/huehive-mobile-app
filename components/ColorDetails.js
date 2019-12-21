@@ -1,8 +1,12 @@
 import React from 'react';
-import {StyleSheet, Text, View, Button,TouchableNativeFeedback } from 'react-native';
+import {StyleSheet, Text, View, Button,TouchableNativeFeedback,Clipboard } from 'react-native';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faCopy } from '@fortawesome/free-regular-svg-icons'
+
 import Color from 'pigment/full';
 
 export function ColorDetail(props) {
+  let state = {copied: false}
   const backgroundColor = {
     backgroundColor: props.color
   };
@@ -14,7 +18,7 @@ export function ColorDetail(props) {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      padding: 16,
+      padding: 4,
     },
   });
   const color = new Color(props.color);
@@ -31,22 +35,24 @@ export function ColorDetail(props) {
       { key: 'Darkness', value: (color.darkness() * 100).toFixed(2) + '%' },
     ];
   let writeToClipboard = function(value) {
-    
+    Clipboard.setString(value);
+    state.copied = true;
   }
   return (
-    <View style={{flex: 1, flexDirection: 'column'}}>
+    <View style={{flex: 1, flexDirection: 'column', padding: 8}}>
       <View style={[styles.backgroundColor]} ></View>
       {/* <Text {...props} style={[props.style, { fontFamily: 'space-mono' }]} >{props.color}</Text> */}
       <View >
         {items.map(item => (
           <TouchableNativeFeedback
            key={item.key}
-           onPress={() => this.writeToClipboard(item.value)}
+           onPress={() => writeToClipboard(item.value)}
           >  
             <View style={styles.info}>
               <Text>{item.key}</Text>
               <Text>:</Text>
               <Text>{item.value}</Text>
+              <FontAwesomeIcon icon={ faCopy } />
             </View>
           </TouchableNativeFeedback>
         ))}
