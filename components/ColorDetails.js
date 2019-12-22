@@ -6,19 +6,18 @@ import { faCopy } from '@fortawesome/free-regular-svg-icons'
 import Color from 'pigment/full';
 
 export function ColorDetail(props) {
-  let state = {copied: false}
-  const backgroundColor = {
-    backgroundColor: props.color
-  };
   const styles = StyleSheet.create({
     backgroundColor: {
       backgroundColor: props.color, height: 200, alignSelf: 'stretch'
     },
     info: {
       flexDirection: 'row',
-      alignItems: 'center',
       justifyContent: 'space-between',
       padding: 4,
+    },
+    colorNameText: {
+      fontSize: 16,
+      fontWeight: '500',
     },
   });
   const color = new Color(props.color);
@@ -36,7 +35,6 @@ export function ColorDetail(props) {
     ];
   let writeToClipboard = function(value) {
     Clipboard.setString(value);
-    state.copied = true;
   }
   return (
     <View style={{flex: 1, flexDirection: 'column', padding: 8}}>
@@ -49,9 +47,9 @@ export function ColorDetail(props) {
            onPress={() => writeToClipboard(item.value)}
           >  
             <View style={styles.info}>
-              <Text>{item.key}</Text>
-              <Text>:</Text>
-              <Text>{item.value}</Text>
+              <Text style={styles.colorNameText}>{item.key} : </Text>
+              
+              <Text >{item.value}</Text>
               <FontAwesomeIcon icon={ faCopy } />
             </View>
           </TouchableNativeFeedback>

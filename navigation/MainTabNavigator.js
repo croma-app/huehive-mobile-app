@@ -5,6 +5,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import ColorDetails from '../screens/ColorDetailScreen'
+import ColorPicker from '../screens/ColorPickerScreen'
 import SettingsScreen from '../screens/SettingsScreen';
 
 const config = Platform.select({
@@ -41,6 +42,9 @@ const ColorDetailsStack = createStackNavigator(
   },
   config
 );
+const ColorPickerStack = createStackNavigator({
+  Links: ColorPicker,
+}, config);
 
 ColorDetailsStack.navigationOptions = {
   tabBarLabel: 'Color',
@@ -69,6 +73,7 @@ SettingsStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
+  ColorPickerStack,
   ColorDetailsStack,
   SettingsStack,
 });

@@ -24,7 +24,8 @@ ColorDetailScreen.navigationOptions = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 15,
+    paddingLeft: 12,
+    paddingRight: 12,
     backgroundColor: '#fff',
   },
 });
