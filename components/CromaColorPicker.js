@@ -1,14 +1,16 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, Button} from 'react-native';
 import { ColorPicker, fromHsv} from 'react-native-color-picker';
-import Color from 'pigment/full';
 
 export class CromaColorPicker extends React.Component {
   constructor(props) { 
         super(props); 
-        this.state = { color : '#4cb96b' }; 
+        this.state = { color : '#4cb96b' };
   } 
   render() {
+    console.log("props: " + this.props);
+    const navigate = this.props.navigation;
+    console.log("navigate: " + navigate);
     return (
     <View>
       <ColorPicker 
@@ -19,6 +21,10 @@ export class CromaColorPicker extends React.Component {
       }
       style={{height: 400}}/>
       <Text>{this.state.color}</Text>
+      <Button
+        title="See Color details"
+        onPress={() =>  this.props.navigation.navigate("ColorDetails", {"color": this.state.color})}
+      />  
     </View>
     );
 

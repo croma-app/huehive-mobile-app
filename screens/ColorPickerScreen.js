@@ -6,7 +6,7 @@ export default function ColorPickerScreen(props) {
   console.log(props)
   return (
     <ScrollView >
-      <CromaColorPicker></CromaColorPicker> 
+      <CromaColorPicker navigation={props.navigation}></CromaColorPicker> 
     </ScrollView>
   );
 }

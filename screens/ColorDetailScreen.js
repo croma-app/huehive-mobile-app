@@ -2,12 +2,13 @@ import React from 'react';
 import { ScrollView, StyleSheet, Button} from 'react-native';
 import { ColorDetail } from '../components/ColorDetails';
 import Colors from '../constants/Colors'
+import { setRecoveryProps } from 'expo/build/ErrorRecovery/ErrorRecovery';
 
 export default function ColorDetailScreen(props) {
-  console.log(props)
+  
   return (
     <ScrollView style={styles.container}>
-      <ColorDetail color={Colors.primary}>{Colors.primary}</ColorDetail>
+      <ColorDetail navigation={props.navigation} color={props.navigation.getParam("color")}>{props.navigation.getParam("color")}</ColorDetail>
       <Button
           title="See color palettes"
           raised='true'
@@ -17,8 +18,10 @@ export default function ColorDetailScreen(props) {
   );
 }
 
-ColorDetailScreen.navigationOptions = {
-  title: Colors.primary
+ColorDetailScreen.navigationOptions = ({ navigation }) => {
+  return {
+    title: navigation.getParam('color'),
+  };
 };
 
 const styles = StyleSheet.create({
