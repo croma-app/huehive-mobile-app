@@ -1,24 +1,34 @@
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, Button} from 'react-native';
 import { ColorDetail } from '../components/ColorDetails';
+import Colors from '../constants/Colors'
+import { setRecoveryProps } from 'expo/build/ErrorRecovery/ErrorRecovery';
 
 export default function ColorDetailScreen(props) {
-  console.log(props)
+  
   return (
     <ScrollView style={styles.container}>
-      <ColorDetail color="skyblue">Color</ColorDetail>
+      <ColorDetail navigation={props.navigation} color={props.navigation.getParam("color")}>{props.navigation.getParam("color")}</ColorDetail>
+      <Button
+          title="See color palettes"
+          raised='true'
+          onPress={() => Alert.alert('Simple Button pressed')}
+      />
     </ScrollView>
   );
 }
 
-ColorDetailScreen.navigationOptions = {
-  title: 'Color',
+ColorDetailScreen.navigationOptions = ({ navigation }) => {
+  return {
+    title: navigation.getParam('color'),
+  };
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 15,
+    paddingLeft: 12,
+    paddingRight: 12,
     backgroundColor: '#fff',
   },
 });
