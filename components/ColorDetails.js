@@ -21,6 +21,9 @@ export function ColorDetail(props) {
     },
   });
   const color = new Color(props.color);
+  for (const i in color) {
+    console.log("Color: " + i);
+  }
   let items = 
     [
       { key: 'HEX', value: color.tohex() },
