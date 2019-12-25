@@ -8,7 +8,6 @@ export default function PalettesScreen(props) {
     if (typeof text !== 'string') {
         return '';
     }
-
     return text
     .replace(/([a-z])([A-Z])/g, '$1 $2')
     .replace(/\b([A-Z]+)([A-Z])([a-z])/, '$1 $2$3')
@@ -24,7 +23,8 @@ export default function PalettesScreen(props) {
         colors.push({color: c.tohex()})
       );
      // console.log("colors================" + JSON.stringify(colors));
-      items.push(<PaletteCard key={i.toString()} colors={colors} name={parseCamelCase(i.toString())}></PaletteCard>)
+      items.push(<PaletteCard onPress={() => props.navigation.navigate("ColorList", {colors: colors})} 
+        key={i.toString()} colors={colors} name={parseCamelCase(i.toString())}></PaletteCard>)
     }
   }
   return (

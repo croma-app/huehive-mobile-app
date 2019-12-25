@@ -11,21 +11,19 @@ export class PaletteCard extends React.Component {
 
     return (
       <Card {...this.props}>
-        <TouchableNativeFeedback onPress={this.props.onPress}>
-          <View>
-            <View style={styles.palette}>
-              {this.props.colors.map(item => (
-                <View
-                  style={[styles.color, { backgroundColor: item.color }]}
-                  key={item.color}
-                />
-              ))}
-            </View>
-            <View style={styles.bottom}>
-              <Text style={styles.label}>{this.props.name}</Text>
-            </View>
+        <View>
+          <View style={styles.palette}>
+            {this.props.colors.map(item => (
+              <View
+                style={[styles.color, { backgroundColor: item.color }]}
+                key={item.color}
+              />
+            ))}
           </View>
-        </TouchableNativeFeedback>
+          <View style={styles.bottom}>
+            <Text style={styles.label}>{this.props.name}</Text>
+          </View>
+        </View>
       </Card>
     );
   }
