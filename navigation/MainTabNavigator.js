@@ -6,6 +6,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import ColorDetailsScreen from '../screens/ColorDetailScreen'
 import ColorPickerScreen from '../screens/ColorPickerScreen'
+import AddPaletteScreen from '../screens/AddPaletteScreen'
 import SettingsScreen from '../screens/SettingsScreen';
 
 const config = Platform.select({
@@ -17,9 +18,10 @@ const RootStack = createStackNavigator(
     Home: HomeScreen,
     ColorDetails: ColorDetailsScreen,
     ColorPicker: ColorPickerScreen,
+    AddPalette: AddPaletteScreen,
   },
   {
-    initialRouteName: 'ColorPicker',
+    initialRouteName: 'AddPalette',
   }
 );
 
