@@ -7,6 +7,8 @@ import ColorDetailsScreen from '../screens/ColorDetailScreen'
 import ColorPickerScreen from '../screens/ColorPickerScreen'
 import PalettesScreen from '../screens/PalettesScreen';
 import AddPaletteScreen from '../screens/AddPaletteScreen'
+import PaletteListScreen from '../screens/PaletteListScreen'
+import SettingsScreen from '../screens/SettingsScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -19,9 +21,10 @@ const RootStack = createStackNavigator(
     ColorPicker: ColorPickerScreen,
     Palettes: PalettesScreen,
     AddPalette: AddPaletteScreen,
+    PaletteList: PaletteListScreen
   },
   {
-    initialRouteName: 'AddPalette',
+    initialRouteName: 'PaletteList',
   }
 );
 
