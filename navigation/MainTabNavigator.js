@@ -2,11 +2,10 @@ import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import { createAppContainer } from 'react-navigation';
-import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import ColorDetailsScreen from '../screens/ColorDetailScreen'
 import ColorPickerScreen from '../screens/ColorPickerScreen'
-import SettingsScreen from '../screens/SettingsScreen';
+import PalettesScreen from '../screens/PalettesScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -17,6 +16,7 @@ const RootStack = createStackNavigator(
     Home: HomeScreen,
     ColorDetails: ColorDetailsScreen,
     ColorPicker: ColorPickerScreen,
+    Palettes: PalettesScreen,
   },
   {
     initialRouteName: 'ColorPicker',

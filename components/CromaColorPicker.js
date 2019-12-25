@@ -8,9 +8,7 @@ export class CromaColorPicker extends React.Component {
         this.state = { color : '#4cb96b' };
   } 
   render() {
-    console.log("props: " + this.props);
     const navigate = this.props.navigation;
-    console.log("navigate: " + navigate);
     return (
     <View>
       <ColorPicker 
