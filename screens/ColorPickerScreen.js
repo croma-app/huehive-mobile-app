@@ -8,7 +8,6 @@ export default function ColorPickerScreen(props) {
   return (
     <ScrollView >
       <CromaColorPicker navigation={props.navigation}></CromaColorPicker> 
-      <PaletteCard colors={[{color: "#CCC"}, {color: "#FF0000"}]} name="testCard"></PaletteCard>
     </ScrollView>
   );
 }
