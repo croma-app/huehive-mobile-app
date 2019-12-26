@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Animated, TouchableHighlight} from 'react-native';
+import { StyleSheet, Animated} from 'react-native';
 import * as Colors from '../constants/Colors';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 

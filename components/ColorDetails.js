@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View, Button, TouchableOpacity,Clipboard } from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity,Clipboard } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faCopy } from '@fortawesome/free-regular-svg-icons'
 

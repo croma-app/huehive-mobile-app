@@ -1,72 +1,44 @@
 import React from "react";
+import CromaButton from './CromaButton';
 import {
-  Text,
   View,
-  Button,
   Alert,
   StyleSheet,
-  TouchableOpacity
 } from "react-native";
 
 export class AddPalette extends React.Component {
   render() {
     return (
       <View>
-        <TouchableOpacity
-          style={styles.button}
+        <CromaButton
           onPress={() => this.props.navigation.navigate("ColorPicker")}
         >
-          <Text> GET PALETTE FROM IMAGE </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
+           GET PALETTE FROM IMAGE 
+        </CromaButton>
+        <CromaButton
           onPress={() => Alert.alert("GET PALETTE FROM COLOR")}
         >
-          <Text> GET PALETTE FROM COLOR </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
+           GET PALETTE FROM COLOR 
+        </CromaButton>
+        <CromaButton
           onPress={() => Alert.alert("ADD COLORS MANUALLY")}
         >
-          <Text> ADD COLORS MANUALLY </Text>
-        </TouchableOpacity>
+           ADD COLORS MANUALLY 
+        </CromaButton>
 
-        <TouchableOpacity
+        <CromaButton
           style={styles.buttonPro}
           onPress={() => Alert.alert("UNLOCK PRO")}
         >
-          <Text> UNLOCK PRO </Text>
-        </TouchableOpacity>
+           UNLOCK PRO 
+        </CromaButton>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  button: {
-    shadowColor: "rgba(0,0,0, .4)",
-    shadowOffset: { height: 1, width: 1 },
-    shadowOpacity: 1,
-    shadowRadius: 1,
-    backgroundColor: "#fff",
-    elevation: 2,
-    height: 50,
-    marginBottom: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column"
-  },
   buttonPro: {
-    shadowColor: "rgba(0,0,0, .4)",
-    shadowOffset: { height: 1, width: 1 },
-    shadowOpacity: 1,
-    shadowRadius: 1,
     backgroundColor: "#f1544d",
-    elevation: 2,
-    height: 50,
-    marginBottom: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "column"
   }
 });

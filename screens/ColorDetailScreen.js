@@ -1,17 +1,16 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Button} from 'react-native';
 import { ColorDetail } from '../components/ColorDetails';
+import CromaButton from '../components/CromaButton';
 
 export default function ColorDetailScreen(props) {
   const color = props.navigation.getParam("color");
   return (
     <ScrollView style={styles.container}>
       <ColorDetail navigation={props.navigation} color={color}>{color}</ColorDetail>
-      <Button
-          title="See color palettes"
-          raised='true'
-          onPress={() => props.navigation.navigate("Palettes", {"color": color})}
-      />
+      <CromaButton  
+        onPress={() => props.navigation.navigate("Palettes", {"color": color})}
+      >See color palettes</CromaButton>
     </ScrollView>
   );
 }
