@@ -1,14 +1,11 @@
 import * as React from 'react';
-import { StyleSheet, TouchableNativeFeedback, View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import Card from './Card';
 import * as Colors from '../constants/Colors';
 
 export class PaletteCard extends React.Component {
   
   render() {
-    //console.log("Props:=============" + JSON.stringify(this.props));
-   
-
     return (
       <Card {...this.props}>
         <View>
