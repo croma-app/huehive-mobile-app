@@ -8,6 +8,7 @@ import PalettesScreen from '../screens/PalettesScreen';
 import AddPaletteScreen from '../screens/AddPaletteScreen';
 import ColorListScreen from '../screens/ColorListScreen';
 import PaletteListScreen from '../screens/PaletteListScreen'
+import Colors from '../constants/Colors'
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -24,6 +25,13 @@ const RootStack = createStackNavigator(
   },
   {
     initialRouteName: 'PaletteList',
+    /* The header config from HomeScreen is now here */
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: Colors.primary,
+      },
+      headerTintColor: '#fff',
+    },
   }
 );
 
