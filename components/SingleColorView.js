@@ -20,9 +20,8 @@ const styles = StyleSheet.create({
   },
   colorText: {
     fontWeight: "700",
-    backgroundColor: "#FFF",
+    backgroundColor: "rgba(255, 255, 255, .3)",
     paddingLeft: 5,
     paddingRight: 5,
-
   }
 });
