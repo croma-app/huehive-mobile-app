@@ -8,7 +8,8 @@ export default function ColorListScreen(props) {
   console.log("Colors:" + JSON.stringify(colors));
   return (
     <ScrollView style={styles.listview} >
-      {colors.map(color => <SingleColorView color={color.color}></SingleColorView>)}
+      {colors.map(color => <SingleColorView 
+      color={color.color}></SingleColorView>)}
       <TouchableOpacity
         style={styles.button}
           onPress={() => this.props.navigation.navigate('ColorPicker')}>

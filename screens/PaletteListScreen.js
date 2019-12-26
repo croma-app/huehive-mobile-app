@@ -1,7 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Button, Alert, View} from 'react-native';
 import { PaletteList } from '../components/PaletteList';
-import { setRecoveryProps } from 'expo/build/ErrorRecovery/ErrorRecovery';
 
 export default function PaletteListScreen(props) {
 

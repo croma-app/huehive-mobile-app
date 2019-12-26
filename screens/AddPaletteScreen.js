@@ -1,7 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Button, Alert, View} from 'react-native';
 import { AddPalette } from '../components/AddPalette';
-import { setRecoveryProps } from 'expo/build/ErrorRecovery/ErrorRecovery';
 
 export default function AddPaletteScreen(props) {
 
