@@ -13,24 +13,24 @@ export class AddPalette extends React.Component {
         <CromaButton
           onPress={() => this.props.navigation.navigate("ColorPicker")}
         >
-           GET PALETTE FROM IMAGE 
+           GET PALETTE FROM IMAGE
         </CromaButton>
         <CromaButton
           onPress={() => Alert.alert("GET PALETTE FROM COLOR")}
         >
-           GET PALETTE FROM COLOR 
+           GET PALETTE FROM COLOR
         </CromaButton>
         <CromaButton
-          onPress={() => Alert.alert("ADD COLORS MANUALLY")}
+          onPress={() => this.props.navigation.navigate("AddPaletteManually")}
         >
-           ADD COLORS MANUALLY 
+           ADD COLORS MANUALLY
         </CromaButton>
 
         <CromaButton
           style={styles.buttonPro}
           onPress={() => Alert.alert("UNLOCK PRO")}
         >
-           UNLOCK PRO 
+           UNLOCK PRO
         </CromaButton>
       </View>
     );

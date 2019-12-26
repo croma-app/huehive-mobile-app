@@ -6,6 +6,7 @@ import ColorDetailsScreen from '../screens/ColorDetailScreen'
 import ColorPickerScreen from '../screens/ColorPickerScreen'
 import PalettesScreen from '../screens/PalettesScreen';
 import AddPaletteScreen from '../screens/AddPaletteScreen';
+import AddPaletteManuallyScreen from '../screens/AddPaletteManuallyScreen';
 import ColorListScreen from '../screens/ColorListScreen';
 import PaletteListScreen from '../screens/PaletteListScreen'
 import Colors from '../constants/Colors'
@@ -20,6 +21,7 @@ const RootStack = createStackNavigator(
     ColorPicker: ColorPickerScreen,
     Palettes: PalettesScreen,
     AddPalette: AddPaletteScreen,
+    AddPaletteManually: AddPaletteManuallyScreen,
     ColorList: ColorListScreen,
     PaletteList: PaletteListScreen
   },
