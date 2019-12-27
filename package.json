@@ -27,6 +27,7 @@
     "expo-image-picker": "~8.0.1",
     "expo-web-browser": "~8.0.0",
     "jimp": "^0.9.3",
+    "ml-kmeans": "^5.0.0",
     "pigment": "^0.1.0",
     "react": "16.9.0",
     "react-dom": "16.9.0",

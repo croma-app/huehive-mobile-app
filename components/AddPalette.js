@@ -3,7 +3,9 @@ import CromaButton from './CromaButton';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
+import kmeans from 'ml-kmeans';
 import Jimp from 'jimp';
+import Color from 'pigment/full';
 import {
   View,
   Alert,
@@ -13,7 +15,7 @@ import {
 export class AddPalette extends React.Component {
   componentDidMount() {
     this.getPermissionAsync();
-    console.log('hi');
+    //console.log('hi');
   }
 
   getPermissionAsync = async () => {
@@ -82,11 +84,51 @@ export class AddPalette extends React.Component {
 
 
   _getProminentColors(image) {
-    // image.bitmap.width
-    // image.bitmap.height
-    // image.bitmap.data
-    return [{color: "#112233"}, {color: "#554433"}, {color: "#cccccc"}];
+    
+    let data = this._prepareDataForKmeans(image);
+    let time = Date.now()
+    let ans = kmeans(data, 20, { initialization: 'random' });
+    console.log(JSON.stringify(ans) + "," + (Date.now() - time) + " ms");
+    ans.centroids = ans.centroids.sort((c1, c2) => c2.size - c1.size);
+
+    console.log(ans.centroids);
+    return ans.centroids.map(centroid => {return {color: this._xyzToHex(centroid.centroid)}});
   }
+
+  _xyzToHex(xyz) {
+    let color = new Color("xyz(" + xyz[0] + ", " + xyz[1] + ", " + xyz[2] +  ")");
+    console.log("color===========" + color.tohex());
+    return color.tohex();
+  }
+
+  _prepareDataForKmeans(image) {
+    let data = [];
+    console.log("image============", image.bitmap.width, image.bitmap.height);
+    for (let i = 0; i < image.bitmap.width; i++) {
+      for (let j = 0; j < image.bitmap.height; j++) {
+        let intColor = image.getPixelColor(i, j);
+        //console.log("hex:" + this._toRgbaColor(intColor));
+        let hexColor = this._toRgbaColor(intColor);
+        let color = new Color(hexColor);
+        let xyz = color.toxyz();
+        // format: "xyz(19.78527130484015, 8.600439447528947, 95.19796416837329)" to double array of xyz
+        xyz = xyz.substr(4, xyz.length - 5).split(", ").map(v => parseFloat(v))
+        data.push(xyz);
+        //console.log("xyz: " + xyz);
+      } 
+    }
+    // console.log("returning data: " + JSON.stringify(data));
+    return data;
+  }
+
+  _toRgbaColor(num) {
+    num >>>= 0;
+    var b = num & 0xFF,
+        g = (num & 0xFF00) >>> 8,
+        r = (num & 0xFF0000) >>> 16,
+        a = ( (num & 0xFF000000) >>> 24 ) / 255 ;
+    return "rgba(" + [r, g, b, a].join(",") + ")";
+}
 }
 
 const styles = StyleSheet.create({
