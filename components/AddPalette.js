@@ -6,6 +6,7 @@ import * as Permissions from 'expo-permissions';
 import kmeans from 'ml-kmeans';
 import Jimp from 'jimp';
 import Color from 'pigment/full';
+
 import {
   View,
   Alert,
@@ -35,19 +36,28 @@ export class AddPalette extends React.Component {
     });
 
     //console.log("image" + result, "base64", result.base64);
-    Jimp.read(new Buffer(result.base64, 'base64'))
+   // Jimp.read(new Buffer(result.base64, 'base64'))
+   console.log("Result: " + JSON.stringify(result));
+   //console.log("base64: " + result.base64.length);
+   if (result.base64 !== undefined) {
+    Jimp.read(new Buffer(result.base64, "base64"))
     .then(image => {
-      console.log("image: " + image);
-      image.resize(100, 100, Jimp.AUTO);
-      console.log(Object.getOwnPropertyNames(image).filter(item => typeof image[item] === 'function'))
-      //image.getPixelColor(x, y);
-      //console.log(image[0][0]);
       this.props.navigation.navigate("ColorList", {colors: this._getProminentColors(image)}); 
     })
     .catch(err => {
       console.log("Error: " + JSON.stringify(err)); // TODO: add toast here 
     // Handle an exception.
     });
+   } else {
+    Jimp.read(result.uri)
+      .then(image => {
+        this.props.navigation.navigate("ColorList", {colors: this._getProminentColors(image)}); 
+      })
+      .catch(err => {
+        console.log("Error: " + JSON.stringify(err)); // TODO: add toast here 
+      // Handle an exception.
+      });
+  }
 
     
   };
@@ -84,10 +94,24 @@ export class AddPalette extends React.Component {
 
 
   _getProminentColors(image) {
-    
+    console.log("image: " + image);
+    /*
+    Jimp.RESIZE_NEAREST_NEIGHBOR;
+    Jimp.RESIZE_BILINEAR;
+    Jimp.RESIZE_BICUBIC;
+    Jimp.RESIZE_HERMITE;
+    Jimp.RESIZE_BEZIER;
+    These does not work with first params.
+    */
+    try {
+    image.resize(Jimp.AUTO, 50);
+    } catch(e) {
+      console.log("error------", e);
+    }
+    console.log("resized");
     let data = this._prepareDataForKmeans(image);
     let time = Date.now()
-    let ans = kmeans(data, 20, { initialization: 'random' });
+    let ans = kmeans(data, 24, { initialization: 'mostDistant', maxIterations: 15 });
     console.log(JSON.stringify(ans) + "," + (Date.now() - time) + " ms");
     ans.centroids = ans.centroids.sort((c1, c2) => c2.size - c1.size);
 
@@ -107,14 +131,12 @@ export class AddPalette extends React.Component {
     for (let i = 0; i < image.bitmap.width; i++) {
       for (let j = 0; j < image.bitmap.height; j++) {
         let intColor = image.getPixelColor(i, j);
-        //console.log("hex:" + this._toRgbaColor(intColor));
         let hexColor = this._toRgbaColor(intColor);
         let color = new Color(hexColor);
         let xyz = color.toxyz();
         // format: "xyz(19.78527130484015, 8.600439447528947, 95.19796416837329)" to double array of xyz
         xyz = xyz.substr(4, xyz.length - 5).split(", ").map(v => parseFloat(v))
         data.push(xyz);
-        //console.log("xyz: " + xyz);
       } 
     }
     // console.log("returning data: " + JSON.stringify(data));
@@ -128,7 +150,7 @@ export class AddPalette extends React.Component {
         r = (num & 0xFF0000) >>> 16,
         a = ( (num & 0xFF000000) >>> 24 ) / 255 ;
     return "rgba(" + [r, g, b, a].join(",") + ")";
-}
+  }
 }
 
 const styles = StyleSheet.create({
