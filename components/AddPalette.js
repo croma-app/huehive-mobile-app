@@ -32,19 +32,22 @@ export class AddPalette extends React.Component {
       base64: true,
     });
 
-    console.log("image" + result, "base64", result.base64);
+    //console.log("image" + result, "base64", result.base64);
     Jimp.read(new Buffer(result.base64, 'base64'))
     .then(image => {
-      console.log("image: " + JSON.stringify(image));
+      console.log("image: " + image);
+      image.resize(100, 100, Jimp.AUTO);
+      console.log(Object.getOwnPropertyNames(image).filter(item => typeof image[item] === 'function'))
+      //image.getPixelColor(x, y);
+      //console.log(image[0][0]);
+      this.props.navigation.navigate("ColorList", {colors: this._getProminentColors(image)}); 
     })
     .catch(err => {
       console.log("Error: " + JSON.stringify(err)); // TODO: add toast here 
     // Handle an exception.
     });
 
-    if (!result.cancelled) {
-      this.setState({ image: result.uri });
-    }
+    
   };
   render() {
     return (
@@ -75,6 +78,14 @@ export class AddPalette extends React.Component {
         </CromaButton>
       </View>
     );
+  }
+
+
+  _getProminentColors(image) {
+    // image.bitmap.width
+    // image.bitmap.height
+    // image.bitmap.data
+    return [{color: "#112233"}, {color: "#554433"}, {color: "#cccccc"}];
   }
 }
 
