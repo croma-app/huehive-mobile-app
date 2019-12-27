@@ -3,6 +3,7 @@ import CromaButton from './CromaButton';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
+import Jimp from 'jimp';
 import {
   View,
   Alert,
@@ -27,12 +28,19 @@ export class AddPalette extends React.Component {
   _pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1
+      quality: 1, 
+      base64: true,
     });
 
-    console.log(result);
+    console.log("image" + result, "base64", result.base64);
+    Jimp.read(new Buffer(result.base64, 'base64'))
+    .then(image => {
+      console.log("image: " + JSON.stringify(image));
+    })
+    .catch(err => {
+      console.log("Error: " + JSON.stringify(err)); // TODO: add toast here 
+    // Handle an exception.
+    });
 
     if (!result.cancelled) {
       this.setState({ image: result.uri });
