@@ -24,6 +24,13 @@ export class AddPalette extends React.Component {
            GET PALETTE FROM IMAGE
         </CromaButton>
         <CromaButton
+          onPress={() => {
+            this.props.navigation.navigate("PickColor", {}); 
+          }}
+        >
+           GET PALETTE FROM CAMERA
+        </CromaButton>
+        <CromaButton
           onPress={() => this.props.navigation.navigate("ColorPicker")}
         >
            GET PALETTE FROM COLOR
