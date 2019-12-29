@@ -4,7 +4,7 @@ import * as Font from 'expo-font';
 import React, { useState } from 'react';
 import { Platform, StatusBar, StyleSheet, View, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-
+import Colors from './constants/Colors'
 import AppNavigator from './navigation/AppNavigator';
 
 export default function App(props) {
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: '#fff',
+    backgroundColor: Colors.backgroundColor,
     flexDirection: "row",
   },
 });

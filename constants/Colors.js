@@ -21,4 +21,5 @@ export default {
   white: '#fff',
   black: '#000',
   fadedBlack: 'rgba(0, 0, 0, .5)',
+  backgroundColor: "#f2f2f2",
 };
