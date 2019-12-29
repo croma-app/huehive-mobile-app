@@ -46,7 +46,6 @@ export class AddPalette extends React.Component {
 
   componentDidMount() {
     this.getPermissionAsync();
-    //console.log('hi');
   }
 
   getPermissionAsync = async () => {

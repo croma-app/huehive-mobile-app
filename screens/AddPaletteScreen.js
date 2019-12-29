@@ -6,7 +6,7 @@ export default function AddPaletteScreen(props) {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-    <AddPalette navigation={props.navigation}></AddPalette>
+      <AddPalette navigation={props.navigation}></AddPalette>
     </ScrollView>
   );
 }
@@ -18,9 +18,8 @@ AddPaletteScreen.navigationOptions = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingLeft: 12,
-    paddingRight: 12,
-    backgroundColor: '#fff',
+    marginLeft: 12,
+    marginRight: 12,
     justifyContent:'center',
   },
 });
