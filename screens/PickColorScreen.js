@@ -18,15 +18,19 @@ export default function ColorListScreen(props) {
   if (hasPermission === false) {
     return <Text>No access to camera</Text>;
   }
+
   return (
+   // 
     <View style={{ flex: 1 }}>
+      
       <Camera style={{ flex: 1 }} type={type}>
-        <View
-          style={{
+      <TouchableOpacity style={[{backgroundColor: 'transparent'}, {
             flex: 1,
             backgroundColor: 'transparent',
             flexDirection: 'row',
-          }}>
+          }]} onPress={(evt) => console.log(`x coord = ${evt.nativeEvent.locationX + "," + evt.nativeEvent.locationY}`)}>
+        
+        
           <TouchableOpacity
             style={{
               flex: 0.1,
@@ -42,8 +46,11 @@ export default function ColorListScreen(props) {
             }}>
             <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
           </TouchableOpacity>
-        </View>
+        
+        </TouchableOpacity>
       </Camera>
+     
     </View>
+    
   );
 }
