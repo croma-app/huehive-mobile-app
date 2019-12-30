@@ -12,10 +12,6 @@ import PaletteListScreen from '../screens/PaletteListScreen'
 import PickColorSceen from '../screens/PickColorScreen';
 import Colors from '../constants/Colors'
 
-const config = Platform.select({
-  web: { headerMode: 'screen' },
-  default: {},
-});
 const RootStack = createStackNavigator(
   {
     ColorDetails: ColorDetailsScreen,

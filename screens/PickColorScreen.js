@@ -1,56 +1,70 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import { Camera } from 'expo-camera';
-export default function ColorListScreen(props) {
-  const [hasPermission, setHasPermission] = useState(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
+import {Permissions} from 'expo';
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
-  }, []);
+export default class PickColorScreen extends React.Component {
+  // TODO: make this a class component to make it work with ref.
+  // implementation with class component
+  // https://github.com/foysalit/rn-tutorial-vedo/blob/master/src/camera.page.js
+  camera = null;
 
-  if (hasPermission === null) {
-    return <View />;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
+  state = {
+      captures: [],
+      capturing: null,
+      hasCameraPermission: null,
+      cameraType: Camera.Constants.Type.back,
   }
 
-  return (
-   // 
-    <View style={{ flex: 1 }}>
-      
-      <Camera style={{ flex: 1 }} type={type}>
-      <TouchableOpacity style={[{backgroundColor: 'transparent'}, {
-            flex: 1,
-            backgroundColor: 'transparent',
-            flexDirection: 'row',
-          }]} onPress={(evt) => console.log(`x coord = ${evt.nativeEvent.locationX + "," + evt.nativeEvent.locationY}`)}>
+  async componentDidMount() {
+    const camera = await Camera.requestPermissionsAsync();
+    const hasCameraPermission = (camera.status === 'granted');
+
+    this.setState({ hasCameraPermission });
+  };
+ 
+  render() {
+    const { hasCameraPermission} = this.state;
+    if (hasCameraPermission === null) {
+      return <View />;
+    } else if (hasCameraPermission === false) {
+        return <Text>Access to camera has been denied.</Text>;
+    }
+    return ( 
+      <View style={{ flex: 1 }}>
         
-        
-          <TouchableOpacity
-            style={{
-              flex: 0.1,
-              alignSelf: 'flex-end',
-              alignItems: 'center',
-            }}
-            onPress={() => {
-              setType(
-                type === Camera.Constants.Type.back
-                  ? Camera.Constants.Type.front
-                  : Camera.Constants.Type.back
-              );
-            }}>
-            <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
+        <Camera style={{ flex: 1 }} type={this.state.cameraType} ref={camera => this.camera = camera}>
+        <TouchableOpacity style={[{backgroundColor: 'transparent'}, {
+              flex: 1,
+              backgroundColor: 'transparent',
+              flexDirection: 'row',
+            }]} onPress={(evt) => {
+                this.camera.takePictureAsync({ onPictureSaved: (photoData) => console.log("pic taken:", photoData) });
+                console.log(`x coord = ${evt.nativeEvent.locationX + "," + evt.nativeEvent.locationY}`);
+              }}>
+          
+          
+            <TouchableOpacity
+              style={{
+                flex: 0.1,
+                alignSelf: 'flex-end',
+                alignItems: 'center',
+              }}
+              onPress={() => {
+                setType(
+                  type === Camera.Constants.Type.back
+                    ? Camera.Constants.Type.front
+                    : Camera.Constants.Type.back
+                );
+              }}>
+              <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
+            </TouchableOpacity>
+          
           </TouchableOpacity>
-        
-        </TouchableOpacity>
-      </Camera>
-     
-    </View>
+        </Camera>
+      
+      </View>
     
-  );
+    );
+  }
 }
