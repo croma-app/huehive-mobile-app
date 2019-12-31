@@ -2,19 +2,26 @@ import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 import { Camera } from 'expo-camera';
 import {Permissions} from 'expo';
+import Utils from '../libs/Utils';
 
 export default class PickColorScreen extends React.Component {
   // TODO: make this a class component to make it work with ref.
   // implementation with class component
   // https://github.com/foysalit/rn-tutorial-vedo/blob/master/src/camera.page.js
   camera = null;
-
-  state = {
+  constructor(props) {
+    super(props);
+    this.state = {
       captures: [],
       capturing: null,
       hasCameraPermission: null,
       cameraType: Camera.Constants.Type.back,
+      pickedColors: [],
+      widthCamera: null,
+      heightCamera: null,
+    }
   }
+  
 
   async componentDidMount() {
     const camera = await Camera.requestPermissionsAsync();
@@ -31,16 +38,31 @@ export default class PickColorScreen extends React.Component {
         return <Text>Access to camera has been denied.</Text>;
     }
     return ( 
-      <View style={{ flex: 1 }}>
+      <View onLayout={(event) => this.onLayout(event)} style={{ flex: 1 }}>
         
         <Camera style={{ flex: 1 }} type={this.state.cameraType} ref={camera => this.camera = camera}>
-        <TouchableOpacity style={[{backgroundColor: 'transparent'}, {
+        <TouchableOpacity  style={[{backgroundColor: 'transparent'}, {
               flex: 1,
               backgroundColor: 'transparent',
               flexDirection: 'row',
-            }]} onPress={(evt) => {
-                this.camera.takePictureAsync({ onPictureSaved: (photoData) => console.log("pic taken:", photoData) });
-                console.log(`x coord = ${evt.nativeEvent.locationX + "," + evt.nativeEvent.locationY}`);
+            }]} onPress={(event) => {
+                console.log(event.nativeEvent.layout);
+                let x = event.nativeEvent.locationX;
+                let y = event.nativeEvent.locationY;
+                let height = this.state.heightCamera;
+                let width = this.state.widthCamera;
+                console.log(x, y, width, height);
+                this.camera.takePictureAsync({ base64: true, onPictureSaved: (photoData) => {
+                  //console.log("pic taken:", photoData) 
+                  Jimp.read(new Buffer(photoData.base64, "base64"))
+                  .then(image => {
+                      image.resize(width, height);
+                      let intColor = image.getPixelColor(x, y);
+                      this.state.pickedColors.push(Utils.toHexColor(intColor));
+                      console.log("picked color: " + Utils.toHexColor(intColor));
+                  });
+                }});
+                console.log(`x coord = ${event.nativeEvent.locationX + "," + event.nativeEvent.locationY}`);
               }}>
           
           
@@ -66,5 +88,13 @@ export default class PickColorScreen extends React.Component {
       </View>
     
     );
+  }
+
+  onLayout(event) {
+    console.log(event.nativeEvent.layout);
+    this.setState({
+      widthCamera: event.nativeEvent.layout.width,
+      heightCamera: event.nativeEvent.layout.height,
+    });
   }
 }

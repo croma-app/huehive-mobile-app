@@ -1,6 +1,7 @@
 import kmeans from 'ml-kmeans';
 import Jimp from 'jimp';
 import Color from 'pigment/full';
+import Utils from './Utils';
 export default class ColorPicker {
   static getProminentColors(image) {
     console.log("image: " + image);
@@ -60,7 +61,7 @@ export default class ColorPicker {
     for (let i = 0; i < image.bitmap.width; i++) {
       for (let j = 0; j < image.bitmap.height; j++) {
         let intColor = image.getPixelColor(i, j);
-        let hex = this._toHexColor(intColor);
+        let hex = Utils.toHexColor(intColor);
         console.log("hex:", hex);
         let color = new Color(hex);
         let xyz = color.tolab();
