@@ -52,14 +52,17 @@ export default class PickColorScreen extends React.Component {
                 let height = this.state.heightCamera;
                 let width = this.state.widthCamera;
                 console.log(x, y, width, height);
-                this.camera.takePictureAsync({ base64: true, onPictureSaved: (photoData) => {
+                let startTime = Date.now();
+                this.camera.takePictureAsync({ base64: true, quality: 0, onPictureSaved: (photoData) => {
                   //console.log("pic taken:", photoData) 
+                  let imageProcessingStartTime = Date.now();
                   Jimp.read(new Buffer(photoData.base64, "base64"))
                   .then(image => {
+                      let resizeStartTime = Date.now();
                       image.resize(width, height);
                       let intColor = image.getPixelColor(x, y);
                       this.state.pickedColors.push(Utils.toHexColor(intColor));
-                      console.log("picked color: " + Utils.toHexColor(intColor));
+                      console.log("picked color: " + Utils.toHexColor(intColor), "total time:" + (Date.now() - startTime), " resize time: " + (Date.now() - resizeStartTime), " image processing time:" + (Date.now() - imageProcessingStartTime));
                   });
                 }});
                 console.log(`x coord = ${event.nativeEvent.locationX + "," + event.nativeEvent.locationY}`);
