@@ -1,12 +1,20 @@
 import React from 'react';
-import { ScrollView, StyleSheet} from 'react-native';
+import { ScrollView, View, StyleSheet} from 'react-native';
 import { PaletteList } from '../components/PaletteList';
+import {PaletteCard} from '../components/PaletteCard';
 
 export default function HomeScreen(props) {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-    <PaletteList navigation={props.navigation}></PaletteList>
+      <PaletteCard colors={[{color: "#11a1aa"}, {color: "#cdcdcc"}]} name={"paletteName"}></PaletteCard>
+      <View
+        style={{
+          borderBottomColor: 'black',
+          borderBottomWidth: 1,
+        }}
+      />
+      <PaletteList navigation={props.navigation}></PaletteList>
     </ScrollView>
   );
 }
