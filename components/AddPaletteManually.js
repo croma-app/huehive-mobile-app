@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View, StyleSheet, TextInput, Button, Alert } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import * as Colors from "../constants/Colors";
+import Colors from "../constants/Colors";
 
 export class AddPaletteManually extends React.Component {
   constructor(props) {
