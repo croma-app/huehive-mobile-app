@@ -4,7 +4,7 @@ import Card from './Card';
 import Colors from '../constants/Colors';
 import MultiColorView from './MultiColorView';
 
-export class PaletteCard extends React.Component {
+export class PalettePreviewCard extends React.Component {
   
   render() {
     return (

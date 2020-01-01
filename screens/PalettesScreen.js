@@ -1,7 +1,7 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text} from 'react-native';
 import Color from 'pigment/full';
-import {PaletteCard} from '../components/PaletteCard';
+import {PalettePreviewCard} from '../components/PalettePreviewCard';
 export default function PalettesScreen(props) {
   // Convert camelCase to sentence
   const parseCamelCase = (text) => {
@@ -23,8 +23,8 @@ export default function PalettesScreen(props) {
         colors.push({color: c.tohex()})
       );
      // console.log("colors================" + JSON.stringify(colors));
-      items.push(<PaletteCard onPress={() => props.navigation.navigate("ColorList", {colors: colors})} 
-        key={i.toString()} colors={colors} name={parseCamelCase(i.toString())}></PaletteCard>)
+      items.push(<PalettePreviewCard onPress={() => props.navigation.navigate("ColorList", {colors: colors})} 
+        key={i.toString()} colors={colors} name={parseCamelCase(i.toString())}></PalettePreviewCard>)
     }
   }
   return (

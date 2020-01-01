@@ -1,6 +1,5 @@
 import React from 'react';
 import { CromaColorPicker } from '../components/CromaColorPicker';
-import {PaletteCard} from '../components/PaletteCard';
 import {ScrollView} from 'react-native'
 
 

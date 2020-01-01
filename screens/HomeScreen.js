@@ -1,8 +1,8 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Button, Alert, View} from 'react-native';
+import { ScrollView, StyleSheet} from 'react-native';
 import { PaletteList } from '../components/PaletteList';
 
-export default function PaletteListScreen(props) {
+export default function HomeScreen(props) {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -11,7 +11,7 @@ export default function PaletteListScreen(props) {
   );
 }
 
-PaletteListScreen.navigationOptions = {
+HomeScreen.navigationOptions = {
    title: 'Croma',
 };
 
