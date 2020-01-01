@@ -2,35 +2,21 @@ import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import Card from './Card';
 import Colors from '../constants/Colors';
-import MultiColorView from './MultiColorView';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faTrashAlt, faShareSquare, faEdit } from '@fortawesome/free-solid-svg-icons'
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
-export class PaletteCard extends React.Component {
+export default class SingleColorCard extends React.Component {
   
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
-      <Card {...this.props} onPress={() => {
-          console.log("navigate to palette screen" + this.props.navigation);
-          this.props.navigation.navigate('Palette', this.props);
-        }}>
+      <Card {...this.props}>
         <View>
-          <MultiColorView {...this.props}></MultiColorView>
+          <View style={{backgroundColor: this.props.color, height: 100}}></View>
           <View style={styles.bottom}>
             <Text style={styles.label}>{this.props.name}</Text>
             <View style={styles.actionButtonsView}>
-              <TouchableOpacity style={styles.actionButton}>
-                <FontAwesomeIcon icon={ faEdit } />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.actionButton}>
-                <FontAwesomeIcon icon={ faShareSquare } />
-              </TouchableOpacity >
               <TouchableOpacity style={styles.actionButton}>
                 <FontAwesomeIcon icon={ faTrashAlt } />
               </TouchableOpacity>

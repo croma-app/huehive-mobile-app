@@ -7,7 +7,7 @@ export default function HomeScreen(props) {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <PaletteCard colors={[{color: "#11a1aa"}, {color: "#cdcdcc"}]} name={"paletteName"}></PaletteCard>
+      <PaletteCard colors={[{color: "#11a1aa"}, {color: "#cdcdcc"}]} name={"paletteName"} navigation={props.navigation}></PaletteCard>
       <View
         style={{
           borderBottomColor: 'black',

@@ -8,6 +8,7 @@ import PalettesScreen from '../screens/PalettesScreen';
 import AddPaletteScreen from '../screens/AddPaletteScreen';
 import AddPaletteManuallyScreen from '../screens/AddPaletteManuallyScreen';
 import ColorListScreen from '../screens/ColorListScreen';
+import PaletteScreen from '../screens/PaletteScreen';
 import HomeScreen from '../screens/HomeScreen'
 import Colors from '../constants/Colors'
 
@@ -23,10 +24,11 @@ const RootStack = createStackNavigator(
     AddPalette: AddPaletteScreen,
     AddPaletteManually: AddPaletteManuallyScreen,
     ColorList: ColorListScreen,
-    PaletteList: HomeScreen
+    Palette: PaletteScreen,
+    Home: HomeScreen,
   },
   {
-    initialRouteName: 'PaletteList',
+    initialRouteName: 'Home',
     /* The header config from HomeScreen is now here */
     defaultNavigationOptions: {
       headerStyle: {
