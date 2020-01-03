@@ -2,13 +2,16 @@ import React from "react";
 import { Text, View, StyleSheet, TextInput, Button, Alert } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Colors from "../constants/Colors";
+import Storage from '../libs/Storage';
 
-export class AddPaletteManually extends React.Component {
+
+export class SavePalette extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { text: "" };
+    this.state = { paletteName: "", colors: this.props.navigation.getParam("colors") || [] };
   }
   render() {
+    console.log("this.props.natigation: ", this.props.navigation);
     return (
       <ScrollView>
         <View style={styles.card}>
@@ -16,10 +19,13 @@ export class AddPaletteManually extends React.Component {
           <TextInput
             style={styles.input}
             placeholder="Enter a name for the palette"
-            onChangeText={text => this.setState({ text })}
+            onChangeText={name => this.setState({ paletteName: name})}
           />
         </View>
-        <Button onPress={() => Alert.alert(this.state.text)} title="Save Palette">
+        <Button onPress={() => {
+          Storage.save({name: this.state.paletteName, colors: this.state.colors});
+          this.props.navigation.navigate("Home");
+          }} title="Save Palette">
 
         </Button>
       </ScrollView>

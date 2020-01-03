@@ -7,7 +7,9 @@ export default function PaletteScreen(props) {
   console.log("Colors:" + JSON.stringify(colors));
   return (
     <ScrollView style={styles.listview} >
-      {colors.map(color => <SingleColorCard color={color.color}></SingleColorCard>)}
+      {
+        colors.map(colorObj => <SingleColorCard onPress={() =>  props.navigation.navigate("ColorDetails", {"color": colorObj.color})} color={colorObj.color}></SingleColorCard>)
+      }
     </ScrollView>
   );
 }

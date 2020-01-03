@@ -10,7 +10,7 @@ export default function ColorListScreen(props) {
     <ScrollView style={styles.listview} >
       {colors.map(color => <SingleColorView color={color.color}></SingleColorView>)}
       <CromaButton
-          onPress={() => this.props.navigation.navigate('ColorPicker')}>
+          onPress={() => props.navigation.navigate('SavePalette', {colors: colors})}>
           SAVE AS NEW PALETTE
       </CromaButton>
     </ScrollView>
