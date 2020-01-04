@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, TextInput } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Colors from "../constants/Colors";
 import Storage from '../libs/Storage';
+import CromaButton from '../components/CromaButton';
 
 
 export class SavePalette extends React.Component {
