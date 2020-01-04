@@ -1,22 +1,44 @@
 import React from 'react';
-import { ScrollView, View, StyleSheet} from 'react-native';
+import { ScrollView, View, StyleSheet, ActivityIndicator} from 'react-native';
 import { PaletteList } from '../components/PaletteList';
 import {PaletteCard} from '../components/PaletteCard';
+import Storage from '../libs/Storage';
 
-export default function HomeScreen(props) {
+export default class HomeScreen extends React.Component {
 
-  return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <PaletteCard colors={[{color: "#11a1aa"}, {color: "#cdcdcc"}]} name={"paletteName"} navigation={props.navigation}></PaletteCard>
-      <View
-        style={{
-          borderBottomColor: 'black',
-          borderBottomWidth: 1,
-        }}
-      />
-      <PaletteList navigation={props.navigation}></PaletteList>
-    </ScrollView>
-  );
+  constructor(props) {
+    super(props);
+    this.state = {isLoading: true};
+  }
+
+  componentDidMount() {
+    Storage.getAllPalettes().then((allPalettes) => {
+      this.setState({allPalettes: allPalettes, isLoading: false});
+    });
+  }
+
+  render() {
+    console.log("State: " + JSON.stringify(this.state));
+    if (this.state.isLoading) {
+      return <ActivityIndicator></ActivityIndicator>
+    } else {
+      return (
+        <ScrollView contentContainerStyle={styles.container}>
+          {Object.keys(this.state.allPalettes).map((name) => {
+            console.log("name: ", name, this.state.allPalettes[name].colors);
+            return <PaletteCard colors={this.state.allPalettes[name].colors} name={name} navigation={this.props.navigation}></PaletteCard>
+          })}
+          <View
+            style={{
+              borderBottomColor: 'black',
+              borderBottomWidth: 1,
+            }}
+          />
+          <PaletteList navigation={this.props.navigation}></PaletteList>
+        </ScrollView>
+      );
+    }
+  }
 }
 
 HomeScreen.navigationOptions = {
