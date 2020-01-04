@@ -27,14 +27,8 @@ export default class HomeScreen extends React.Component {
           {Object.keys(this.state.allPalettes).map((name) => {
             console.log("name: ", name, this.state.allPalettes[name].colors);
             return <PaletteCard colors={this.state.allPalettes[name].colors} name={name} navigation={this.props.navigation} />
-          })}
-          <View
-            style={{
-              borderBottomColor: 'black',
-              borderBottomWidth: 1,
-            }}
-          />
-          <PaletteList navigation={this.props.navigation} />
+          })}          
+          <PaletteList navigation={this.props.navigation}/></PaletteList>
         </ScrollView>
       );
     }
@@ -48,9 +42,7 @@ HomeScreen.navigationOptions = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingLeft: 0,
-    paddingRight: 0,
-    backgroundColor: '#fff',
+    margin: 8,
     justifyContent:'center',
   },
 });

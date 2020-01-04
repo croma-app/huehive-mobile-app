@@ -47,6 +47,5 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 12,
     paddingRight: 12,
-    backgroundColor: '#fff',
   },
 });

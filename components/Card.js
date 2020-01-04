@@ -6,7 +6,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 export default class Card extends React.Component {
   render() {
     return (
-      <TouchableOpacity onPress={this.props.onPress} style={[styles.inner, this.props.style]}>
+      <TouchableOpacity onPress={this.props.onPress} style={[styles.inner]}>
         <Animated.View {...this.props}  >
           {this.props.children}
         </Animated.View>
@@ -18,9 +18,7 @@ export default class Card extends React.Component {
 const styles = StyleSheet.create({
   inner: {
     backgroundColor: Colors.white,
-    marginVertical: 4,
+    marginVertical: 8,
     elevation: 1,
-    marginTop: 8,
-    marginBottom: 8,
   },
 });
