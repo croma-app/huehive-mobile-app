@@ -20,13 +20,13 @@ export default class HomeScreen extends React.Component {
   render() {
     console.log("State: " + JSON.stringify(this.state));
     if (this.state.isLoading) {
-      return <ActivityIndicator></ActivityIndicator>
+      return <ActivityIndicator />
     } else {
       return (
         <ScrollView contentContainerStyle={styles.container}>
           {Object.keys(this.state.allPalettes).map((name) => {
             console.log("name: ", name, this.state.allPalettes[name].colors);
-            return <PaletteCard colors={this.state.allPalettes[name].colors} name={name} navigation={this.props.navigation}></PaletteCard>
+            return <PaletteCard colors={this.state.allPalettes[name].colors} name={name} navigation={this.props.navigation} />
           })}
           <View
             style={{
@@ -34,7 +34,7 @@ export default class HomeScreen extends React.Component {
               borderBottomWidth: 1,
             }}
           />
-          <PaletteList navigation={this.props.navigation}></PaletteList>
+          <PaletteList navigation={this.props.navigation} />
         </ScrollView>
       );
     }

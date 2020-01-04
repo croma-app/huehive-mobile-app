@@ -8,7 +8,7 @@ export default function ColorListScreen(props) {
   console.log("Colors:" + JSON.stringify(colors));
   return (
     <ScrollView style={styles.listview} >
-      {colors.map(color => <SingleColorView color={color.color}></SingleColorView>)}
+      {colors.map(color => <SingleColorView key={color.color} color={color.color} />)}
       <CromaButton
           onPress={() => props.navigation.navigate('SavePalette', {colors: colors})}>
           SAVE AS NEW PALETTE
