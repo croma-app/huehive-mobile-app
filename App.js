@@ -22,10 +22,10 @@ export default function App(props) {
   } else {
     return (
       <View style={[styles.container]}>
-      <View style={[{width: Platform.OS=='web' ? Math.min(600, width): width}]}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <AppNavigator />
-      </View>
+        <View style={[{backgroundColor: "transparent"}, {width: Platform.OS=='web' ? Math.min(600, width): width}]}>
+          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+          <AppNavigator />
+        </View>
       </View>
     );
   }

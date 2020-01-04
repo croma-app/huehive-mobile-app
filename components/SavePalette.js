@@ -44,13 +44,14 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
     backgroundColor: "#fff",
     elevation: 2,
-    height: 80,
-    margin: 10,
-    padding: 10
+    height: 92,
+    marginVertical: 10,
+    padding: 10,
   },
   label: {
     flex: 1,
-    color: Colors.darkGrey
+    color: Colors.darkGrey,
+    fontWeight: 700,
   },
   input: {
     flex: 1,

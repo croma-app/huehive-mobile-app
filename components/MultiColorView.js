@@ -5,7 +5,7 @@ export default function MultiColorView(props) {
     palette: {
       alignItems: 'stretch',
       flexDirection: 'row',
-      height: 100,
+      height: 112,
     },
     color: {
       flex: 1,

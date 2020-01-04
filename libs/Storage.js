@@ -11,8 +11,7 @@ export default class Storage {
     palettes = JSON.parse(palettes);
     palettes[colorPalette.name] = colorPalette;
 
-    await AsyncStorage.setItem(ALL_PALETTES, JSON.stringify(palettes));
-    return palettes;
+    return await AsyncStorage.setItem(ALL_PALETTES, JSON.stringify(palettes));
   }
 
   static getAllPalettes = async () => {

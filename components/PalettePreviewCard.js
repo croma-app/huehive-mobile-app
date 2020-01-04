@@ -24,9 +24,11 @@ const styles = StyleSheet.create({
   bottom: {
     flexDirection: 'row',
     alignItems: 'center',
+    height: 48,
   },
   label: {
     flex: 1,
+    fontWeight: 500,
     marginHorizontal: 16,
     color: Colors.darkGrey,
   },

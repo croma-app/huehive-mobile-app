@@ -8,12 +8,12 @@ import Color from 'pigment/full';
 export function ColorDetail(props) {
   const styles = StyleSheet.create({
     backgroundColor: {
-      backgroundColor: props.color, height: 200, alignSelf: 'stretch'
+      backgroundColor: props.color, height: 112, alignSelf: 'stretch'
     },
     info: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      padding: 4,
+      padding: 10,
     },
     colorNameText: {
       fontSize: 16,
@@ -37,7 +37,7 @@ export function ColorDetail(props) {
     Clipboard.setString(value);
   }
   return (
-    <View style={{flex: 1, flexDirection: 'column', padding: 8}}>
+    <View style={{flex: 1, flexDirection: 'column', padding: 8, backgroundColor: "#fff"}}>
       <View style={[styles.backgroundColor]} ></View>
       {/* <Text {...props} style={[props.style, { fontFamily: 'space-mono' }]} >{props.color}</Text> */}
       <View >
