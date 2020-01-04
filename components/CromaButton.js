@@ -4,9 +4,10 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default class CromaButton extends React.Component {
   render() {
+    const { style, onPress, children } = this.props
     return (
-      <TouchableOpacity style={[styles.button, this.props.style]} onPress={this.props.onPress} >
-          <Text style={{ textTransform: 'uppercase'}}>  {this.props.children} </Text>
+      <TouchableOpacity style={[styles.button, style]} onPress={onPress} >
+          <Text style={{ textTransform: 'uppercase'}}>  {children} </Text>
       </TouchableOpacity>
     );
   }
