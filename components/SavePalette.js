@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, TextInput, Button, Alert } from "react-native";
+import { Text, View, StyleSheet, TextInput } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Colors from "../constants/Colors";
 import Storage from '../libs/Storage';
@@ -22,12 +22,11 @@ export class SavePalette extends React.Component {
             onChangeText={name => this.setState({ paletteName: name})}
           />
         </View>
-        <Button onPress={() => {
-          Storage.save({name: this.state.paletteName, colors: this.state.colors});
-          this.props.navigation.navigate("Home");
-          }} title="Save Palette">
-
-        </Button>
+        <CromaButton onPress={() => {
+            Storage.save({name: this.state.paletteName, colors: this.state.colors}).then(() => this.props.navigation.navigate("Home"));
+          }} >
+            Save palette
+        </CromaButton>
       </ScrollView>
     );
   }

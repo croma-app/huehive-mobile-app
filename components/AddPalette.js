@@ -9,16 +9,28 @@ import {
   View,
   Alert,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 
 export class AddPalette extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {loading: false};
+  }
   
   render() {
     return (
       <View>
+        {this.state.loading ? <ActivityIndicator></ActivityIndicator> : <View></View>}
         <CromaButton
           onPress={() => {
-            this._pickImage();
+            this.setState({loading: true});
+            this._pickImage().then((image, err) => {
+              // TODO: handle err
+              this.setState({loading: false});
+              this.props.navigation.navigate("ColorList", {colors: ColorPicker.getProminentColors(image)}); 
+            });
           }}
         >
            GET PALETTE FROM IMAGE
@@ -63,25 +75,11 @@ export class AddPalette extends React.Component {
       quality: 1, 
       base64: true,
     });
-   // console.log("Result: " + JSON.stringify(result));
-   if (result.base64 !== undefined) {
-    Jimp.read(new Buffer(result.base64, "base64"))
-    .then(image => {
-      this.props.navigation.navigate("ColorList", {colors: ColorPicker.getProminentColors(image)}); 
-    })
-    .catch(err => {
-      console.log("Error: " + JSON.stringify(err)); // TODO: add toast here 
-    // Handle an exception.
-    });
-   } else {
-    Jimp.read(result.uri)
-      .then(image => {
-        this.props.navigation.navigate("ColorList", {colors: ColorPicker.getProminentColors(image)}); 
-      })
-      .catch(err => {
-        console.log("Error: " + JSON.stringify(err)); // TODO: add toast here 
-      // Handle an exception.
-      });
+      // console.log("Result: " + JSON.stringify(result));
+    if (result.base64 !== undefined) {
+      return await Jimp.read(new Buffer(result.base64, "base64"));
+    } else {
+      return await Jimp.read(result.uri);   
     }
   };
 }
