@@ -11,8 +11,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: maxheld83/ghpages@v0.2.1
-    - name: GitHub Pages Deploy
+    - name: Build
       run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+        npm install
+        expo build:web
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@releases/v3
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: web-build
