@@ -15,7 +15,7 @@ export default class SingleColorCard extends React.Component {
         <View>
           <View style={{backgroundColor: this.props.color, height: 100}}></View>
           <View style={styles.bottom}>
-            <Text style={styles.label}>{this.props.name}</Text>
+            <Text style={styles.label}>{this.props.color}</Text>
             <View style={styles.actionButtonsView}>
               <TouchableOpacity style={styles.actionButton}>
                 <FontAwesomeIcon icon={ faTrashAlt } />
@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
   bottom: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 8,
-    height: 36,
+    padding: 16,
+    height: 54,
   },
   actionButtonsView: {
     flexDirection: "row",
@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
   label: {
     flex: 1,
     marginHorizontal: 16,
+    fontWeight: 500,
     color: Colors.darkGrey,
   },
 });
