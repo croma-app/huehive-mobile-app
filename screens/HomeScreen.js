@@ -28,7 +28,7 @@ export default class HomeScreen extends React.Component {
             console.log("name: ", name, this.state.allPalettes[name].colors);
             return <PaletteCard colors={this.state.allPalettes[name].colors} name={name} navigation={this.props.navigation} />
           })}          
-          <PaletteList navigation={this.props.navigation}/></PaletteList>
+          <PaletteList navigation={this.props.navigation}/>
         </ScrollView>
       );
     }
