@@ -11,14 +11,15 @@ export default class HomeScreen extends React.Component {
     this.state = {isLoading: true};
   }
 
-  componentDidMount() {
-    Storage.getAllPalettes().then((allPalettes) => {
-      this.setState({allPalettes: allPalettes, isLoading: false});
-    });
+  async componentDidMount() {
+    console.log("Component did mount called");
+    let allPalettes = await Storage.getAllPalettes();
+    this.setState({allPalettes: allPalettes, isLoading: false});
   }
 
   render() {
-    console.log("State: " + JSON.stringify(this.state));
+    console.log("Render called");
+    //console.log("State: " + JSON.stringify(this.state));
     if (this.state.isLoading) {
       return <ActivityIndicator />
     } else {

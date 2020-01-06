@@ -23,8 +23,10 @@ export class SavePalette extends React.Component {
             onChangeText={name => this.setState({ paletteName: name})}
           />
         </View>
-        <CromaButton onPress={() => {
-            Storage.save({name: this.state.paletteName, colors: this.state.colors}).then(() => this.props.navigation.navigate("Home"));
+        <CromaButton onPress={async () => {
+            await Storage.save({name: this.state.paletteName, colors: this.state.colors});
+            console.log("navigating to home");
+            this.props.navigation.navigate("Home");
           }} >
             Save palette
         </CromaButton>
@@ -51,7 +53,7 @@ const styles = StyleSheet.create({
   label: {
     flex: 1,
     color: Colors.darkGrey,
-    fontWeight: 700,
+    fontWeight: "700",
   },
   input: {
     flex: 1,

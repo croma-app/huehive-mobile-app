@@ -17,7 +17,7 @@ export function ColorDetail(props) {
     },
     colorNameText: {
       fontSize: 16,
-      fontWeight: '500',
+      fontWeight: "500",
     },
   });
   const color = new Color(props.color);

@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   label: {
     flex: 1,
     marginHorizontal: 16,
-    fontWeight: 500,
+    fontWeight: "500",
     color: Colors.darkGrey,
   },
 });

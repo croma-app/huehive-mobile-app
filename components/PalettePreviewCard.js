@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
   label: {
     flex: 1,
-    fontWeight: 500,
+    fontWeight: "500",
     marginHorizontal: 16,
     color: Colors.darkGrey,
   },
