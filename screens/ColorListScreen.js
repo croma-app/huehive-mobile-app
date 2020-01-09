@@ -1,6 +1,6 @@
 import React from 'react';
 import {SingleColorView} from '../components/SingleColorView';
-import {ScrollView, TouchableOpacity, StyleSheet, Text} from 'react-native'
+import {ScrollView, StyleSheet} from 'react-native'
 import CromaButton from '../components/CromaButton';
 
 export default function ColorListScreen(props) {

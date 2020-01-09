@@ -1,7 +1,8 @@
 import React from 'react';
-import {StyleSheet, Text, View, TouchableOpacity,Clipboard } from 'react-native';
+import {StyleSheet, Text, View, Clipboard } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faCopy } from '@fortawesome/free-regular-svg-icons'
+import Touchable from 'react-native-platform-touchable';
 
 import Color from 'pigment/full';
 
@@ -42,7 +43,7 @@ export function ColorDetail(props) {
       {/* <Text {...props} style={[props.style, { fontFamily: 'space-mono' }]} >{props.color}</Text> */}
       <View >
         {items.map(item => (
-          <TouchableOpacity
+          <Touchable
            key={item.key}
            onPress={() => writeToClipboard(item.value)}
           >  
@@ -52,7 +53,7 @@ export function ColorDetail(props) {
               <Text >{item.value}</Text>
               <FontAwesomeIcon icon={ faCopy } />
             </View>
-          </TouchableOpacity>
+          </Touchable>
         ))}
         
       </View>

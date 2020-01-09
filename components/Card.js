@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { StyleSheet, Animated} from 'react-native';
 import Colors from '../constants/Colors';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import Touchable from 'react-native-platform-touchable';
 
 export default class Card extends React.Component {
   render() {
     return (
-      <TouchableOpacity onPress={this.props.onPress} style={[styles.inner]}>
+      <Touchable onPress={this.props.onPress} style={[styles.inner]}>
         <Animated.View {...this.props}  >
           {this.props.children}
         </Animated.View>
-      </TouchableOpacity>
+      </Touchable>
     );
   }
 }

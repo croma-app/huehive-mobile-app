@@ -5,7 +5,7 @@ import Colors from '../constants/Colors';
 import MultiColorView from './MultiColorView';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faTrashAlt, faShareSquare, faEdit } from '@fortawesome/free-solid-svg-icons'
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import Touchable from 'react-native-platform-touchable';
 
 
 export class PaletteCard extends React.Component {
@@ -25,15 +25,15 @@ export class PaletteCard extends React.Component {
           <View style={styles.bottom}>
             <Text style={styles.label}>{this.props.name}</Text>
             <View style={styles.actionButtonsView}>
-              <TouchableOpacity style={styles.actionButton}>
+              <Touchable style={styles.actionButton}>
                 <FontAwesomeIcon icon={ faEdit } />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.actionButton}>
+              </Touchable>
+              <Touchable style={styles.actionButton}>
                 <FontAwesomeIcon icon={ faShareSquare } />
-              </TouchableOpacity >
-              <TouchableOpacity style={styles.actionButton}>
+              </Touchable >
+              <Touchable style={styles.actionButton}>
                 <FontAwesomeIcon icon={ faTrashAlt } />
-              </TouchableOpacity>
+              </Touchable>
             </View>
           </View>
         </View>

@@ -4,7 +4,7 @@ import Card from './Card';
 import Colors from '../constants/Colors';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import Touchable from 'react-native-platform-touchable';
 
 
 export default class SingleColorCard extends React.Component {
@@ -17,9 +17,9 @@ export default class SingleColorCard extends React.Component {
           <View style={styles.bottom}>
             <Text style={styles.label}>{this.props.color}</Text>
             <View style={styles.actionButtonsView}>
-              <TouchableOpacity style={styles.actionButton}>
+              <Touchable style={styles.actionButton}>
                 <FontAwesomeIcon icon={ faTrashAlt } />
-              </TouchableOpacity>
+              </Touchable>
             </View>
           </View>
         </View>
