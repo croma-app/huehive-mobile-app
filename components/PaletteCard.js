@@ -15,13 +15,18 @@ export class PaletteCard extends React.Component {
   }
 
   render() {
+    const { deletePaletteByName } = this.props
     return (
-      <Card {...this.props} onPress={() => {
-          console.log("navigate to palette screen" + this.props.navigation);
-          this.props.navigation.navigate('Palette', this.props);
-        }}>
         <View>
-          <MultiColorView {...this.props}></MultiColorView>
+          <Card 
+            {...this.props} 
+            onPress={() => {
+              console.log("navigate to palette screen" + this.props.navigation);
+              this.props.navigation.navigate('Palette', this.props);
+            }}
+          >
+            <MultiColorView {...this.props}></MultiColorView>
+          </Card>
           <View style={styles.bottom}>
             <Text style={styles.label}>{this.props.name}</Text>
             <View style={styles.actionButtonsView}>
@@ -31,13 +36,12 @@ export class PaletteCard extends React.Component {
               <Touchable style={styles.actionButton}>
                 <FontAwesomeIcon icon={ faShareSquare } />
               </Touchable >
-              <Touchable style={styles.actionButton}>
+              <Touchable onPress={() => {deletePaletteByName(this.props.name)}} style={styles.actionButton}>
                 <FontAwesomeIcon icon={ faTrashAlt } />
               </Touchable>
             </View>
           </View>
         </View>
-      </Card>
     );
   }
 }
