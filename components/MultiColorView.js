@@ -1,22 +1,25 @@
-import * as React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import * as React from "react";
+import { StyleSheet, View, Text } from "react-native";
 export default function MultiColorView(props) {
   const styles = StyleSheet.create({
     palette: {
-      alignItems: 'stretch',
-      flexDirection: 'row',
-      height: 112,
+      alignItems: "stretch",
+      flexDirection: "row",
+      height: 112
     },
     color: {
-      flex: 1,
-    },
+      flex: 1
+    }
   });
-  return <View style={styles.palette}>
-    {props.colors && props.colors.map(item => (
-      <View
-        style={[styles.color, { backgroundColor: item.color }]}
-        key={item.color}
-      />
-    ))}
-  </View>
+  return (
+    <View style={styles.palette}>
+      {props.colors &&
+        props.colors.map(item => (
+          <View
+            style={[styles.color, { backgroundColor: item.color }]}
+            key={item.color}
+          />
+        ))}
+    </View>
+  );
 }

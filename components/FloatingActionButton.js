@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { StyleSheet, TouchableHighlight, View } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import * as Colors from '../constants/Colors';
+import * as React from "react";
+import { StyleSheet, TouchableHighlight, View } from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
+import * as Colors from "../constants/Colors";
 
 export default class FloatingActionButton extends React.Component {
   render() {
@@ -17,22 +17,22 @@ export default class FloatingActionButton extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
+    position: "absolute",
     right: 16,
     bottom: 16,
     height: 56,
     width: 56,
     borderRadius: 28,
-    elevation: 6,
+    elevation: 6
   },
   fab: {
     backgroundColor: Colors.accent,
     height: 56,
     width: 56,
-    borderRadius: 28,
+    borderRadius: 28
   },
   icon: {
     margin: 16,
-    color: Colors.fadedBlack,
-  },
+    color: Colors.fadedBlack
+  }
 });

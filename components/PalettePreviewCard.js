@@ -1,11 +1,10 @@
-import * as React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import Card from './Card';
-import Colors from '../constants/Colors';
-import MultiColorView from './MultiColorView';
+import * as React from "react";
+import { StyleSheet, View, Text } from "react-native";
+import Card from "./Card";
+import Colors from "../constants/Colors";
+import MultiColorView from "./MultiColorView";
 
 export class PalettePreviewCard extends React.Component {
-  
   render() {
     return (
       <Card {...this.props}>
@@ -22,14 +21,14 @@ export class PalettePreviewCard extends React.Component {
 
 const styles = StyleSheet.create({
   bottom: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 48,
+    flexDirection: "row",
+    alignItems: "center",
+    height: 48
   },
   label: {
     flex: 1,
     fontWeight: "500",
     marginHorizontal: 16,
-    color: Colors.darkGrey,
-  },
+    color: Colors.darkGrey
+  }
 });

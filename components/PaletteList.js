@@ -1,8 +1,5 @@
 import React from "react";
-import {
-  View,
-  StyleSheet,
-} from "react-native";
+import { View, StyleSheet } from "react-native";
 import CromaButton from "./CromaButton";
 
 export class PaletteList extends React.Component {
