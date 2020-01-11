@@ -4,7 +4,7 @@ import Storage from './../libs/Storage'
 export default function applicationHook(initState) {
 
   const addPalette = async (palette) => {
-    const savedPalette = await Storage.save(palette)
+    await Storage.save(palette)
     setState(state => {
       const { allPalettes } = state
       allPalettes[palette.name] = palette

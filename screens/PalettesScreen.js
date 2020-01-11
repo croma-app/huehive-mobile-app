@@ -22,7 +22,6 @@ export default function PalettesScreen(props) {
       paletteColors.forEach((c)=> 
         colors.push({color: c.tohex()})
       );
-     // console.log("colors================" + JSON.stringify(colors));
       items.push(<PalettePreviewCard onPress={() => props.navigation.navigate("ColorList", {colors: colors})} 
         key={i.toString()} colors={colors} name={parseCamelCase(i.toString())}></PalettePreviewCard>)
     }
@@ -44,7 +43,6 @@ PalettesScreen.navigationOptions = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     paddingLeft: 12,
     paddingRight: 12,
   },
