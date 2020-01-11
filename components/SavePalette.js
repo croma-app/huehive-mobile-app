@@ -4,35 +4,37 @@ import { ScrollView } from "react-native-gesture-handler";
 import Colors from "../constants/Colors";
 import Storage from '../libs/Storage';
 import CromaButton from '../components/CromaButton';
+import { Croma } from "../App";
 
+// constructor(props) {
+//   super(props);
+//   this.state = { paletteName: "", colors: this.props.navigation.getParam("colors") || [] };
+// }
 
-export class SavePalette extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { paletteName: "", colors: this.props.navigation.getParam("colors") || [] };
-  }
-  render() {
-    console.log("this.props.natigation: ", this.props.navigation);
-    return (
-      <ScrollView>
-        <View style={styles.card}>
-          <Text style={styles.label}>ADD NEW PALETTE</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter a name for the palette"
-            onChangeText={name => this.setState({ paletteName: name})}
-          />
-        </View>
-        <CromaButton onPress={async () => {
-            await Storage.save({name: this.state.paletteName, colors: this.state.colors});
-            console.log("navigating to home");
-            this.props.navigation.navigate("Home");
-          }} >
-            Save palette
+export const SavePalette = (props) => {
+  console.log("props.natigation: ", props.navigation);
+  const [paletteName, setPaletteName] = React.useState('')
+  const { addPalette } = React.useContext(Croma)
+  return (
+    <ScrollView>
+      <View style={styles.card}>
+        <Text style={styles.label}>ADD NEW PALETTE</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter a name for the palette"
+          onChangeText={name => setPaletteName(name)}
+        />
+      </View>
+      <CromaButton onPress={async () => {
+        const colors = props.navigation.getParam("colors") || []
+        addPalette({name: paletteName, colors: colors})
+        console.log("navigating to home");
+        props.navigation.navigate("Home");
+      }} >
+        Save palette
         </CromaButton>
-      </ScrollView>
-    );
-  }
+    </ScrollView >
+  );
 }
 
 const styles = StyleSheet.create({

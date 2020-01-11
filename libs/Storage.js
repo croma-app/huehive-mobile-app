@@ -26,4 +26,10 @@ export default class Storage {
       return {};
     }
   }
+
+  static deletePaletteByName = async (name) => {
+    const palettes = await this.getAllPalettes()
+    delete palettes[name]
+    await AsyncStorage.setItem(ALL_PALETTES, JSON.stringify(palettes));
+  }
 }
