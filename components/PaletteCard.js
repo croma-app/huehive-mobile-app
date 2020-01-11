@@ -6,44 +6,38 @@ import MultiColorView from './MultiColorView';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faTrashAlt, faShareSquare, faEdit } from '@fortawesome/free-solid-svg-icons'
 import Touchable from 'react-native-platform-touchable';
+import { Croma } from '../App';
 
 
-export class PaletteCard extends React.Component {
-  
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    const { deletePaletteByName } = this.props
-    return (
-        <View>
-          <Card 
-            {...this.props} 
-            onPress={() => {
-              console.log("navigate to palette screen" + this.props.navigation);
-              this.props.navigation.navigate('Palette', this.props);
-            }}
-          >
-            <MultiColorView {...this.props}></MultiColorView>
-          </Card>
-          <View style={styles.bottom}>
-            <Text style={styles.label}>{this.props.name}</Text>
-            <View style={styles.actionButtonsView}>
-              <Touchable style={styles.actionButton}>
-                <FontAwesomeIcon icon={ faEdit } />
-              </Touchable>
-              <Touchable style={styles.actionButton}>
-                <FontAwesomeIcon icon={ faShareSquare } />
-              </Touchable >
-              <Touchable onPress={() => {deletePaletteByName(this.props.name)}} style={styles.actionButton}>
-                <FontAwesomeIcon icon={ faTrashAlt } />
-              </Touchable>
-            </View>
-          </View>
+export const PaletteCard = (props) => {
+  const { deletePaletteByName } = React.useContext(Croma)
+  return (
+    <View>
+      <Card
+        {...props}
+        onPress={() => {
+          console.log("navigate to palette screen" + props.navigation);
+          props.navigation.navigate('Palette',props);
+        }}
+      >
+        <MultiColorView {...props}></MultiColorView>
+      </Card>
+      <View style={styles.bottom}>
+        <Text style={styles.label}>{props.name}</Text>
+        <View style={styles.actionButtonsView}>
+          <Touchable style={styles.actionButton}>
+            <FontAwesomeIcon icon={faEdit} />
+          </Touchable>
+          <Touchable style={styles.actionButton}>
+            <FontAwesomeIcon icon={faShareSquare} />
+          </Touchable >
+          <Touchable onPress={() => { deletePaletteByName(props.name) }} style={styles.actionButton}>
+            <FontAwesomeIcon icon={faTrashAlt} />
+          </Touchable>
         </View>
-    );
-  }
+      </View>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -56,7 +50,7 @@ const styles = StyleSheet.create({
   actionButtonsView: {
     flexDirection: "row",
     alignItems: "flex-end",
-    
+
   },
   actionButton: {
     paddingRight: 16,

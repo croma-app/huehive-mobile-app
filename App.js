@@ -7,29 +7,39 @@ import { Ionicons } from '@expo/vector-icons';
 import Colors from './constants/Colors'
 import AppNavigator from './navigation/AppNavigator';
 
+import Storage from './libs/Storage';
+import applicationHook from './screens/store';
+
+export const Croma = React.createContext()
+
+
+
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
-  const {height, width} = Dimensions.get('window');
+  const { height, width } = Dimensions.get('window');
   console.log("height", height, "width", width);
-  if (!isLoadingComplete && !props.skipLoadingScreen) {
+  // if (!isLoadingComplete && !props.skipLoadingScreen) {
+  //   return (
+  //     <AppLoading
+  //       startAsync={loadResourcesAsync}
+  //       onError={handleLoadingError}
+  //       onFinish={() => handleFinishLoading(setLoadingComplete)}
+  //     />
+  //   );
+  // } else {
+    const initState = {allPalettes: {}, deletedPalettes: {}, isLoading: false }
     return (
-      <AppLoading
-        startAsync={loadResourcesAsync}
-        onError={handleLoadingError}
-        onFinish={() => handleFinishLoading(setLoadingComplete)}
-      />
-    );
-  } else {
-    return (
-      <View style={[styles.container]}>
-        <View style={[{backgroundColor: "transparent"}, {width: Platform.OS=='web' ? Math.min(600, width): width}]}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <AppNavigator />
+      <Croma.Provider value={applicationHook(initState)}>
+        <View style={[styles.container]}>
+          <View style={[{ backgroundColor: "transparent" }, { width: Platform.OS == 'web' ? Math.min(600, width) : width }]}>
+            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+            <AppNavigator />
+          </View>
         </View>
-      </View>
+      </Croma.Provider>
     );
-  }
-} 
+  // }
+}
 
 async function loadResourcesAsync() {
   await Promise.all([
