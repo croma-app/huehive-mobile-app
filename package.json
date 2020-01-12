@@ -20,7 +20,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.12.0",
     "@fortawesome/react-native-fontawesome": "^0.2.0",
     "@react-navigation/web": "^1.0.0-alpha.9",
-    "croma-color-picker": "^1.0.0",
+    "croma-color-picker": "^1.0.1",
     "expo": "^36.0.0",
     "expo-asset": "~8.0.0",
     "expo-constants": "~8.0.0",
