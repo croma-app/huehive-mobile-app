@@ -26,11 +26,11 @@ class CromaColorPicker extends React.Component {
           style={[{ height: 300, verticalMargin: 8, flex: 1 }]}
         />
         <CromaButton
-          onPress={() =>
-            this.props.navigation.goBack({
-              color: this.state.color
-            })
-          }
+          onPress={() => {
+            console.log(this.props.navigation.getParam("onDone"));
+            this.props.navigation.getParam("onDone")({color: this.state.color});
+            this.props.navigation.goBack();
+          }}
         >
           Done
         </CromaButton>
