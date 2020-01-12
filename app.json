@@ -25,6 +25,15 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "web": {
+      "build": {
+        "babel": {
+          "include": [
+            "croma-color-picker" 
+          ]
+        }
+      }
     }
   }
 }
