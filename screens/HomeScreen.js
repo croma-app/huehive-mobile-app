@@ -5,7 +5,7 @@ import { PaletteCard } from "../components/PaletteCard";
 import { UndoCard } from "../components/UndoCard";
 import { Croma } from "../App";
 
-const HomeScreen = function(props) {
+const HomeScreen = function (props) {
   const {
     isLoading,
     allPalettes,
@@ -21,7 +21,21 @@ const HomeScreen = function(props) {
     return <ActivityIndicator />;
   } else {
     return (
-      <ScrollView contentContainerStyle={styles.container}>
+      <>
+        <ScrollView contentContainerStyle={styles.container}>
+          {Object.keys(allPalettes).map(name => {
+            console.log("name: ", name, allPalettes[name].colors);
+            return (
+              <PaletteCard
+                key={name}
+                colors={allPalettes[name].colors}
+                name={name}
+                navigation={props.navigation}
+              />
+            );
+          })}
+          <PaletteList navigation={props.navigation} />
+        </ScrollView>
         {Object.keys(deletedPalettes).map(name => {
           return (
             <UndoCard
@@ -31,19 +45,7 @@ const HomeScreen = function(props) {
             />
           );
         })}
-        {Object.keys(allPalettes).map(name => {
-          console.log("name: ", name, allPalettes[name].colors);
-          return (
-            <PaletteCard
-              key={name}
-              colors={allPalettes[name].colors}
-              name={name}
-              navigation={props.navigation}
-            />
-          );
-        })}
-        <PaletteList navigation={props.navigation} />
-      </ScrollView>
+      </>
     );
   }
 };

@@ -9,7 +9,6 @@ export default class Storage {
     }
     palettes = JSON.parse(palettes);
     palettes[colorPalette.name] = colorPalette;
-
     let rv = await AsyncStorage.setItem(ALL_PALETTES, JSON.stringify(palettes));
 
     console.log("saved succussfully");
