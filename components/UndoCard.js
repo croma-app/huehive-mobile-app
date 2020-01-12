@@ -14,7 +14,7 @@ export const UndoCard = props => {
           undoDeletionByName(name);
         }}
       >
-        <Text style={styles.undoButton}> Undo </Text>
+        <Text style={styles.undoButton}> UNDO </Text>
       </Touchable>
     </View>
   );
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   undoCard: {
     backgroundColor: "#303036",
     flexDirection: "row",
-    padding: 12,
+    padding: 15,
     marginTop: 1
   },
   undoText: {

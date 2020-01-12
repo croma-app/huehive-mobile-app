@@ -6,11 +6,6 @@ import Storage from "../libs/Storage";
 import CromaButton from "../components/CromaButton";
 import { Croma } from "../App";
 
-// constructor(props) {
-//   super(props);
-//   this.state = { paletteName: "", colors: this.props.navigation.getParam("colors") || [] };
-// }
-
 export const SavePalette = props => {
   console.log("props.natigation: ", props.navigation);
   const [paletteName, setPaletteName] = React.useState("");
