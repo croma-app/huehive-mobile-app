@@ -4,7 +4,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import Colors from "../constants/Colors";
 import Storage from "../libs/Storage";
 import CromaButton from "../components/CromaButton";
-import { Croma } from "../App";
+import { Croma } from "../screens/store";
 
 export const SavePalette = props => {
   console.log("props.natigation: ", props.navigation);
