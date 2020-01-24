@@ -1,32 +1,56 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import SingleColorCard from "../components/SingleColorCard";
 import { ScrollView, StyleSheet } from "react-native";
 import CromaButton from "../components/CromaButton";
+import { UndoCard } from '../components/UndoCard'
+import { Croma } from '../screens/store';
+
+
 
 export default function PaletteScreen(props) {
-  const [colors, setColors] = useState(props.navigation.getParam("colors"));
+  const paletteName = props.navigation.getParam("name")
+  const { 
+    allPalettes,
+    colorDeleteFromPalette,
+    undoColorDeletion,
+    addColorToPalette
+  } = React.useContext(Croma);
+  const colors = allPalettes[paletteName].colors
+  const deletedColors = allPalettes[paletteName].deletedColors ?
+    allPalettes[paletteName].deletedColors : []
+
+  const deleteColor = (index) => {
+    colorDeleteFromPalette(props.navigation.getParam("name"), index)
+  }
+
+
   return (
-    <ScrollView style={styles.listview}>
-      {colors.map(colorObj => (
-        <SingleColorCard
-          onPress={() =>
-            props.navigation.navigate("ColorDetails", { color: colorObj.color })
+    <>
+      <ScrollView style={styles.listview}>
+        {colors.map((colorObj, index) => {
+          return <SingleColorCard
+            onPress={() =>
+              props.navigation.navigate("ColorDetails", { color: colorObj.color })
+            }
+            color={colorObj.color}
+            colorDeleteFromPalette={() => { deleteColor(index) }}
+          ></SingleColorCard>
+        })}
+        <CromaButton onPress={() => props.navigation.navigate("ColorPicker", {
+          onDone: (color) => {
+            addColorToPalette(paletteName, color);
           }
-          color={colorObj.color}
-        ></SingleColorCard>
-      ))}
-      <CromaButton onPress={() => props.navigation.navigate("ColorPicker", {onDone: (color) => {
-        let newColors = [...colors, color];
-        console.log("color:", color, "nc", newColors);
-        palette = {
-          name: this.params.navigation.getParam("name"),
-          colors: newColors,
-        }
-
-        setColors(newColors);
-
-      }})}>Add color</CromaButton>
-    </ScrollView>
+        })}>Add color</CromaButton>
+      </ScrollView>
+      {
+        deletedColors.map((colorObj) =>
+          <UndoCard
+            name={colorObj.color}
+            undoDeletionByName={(colorName) => { undoColorDeletion(paletteName, colorName) }}
+          />
+        )
+      }
+    </>
   );
 }
 PaletteScreen.navigationOptions = ({ navigation }) => {

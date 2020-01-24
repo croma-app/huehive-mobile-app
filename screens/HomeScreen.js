@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, ActivityIndicator } from "react-native";
 import { PaletteList } from "../components/PaletteList";
 import { PaletteCard } from "../components/PaletteCard";
 import { UndoCard } from "../components/UndoCard";
-import { Croma } from "../App";
+import { Croma } from "../screens/store";
 
 const HomeScreen = function (props) {
   const {

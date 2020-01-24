@@ -9,15 +9,14 @@ import {
 import Colors from "./constants/Colors";
 import AppNavigator from "./navigation/AppNavigator";
 
-import applicationHook from "./screens/store";
+import applicationHook, { initState, Croma } from "./screens/store";
 
-export const Croma = React.createContext();
+
 
 export default function App(props) {
   const { height, width } = Dimensions.get("window");
   console.log("height", height, "width", width);
 
-  const initState = { allPalettes: {}, deletedPalettes: {}, isLoading: false };
   return (
     <Croma.Provider value={applicationHook(initState)}>
       <View style={[styles.container]}>
