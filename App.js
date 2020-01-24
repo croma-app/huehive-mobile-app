@@ -11,8 +11,6 @@ import AppNavigator from "./navigation/AppNavigator";
 
 import applicationHook, { initState, Croma } from "./screens/store";
 
-
-
 export default function App(props) {
   const { height, width } = Dimensions.get("window");
   console.log("height", height, "width", width);

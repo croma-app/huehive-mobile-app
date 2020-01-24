@@ -1,42 +1,31 @@
-import React from "react";
+import React, {useState} from "react";
 import { ScrollView, View, StyleSheet } from "react-native";
 import CromaButton from "../components/CromaButton";
 import { CromaColorPicker as ColorPicker } from "croma-color-picker";
 export default function ColorPickerScreen(props) {
+  const [color, setColor] = useState("#db0a5b");
   return (
     <ScrollView>
-      <CromaColorPicker navigation={props.navigation}></CromaColorPicker>
-    </ScrollView>
-  );
-}
-
-class CromaColorPicker extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { color: "#db0a5b" };
-  }
-  render() {
-    return (
       <View style={styles.container}>
         <ColorPicker
           onChangeColor={color => {
             console.log("oncolorchange called", color);
-            this.setState({ color: color });
+            setColor(color);
           }}
           style={[{ height: 300, verticalMargin: 8, flex: 1 }]}
         />
         <CromaButton
           onPress={() => {
-            console.log(this.props.navigation.getParam("onDone"));
-            this.props.navigation.getParam("onDone")({color: this.state.color});
-            this.props.navigation.goBack();
+            console.log(props.navigation.getParam("onDone"));
+            props.navigation.getParam("onDone")({color: color});
+            props.navigation.goBack();
           }}
         >
           Done
         </CromaButton>
       </View>
-    );
-  }
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({

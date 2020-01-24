@@ -99,7 +99,7 @@ export default function applicationHook(initState) {
     })
   }
 
-  clearDeletedColor = (name, colorName) => {
+  const clearDeletedColor = (name, colorName) => {
     setState(state => {
       const { allPalettes } = state
       allPalettes[name].deletedColors.forEach((color, index) => {
