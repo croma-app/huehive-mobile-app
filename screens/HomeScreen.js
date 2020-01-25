@@ -90,37 +90,36 @@ const HomeScreen = function(props) {
               />
             );
           })}
-
-          <FloatingAction
-            color={Colors.accent}
-            actions={actions}
-            onPressItem={name => {
-              if (name === "palette_from_image") {
-                setPickImgLoading(true);
-                pickImage().then((image, err) => {
-                  // TODO: handle err
-                  setPickImgLoading(false);
-                  props.navigation.navigate("ColorList", {
-                    colors: ColorPicker.getProminentColors(image)
-                  });
-                });
-              } else if (name === "palette_from_color") {
-                props.navigation.navigate("ColorPicker", {
-                  onDone: color => {
-                    console.log("Navigating to palettes");
-                    props.navigation.navigate("Palettes", {
-                      color: color.color
-                    });
-                  }
-                });
-              } else if (name === "add_colors_manually") {
-                props.navigation.navigate("AddPaletteManually");
-              } else if (name === "unlock_pro") {
-              }
-              console.log(`selected button: ${name}`);
-            }}
-          />
         </ScrollView>
+        <FloatingAction
+          color={Colors.accent}
+          actions={actions}
+          onPressItem={name => {
+            if (name === "palette_from_image") {
+              setPickImgLoading(true);
+              pickImage().then((image, err) => {
+                // TODO: handle err
+                setPickImgLoading(false);
+                props.navigation.navigate("ColorList", {
+                  colors: ColorPicker.getProminentColors(image)
+                });
+              });
+            } else if (name === "palette_from_color") {
+              props.navigation.navigate("ColorPicker", {
+                onDone: color => {
+                  console.log("Navigating to palettes");
+                  props.navigation.navigate("Palettes", {
+                    color: color.color
+                  });
+                }
+              });
+            } else if (name === "add_colors_manually") {
+              props.navigation.navigate("AddPaletteManually");
+            } else if (name === "unlock_pro") {
+            }
+            console.log(`selected button: ${name}`);
+          }}
+        />
         {Object.keys(deletedPalettes).map(name => {
           return (
             <UndoCard
