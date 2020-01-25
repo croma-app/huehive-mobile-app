@@ -10,10 +10,11 @@ export const SavePalette = props => {
   console.log("props.natigation: ", props.navigation);
   const [paletteName, setPaletteName] = React.useState("");
   const { addPalette } = React.useContext(Croma);
+  const { title, navigationPath } = props
   return (
     <ScrollView>
       <View style={styles.card}>
-        <Text style={styles.label}>ADD NEW PALETTE</Text>
+        <Text style={styles.label}>{title}</Text>
         <TextInput
           style={styles.input}
           placeholder="Enter a name for the palette"
@@ -23,9 +24,14 @@ export const SavePalette = props => {
       <CromaButton
         onPress={async () => {
           const colors = props.navigation.getParam("colors") || [];
-          addPalette({ name: paletteName, colors: colors });
+          const palette = { name: paletteName, colors: colors } 
+          addPalette(palette);
           console.log("navigating to home");
-          props.navigation.navigate("Home");
+          if(navigationPath === 'Palette'){
+            props.navigation.navigate(navigationPath, palette);            
+          }else{
+            props.navigation.navigate(navigationPath);
+          }
         }}
       >
         Save palette
