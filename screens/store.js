@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Storage from "./../libs/Storage";
-const UNDO_TIMEOUT = 3000
+const UNDO_TIMEOUT = 3000;
 
 export const initState = {
   allPalettes: {},
   deletedPalettes: {},
-  isLoading: false,
+  isLoading: false
 };
 
-const shrinkStateToStore = function (allPalettes) {
-  Storage.saveAllPalette(allPalettes)
-}
+const shrinkStateToStore = function(allPalettes) {
+  Storage.saveAllPalette(allPalettes);
+};
 
 export default function applicationHook(initState) {
   const addPalette = async palette => {
@@ -35,12 +35,12 @@ export default function applicationHook(initState) {
   };
 
   const addColorToPalette = (name, color) => {
-    setState((state) => {
-      const { allPalettes } = state
-      allPalettes[name].colors = allPalettes[name].colors.concat(color)
-      return { ...state, allPalettes }
-    })
-  }
+    setState(state => {
+      const { allPalettes } = state;
+      allPalettes[name].colors = allPalettes[name].colors.concat(color);
+      return { ...state, allPalettes };
+    });
+  };
 
   const deletePaletteByName = async name => {
     await Storage.deletePaletteByName(name);
@@ -63,7 +63,7 @@ export default function applicationHook(initState) {
     setState(state => {
       const { deletedPalettes } = state;
       if (deletedPalettes[name]) {
-        addPalette({ ...deletedPalettes[name] })
+        addPalette({ ...deletedPalettes[name] });
         removePaletteFromStateByName(name);
       }
       return { ...state };
@@ -71,45 +71,45 @@ export default function applicationHook(initState) {
   };
 
   const colorDeleteFromPalette = (name, colorIndex) => {
-    setState((state) => {
-      const { allPalettes } = state
-      const deletedColor = allPalettes[name].colors.splice(colorIndex, 1)
+    setState(state => {
+      const { allPalettes } = state;
+      const deletedColor = allPalettes[name].colors.splice(colorIndex, 1);
       if (allPalettes[name].deletedColors) {
-        allPalettes[name].deletedColors.push(deletedColor[0])
+        allPalettes[name].deletedColors.push(deletedColor[0]);
       } else {
-        allPalettes[name].deletedColors = deletedColor
+        allPalettes[name].deletedColors = deletedColor;
       }
       setTimeout(() => {
-        clearDeletedColor(name, deletedColor[0].color)
-      }, UNDO_TIMEOUT)
-      return { ...state, allPalettes }
-    })
-  }
+        clearDeletedColor(name, deletedColor[0].color);
+      }, UNDO_TIMEOUT);
+      return { ...state, allPalettes };
+    });
+  };
 
   const undoColorDeletion = (name, colorName) => {
     setState(state => {
-      const { allPalettes } = state
-      allPalettes[name].colors.push({ color: colorName })
+      const { allPalettes } = state;
+      allPalettes[name].colors.push({ color: colorName });
       allPalettes[name].deletedColors.forEach((color, index) => {
         if (color.color === colorName) {
-          allPalettes[name].deletedColors.splice(index, 1)
+          allPalettes[name].deletedColors.splice(index, 1);
         }
-      })
-      return { ...state, allPalettes }
-    })
-  }
+      });
+      return { ...state, allPalettes };
+    });
+  };
 
   const clearDeletedColor = (name, colorName) => {
     setState(state => {
-      const { allPalettes } = state
+      const { allPalettes } = state;
       allPalettes[name].deletedColors.forEach((color, index) => {
         if (color.color === colorName) {
-          allPalettes[name].deletedColors.splice(index, 1)
+          allPalettes[name].deletedColors.splice(index, 1);
         }
-      })
-      return { ...state, allPalettes }
-    })
-  }
+      });
+      return { ...state, allPalettes };
+    });
+  };
 
   const [state, setState] = useState({
     ...initState,
@@ -122,11 +122,10 @@ export default function applicationHook(initState) {
     addColorToPalette
   });
   if (Object.keys(state.allPalettes).length > 0) {
-    shrinkStateToStore(state.allPalettes)
+    shrinkStateToStore(state.allPalettes);
   }
   console.log(state, "updated state ");
   return state;
 }
-
 
 export const Croma = React.createContext();

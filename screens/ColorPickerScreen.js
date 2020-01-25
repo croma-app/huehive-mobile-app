@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { ScrollView, View, StyleSheet } from "react-native";
 import CromaButton from "../components/CromaButton";
 import { CromaColorPicker as ColorPicker } from "croma-color-picker";
@@ -17,8 +17,8 @@ export default function ColorPickerScreen(props) {
         <CromaButton
           onPress={() => {
             console.log(props.navigation.getParam("onDone"));
-            props.navigation.getParam("onDone")({color: color});
             props.navigation.goBack();
+            props.navigation.getParam("onDone")({ color: color });
           }}
         >
           Done

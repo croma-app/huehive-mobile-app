@@ -7,7 +7,7 @@ export const UndoCard = props => {
     Todo - need to add deletion based on type 
   */
   const { name, undoDeletionByName } = props;
-  console.log(props, "undo card ****** &&&&&& ")
+  console.log(props, "undo card ****** &&&&&& ");
   return (
     <View style={styles.undoCard}>
       <View style={{ width: "80%" }}>
@@ -15,7 +15,7 @@ export const UndoCard = props => {
       </View>
       <Touchable
         onPress={() => {
-          undoDeletionByName(name)
+          undoDeletionByName(name);
         }}
       >
         <Text style={styles.undoButton}> UNDO </Text>
