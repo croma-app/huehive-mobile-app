@@ -4,7 +4,16 @@ import { ScrollView, StyleSheet } from "react-native";
 import CromaButton from "../components/CromaButton";
 import { UndoCard } from "../components/UndoCard";
 import { Croma } from "../screens/store";
-
+import { FloatingAction } from "react-native-floating-action";
+import Colors from "../constants/Colors";
+const actions = [
+  {
+    text: "Accessibility",
+    icon: require("../assets/images/add.png"),
+    name: "bt_accessibility",
+    position: 1
+  }
+];
 export default function PaletteScreen(props) {
   const paletteName = props.navigation.getParam("name");
   const {
@@ -40,18 +49,19 @@ export default function PaletteScreen(props) {
             ></SingleColorCard>
           );
         })}
-        <CromaButton
-          onPress={() =>
-            props.navigation.navigate("ColorPicker", {
-              onDone: color => {
-                addColorToPalette(paletteName, color);
-              }
-            })
-          }
-        >
-          Add color
-        </CromaButton>
       </ScrollView>
+      <FloatingAction
+        actions={actions}
+        overrideWithAction={true}
+        color={Colors.accent}
+        onPressItem={() =>
+          props.navigation.navigate("ColorPicker", {
+            onDone: color => {
+              addColorToPalette(paletteName, color);
+            }
+          })
+        }
+      />
       {deletedColors.map(colorObj => (
         <UndoCard
           name={colorObj.color}
