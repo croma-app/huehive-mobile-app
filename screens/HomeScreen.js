@@ -90,8 +90,17 @@ const HomeScreen = function(props) {
               />
             );
           })}
-
-          <FloatingAction
+        </ScrollView>
+        {Object.keys(deletedPalettes).map(name => {
+          return (
+            <UndoCard
+              key={name}
+              name={name}
+              undoDeletionByName={undoDeletionByName}
+            />
+          );
+        })}
+        <FloatingAction
             color={Colors.accent}
             actions={actions}
             onPressItem={name => {
@@ -120,16 +129,6 @@ const HomeScreen = function(props) {
               console.log(`selected button: ${name}`);
             }}
           />
-        </ScrollView>
-        {Object.keys(deletedPalettes).map(name => {
-          return (
-            <UndoCard
-              key={name}
-              name={name}
-              undoDeletionByName={undoDeletionByName}
-            />
-          );
-        })}
       </>
     );
   }
