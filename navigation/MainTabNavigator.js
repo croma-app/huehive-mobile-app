@@ -6,6 +6,7 @@ import ColorDetailsScreen from "../screens/ColorDetailScreen";
 import ColorPickerScreen from "../screens/ColorPickerScreen";
 import PalettesScreen from "../screens/PalettesScreen";
 import SavePaletteScreen from "../screens/SavePaletteScreen";
+import AddPaletteManuallyScreen from "../screens/AddPaletteManuallyScreen";
 import ColorListScreen from "../screens/ColorListScreen";
 import PaletteScreen from "../screens/PaletteScreen";
 import HomeScreen from "../screens/HomeScreen";
@@ -23,7 +24,8 @@ const RootStack = createStackNavigator(
     SavePalette: SavePaletteScreen,
     ColorList: ColorListScreen,
     Palette: PaletteScreen,
-    Home: HomeScreen
+    Home: HomeScreen,
+    AddPaletteManually: AddPaletteManuallyScreen
   },
   {
     initialRouteName: "Home",
