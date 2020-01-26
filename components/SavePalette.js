@@ -2,7 +2,6 @@ import React from "react";
 import { Text, View, StyleSheet, TextInput } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Colors from "../constants/Colors";
-import Storage from "../libs/Storage";
 import CromaButton from "../components/CromaButton";
 import { Croma } from "../screens/store";
 
@@ -10,7 +9,7 @@ export const SavePalette = props => {
   console.log("props.natigation: ", props.navigation);
   const [paletteName, setPaletteName] = React.useState("");
   const { addPalette } = React.useContext(Croma);
-  const { title, navigationPath } = props
+  const { title, navigationPath } = props;
   return (
     <ScrollView>
       <View style={styles.card}>
@@ -23,13 +22,15 @@ export const SavePalette = props => {
       </View>
       <CromaButton
         onPress={async () => {
-          const colors = props.navigation.getParam("colors") || [];
-          const palette = { name: paletteName, colors: colors } 
+          const colors = [
+            ...new Set(props.navigation.getParam("colors") || [])
+          ];
+          const palette = { name: paletteName, colors: colors };
           addPalette(palette);
           console.log("navigating to home");
-          if(navigationPath === 'Palette'){
-            props.navigation.navigate(navigationPath, palette);            
-          }else{
+          if (navigationPath === "Palette") {
+            props.navigation.navigate(navigationPath, palette);
+          } else {
             props.navigation.navigate(navigationPath);
           }
         }}

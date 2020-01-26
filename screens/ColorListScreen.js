@@ -4,8 +4,7 @@ import { ScrollView, StyleSheet } from "react-native";
 import CromaButton from "../components/CromaButton";
 
 export default function ColorListScreen(props) {
-  const colors = props.navigation.getParam("colors");
-  console.log("Colors:" + JSON.stringify(colors));
+  const colors = uniqueColors(props.navigation.getParam("colors"));
   return (
     <ScrollView style={styles.listview}>
       {colors.map(color => (
@@ -21,6 +20,20 @@ export default function ColorListScreen(props) {
     </ScrollView>
   );
 }
+function uniqueColors(colors) {
+  let set = new Set();
+  let uniqueColors = [];
+  colors.forEach(color => {
+    console.log("Color: " + color.color);
+    if (!set.has(color.color)) {
+      console.log("inside===" + color.color);
+      uniqueColors.push(color);
+    }
+    set.add(color.color);
+  });
+  return uniqueColors;
+}
+
 ColorListScreen.navigationOptions = {
   title: "Colors"
 };

@@ -1,20 +1,21 @@
 import React, { useState } from "react";
 import SingleColorCard from "../components/SingleColorCard";
-import { ScrollView, StyleSheet } from "react-native";
-import CromaButton from "../components/CromaButton";
+import { ScrollView, StyleSheet, View, Dimensions } from "react-native";
 import { UndoCard } from "../components/UndoCard";
 import { Croma } from "../screens/store";
 import { FloatingAction } from "react-native-floating-action";
 import Colors from "../constants/Colors";
+import { Header } from "react-navigation";
 const actions = [
   {
-    text: "Accessibility",
+    text: "Add color",
     icon: require("../assets/images/add.png"),
-    name: "bt_accessibility",
+    name: "add_color",
     position: 1
   }
 ];
 export default function PaletteScreen(props) {
+  const { height, width } = Dimensions.get("window");
   const paletteName = props.navigation.getParam("name");
   const {
     allPalettes,
@@ -32,7 +33,9 @@ export default function PaletteScreen(props) {
   };
 
   return (
-    <>
+    <View
+      style={(styles.container, { minHeight: height - Header.HEIGHT - 16 })}
+    >
       <ScrollView style={styles.listview}>
         {colors.map((colorObj, index) => {
           return (
@@ -50,6 +53,15 @@ export default function PaletteScreen(props) {
           );
         })}
       </ScrollView>
+
+      {deletedColors.map(colorObj => (
+        <UndoCard
+          name={colorObj.color}
+          undoDeletionByName={colorName => {
+            undoColorDeletion(paletteName, colorName);
+          }}
+        />
+      ))}
       <FloatingAction
         actions={actions}
         overrideWithAction={true}
@@ -62,15 +74,7 @@ export default function PaletteScreen(props) {
           })
         }
       />
-      {deletedColors.map(colorObj => (
-        <UndoCard
-          name={colorObj.color}
-          undoDeletionByName={colorName => {
-            undoColorDeletion(paletteName, colorName);
-          }}
-        />
-      ))}
-    </>
+    </View>
   );
 }
 PaletteScreen.navigationOptions = ({ navigation }) => {
@@ -80,6 +84,9 @@ PaletteScreen.navigationOptions = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
   listview: {
     margin: 8
   }

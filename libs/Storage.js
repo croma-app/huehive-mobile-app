@@ -14,4 +14,9 @@ export default class Storage {
   static saveAllPalette = async allPalette => {
     await AsyncStorage.setItem(ALL_PALETTES, JSON.stringify(allPalette));
   };
+  static deletePaletteByName = async name => {
+    let palettes = await Storage.getAllPalettes();
+    delete palettes[name];
+    await Storage.saveAllPalette(palettes);
+  };
 }

@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, ActivityIndicator, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  ActivityIndicator,
+  View,
+  Dimensions
+} from "react-native";
 import { PaletteCard } from "../components/PaletteCard";
 import { UndoCard } from "../components/UndoCard";
 import { Croma } from "../screens/store";
@@ -10,7 +16,11 @@ import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
 import ColorPicker from "../libs/ColorPicker";
 import Jimp from "jimp";
+import { Header } from "react-navigation";
+
 const HomeScreen = function(props) {
+  const { height, width } = Dimensions.get("window");
+
   const actions = [
     {
       text: "Get palette from image",
@@ -76,9 +86,11 @@ const HomeScreen = function(props) {
     return <ActivityIndicator />;
   } else {
     return (
-      <>
+      <View
+        style={[styles.container, { minHeight: height - Header.HEIGHT - 16 }]}
+      >
         {pickImgloading ? <ActivityIndicator /> : <View />}
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView>
           {Object.keys(allPalettes).map(name => {
             console.log("name: ", name, allPalettes[name].colors);
             return (
@@ -91,6 +103,16 @@ const HomeScreen = function(props) {
             );
           })}
         </ScrollView>
+
+        {Object.keys(deletedPalettes).map(name => {
+          return (
+            <UndoCard
+              key={name}
+              name={name}
+              undoDeletionByName={undoDeletionByName}
+            />
+          );
+        })}
         <FloatingAction
           color={Colors.accent}
           actions={actions}
@@ -120,16 +142,7 @@ const HomeScreen = function(props) {
             console.log(`selected button: ${name}`);
           }}
         />
-        {Object.keys(deletedPalettes).map(name => {
-          return (
-            <UndoCard
-              key={name}
-              name={name}
-              undoDeletionByName={undoDeletionByName}
-            />
-          );
-        })}
-      </>
+      </View>
     );
   }
 };
