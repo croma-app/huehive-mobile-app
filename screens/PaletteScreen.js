@@ -6,6 +6,7 @@ import { Croma } from "../screens/store";
 import { FloatingAction } from "react-native-floating-action";
 import Colors from "../constants/Colors";
 import { Header } from "react-navigation";
+import EmptyView from "../components/EmptyView";
 const actions = [
   {
     text: "Add color",
@@ -52,6 +53,7 @@ export default function PaletteScreen(props) {
             ></SingleColorCard>
           );
         })}
+        <EmptyView /> 
       </ScrollView>
 
       {deletedColors.map(colorObj => (

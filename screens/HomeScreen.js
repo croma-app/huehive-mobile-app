@@ -17,6 +17,7 @@ import * as Permissions from "expo-permissions";
 import ColorPicker from "../libs/ColorPicker";
 import Jimp from "jimp";
 import { Header } from "react-navigation";
+import EmptyView from "../components/EmptyView";
 
 const HomeScreen = function(props) {
   const { height, width } = Dimensions.get("window");
@@ -102,6 +103,7 @@ const HomeScreen = function(props) {
               />
             );
           })}
+          <EmptyView />
         </ScrollView>
 
         {Object.keys(deletedPalettes).map(name => {
