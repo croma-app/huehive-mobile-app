@@ -55,7 +55,7 @@ export default function PaletteScreen(props) {
             );
           })}
           <EmptyView />
-        </ScrollView>
+        </ScrollView> 
         <FloatingAction
           actions={actions}
           overrideWithAction={true}
