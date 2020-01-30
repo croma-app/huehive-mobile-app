@@ -75,9 +75,9 @@ export default function applicationHook(initState) {
       const { allPalettes } = state;
       const deletedColor = allPalettes[name].colors.splice(colorIndex, 1);
       if (allPalettes[name].deletedColors) {
-        allPalettes[name].deletedColors.push(deletedColor[0]);
+        allPalettes[name].deletedColors.push({...deletedColor[0]});
       } else {
-        allPalettes[name].deletedColors = deletedColor;
+        allPalettes[name].deletedColors = [...deletedColor];
       }
       setTimeout(() => {
         clearDeletedColor(name, deletedColor[0].color);
