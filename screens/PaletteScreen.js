@@ -34,49 +34,52 @@ export default function PaletteScreen(props) {
   };
 
   return (
-    <View
-      style={(styles.container, { minHeight: height - Header.HEIGHT - 16 })}
-    >
-      <ScrollView style={styles.listview}>
-        {colors.map((colorObj, index) => {
-          return (
-            <SingleColorCard
-              onPress={() =>
-                props.navigation.navigate("ColorDetails", {
-                  color: colorObj.color
-                })
+    <>
+      <View
+        style={(styles.container, { minHeight: height - Header.HEIGHT - 16 })}
+      >
+        <ScrollView style={styles.listview}>
+          {colors.map((colorObj, index) => {
+            return (
+              <SingleColorCard
+                onPress={() =>
+                  props.navigation.navigate("ColorDetails", {
+                    color: colorObj.color
+                  })
+                }
+                color={colorObj.color}
+                colorDeleteFromPalette={() => {
+                  deleteColor(index);
+                }}
+              ></SingleColorCard>
+            );
+          })}
+          <EmptyView />
+        </ScrollView>
+        <FloatingAction
+          actions={actions}
+          overrideWithAction={true}
+          color={Colors.accent}
+          onPressItem={() =>
+            props.navigation.navigate("ColorPicker", {
+              onDone: color => {
+                addColorToPalette(paletteName, color);
               }
-              color={colorObj.color}
-              colorDeleteFromPalette={() => {
-                deleteColor(index);
-              }}
-            ></SingleColorCard>
-          );
-        })}
-        <EmptyView /> 
-      </ScrollView>
-
-      {deletedColors.map(colorObj => (
-        <UndoCard
-          name={colorObj.color}
-          undoDeletionByName={colorName => {
-            undoColorDeletion(paletteName, colorName);
-          }}
+            })
+          }
         />
-      ))}
-      <FloatingAction
-        actions={actions}
-        overrideWithAction={true}
-        color={Colors.accent}
-        onPressItem={() =>
-          props.navigation.navigate("ColorPicker", {
-            onDone: color => {
-              addColorToPalette(paletteName, color);
-            }
-          })
-        }
-      />
-    </View>
+      </View>
+      <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>
+        {deletedColors.map(colorObj => (
+          <UndoCard
+            name={colorObj.color}
+            undoDeletionByName={colorName => {
+              undoColorDeletion(paletteName, colorName);
+            }}
+          />
+        ))}
+      </View>
+    </>
   );
 }
 PaletteScreen.navigationOptions = ({ navigation }) => {
