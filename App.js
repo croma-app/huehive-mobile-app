@@ -3,8 +3,7 @@ import {
   Platform,
   StatusBar,
   StyleSheet,
-  View,
-  Dimensions
+  View
 } from "react-native";
 import Colors from "./constants/Colors";
 import AppNavigator from "./navigation/AppNavigator";
@@ -12,16 +11,12 @@ import AppNavigator from "./navigation/AppNavigator";
 import applicationHook, { initState, Croma } from "./screens/store";
 
 export default function App(props) {
-  const { height, width } = Dimensions.get("window");
-  console.log("height", height, "width", width);
-
   return (
     <Croma.Provider value={applicationHook(initState)}>
       <View style={[styles.container]}>
         <View
           style={[
-            { backgroundColor: "transparent" },
-            { width: Platform.OS == "web" ? Math.min(600, width) : width }
+            { flex: 1, backgroundColor: "transparent", maxWidth: 600},
           ]}
         >
           {Platform.OS === "ios" && <StatusBar barStyle="default" />}
