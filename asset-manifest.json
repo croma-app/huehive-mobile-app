@@ -1,6 +1,6 @@
 {
-  "app.js": "/static/js/app.baa17049.chunk.js",
-  "app.0e3e969998beebd5ae39.map": "/0e3e969998beebd5ae39.map",
+  "app.js": "/static/js/app.92a98771.chunk.js",
+  "app.bcb0c23ff023c139b6c3.map": "/bcb0c23ff023c139b6c3.map",
   "runtime~app.js": "/static/js/runtime~app.43360584.js",
   "runtime~app.2761cd8426f52ed76a3e.map": "/2761cd8426f52ed76a3e.map",
   "static/js/2.27c7612f.chunk.js": "/static/js/2.27c7612f.chunk.js",
@@ -25,11 +25,11 @@
   "favicon.ico": "/favicon.ico",
   "index.html": "/index.html",
   "manifest.json": "/manifest.json",
-  "precache-manifest.8ec0acd942d39bc1e59f90803be634d7.js": "/precache-manifest.8ec0acd942d39bc1e59f90803be634d7.js",
+  "precache-manifest.a7b79a682195b9c09898910b2452d090.js": "/precache-manifest.a7b79a682195b9c09898910b2452d090.js",
   "serve.json": "/serve.json",
   "service-worker.js": "/service-worker.js",
   "static/js/2.27c7612f.chunk.js.gz": "/static/js/2.27c7612f.chunk.js.gz",
-  "static/js/app.baa17049.chunk.js.gz": "/static/js/app.baa17049.chunk.js.gz",
+  "static/js/app.92a98771.chunk.js.gz": "/static/js/app.92a98771.chunk.js.gz",
   "static/js/runtime~app.43360584.js.gz": "/static/js/runtime~app.43360584.js.gz",
   "static/media/back-icon-mask.png": "/static/media/back-icon-mask.6165c9d7.png"
 }
