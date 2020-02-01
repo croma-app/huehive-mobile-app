@@ -1,6 +1,6 @@
 {
-  "background_color": "#ffffff",
-  "description": "A Neat Expo App",
+  "background_color": "#f1544d",
+  "description": "Save your colors",
   "dir": "auto",
   "display": "standalone",
   "lang": "en",
