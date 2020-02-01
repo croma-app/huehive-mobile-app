@@ -27,6 +27,7 @@
       "supportsTablet": true
     },
     "web": {
+      "themeColor": "#c94740",
       "build": {
         "babel": {
           "include": [
