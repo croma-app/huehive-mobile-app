@@ -26,6 +26,7 @@
     "ios": {
       "supportsTablet": true
     },
+    "description": "Save your colors",
     "web": {
       "build": {
         "babel": {
