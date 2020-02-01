@@ -20,7 +20,7 @@ self.__precacheManifest = [
     "url": "/serve.json"
   },
   {
-    "revision": "7a7bc7ead25db795e58b336f04d2624c",
+    "revision": "273e385bd8a42c9a0079719669964071",
     "url": "/favicon.ico"
   },
   {
@@ -92,7 +92,7 @@ self.__precacheManifest = [
     "url": "/apple/splash/icon_828x1792.png"
   },
   {
-    "revision": "d42b0e44bd560ace055a5a43e61a3e03",
+    "revision": "52dfe9ffb5a289177ff8898d7528db1a",
     "url": "/index.html"
   },
   {
