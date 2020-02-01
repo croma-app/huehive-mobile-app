@@ -15,7 +15,7 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#f1544d"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -26,6 +26,7 @@
     "ios": {
       "supportsTablet": true
     },
+    "description": "Save your colors",
     "web": {
       "themeColor": "#c94740",
       "build": {
