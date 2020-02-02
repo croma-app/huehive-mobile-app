@@ -26,6 +26,10 @@
     "ios": {
       "supportsTablet": true
     },
+    "android": {
+      "package": "app.croma",
+      "versionCode": 1
+    },
     "description": "Save your colors",
     "web": {
       "themeColor": "#c94740",

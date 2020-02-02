@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Platform,
-  StatusBar,
-  StyleSheet,
-  View
-} from "react-native";
+import { Platform, StatusBar, StyleSheet, View } from "react-native";
 import Colors from "./constants/Colors";
 import AppNavigator from "./navigation/AppNavigator";
 
@@ -15,9 +10,7 @@ export default function App(props) {
     <Croma.Provider value={applicationHook(initState)}>
       <View style={[styles.container]}>
         <View
-          style={[
-            { flex: 1, backgroundColor: "transparent", maxWidth: 600},
-          ]}
+          style={[{ flex: 1, backgroundColor: "transparent", maxWidth: 600 }]}
         >
           {Platform.OS === "ios" && <StatusBar barStyle="default" />}
           <AppNavigator />

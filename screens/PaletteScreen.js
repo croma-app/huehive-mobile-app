@@ -55,7 +55,7 @@ export default function PaletteScreen(props) {
             );
           })}
           <EmptyView />
-        </ScrollView> 
+        </ScrollView>
         <FloatingAction
           actions={actions}
           overrideWithAction={true}
@@ -69,7 +69,7 @@ export default function PaletteScreen(props) {
           }
         />
       </View>
-      <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>
+      <View style={{ position: "absolute", bottom: 0, width: "100%" }}>
         {deletedColors.map(colorObj => (
           <UndoCard
             name={colorObj.color}

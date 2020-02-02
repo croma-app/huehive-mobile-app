@@ -19,7 +19,7 @@ import Jimp from "jimp";
 import { Header } from "react-navigation";
 import EmptyView from "../components/EmptyView";
 
-const HomeScreen = function (props) {
+const HomeScreen = function(props) {
   const { height, width } = Dimensions.get("window");
 
   const actions = [
@@ -137,7 +137,7 @@ const HomeScreen = function (props) {
           />
         </View>
 
-        <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>
+        <View style={{ position: "absolute", bottom: 0, width: "100%" }}>
           {Object.keys(deletedPalettes).map(name => {
             return (
               <UndoCard
