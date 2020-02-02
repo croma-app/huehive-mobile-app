@@ -28,9 +28,6 @@ export const PaletteCard = props => {
         <Text style={styles.label}>{props.name}</Text>
         <View style={styles.actionButtonsView}>
           <Touchable style={styles.actionButton}>
-            <FontAwesomeIcon icon={faEdit} />
-          </Touchable>
-          <Touchable style={styles.actionButton}>
             <FontAwesomeIcon icon={faShareSquare} />
           </Touchable>
           <Touchable

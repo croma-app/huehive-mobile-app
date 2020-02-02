@@ -4,7 +4,8 @@ import {
   StyleSheet,
   ActivityIndicator,
   View,
-  Dimensions
+  Dimensions,
+  Platform
 } from "react-native";
 import { PaletteCard } from "../components/PaletteCard";
 import { UndoCard } from "../components/UndoCard";
@@ -48,6 +49,9 @@ const HomeScreen = function(props) {
       color: Colors.primary
     }
   ];
+  if(Platform.OS === "web"){
+    actions.pop()
+  }
   const {
     isLoading,
     allPalettes,
