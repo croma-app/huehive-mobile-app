@@ -43,6 +43,7 @@
     "react-navigation-stack": "^1.10.3"
   },
   "devDependencies": {
+    "@expo/webpack-config": "^0.10.11",
     "babel-preset-expo": "^7.0.0",
     "husky": "^3.1.0",
     "jest-expo": "^36.0.0",
