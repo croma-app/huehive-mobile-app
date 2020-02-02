@@ -7,7 +7,13 @@
   "name": "Croma",
   "orientation": "portrait",
   "prefer_related_applications": true,
-  "related_applications": [],
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "http://play.google.com/store/apps/details?id=app.croma",
+      "id": "app.croma"
+    }
+  ],
   "short_name": "Croma",
   "start_url": ".",
   "theme_color": "#c94740",
