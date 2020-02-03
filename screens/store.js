@@ -124,7 +124,6 @@ export default function applicationHook(initState) {
   if (Object.keys(state.allPalettes).length > 0) {
     shrinkStateToStore(state.allPalettes);
   }
-  console.log(state, "updated state ");
   return state;
 }
 

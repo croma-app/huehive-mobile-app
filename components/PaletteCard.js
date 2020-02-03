@@ -18,7 +18,6 @@ export const PaletteCard = props => {
     <Card
       {...props}
       onPress={() => {
-        console.log("navigate to palette screen" + props.navigation);
         props.navigation.navigate("Palette", props);
       }}
     >

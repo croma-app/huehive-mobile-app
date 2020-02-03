@@ -9,14 +9,12 @@ export default function ColorPickerScreen(props) {
       <View style={styles.container}>
         <ColorPicker
           onChangeColor={color => {
-            console.log("oncolorchange called", color);
             setColor(color);
           }}
           style={[{ height: 300, verticalMargin: 8, flex: 1 }]}
         />
         <CromaButton
           onPress={() => {
-            console.log(props.navigation.getParam("onDone"));
             props.navigation.goBack();
             props.navigation.getParam("onDone")({ color: color });
           }}

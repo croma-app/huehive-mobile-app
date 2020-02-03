@@ -24,9 +24,7 @@ function uniqueColors(colors) {
   let set = new Set();
   let uniqueColors = [];
   colors.forEach(color => {
-    console.log("Color: " + color.color);
     if (!set.has(color.color)) {
-      console.log("inside===" + color.color);
       uniqueColors.push(color);
     }
     set.add(color.color);
