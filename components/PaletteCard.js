@@ -18,7 +18,6 @@ export const PaletteCard = props => {
     <Card
       {...props}
       onPress={() => {
-        console.log("navigate to palette screen" + props.navigation);
         props.navigation.navigate("Palette", props);
       }}
     >
@@ -27,9 +26,6 @@ export const PaletteCard = props => {
       <View style={styles.bottom}>
         <Text style={styles.label}>{props.name}</Text>
         <View style={styles.actionButtonsView}>
-          <Touchable style={styles.actionButton}>
-            <FontAwesomeIcon icon={faEdit} />
-          </Touchable>
           <Touchable style={styles.actionButton}>
             <FontAwesomeIcon icon={faShareSquare} />
           </Touchable>

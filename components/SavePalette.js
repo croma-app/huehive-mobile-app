@@ -6,7 +6,6 @@ import CromaButton from "../components/CromaButton";
 import { Croma } from "../screens/store";
 
 export const SavePalette = props => {
-  console.log("props.natigation: ", props.navigation);
   const [paletteName, setPaletteName] = React.useState("");
   const { addPalette } = React.useContext(Croma);
   const { title, navigationPath } = props;
@@ -27,7 +26,6 @@ export const SavePalette = props => {
           ];
           const palette = { name: paletteName, colors: colors };
           addPalette(palette);
-          console.log("navigating to home");
           if (navigationPath === "Palette") {
             props.navigation.navigate(navigationPath, palette);
           } else {

@@ -4,7 +4,8 @@ import {
   StyleSheet,
   ActivityIndicator,
   View,
-  Dimensions
+  Dimensions,
+  Platform
 } from "react-native";
 import { PaletteCard } from "../components/PaletteCard";
 import { UndoCard } from "../components/UndoCard";
@@ -48,6 +49,9 @@ const HomeScreen = function(props) {
       color: Colors.primary
     }
   ];
+  if(Platform.OS === "web"){
+    actions.pop()
+  }
   const {
     isLoading,
     allPalettes,
@@ -56,7 +60,6 @@ const HomeScreen = function(props) {
     undoDeletionByName
   } = React.useContext(Croma);
   const [pickImgloading, setPickImgLoading] = useState(false);
-  console.log("called again ", allPalettes, deletedPalettes);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -64,7 +67,6 @@ const HomeScreen = function(props) {
       quality: 1,
       base64: true
     });
-    // console.log("Result: " + JSON.stringify(result));
     if (result.base64 !== undefined) {
       return await Jimp.read(new Buffer(result.base64, "base64"));
     } else {
@@ -94,7 +96,6 @@ const HomeScreen = function(props) {
           {pickImgloading ? <ActivityIndicator /> : <View />}
           <ScrollView>
             {Object.keys(allPalettes).map(name => {
-              console.log("name: ", name, allPalettes[name].colors);
               return (
                 <PaletteCard
                   key={name}
@@ -122,7 +123,6 @@ const HomeScreen = function(props) {
               } else if (name === "palette_from_color") {
                 props.navigation.navigate("ColorPicker", {
                   onDone: color => {
-                    console.log("Navigating to palettes");
                     props.navigation.navigate("Palettes", {
                       color: color.color
                     });
@@ -132,7 +132,6 @@ const HomeScreen = function(props) {
                 props.navigation.navigate("AddPaletteManually");
               } else if (name === "unlock_pro") {
               }
-              console.log(`selected button: ${name}`);
             }}
           />
         </View>
