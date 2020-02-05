@@ -12,10 +12,14 @@ const shrinkStateToStore = function(allPalettes) {
   Storage.saveAllPalette(allPalettes);
 };
 
+const colorSortCallback = (a, b)=> a.color > b.color ? 1 : -1
+const sortPalette = (palette) => palette.colors.sort(colorSortCallback)
+
 export default function applicationHook(initState) {
   const addPalette = async palette => {
     setState(state => {
       const { allPalettes } = state;
+      sortPalette(palette)
       allPalettes[palette.name] = palette;
       return { ...state, allPalettes };
     });
@@ -38,6 +42,7 @@ export default function applicationHook(initState) {
     setState(state => {
       const { allPalettes } = state;
       allPalettes[name].colors = allPalettes[name].colors.concat(color);
+      sortPalette(allPalettes[name])
       return { ...state, allPalettes };
     });
   };
@@ -95,6 +100,7 @@ export default function applicationHook(initState) {
           allPalettes[name].deletedColors.splice(index, 1);
         }
       });
+      sortPalette(allPalettes[name])
       return { ...state, allPalettes };
     });
   };
