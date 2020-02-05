@@ -13,7 +13,9 @@ export const UndoCard = props => {
         <Text style={styles.undoText}>Deleted {name}. tab to dismiss.</Text>
       </View>
       <Touchable
-        onPress={() => {
+        onPress={event => {
+          event.stopPropagation();
+          event.preventDefault();
           undoDeletionByName(name);
         }}
       >

@@ -30,7 +30,9 @@ export const PaletteCard = props => {
             <FontAwesomeIcon icon={faShareSquare} />
           </Touchable>
           <Touchable
-            onPress={() => {
+            onPress={event => {
+              event.preventDefault();
+              event.stopPropagation();
               deletePaletteByName(props.name);
             }}
             style={styles.actionButton}

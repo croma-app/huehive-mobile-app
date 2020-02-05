@@ -42,6 +42,7 @@ export default function PaletteScreen(props) {
           {colors.map((colorObj, index) => {
             return (
               <SingleColorCard
+                key={colorObj.color}
                 onPress={() =>
                   props.navigation.navigate("ColorDetails", {
                     color: colorObj.color

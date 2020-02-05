@@ -18,7 +18,11 @@ export default class SingleColorCard extends React.Component {
             <Text style={styles.label}>{this.props.color}</Text>
             <View style={styles.actionButtonsView}>
               <Touchable
-                onPress={this.props.colorDeleteFromPalette}
+                onPress={event => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  this.props.colorDeleteFromPalette();
+                }}
                 style={styles.actionButton}
               >
                 <FontAwesomeIcon icon={faTrashAlt} />

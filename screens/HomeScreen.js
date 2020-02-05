@@ -49,8 +49,8 @@ const HomeScreen = function(props) {
       color: Colors.primary
     }
   ];
-  if(Platform.OS === "web"){
-    actions.pop()
+  if (Platform.OS === "web") {
+    actions.pop();
   }
   const {
     isLoading,
