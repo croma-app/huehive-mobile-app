@@ -2,6 +2,12 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Touchable from "react-native-platform-touchable";
 
+export const DialogContainer = (props) => (
+  <View style={{ position: "absolute", bottom: 0, width: "100%" }}>
+    {props.children}
+  </View>  
+)
+
 export const UndoCard = props => {
   /*
     Todo - need to add deletion based on type 
@@ -24,6 +30,14 @@ export const UndoCard = props => {
     </View>
   );
 };
+
+export const TextCard = props => (
+  <View style={styles.undoCard}>
+      <View style={{ width: "80%" }}>
+        <Text style={styles.undoText}>A palette with same name already exists.</Text>
+      </View>
+  </View>    
+);
 
 const styles = StyleSheet.create({
   undoCard: {
