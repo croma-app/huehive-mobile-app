@@ -8,7 +8,7 @@ import {
   Platform
 } from "react-native";
 import { PaletteCard } from "../components/PaletteCard";
-import { UndoCard } from "../components/UndoCard";
+import { UndoCard, DialogContainer } from "../components/UndoCard";
 import { Croma } from "../screens/store";
 import { FloatingAction } from "react-native-floating-action";
 import Colors from "../constants/Colors";
@@ -136,7 +136,7 @@ const HomeScreen = function(props) {
           />
         </View>
 
-        <View style={{ position: "absolute", bottom: 0, width: "100%" }}>
+        <DialogContainer>
           {Object.keys(deletedPalettes).map(name => {
             return (
               <UndoCard
@@ -146,7 +146,7 @@ const HomeScreen = function(props) {
               />
             );
           })}
-        </View>
+        </DialogContainer>
       </>
     );
   }

@@ -4,10 +4,12 @@ import { ScrollView } from "react-native-gesture-handler";
 import Colors from "../constants/Colors";
 import CromaButton from "../components/CromaButton";
 import { Croma } from "../screens/store";
+import { TextCard } from "./UndoCard";
 
 export const SavePalette = props => {
   const [paletteName, setPaletteName] = React.useState("");
-  const { addPalette } = React.useContext(Croma);
+  const [isPaletteNameExist, setIsPaletteNameExist] = React.useState(false);
+  const { addPalette, allPalettes } = React.useContext(Croma);
   const { title, navigationPath } = props;
   return (
     <ScrollView>
@@ -21,6 +23,13 @@ export const SavePalette = props => {
       </View>
       <CromaButton
         onPress={async () => {
+          if (allPalettes[paletteName]) {
+            setIsPaletteNameExist(true)
+            setTimeout(() => {
+              setIsPaletteNameExist(false)
+            }, 3000)
+            return null
+          }
           const colors = [
             ...new Set(props.navigation.getParam("colors") || [])
           ];
@@ -35,6 +44,7 @@ export const SavePalette = props => {
       >
         Save palette
       </CromaButton>
+      {isPaletteNameExist && <TextCard />}
     </ScrollView>
   );
 };
