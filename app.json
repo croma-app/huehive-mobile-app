@@ -28,7 +28,8 @@
     },
     "android": {
       "package": "app.croma",
-      "versionCode": 1
+      "versionCode": 1,
+      "permissions": ["CAMERA","READ_PHONE_STATE"]
     },
     "description": "Save your colors",
     "web": {
