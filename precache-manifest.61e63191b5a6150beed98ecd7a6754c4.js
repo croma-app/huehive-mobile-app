@@ -28,6 +28,10 @@ self.__precacheManifest = [
     "url": "/expo-service-worker.js"
   },
   {
+    "revision": "0aca69c7e0da16eba1183e8fc8fa6fd9",
+    "url": "/privacy_policy.html"
+  },
+  {
     "revision": "e4e1e3970a2ba33a5ee4e6ab959b7dab",
     "url": "/manifest.json"
   },
@@ -96,12 +100,12 @@ self.__precacheManifest = [
     "url": "/index.html"
   },
   {
-    "revision": "11f9496d418465fb015bf037b61f90cd",
-    "url": "/static/js/app.1b2c2d8e.chunk.js.gz"
-  },
-  {
     "revision": "3e74af9999f35270f8894dc18ec62976",
     "url": "/static/js/runtime~app.43360584.js.gz"
+  },
+  {
+    "revision": "11f9496d418465fb015bf037b61f90cd",
+    "url": "/static/js/app.1b2c2d8e.chunk.js.gz"
   },
   {
     "revision": "d5c897f0f97f669b9e417ea3d269865f",
