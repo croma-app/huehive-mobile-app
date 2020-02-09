@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SingleColorCard from "../components/SingleColorCard";
 import { ScrollView, StyleSheet, View, Dimensions } from "react-native";
-import { UndoCard } from "../components/UndoCard";
+import { UndoCard, DialogContainer } from "../components/UndoCard";
 import { Croma } from "../screens/store";
 import { FloatingAction } from "react-native-floating-action";
 import Colors from "../constants/Colors";
@@ -70,7 +70,7 @@ export default function PaletteScreen(props) {
           }
         />
       </View>
-      <View style={{ position: "absolute", bottom: 0, width: "100%" }}>
+      <DialogContainer>
         {deletedColors.map(colorObj => (
           <UndoCard
             name={colorObj.color}
@@ -79,7 +79,7 @@ export default function PaletteScreen(props) {
             }}
           />
         ))}
-      </View>
+      </DialogContainer>
     </>
   );
 }
