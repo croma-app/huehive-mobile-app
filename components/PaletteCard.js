@@ -10,7 +10,7 @@ import {
   faEdit
 } from "@fortawesome/free-solid-svg-icons";
 import Touchable from "react-native-platform-touchable";
-import { Croma } from "../screens/store";
+import { Croma } from "../store/store";
 
 export const PaletteCard = props => {
   const { deletePaletteByName } = React.useContext(Croma);

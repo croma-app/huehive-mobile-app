@@ -3,7 +3,7 @@ import { Platform, StatusBar, StyleSheet, View } from "react-native";
 import Colors from "./constants/Colors";
 import AppNavigator from "./navigation/AppNavigator";
 
-import applicationHook, { initState, Croma } from "./screens/store";
+import applicationHook, { initState, Croma } from "./store/store";
 
 export default function App(props) {
   return (

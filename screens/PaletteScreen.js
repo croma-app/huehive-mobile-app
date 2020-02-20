@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import SingleColorCard from "../components/SingleColorCard";
 import { ScrollView, StyleSheet, View, Dimensions } from "react-native";
 import { UndoDialog, DialogContainer } from "../components/CommanDialogs";
-import { Croma } from "../screens/store";
+import { Croma } from "../store/store";
 import { FloatingAction } from "react-native-floating-action";
 import Colors from "../constants/Colors";
 import { Header } from "react-navigation";
