@@ -8,7 +8,7 @@ export const DialogContainer = (props) => (
   </View>  
 )
 
-export const UndoCard = props => {
+export const UndoDialog = props => {
   /*
     Todo - need to add deletion based on type 
   */
@@ -31,7 +31,7 @@ export const UndoCard = props => {
   );
 };
 
-export const TextCard = props => (
+export const TextDialog = props => (
   <View style={styles.undoCard}>
       <View style={{ width: "80%" }}>
         <Text style={styles.undoText}>A palette with same name already exists.</Text>
