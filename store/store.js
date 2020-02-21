@@ -30,7 +30,6 @@ export default function applicationHook(initState) {
     const isUserAleadyExits = await Storage.checkUserAlreadyExists() 
     if( isUserAleadyExits != 'true'){
       Storage.setUserAlreadyExists()
-      console.log('check man ')
       defaultPalettes = {
         'Croma example palette': {
           name: 'Croma example palette',
