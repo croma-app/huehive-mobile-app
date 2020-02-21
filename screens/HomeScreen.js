@@ -8,7 +8,7 @@ import {
   Platform
 } from "react-native";
 import { PaletteCard } from "../components/PaletteCard";
-import { UndoCard, DialogContainer } from "../components/UndoCard";
+import { UndoDialog, DialogContainer } from "../components/CommanDialogs";
 import { Croma } from "../screens/store";
 import { FloatingAction } from "react-native-floating-action";
 import Colors from "../constants/Colors";
@@ -139,7 +139,7 @@ const HomeScreen = function(props) {
         <DialogContainer>
           {Object.keys(deletedPalettes).map(name => {
             return (
-              <UndoCard
+              <UndoDialog
                 key={name}
                 name={name}
                 undoDeletionByName={undoDeletionByName}

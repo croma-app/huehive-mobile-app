@@ -3,8 +3,8 @@ import { Text, View, StyleSheet, TextInput } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Colors from "../constants/Colors";
 import CromaButton from "../components/CromaButton";
-import { Croma } from "../screens/store";
-import { TextCard } from "./UndoCard";
+import { Croma } from "../store/store";
+import { TextDialog } from "./CommanDialogs";
 
 export const SavePalette = props => {
   const [paletteName, setPaletteName] = React.useState("");
@@ -44,7 +44,7 @@ export const SavePalette = props => {
       >
         Save palette
       </CromaButton>
-      {isPaletteNameExist && <TextCard />}
+      {isPaletteNameExist && <TextDialog />}
     </ScrollView>
   );
 };
