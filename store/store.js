@@ -8,12 +8,11 @@ export const initState = {
   isLoading: false
 };
 
-const shrinkStateToStore = function(allPalettes) {
+const shrinkStateToStore = function (allPalettes) {
   Storage.saveAllPalette(allPalettes);
 };
 
-const colorSortCallback = (a, b)=> a.color > b.color ? 1 : -1
-const sortPalette = (palette) => palette.colors.sort(colorSortCallback)
+const sortPalette = (palette) => palette.colors.sort((a, b) => a.color > b.color ? 1 : -1)
 
 export default function applicationHook(initState) {
   const addPalette = async palette => {
@@ -26,8 +25,21 @@ export default function applicationHook(initState) {
   };
 
   const loadInitPaletteFromStore = async () => {
+    //setting default palette when user comming first time
+    let defaultPalettes = {}
+    const isUserAleadyExits = await Storage.checkUserAlreadyExists() 
+    if( isUserAleadyExits != 'true'){
+      Storage.setUserAlreadyExists()
+      defaultPalettes = {
+        'Croma example palette': {
+          name: 'Croma example palette',
+          colors: [{color: "#ef635f"},{color: "#efd05f"}]
+        }
+      } 
+    }
     const allPalettes = await Storage.getAllPalettes();
-    setState(state => ({ ...state, allPalettes }));
+    
+    setState(state => ({ ...state, allPalettes: {...allPalettes, ...defaultPalettes} }));
   };
 
   const removePaletteFromStateByName = name => {
@@ -48,7 +60,6 @@ export default function applicationHook(initState) {
   };
 
   const deletePaletteByName = async name => {
-    await Storage.deletePaletteByName(name);
     setState(state => {
       const { allPalettes } = state;
       const { deletedPalettes } = state;

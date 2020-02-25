@@ -1,5 +1,6 @@
 import { AsyncStorage } from "react-native";
 const ALL_PALETTES = "ALL_PALETTES";
+const IS_USER_ALREADY_EXIST_KEY = 'IS_USER_ALREADY_EXIST';
 export default class Storage {
   static getAllPalettes = async () => {
     let palettes = await AsyncStorage.getItem(ALL_PALETTES);
@@ -13,9 +14,12 @@ export default class Storage {
   static saveAllPalette = async allPalette => {
     await AsyncStorage.setItem(ALL_PALETTES, JSON.stringify(allPalette));
   };
-  static deletePaletteByName = async name => {
-    let palettes = await Storage.getAllPalettes();
-    delete palettes[name];
-    await Storage.saveAllPalette(palettes);
-  };
+
+  static setUserAlreadyExists = async () => {
+    await AsyncStorage.setItem(IS_USER_ALREADY_EXIST_KEY, 'true')
+  }
+
+  static checkUserAlreadyExists = async () => {
+    return await AsyncStorage.getItem(IS_USER_ALREADY_EXIST_KEY)
+  }
 }
