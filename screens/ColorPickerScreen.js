@@ -5,7 +5,7 @@ import { CromaColorPicker as ColorPicker } from "croma-color-picker";
 export default function ColorPickerScreen(props) {
   const [color, setColor] = useState("#db0a5b");
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         <ColorPicker
           onChangeColor={color => {
