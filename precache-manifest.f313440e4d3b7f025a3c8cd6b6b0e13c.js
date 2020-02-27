@@ -1,7 +1,7 @@
 self.__precacheManifest = [
   {
-    "revision": "86187f63ce392a086774",
-    "url": "/static/js/app.f5642575.chunk.js"
+    "revision": "02933be8f83d38ef0cab",
+    "url": "/static/js/app.740f0814.chunk.js"
   },
   {
     "revision": "2761cd8426f52ed76a3e",
@@ -96,12 +96,12 @@ self.__precacheManifest = [
     "url": "/apple/splash/icon_828x1792.png"
   },
   {
-    "revision": "312205880855c84f1cf31aa9386e919e",
+    "revision": "2d7cf1624478f8bf8e0b995ca393abfb",
     "url": "/index.html"
   },
   {
-    "revision": "8c16d8e527cf3b35f2f313d8861f86e7",
-    "url": "/static/js/app.f5642575.chunk.js.gz"
+    "revision": "d59bd4a9f605405c90b446787da6f643",
+    "url": "/static/js/app.740f0814.chunk.js.gz"
   },
   {
     "revision": "3e74af9999f35270f8894dc18ec62976",
