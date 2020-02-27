@@ -6,7 +6,7 @@ import CromaButton from "../components/CromaButton";
 export default function ColorDetailScreen(props) {
   const color = props.navigation.getParam("color");
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <ColorDetail navigation={props.navigation} color={color}>
         {color}
       </ColorDetail>

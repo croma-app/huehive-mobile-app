@@ -94,7 +94,7 @@ const HomeScreen = function(props) {
           style={[styles.container, { minHeight: height - Header.HEIGHT - 16 }]}
         >
           {pickImgloading ? <ActivityIndicator /> : <View />}
-          <ScrollView>
+          <ScrollView showsVerticalScrollIndicator={false}>
             {Object.keys(allPalettes).map(name => {
               return (
                 <PaletteCard

@@ -38,7 +38,7 @@ export default function PaletteScreen(props) {
       <View
         style={(styles.container, { minHeight: height - Header.HEIGHT - 16 })}
       >
-        <ScrollView style={styles.listview}>
+        <ScrollView style={styles.listview} showsVerticalScrollIndicator={false}>
           {colors.map((colorObj, index) => {
             return (
               <SingleColorCard

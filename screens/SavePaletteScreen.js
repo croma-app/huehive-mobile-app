@@ -4,7 +4,7 @@ import { SavePalette } from "../components/SavePalette";
 
 export default function SavePaletteScreen(props) {
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <SavePalette
         title={"ADD NEW PALETTE"}
         navigationPath={"Home"}

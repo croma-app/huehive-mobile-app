@@ -6,7 +6,7 @@ import CromaButton from "../components/CromaButton";
 export default function ColorListScreen(props) {
   const colors = uniqueColors(props.navigation.getParam("colors"));
   return (
-    <ScrollView style={styles.listview}>
+    <ScrollView style={styles.listview} showsVerticalScrollIndicator={false}>
       {colors.map(color => (
         <SingleColorView key={color.color} color={color.color} />
       ))}

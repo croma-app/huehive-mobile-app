@@ -12,7 +12,7 @@ export const SavePalette = props => {
   const { addPalette, allPalettes } = React.useContext(Croma);
   const { title, navigationPath } = props;
   return (
-    <ScrollView>
+    <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.card}>
         <Text style={styles.label}>{title}</Text>
         <TextInput
