@@ -27,19 +27,19 @@ export default function applicationHook(initState) {
   const loadInitPaletteFromStore = async () => {
     //setting default palette when user comming first time
     let defaultPalettes = {}
-    const isUserAleadyExits = await Storage.checkUserAlreadyExists() 
-    if( isUserAleadyExits != 'true'){
+    const isUserAleadyExits = await Storage.checkUserAlreadyExists()
+    if (isUserAleadyExits != 'true') {
       Storage.setUserAlreadyExists()
       defaultPalettes = {
         'Croma example palette': {
           name: 'Croma example palette',
-          colors: [{color: "#ef635f"},{color: "#efd05f"}]
+          colors: [{ color: "#F0675F" }, { color: "#F3D163" }, { color: '#EBEF5C' }, { color: '#C9EF5B' }]
         }
-      } 
+      }
     }
     const allPalettes = await Storage.getAllPalettes();
-    
-    setState(state => ({ ...state, allPalettes: {...allPalettes, ...defaultPalettes} }));
+
+    setState(state => ({ ...state, allPalettes: { ...allPalettes, ...defaultPalettes } }));
   };
 
   const removePaletteFromStateByName = name => {
