@@ -28,7 +28,7 @@ export default function applicationHook(initState) {
     //setting default palette when user comming first time
     let defaultPalettes = {}
     const isUserAleadyExits = await Storage.checkUserAlreadyExists()
-    if (isUserAleadyExits != 'true') {
+    if (isUserAleadyExits !== 'true') {
       Storage.setUserAlreadyExists()
       defaultPalettes = {
         'Croma example palette': {
