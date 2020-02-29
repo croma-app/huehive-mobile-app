@@ -20,7 +20,7 @@ import Jimp from "jimp";
 import { Header } from "react-navigation";
 import EmptyView from "../components/EmptyView";
 
-const HomeScreen = function(props) {
+const HomeScreen = function (props) {
   const { height, width } = Dimensions.get("window");
 
   const actions = [
@@ -113,13 +113,16 @@ const HomeScreen = function(props) {
             onPressItem={name => {
               if (name === "palette_from_image") {
                 setPickImgLoading(true);
-                pickImage().then((image, err) => {
-                  // TODO: handle err
-                  setPickImgLoading(false);
-                  props.navigation.navigate("ColorList", {
-                    colors: ColorPicker.getProminentColors(image)
+                pickImage()
+                  .then((image, err) => {
+                    setPickImgLoading(false);
+                    props.navigation.navigate("ColorList", {
+                      colors: ColorPicker.getProminentColors(image)
+                    });
+                  })
+                  .catch((err) => {
+                    setPickImgLoading(false);
                   });
-                });
               } else if (name === "palette_from_color") {
                 props.navigation.navigate("ColorPicker", {
                   onDone: color => {
