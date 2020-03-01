@@ -104,12 +104,12 @@ self.__precacheManifest = [
     "url": "/static/js/runtime~app.43360584.js.gz"
   },
   {
-    "revision": "d5c897f0f97f669b9e417ea3d269865f",
-    "url": "/expo-service-worker.js.gz"
-  },
-  {
     "revision": "08e9b33125316f90b02a10ba539348b9",
     "url": "/static/js/app.a5162045.chunk.js.gz"
+  },
+  {
+    "revision": "d5c897f0f97f669b9e417ea3d269865f",
+    "url": "/expo-service-worker.js.gz"
   },
   {
     "revision": "000c0da4d05c8fb98f961c1e54ca2577",
