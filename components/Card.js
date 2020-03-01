@@ -2,6 +2,7 @@ import * as React from "react";
 import { StyleSheet, Animated, Platform } from "react-native";
 import Colors from "../constants/Colors";
 import Touchable from "react-native-platform-touchable";
+import * as Animatable from 'react-native-animatable';
 
 export default class Card extends React.Component {
   render() {
@@ -18,7 +19,7 @@ export default class Card extends React.Component {
             })}
         style={[styles.inner]}
       >
-        <Animated.View {...this.props}>{this.props.children}</Animated.View>
+        <Animatable.View animation="zoomIn" iterationCount={1} {...this.props}>{this.props.children}</Animatable.View>
       </Touchable>
     );
   }
