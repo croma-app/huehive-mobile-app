@@ -1,20 +1,13 @@
 import React, { useState } from "react";
+
 import SingleColorCard from "../components/SingleColorCard";
-import { ScrollView, StyleSheet, View, Dimensions } from "react-native";
+import { ScrollView, StyleSheet, View, Dimensions, Platform } from "react-native";
 import { UndoDialog, DialogContainer } from "../components/CommanDialogs";
 import { Croma } from "../store/store";
-import { FloatingAction } from "react-native-floating-action";
+import ActionButton from 'react-native-action-button';
 import Colors from "../constants/Colors";
 import { Header } from "react-navigation";
 import EmptyView from "../components/EmptyView";
-const actions = [
-  {
-    text: "Add color",
-    icon: require("../assets/images/add.png"),
-    name: "add_color",
-    position: 1
-  }
-];
 export default function PaletteScreen(props) {
   const { height, width } = Dimensions.get("window");
   const paletteName = props.navigation.getParam("name");
@@ -57,17 +50,15 @@ export default function PaletteScreen(props) {
           })}
           <EmptyView />
         </ScrollView>
-        <FloatingAction
-          actions={actions}
-          overrideWithAction={true}
-          color={Colors.accent}
-          onPressItem={() =>
+        <ActionButton bgColor="rgba(68, 68, 68, 0.6)" hideShadow={Platform.OS === "web" ? "true" : "false"}
+          buttonColor={Colors.accent}
+          onPress={() => {  
             props.navigation.navigate("ColorPicker", {
-              onDone: color => {
-                addColorToPalette(paletteName, color);
-              }
-            })
-          }
+            onDone: color => {
+              addColorToPalette(paletteName, color);
+            }
+          });
+        }}
         />
       </View>
       <DialogContainer>

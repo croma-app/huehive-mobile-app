@@ -10,7 +10,6 @@ import {
 import { PaletteCard } from "../components/PaletteCard";
 import { UndoDialog, DialogContainer } from "../components/CommanDialogs";
 import { Croma } from "../store/store";
-import { FloatingAction } from "react-native-floating-action";
 import Colors from "../constants/Colors";
 import * as ImagePicker from "expo-image-picker";
 import Constants from "expo-constants";
@@ -19,39 +18,12 @@ import ColorPicker from "../libs/ColorPicker";
 import Jimp from "jimp";
 import { Header } from "react-navigation";
 import EmptyView from "../components/EmptyView";
-
+import ActionButton from 'react-native-action-button';
+import { Ionicons } from '@expo/vector-icons';
+Ionicons.loadFont();
 const HomeScreen = function (props) {
   const { height, width } = Dimensions.get("window");
-
-  const actions = [
-    {
-      text: "Get palette from image",
-      name: "palette_from_image",
-      position: 2,
-      color: Colors.accent
-    },
-    {
-      text: "Get palette from color",
-      name: "palette_from_color",
-      position: 1,
-      color: Colors.accent
-    },
-    {
-      text: "Add colors manually",
-      name: "add_colors_manually",
-      position: 3,
-      color: Colors.accent
-    },
-    {
-      text: "Unlock Pro",
-      name: "unlock_pro",
-      position: 4,
-      color: Colors.primary
-    }
-  ];
-  if (Platform.OS === "web") {
-    actions.pop();
-  }
+  
   const {
     isLoading,
     allPalettes,
@@ -107,36 +79,8 @@ const HomeScreen = function (props) {
             })}
             <EmptyView />
           </ScrollView>
-          <FloatingAction
-            color={Colors.accent}
-            actions={actions}
-            onPressItem={name => {
-              if (name === "palette_from_image") {
-                setPickImgLoading(true);
-                pickImage()
-                  .then((image, err) => {
-                    setPickImgLoading(false);
-                    props.navigation.navigate("ColorList", {
-                      colors: ColorPicker.getProminentColors(image)
-                    });
-                  })
-                  .catch((err) => {
-                    setPickImgLoading(false);
-                  });
-              } else if (name === "palette_from_color") {
-                props.navigation.navigate("ColorPicker", {
-                  onDone: color => {
-                    props.navigation.navigate("Palettes", {
-                      color: color.color
-                    });
-                  }
-                });
-              } else if (name === "add_colors_manually") {
-                props.navigation.navigate("AddPaletteManually");
-              } else if (name === "unlock_pro") {
-              }
-            }}
-          />
+          
+          
         </View>
 
         <DialogContainer>
@@ -150,10 +94,44 @@ const HomeScreen = function (props) {
             );
           })}
         </DialogContainer>
+        {/*Setting box shadow to false because of Issue on the web: https://github.com/mastermoo/react-native-action-button/issues/337 */}
+        <ActionButton bgColor="rgba(68, 68, 68, 0.6)" hideShadow={Platform.OS === "web" ? "true" : "false"} buttonColor={Colors.accent} key="action-button-home">
+          <ActionButton.Item buttonColor='#9b59b6' title="Get palette from image" onPress={() => {
+             setPickImgLoading(true);
+             pickImage()
+               .then((image, err) => {
+                 setPickImgLoading(false);
+                 props.navigation.navigate("ColorList", {
+                   colors: ColorPicker.getProminentColors(image)
+                 });
+               })
+               .catch((err) => {
+                 setPickImgLoading(false);
+               });
+          }}>
+            <Ionicons name="md-camera" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+          <ActionButton.Item buttonColor='#3498db' title="Get palette from color" onPress={() => {
+             props.navigation.navigate("ColorPicker", {
+              onDone: color => {
+                props.navigation.navigate("Palettes", {
+                  color: color.color
+                });
+              }
+            });
+          }}>
+            <Ionicons name="md-color-palette" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+          <ActionButton.Item buttonColor='#1abc9c' title="Add colors manually" onPress={() =>  props.navigation.navigate("AddPaletteManually")}>
+            <Ionicons name="md-color-filter" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+        </ActionButton>
       </>
     );
   }
 };
+
+
 
 export default HomeScreen;
 
@@ -165,5 +143,10 @@ const styles = StyleSheet.create({
   container: {
     margin: 8,
     justifyContent: "center"
-  }
+  },
+  actionButtonIcon: {
+    fontSize: 20,
+    height: 22,
+    color: 'white',
+  },
 });
