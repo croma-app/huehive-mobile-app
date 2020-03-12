@@ -18,12 +18,11 @@ import ColorPicker from "../libs/ColorPicker";
 import Jimp from "jimp";
 import { Header } from "react-navigation";
 import EmptyView from "../components/EmptyView";
-import ActionButton from 'react-native-action-button';
-import { Ionicons } from '@expo/vector-icons';
-Ionicons.loadFont();
-const HomeScreen = function (props) {
+import ActionButton from "react-native-action-button";
+import { Ionicons } from "@expo/vector-icons";
+const HomeScreen = function(props) {
   const { height, width } = Dimensions.get("window");
-  
+
   const {
     isLoading,
     allPalettes,
@@ -79,8 +78,6 @@ const HomeScreen = function (props) {
             })}
             <EmptyView />
           </ScrollView>
-          
-          
         </View>
 
         <DialogContainer>
@@ -95,34 +92,51 @@ const HomeScreen = function (props) {
           })}
         </DialogContainer>
         {/*Setting box shadow to false because of Issue on the web: https://github.com/mastermoo/react-native-action-button/issues/337 */}
-        <ActionButton bgColor="rgba(68, 68, 68, 0.6)" hideShadow={Platform.OS === "web" ? "true" : "false"} buttonColor={Colors.accent} key="action-button-home">
-          <ActionButton.Item buttonColor='#9b59b6' title="Get palette from image" onPress={() => {
-             setPickImgLoading(true);
-             pickImage()
-               .then((image, err) => {
-                 setPickImgLoading(false);
-                 props.navigation.navigate("ColorList", {
-                   colors: ColorPicker.getProminentColors(image)
-                 });
-               })
-               .catch((err) => {
-                 setPickImgLoading(false);
-               });
-          }}>
+        <ActionButton
+          bgColor="rgba(68, 68, 68, 0.6)"
+          hideShadow={Platform.OS === "web" ? "true" : "false"}
+          buttonColor={Colors.accent}
+          key="action-button-home"
+        >
+          <ActionButton.Item
+            buttonColor="#9b59b6"
+            title="Get palette from image"
+            onPress={() => {
+              setPickImgLoading(true);
+              pickImage()
+                .then((image, err) => {
+                  setPickImgLoading(false);
+                  props.navigation.navigate("ColorList", {
+                    colors: ColorPicker.getProminentColors(image)
+                  });
+                })
+                .catch(err => {
+                  setPickImgLoading(false);
+                });
+            }}
+          >
             <Ionicons name="md-camera" style={styles.actionButtonIcon} />
           </ActionButton.Item>
-          <ActionButton.Item buttonColor='#3498db' title="Get palette from color" onPress={() => {
-             props.navigation.navigate("ColorPicker", {
-              onDone: color => {
-                props.navigation.navigate("Palettes", {
-                  color: color.color
-                });
-              }
-            });
-          }}>
+          <ActionButton.Item
+            buttonColor="#3498db"
+            title="Get palette from color"
+            onPress={() => {
+              props.navigation.navigate("ColorPicker", {
+                onDone: color => {
+                  props.navigation.navigate("Palettes", {
+                    color: color.color
+                  });
+                }
+              });
+            }}
+          >
             <Ionicons name="md-color-palette" style={styles.actionButtonIcon} />
           </ActionButton.Item>
-          <ActionButton.Item buttonColor='#1abc9c' title="Add colors manually" onPress={() =>  props.navigation.navigate("AddPaletteManually")}>
+          <ActionButton.Item
+            buttonColor="#1abc9c"
+            title="Add colors manually"
+            onPress={() => props.navigation.navigate("AddPaletteManually")}
+          >
             <Ionicons name="md-color-filter" style={styles.actionButtonIcon} />
           </ActionButton.Item>
         </ActionButton>
@@ -130,8 +144,6 @@ const HomeScreen = function (props) {
     );
   }
 };
-
-
 
 export default HomeScreen;
 
@@ -147,6 +159,6 @@ const styles = StyleSheet.create({
   actionButtonIcon: {
     fontSize: 20,
     height: 22,
-    color: 'white',
-  },
+    color: "white"
+  }
 });

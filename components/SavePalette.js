@@ -24,11 +24,11 @@ export const SavePalette = props => {
       <CromaButton
         onPress={async () => {
           if (allPalettes[paletteName]) {
-            setIsPaletteNameExist(true)
+            setIsPaletteNameExist(true);
             setTimeout(() => {
-              setIsPaletteNameExist(false)
-            }, 3000)
-            return null
+              setIsPaletteNameExist(false);
+            }, 3000);
+            return null;
           }
           const colors = [
             ...new Set(props.navigation.getParam("colors") || [])

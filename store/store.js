@@ -8,17 +8,18 @@ export const initState = {
   isLoading: false
 };
 
-const shrinkStateToStore = function (allPalettes) {
+const shrinkStateToStore = function(allPalettes) {
   Storage.saveAllPalette(allPalettes);
 };
 
-const sortPalette = (palette) => palette.colors.sort((a, b) => a.color > b.color ? 1 : -1)
+const sortPalette = palette =>
+  palette.colors.sort((a, b) => (a.color > b.color ? 1 : -1));
 
 export default function applicationHook(initState) {
   const addPalette = async palette => {
     setState(state => {
       const { allPalettes } = state;
-      sortPalette(palette)
+      sortPalette(palette);
       allPalettes[palette.name] = palette;
       return { ...state, allPalettes };
     });
@@ -26,20 +27,23 @@ export default function applicationHook(initState) {
 
   const loadInitPaletteFromStore = async () => {
     //setting default palette when user comming first time
-    let defaultPalettes = {}
-    const isUserAleadyExits = await Storage.checkUserAlreadyExists() 
-    if( isUserAleadyExits != 'true'){
-      Storage.setUserAlreadyExists()
+    let defaultPalettes = {};
+    const isUserAleadyExits = await Storage.checkUserAlreadyExists();
+    if (isUserAleadyExits != "true") {
+      Storage.setUserAlreadyExists();
       defaultPalettes = {
-        'Croma example palette': {
-          name: 'Croma example palette',
-          colors: [{color: "#ef635f"},{color: "#efd05f"}]
+        "Croma example palette": {
+          name: "Croma example palette",
+          colors: [{ color: "#ef635f" }, { color: "#efd05f" }]
         }
-      } 
+      };
     }
     const allPalettes = await Storage.getAllPalettes();
-    
-    setState(state => ({ ...state, allPalettes: {...allPalettes, ...defaultPalettes} }));
+
+    setState(state => ({
+      ...state,
+      allPalettes: { ...allPalettes, ...defaultPalettes }
+    }));
   };
 
   const removePaletteFromStateByName = name => {
@@ -54,7 +58,7 @@ export default function applicationHook(initState) {
     setState(state => {
       const { allPalettes } = state;
       allPalettes[name].colors = allPalettes[name].colors.concat(color);
-      sortPalette(allPalettes[name])
+      sortPalette(allPalettes[name]);
       return { ...state, allPalettes };
     });
   };
@@ -111,7 +115,7 @@ export default function applicationHook(initState) {
           allPalettes[name].deletedColors.splice(index, 1);
         }
       });
-      sortPalette(allPalettes[name])
+      sortPalette(allPalettes[name]);
       return { ...state, allPalettes };
     });
   };

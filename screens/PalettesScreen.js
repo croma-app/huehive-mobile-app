@@ -32,7 +32,11 @@ export default function PalettesScreen(props) {
       );
     }
   }
-  return <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>{items}</ScrollView>;
+  return (
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      {items}
+    </ScrollView>
+  );
 }
 
 PalettesScreen.navigationOptions = ({ navigation }) => {

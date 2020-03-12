@@ -1,10 +1,16 @@
 import React, { useState } from "react";
 
 import SingleColorCard from "../components/SingleColorCard";
-import { ScrollView, StyleSheet, View, Dimensions, Platform } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  View,
+  Dimensions,
+  Platform
+} from "react-native";
 import { UndoDialog, DialogContainer } from "../components/CommanDialogs";
 import { Croma } from "../store/store";
-import ActionButton from 'react-native-action-button';
+import ActionButton from "react-native-action-button";
 import Colors from "../constants/Colors";
 import { Header } from "react-navigation";
 import EmptyView from "../components/EmptyView";
@@ -31,7 +37,10 @@ export default function PaletteScreen(props) {
       <View
         style={(styles.container, { minHeight: height - Header.HEIGHT - 16 })}
       >
-        <ScrollView style={styles.listview} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={styles.listview}
+          showsVerticalScrollIndicator={false}
+        >
           {colors.map((colorObj, index) => {
             return (
               <SingleColorCard
@@ -50,15 +59,17 @@ export default function PaletteScreen(props) {
           })}
           <EmptyView />
         </ScrollView>
-        <ActionButton bgColor="rgba(68, 68, 68, 0.6)" hideShadow={Platform.OS === "web" ? "true" : "false"}
+        <ActionButton
+          bgColor="rgba(68, 68, 68, 0.6)"
+          hideShadow={Platform.OS === "web" ? "true" : "false"}
           buttonColor={Colors.accent}
-          onPress={() => {  
+          onPress={() => {
             props.navigation.navigate("ColorPicker", {
-            onDone: color => {
-              addColorToPalette(paletteName, color);
-            }
-          });
-        }}
+              onDone: color => {
+                addColorToPalette(paletteName, color);
+              }
+            });
+          }}
         />
       </View>
       <DialogContainer>

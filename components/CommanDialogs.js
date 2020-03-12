@@ -2,11 +2,11 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Touchable from "react-native-platform-touchable";
 
-export const DialogContainer = (props) => (
+export const DialogContainer = props => (
   <View style={{ position: "absolute", bottom: 0, width: "100%" }}>
     {props.children}
-  </View>  
-)
+  </View>
+);
 
 export const UndoDialog = props => {
   /*
@@ -33,10 +33,12 @@ export const UndoDialog = props => {
 
 export const TextDialog = props => (
   <View style={styles.undoCard}>
-      <View style={{ width: "80%" }}>
-        <Text style={styles.undoText}>A palette with same name already exists.</Text>
-      </View>
-  </View>    
+    <View style={{ width: "80%" }}>
+      <Text style={styles.undoText}>
+        A palette with same name already exists.
+      </Text>
+    </View>
+  </View>
 );
 
 const styles = StyleSheet.create({

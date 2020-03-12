@@ -37,22 +37,21 @@ export function ColorDetail(props) {
     { key: "Darkness", value: (color.darkness() * 100).toFixed(2) + "%" }
   ];
 
-  const debounce = (func, delay) => { 
-    let debounceTimer 
-    return function() { 
-        const context = this
-        const args = arguments 
-            clearTimeout(debounceTimer) 
-                debounceTimer 
-            = setTimeout(() => func.apply(context, args), delay) 
-    } 
-  } 
-  const debouncedSetCopiedIndex = debounce(()=>setCopyiedIntex(-1), 2000)
-  
-  let writeToClipboard = function (value, index) {
+  const debounce = (func, delay) => {
+    let debounceTimer;
+    return function() {
+      const context = this;
+      const args = arguments;
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => func.apply(context, args), delay);
+    };
+  };
+  const debouncedSetCopiedIndex = debounce(() => setCopyiedIntex(-1), 2000);
+
+  let writeToClipboard = function(value, index) {
     Clipboard.setString(value);
     setCopyiedIntex(index);
-    debouncedSetCopiedIndex()
+    debouncedSetCopiedIndex();
   };
   return (
     <View
@@ -65,7 +64,7 @@ export function ColorDetail(props) {
     >
       <View style={[styles.backgroundColor]}></View>
       {/* <Text {...props} style={[props.style, { fontFamily: 'space-mono' }]} >{props.color}</Text> */}
-      <View style={{marginTop: 20}}>
+      <View style={{ marginTop: 20 }}>
         {items.map((item, index) => (
           <Touchable
             key={item.key}
@@ -75,7 +74,11 @@ export function ColorDetail(props) {
               <Text style={styles.colorNameText}>{item.key} : </Text>
 
               <Text>{item.value}</Text>
-              {index === copyiedIndex && <Text style={{position: 'absolute', top: -11, right: 0}}>Copied!</Text>}
+              {index === copyiedIndex && (
+                <Text style={{ position: "absolute", top: -11, right: 0 }}>
+                  Copied!
+                </Text>
+              )}
               <FontAwesomeIcon icon={faCopy} />
             </View>
           </Touchable>
