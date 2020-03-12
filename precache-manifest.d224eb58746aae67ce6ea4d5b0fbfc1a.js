@@ -144,12 +144,12 @@ self.__precacheManifest = [
     "url": "/index.html"
   },
   {
-    "revision": "3e74af9999f35270f8894dc18ec62976",
-    "url": "/static/js/runtime~app.43360584.js.gz"
-  },
-  {
     "revision": "eea1c40e7d5512012f059f83b544a803",
     "url": "/static/js/app.b56b3c46.chunk.js.gz"
+  },
+  {
+    "revision": "3e74af9999f35270f8894dc18ec62976",
+    "url": "/static/js/runtime~app.43360584.js.gz"
   },
   {
     "revision": "d5c897f0f97f669b9e417ea3d269865f",
