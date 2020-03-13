@@ -1,4 +1,4 @@
-## Croma
+## Croma (https://croma.app)
 
 ![](Croma_web.gif)
 
