@@ -140,16 +140,16 @@ self.__precacheManifest = [
     "url": "/apple/splash/icon_828x1792.png"
   },
   {
-    "revision": "d2b2782516d7e1d5130a7553dda6945b",
+    "revision": "969111f48f97bf1dca0c550e987e52e2",
     "url": "/index.html"
-  },
-  {
-    "revision": "3e74af9999f35270f8894dc18ec62976",
-    "url": "/static/js/runtime~app.43360584.js.gz"
   },
   {
     "revision": "3ea23ba686959e6b29ff8853dde99f8c",
     "url": "/static/js/app.2dc86948.chunk.js.gz"
+  },
+  {
+    "revision": "3e74af9999f35270f8894dc18ec62976",
+    "url": "/static/js/runtime~app.43360584.js.gz"
   },
   {
     "revision": "d5c897f0f97f669b9e417ea3d269865f",
