@@ -1,5 +1,7 @@
 ## Croma
 
+![](Croma_web.gif)
+
 # referances
 * https://github.com/numixproject/croma
 * https://github.com/satya164/croma
