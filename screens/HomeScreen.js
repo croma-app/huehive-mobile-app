@@ -153,6 +153,15 @@ const HomeScreen = function(props) {
               <Entypo name="google-play" style={styles.actionButtonIcon} />
             </ActionButton.Item>
           )}
+          {Platform.OS === "android" && (
+            <ActionButton.Item
+              buttonColor={Colors.primary}
+              title="Unlock pro"
+              onPress={() => console.log("Unlock pro")}
+            >
+              <Ionicons name="md-unlock" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+          )}
         </ActionButton>
       </>
     );

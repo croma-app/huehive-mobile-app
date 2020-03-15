@@ -61,7 +61,7 @@ export default function PaletteScreen(props) {
         </ScrollView>
         <ActionButton
           bgColor="rgba(68, 68, 68, 0.6)"
-          hideShadow={Platform.OS === "web" ? "true" : "false"}
+          hideShadow={Platform.OS === "web" ? true : false}
           buttonColor={Colors.accent}
           onPress={() => {
             props.navigation.navigate("ColorPicker", {
