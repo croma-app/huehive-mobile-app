@@ -5,7 +5,8 @@ import {
   ActivityIndicator,
   View,
   Dimensions,
-  Platform
+  Platform,
+  Linking
 } from "react-native";
 import { PaletteCard } from "../components/PaletteCard";
 import { UndoDialog, DialogContainer } from "../components/CommanDialogs";
@@ -19,7 +20,7 @@ import Jimp from "jimp";
 import { Header } from "react-navigation";
 import EmptyView from "../components/EmptyView";
 import ActionButton from "react-native-action-button";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, Entypo } from "@expo/vector-icons";
 const HomeScreen = function(props) {
   const { height, width } = Dimensions.get("window");
 
@@ -94,7 +95,7 @@ const HomeScreen = function(props) {
         {/*Setting box shadow to false because of Issue on the web: https://github.com/mastermoo/react-native-action-button/issues/337 */}
         <ActionButton
           bgColor="rgba(68, 68, 68, 0.6)"
-          hideShadow={Platform.OS === "web" ? "true" : "false"}
+          hideShadow={Platform.OS === "web" ? true : false}
           buttonColor={Colors.accent}
           key="action-button-home"
         >
@@ -139,6 +140,19 @@ const HomeScreen = function(props) {
           >
             <Ionicons name="md-color-filter" style={styles.actionButtonIcon} />
           </ActionButton.Item>
+          {Platform.OS === "web" && (
+            <ActionButton.Item
+              buttonColor={Colors.primary}
+              title="Get croma on playstore"
+              onPress={() =>
+                Linking.openURL(
+                  "https://play.google.com/store/apps/details?id=app.croma"
+                )
+              }
+            >
+              <Entypo name="google-play" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+          )}
         </ActionButton>
       </>
     );
