@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Storage from "./../libs/Storage";
+import CromaConstants from "../constants/CromaConstants";
 const UNDO_TIMEOUT = 3000;
 
 export const initState = {
@@ -57,7 +58,9 @@ export default function applicationHook(initState) {
   const addColorToPalette = (name, color) => {
     setState(state => {
       const { allPalettes } = state;
-      allPalettes[name].colors = allPalettes[name].colors.concat(color);
+      if (allPalettes[name].colors.length < CromaConstants.maxColorInPaletteDefault){
+        allPalettes[name].colors = allPalettes[name].colors.concat(color);
+      }
       sortPalette(allPalettes[name]);
       return { ...state, allPalettes };
     });

@@ -5,6 +5,7 @@ import Colors from "../constants/Colors";
 import CromaButton from "../components/CromaButton";
 import { Croma } from "../store/store";
 import { TextDialog } from "./CommanDialogs";
+import CromaConstants from "../constants/CromaConstants";
 
 export const SavePalette = props => {
   const [paletteName, setPaletteName] = React.useState("");
@@ -33,7 +34,9 @@ export const SavePalette = props => {
           const colors = [
             ...new Set(props.navigation.getParam("colors") || [])
           ];
-          const palette = { name: paletteName, colors: colors };
+
+          selected_colors = colors.slice(0, CromaConstants.maxColorInPaletteDefault);
+          const palette = { name: paletteName, colors: selected_colors };
           addPalette(palette);
           if (navigationPath === "Palette") {
             props.navigation.navigate(navigationPath, palette);
