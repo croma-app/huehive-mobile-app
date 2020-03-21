@@ -29,7 +29,10 @@
     "android": {
       "package": "app.croma",
       "versionCode": 3,
-      "permissions": ["CAMERA","READ_PHONE_STATE"]
+      "permissions": [
+        "CAMERA",
+        "READ_PHONE_STATE"
+      ]
     },
     "description": "Save your colors",
     "web": {
@@ -37,10 +40,13 @@
       "build": {
         "babel": {
           "include": [
-            "croma-color-picker" 
+            "croma-color-picker"
           ]
         }
       }
-    }
-  }
+    },
+    "entryPoint": "node_modules/expo/AppEntry.js"
+  },
+  "displayName": "Croma",
+  "name": "Croma"
 }

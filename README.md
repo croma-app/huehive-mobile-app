@@ -25,3 +25,7 @@ expo build:android -t app-bundle
 
 ### Prettier
 ```  prettier --write "**/*.js" ```
+
+
+### Android
+``` npm run android ```
