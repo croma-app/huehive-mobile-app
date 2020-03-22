@@ -2,8 +2,7 @@ import * as React from "react";
 import { StyleSheet, View, Text } from "react-native";
 import Card from "./Card";
 import Colors from "../constants/Colors";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import Touchable from "react-native-platform-touchable";
 
 export default class SingleColorCard extends React.Component {
@@ -25,7 +24,7 @@ export default class SingleColorCard extends React.Component {
                 }}
                 style={styles.actionButton}
               >
-                <FontAwesomeIcon icon={faTrashAlt} />
+               <FontAwesome name="trash" />
               </Touchable>
             </View>
           </View>

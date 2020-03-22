@@ -5,12 +5,7 @@ import Colors from "../constants/Colors";
 import { Share } from 'react-native';
 
 import MultiColorView from "./MultiColorView";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faTrashAlt,
-  faShareSquare,
-  faEdit
-} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import Touchable from "react-native-platform-touchable";
 import { Croma } from "../store/store";
 
@@ -55,7 +50,7 @@ export const PaletteCard = props => {
         <View style={styles.actionButtonsView}>
           {Platform.OS === "web" ? null :
             <Touchable onPress={onShare} style={styles.actionButton}>
-              <FontAwesomeIcon icon={faShareSquare} />
+              <FontAwesome name="share" />
             </Touchable>
           }
           <Touchable
@@ -66,7 +61,7 @@ export const PaletteCard = props => {
             }}
             style={styles.actionButton}
           >
-            <FontAwesomeIcon icon={faTrashAlt} />
+            <FontAwesome name="trash" />
           </Touchable>
         </View>
       </View>

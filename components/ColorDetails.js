@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Clipboard } from "react-native";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faCopy } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesome } from "@expo/vector-icons";
+
 import Touchable from "react-native-platform-touchable";
 
 import Color from "pigment/full";
@@ -79,7 +79,7 @@ export function ColorDetail(props) {
                   Copied!
                 </Text>
               )}
-              <FontAwesomeIcon icon={faCopy} />
+              <FontAwesome name="copy" />
             </View>
           </Touchable>
         ))}

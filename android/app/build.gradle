@@ -70,13 +70,13 @@ import com.android.build.OutputFile
  *   // supply additional arguments to the packager
  *   extraPackagerArgs: []
  * ]
+ *
  */
 
 project.ext.react = [
-    entryFile: "index.js",
-    enableHermes: false
+        entryFile: "index.js",
+        enableHermes: false
 ]
-
 apply from: '../../node_modules/react-native-unimodules/gradle.groovy'
 apply from: "../../node_modules/react-native/react.gradle"
 
@@ -114,10 +114,21 @@ android {
             include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }
+    signingConfigs {
+        release {
+            if (project.hasProperty('UPLOAD_STORE_FILE')) {
+                storeFile file(UPLOAD_STORE_FILE)
+                storePassword UPLOAD_STORE_PASSWORD
+                keyAlias UPLOAD_KEY_ALIAS
+                keyPassword UPLOAD_KEY_PASSWORD
+            }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
