@@ -1,4 +1,4 @@
-package com.croma.generated;
+package app.croma.generated;
 
 import java.util.Arrays;
 import java.util.List;

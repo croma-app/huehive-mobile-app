@@ -5,13 +5,15 @@
     "ios": "react-native run-ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "prettier": "prettier '*.js'"
+    "prettier": "prettier '*.js'",
+    "postinstall": "rm -rf ./node_modules/expo/node_modules/expo-font/"
   },
   "jest": {
     "preset": "jest-expo"
   },
   "dependencies": {
     "@expo/samples": "~3.0.3",
+    "@expo/vector-icons": "^10.0.0",
     "@react-navigation/web": "^1.0.0-alpha.9",
     "croma-color-picker": "^1.0.1",
     "expo": "^36.0.0",
