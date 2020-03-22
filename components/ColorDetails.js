@@ -39,7 +39,7 @@ export function ColorDetail(props) {
 
   const debounce = (func, delay) => {
     let debounceTimer;
-    return function() {
+    return function () {
       const context = this;
       const args = arguments;
       clearTimeout(debounceTimer);
@@ -48,7 +48,7 @@ export function ColorDetail(props) {
   };
   const debouncedSetCopiedIndex = debounce(() => setCopyiedIntex(-1), 2000);
 
-  let writeToClipboard = function(value, index) {
+  let writeToClipboard = function (value, index) {
     Clipboard.setString(value);
     setCopyiedIntex(index);
     debouncedSetCopiedIndex();
@@ -75,7 +75,16 @@ export function ColorDetail(props) {
 
               <Text>{item.value}</Text>
               {index === copyiedIndex && (
-                <Text style={{ position: "absolute", top: -11, right: 0 }}>
+                <Text style={{
+                  position: 'absolute',
+                  backgroundColor: 'rgb(64, 64, 58)',
+                  top: '-25px',
+                  right: '-10px',
+                  color: '#fff',
+                  padding: '5px ',
+                  textAlign: 'center',
+                  borderRadius: '6px'
+                }}>
                   Copied!
                 </Text>
               )}
