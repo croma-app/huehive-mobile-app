@@ -54,7 +54,7 @@ export const PaletteCard = props => {
         <View style={styles.actionButtonsView}>
           {Platform.OS === "web" ? null : (
             <Touchable onPress={onShare} style={styles.actionButton}>
-              <FontAwesome name="share" />
+              <FontAwesome size={20} name="share" />
             </Touchable>
           )}
           <Touchable
@@ -65,7 +65,7 @@ export const PaletteCard = props => {
             }}
             style={styles.actionButton}
           >
-            <FontAwesome name="trash" />
+            <FontAwesome size={20} name="trash" />
           </Touchable>
         </View>
       </View>

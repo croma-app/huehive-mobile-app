@@ -24,7 +24,7 @@ export default class SingleColorCard extends React.Component {
                 }}
                 style={styles.actionButton}
               >
-                <FontAwesome name="trash" />
+                <FontAwesome size={20} name="trash" />
               </Touchable>
             </View>
           </View>
