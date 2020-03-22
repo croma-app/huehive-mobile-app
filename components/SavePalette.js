@@ -7,9 +7,10 @@ import { Croma } from "../store/store";
 import { TextDialog } from "./CommanDialogs";
 
 export const SavePalette = props => {
-  const [paletteName, setPaletteName] = React.useState(props.navigation.getParam("name")?props.navigation.getParam("name"):"");
-  
-  
+  const [paletteName, setPaletteName] = React.useState(
+    props.navigation.getParam("name") ? props.navigation.getParam("name") : ""
+  );
+
   const [isPaletteNameExist, setIsPaletteNameExist] = React.useState(false);
   const { addPalette, allPalettes } = React.useContext(Croma);
   const { title, navigationPath } = props;
@@ -33,13 +34,11 @@ export const SavePalette = props => {
             }, 3000);
             return null;
           }
-          let colorsFromParams = props.navigation.getParam("colors")
-          if(typeof colorsFromParams === 'string'){
-            colorsFromParams = JSON.parse(colorsFromParams)
-          }  
-          const colors = [
-            ...new Set(colorsFromParams || [])
-          ];
+          let colorsFromParams = props.navigation.getParam("colors");
+          if (typeof colorsFromParams === "string") {
+            colorsFromParams = JSON.parse(colorsFromParams);
+          }
+          const colors = [...new Set(colorsFromParams || [])];
           const palette = { name: paletteName, colors: colors };
           addPalette(palette);
           if (navigationPath === "Palette") {

@@ -2,7 +2,7 @@ import * as React from "react";
 import { StyleSheet, View, Text, Platform } from "react-native";
 import Card from "./Card";
 import Colors from "../constants/Colors";
-import { Share } from 'react-native';
+import { Share } from "react-native";
 
 import MultiColorView from "./MultiColorView";
 import { FontAwesome } from "@expo/vector-icons";
@@ -11,17 +11,21 @@ import { Croma } from "../store/store";
 
 export const PaletteCard = props => {
   const { deletePaletteByName } = React.useContext(Croma);
-  const onShare = async (event) => {
+  const onShare = async event => {
     event.preventDefault();
     event.stopPropagation();
     try {
-      const result = await Share.share({
-        title: 'croma app',
-        message:
-          `https://croma.app/#/Main/SavePalette?name=${props.name}&colors=${encodeURIComponent(JSON.stringify(props.colors))}`,
-      }, {
-        dialogTitle: 'croma app '
-      });
+      const result = await Share.share(
+        {
+          title: "croma app",
+          message: `https://croma.app/#/Main/SavePalette?name=${
+            props.name
+          }&colors=${encodeURIComponent(JSON.stringify(props.colors))}`
+        },
+        {
+          dialogTitle: "croma app "
+        }
+      );
 
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -48,11 +52,11 @@ export const PaletteCard = props => {
       <View style={styles.bottom}>
         <Text style={styles.label}>{props.name}</Text>
         <View style={styles.actionButtonsView}>
-          {Platform.OS === "web" ? null :
+          {Platform.OS === "web" ? null : (
             <Touchable onPress={onShare} style={styles.actionButton}>
               <FontAwesome name="share" />
             </Touchable>
-          }
+          )}
           <Touchable
             onPress={event => {
               event.preventDefault();
