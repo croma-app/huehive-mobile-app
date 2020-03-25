@@ -21,6 +21,8 @@ import { Header } from "react-navigation";
 import EmptyView from "../components/EmptyView";
 import ActionButton from "react-native-action-button";
 import { Ionicons, Entypo } from "@expo/vector-icons";
+import InAppBilling from "react-native-billing";
+
 const HomeScreen = function(props) {
   const { height, width } = Dimensions.get("window");
 
@@ -53,6 +55,33 @@ const HomeScreen = function(props) {
       }
     }
   };
+  const purchase = async function() {
+    try {
+      console.log("starting purchase");
+      await InAppBilling.open();
+      const details = await InAppBilling.purchase("croma_pro");
+      console.log("You purchased: ", details);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      await InAppBilling.close();
+    }
+  }
+  
+  const checkPurchase = async function() {
+      try {
+      await InAppBilling.open();
+      // If subscriptions/products are updated server-side you
+      // will have to update cache with loadOwnedPurchasesFromGoogle()
+      await InAppBilling.loadOwnedPurchasesFromGoogle();
+      const isPurchased = await InAppBilling.isPurchased("croma_pro")
+      console.log("Customer subscribed: ", isPurchased);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      await InAppBilling.close();
+    }
+  }
   useEffect(() => {
     loadInitPaletteFromStore();
     getPermissionAsync();
@@ -157,7 +186,10 @@ const HomeScreen = function(props) {
             <ActionButton.Item
               buttonColor={Colors.primary}
               title="Unlock pro"
-              onPress={() => console.log("Unlock pro")}
+              onPress={() => {
+                console.log("Unlock pro");
+                purchase();
+              }}
             >
               <Ionicons name="md-unlock" style={styles.actionButtonIcon} />
             </ActionButton.Item>

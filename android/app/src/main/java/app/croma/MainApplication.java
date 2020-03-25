@@ -5,6 +5,7 @@ import android.app.Application;
 import app.croma.BuildConfig;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.idehub.Billing.InAppBillingBridgePackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
