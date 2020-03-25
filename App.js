@@ -9,6 +9,17 @@ export default function App(props) {
   return (
     <Croma.Provider value={applicationHook(initState)}>
       <View style={[styles.container]}>
+      <StatusBar
+        barStyle = "light-content"
+        // dark-content, light-content and default
+        hidden = {false}
+        //To hide statusBar
+        backgroundColor = {Colors.primaryDark}
+        //Background color of statusBar only works for Android
+        translucent = {false}
+        //allowing light, but not detailed shapes
+        networkActivityIndicatorVisible = {true}
+    />
         <View
           style={[{ flex: 1, backgroundColor: "transparent", maxWidth: 600 }]}
         >
