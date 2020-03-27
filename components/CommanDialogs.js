@@ -35,7 +35,7 @@ export const TextDialog = props => (
   <View style={styles.undoCard}>
     <View style={{ width: "80%" }}>
       <Text style={styles.undoText}>
-        A palette with same name already exists.
+        {props.text}
       </Text>
     </View>
   </View>
