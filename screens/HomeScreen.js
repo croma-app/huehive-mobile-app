@@ -31,7 +31,9 @@ const HomeScreen = function(props) {
     allPalettes,
     loadInitPaletteFromStore,
     deletedPalettes,
-    undoDeletionByName
+    undoDeletionByName,
+    isPro,
+    setPurchase
   } = React.useContext(Croma);
   const [pickImgloading, setPickImgLoading] = useState(false);
 
@@ -61,13 +63,14 @@ const HomeScreen = function(props) {
       await InAppBilling.open();
       const details = await InAppBilling.purchase("croma_pro");
       console.log("You purchased: ", details);
+      setPurchase(details);
     } catch (err) {
       console.log(err);
     } finally {
       await InAppBilling.close();
     }
   }
-  
+  // TODO: restore purchase
   const checkPurchase = async function() {
       try {
       await InAppBilling.open();
@@ -182,7 +185,7 @@ const HomeScreen = function(props) {
               <Entypo name="google-play" style={styles.actionButtonIcon} />
             </ActionButton.Item>
           )}
-          {Platform.OS === "android" && (
+          {Platform.OS === "android" && !isPro && (
             <ActionButton.Item
               buttonColor={Colors.primary}
               title="Unlock pro"

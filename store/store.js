@@ -5,7 +5,8 @@ const UNDO_TIMEOUT = 3000;
 export const initState = {
   allPalettes: {},
   deletedPalettes: {},
-  isLoading: false
+  isLoading: false,
+  isPro: false
 };
 
 const shrinkStateToStore = function(allPalettes) {
@@ -53,6 +54,15 @@ export default function applicationHook(initState) {
       return { ...state, deletedPalettes };
     });
   };
+
+  const setPurchase = (details) => {
+    setState(state => {
+      state.isPro = true;
+      state.purchaseDetails = details;
+      return state;
+    });
+  }
+
 
   const addColorToPalette = (name, color) => {
     setState(state => {
@@ -140,7 +150,8 @@ export default function applicationHook(initState) {
     addPalette,
     colorDeleteFromPalette,
     undoColorDeletion,
-    addColorToPalette
+    addColorToPalette,
+    setPurchase
   });
   if (Object.keys(state.allPalettes).length > 0) {
     shrinkStateToStore(state.allPalettes);
