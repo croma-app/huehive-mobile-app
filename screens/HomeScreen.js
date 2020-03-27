@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -6,7 +6,8 @@ import {
   View,
   Dimensions,
   Platform,
-  Linking
+  Linking,
+  ToastAndroid
 } from "react-native";
 import { PaletteCard } from "../components/PaletteCard";
 import { UndoDialog, DialogContainer } from "../components/CommanDialogs";
@@ -35,6 +36,8 @@ const HomeScreen = function(props) {
     isPro,
     setPurchase
   } = React.useContext(Croma);
+  const toastRef = useRef(null);
+  //const [purchasedMsg, showPurchasedMsg] = useState(false);
   const [pickImgloading, setPickImgLoading] = useState(false);
 
   const pickImage = async () => {
@@ -63,6 +66,7 @@ const HomeScreen = function(props) {
       await InAppBilling.open();
       const details = await InAppBilling.purchase("croma_pro");
       console.log("You purchased: ", details);
+      ToastAndroid.show("Congrats, You are now a pro user!", ToastAndroid.LONG)
       setPurchase(details);
     } catch (err) {
       console.log(err);
@@ -89,6 +93,7 @@ const HomeScreen = function(props) {
     loadInitPaletteFromStore();
     getPermissionAsync();
   }, []);
+  console.log("Is pro------", isPro);
   if (isLoading) {
     return <ActivityIndicator />;
   } else {
