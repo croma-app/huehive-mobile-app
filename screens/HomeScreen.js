@@ -22,12 +22,10 @@ import EmptyView from "../components/EmptyView";
 import ActionButton from "react-native-action-button";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 const HomeScreen = function(props) {
-  const { height, width } = Dimensions.get("window");
-
+  const { height } = Dimensions.get("window");
   const {
     isLoading,
     allPalettes,
-    loadInitPaletteFromStore,
     deletedPalettes,
     undoDeletionByName
   } = React.useContext(Croma);
@@ -54,7 +52,6 @@ const HomeScreen = function(props) {
     }
   };
   useEffect(() => {
-    loadInitPaletteFromStore();
     getPermissionAsync();
   }, []);
   if (isLoading) {
