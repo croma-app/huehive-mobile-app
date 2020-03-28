@@ -5,6 +5,7 @@ const UNDO_TIMEOUT = 3000;
 export const initState = {
   allPalettes: {},
   deletedPalettes: {},
+  isLoading: false,
   isPro: false
 };
 
@@ -56,9 +57,7 @@ export default function applicationHook(initState) {
 
   const setPurchase = (details) => {
     setState(state => {
-      state.isPro = true;
-      state.purchaseDetails = details;
-      return state;
+      return {...state, isPro: true, purchaseDetails: details};
     });
   }
 

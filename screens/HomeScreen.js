@@ -69,6 +69,7 @@ const HomeScreen = function (props) {
       setPurchase(details);
     } catch (err) {
       console.log(err);
+      ToastAndroid.show("Purchas unsucceessful " + err, ToastAndroid.LONG)
     } finally {
       await InAppBilling.close();
     }
