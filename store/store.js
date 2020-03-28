@@ -5,7 +5,6 @@ const UNDO_TIMEOUT = 3000;
 export const initState = {
   allPalettes: {},
   deletedPalettes: {},
-  isLoading: false,
   isPro: false
 };
 
@@ -154,8 +153,10 @@ export default function applicationHook(initState) {
     setPurchase
   });
   
-  // Sync state to local storage 
-  syncStateToStore(state);
+  // Sync state to local storage
+  if(Object.keys(state.allPalettes).length !== 0 || Object.keys(state.deletedPalettes).length !== 0 || state.isPro !== initState.isPro){
+    syncStateToStore(state);
+  } 
   return state;
 }
 
