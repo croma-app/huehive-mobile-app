@@ -20,12 +20,14 @@ export const SavePalette = props => {
     if (typeof colorsFromParams === "string") {
       colorsFromParams = JSON.parse(colorsFromParams);
     }
+    const colors = [...new Set(colorsFromParams || [])]
     setIsUnlockProNotifiction(!isPro && colors.length > 4);
-    setFinalColors([...new Set(colorsFromParams || [])]);
+    setFinalColors(colors);
     setTimeout(() => {
       setIsUnlockProNotifiction(false);
     }, 5000);
   }, []);
+
   const { title, navigationPath } = props;
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
