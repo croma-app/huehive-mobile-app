@@ -8,16 +8,17 @@ import applicationHook, { initState, Croma } from "./store/store";
 export default function App(props) {
   const [isPalettesLoaded, setIsPalettesLoaded] = useState(false);
   const applicationState = applicationHook(initState)
-  if(Platform.OS === 'web'){
-    applicationHook.setPurchase({
-      platfrom: 'web'
-    })
-  }
+  
   useEffect(() => {
     (async () => {
       await applicationState.loadInitPaletteFromStore();
       setIsPalettesLoaded(true)
     })();
+    if(Platform.OS === 'web'){
+      applicationState.setPurchase({
+        platfrom: 'web'
+      })
+    }
   }, []);
   return (
     !isPalettesLoaded ? <View style={{flex: 1,marginTop: '20%'}}>
