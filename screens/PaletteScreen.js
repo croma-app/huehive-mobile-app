@@ -18,6 +18,7 @@ export default function PaletteScreen(props) {
   const { height, width } = Dimensions.get("window");
   const paletteName = props.navigation.getParam("name");
   const {
+    isPro,
     allPalettes,
     colorDeleteFromPalette,
     undoColorDeletion,
@@ -41,7 +42,7 @@ export default function PaletteScreen(props) {
           style={styles.listview}
           showsVerticalScrollIndicator={false}
         >
-          {colors.map((colorObj, index) => {
+          {colors.slice(0, isPro ? colors.length : 4).map((colorObj, index) => {
             return (
               <SingleColorCard
                 key={colorObj.color}

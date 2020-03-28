@@ -5,11 +5,12 @@ const UNDO_TIMEOUT = 3000;
 export const initState = {
   allPalettes: {},
   deletedPalettes: {},
-  isLoading: false
+  isLoading: false,
+  isPro: false
 };
 
-const shrinkStateToStore = function(allPalettes) {
-  Storage.saveAllPalette(allPalettes);
+const syncStateToStore = function (state) {
+  Storage.setApplicationState(state);
 };
 
 const sortPalette = palette =>
@@ -26,24 +27,24 @@ export default function applicationHook(initState) {
   };
 
   const loadInitPaletteFromStore = async () => {
-    //setting default palette when user comming first time
+    // Loading application state from localStorage 
+    const _state = await Storage.getApplicationState();
+    setState((state) => ({
+      ...state,
+      ..._state
+    }));
+
+    // Setting default palette when user comming first time
     let defaultPalettes = {};
     const isUserAleadyExits = await Storage.checkUserAlreadyExists();
     if (isUserAleadyExits != "true") {
       Storage.setUserAlreadyExists();
       defaultPalettes = {
-        "Croma example palette": {
-          name: "Croma example palette",
-          colors: [{ color: "#ef635f" }, { color: "#efd05f" }]
-        }
+        name: "Croma example palette",
+        colors: [{ color: "#F0675F" }, { color: "#F3D163" }, { color: '#EBEF5C' }, { color: '#C9EF5B' }]
       };
+      addPalette(defaultPalettes)
     }
-    const allPalettes = await Storage.getAllPalettes();
-
-    setState(state => ({
-      ...state,
-      allPalettes: { ...allPalettes, ...defaultPalettes }
-    }));
   };
 
   const removePaletteFromStateByName = name => {
@@ -53,6 +54,13 @@ export default function applicationHook(initState) {
       return { ...state, deletedPalettes };
     });
   };
+
+  const setPurchase = (details) => {
+    setState(state => {
+      return {...state, isPro: true, purchaseDetails: details};
+    });
+  }
+
 
   const addColorToPalette = (name, color) => {
     setState(state => {
@@ -140,11 +148,14 @@ export default function applicationHook(initState) {
     addPalette,
     colorDeleteFromPalette,
     undoColorDeletion,
-    addColorToPalette
+    addColorToPalette,
+    setPurchase
   });
-  if (Object.keys(state.allPalettes).length > 0) {
-    shrinkStateToStore(state.allPalettes);
-  }
+  
+  // Sync state to local storage
+  if(Object.keys(state.allPalettes).length !== 0 || Object.keys(state.deletedPalettes).length !== 0 || state.isPro !== initState.isPro){
+    syncStateToStore(state);
+  } 
   return state;
 }
 

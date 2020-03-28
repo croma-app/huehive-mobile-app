@@ -27,3 +27,5 @@ Run locally:
 Build signed apk:
 ```  ./gradlew clean && ./gradlew :app:bundleRelease ```
 Ref: https://reactnative.dev/docs/signed-apk-android 
+Bundle
+``` react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/ ```

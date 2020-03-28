@@ -1,5 +1,5 @@
-import React from "react";
-import { Text, View, StyleSheet, TextInput } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Text, View, StyleSheet, TextInput, Platform } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Colors from "../constants/Colors";
 import CromaButton from "../components/CromaButton";
@@ -7,12 +7,27 @@ import { Croma } from "../store/store";
 import { TextDialog } from "./CommanDialogs";
 
 export const SavePalette = props => {
-  const [paletteName, setPaletteName] = React.useState(
+  const [paletteName, setPaletteName] = useState(
     props.navigation.getParam("name") ? props.navigation.getParam("name") : ""
   );
-
+  const [finalColors, setFinalColors] = useState([])
+  const [isUnlockProNotification, setIsUnlockProNotifiction] = useState(false);
   const [isPaletteNameExist, setIsPaletteNameExist] = React.useState(false);
-  const { addPalette, allPalettes } = React.useContext(Croma);
+  const { addPalette, allPalettes, isPro } = React.useContext(Croma);
+
+  useEffect(() => {
+    let colorsFromParams = props.navigation.getParam("colors");
+    if (typeof colorsFromParams === "string") {
+      colorsFromParams = JSON.parse(colorsFromParams);
+    }
+    const colors = [...new Set(colorsFromParams || [])]
+    setIsUnlockProNotifiction(!isPro && colors.length > 4);
+    setFinalColors(colors);
+    setTimeout(() => {
+      setIsUnlockProNotifiction(false);
+    }, 5000);
+  }, []);
+
   const { title, navigationPath } = props;
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -34,12 +49,7 @@ export const SavePalette = props => {
             }, 3000);
             return null;
           }
-          let colorsFromParams = props.navigation.getParam("colors");
-          if (typeof colorsFromParams === "string") {
-            colorsFromParams = JSON.parse(colorsFromParams);
-          }
-          const colors = [...new Set(colorsFromParams || [])];
-          const palette = { name: paletteName, colors: colors };
+          const palette = { name: paletteName, colors: finalColors };
           addPalette(palette);
           if (navigationPath === "Palette") {
             props.navigation.navigate(navigationPath, palette);
@@ -50,7 +60,8 @@ export const SavePalette = props => {
       >
         Save palette
       </CromaButton>
-      {isPaletteNameExist && <TextDialog />}
+      {isPaletteNameExist && <TextDialog text={'A palette with same name already exists.'} />}
+      {isUnlockProNotification && <TextDialog text={'Unlock pro to save more than 4 colors!'} />}
     </ScrollView>
   );
 };

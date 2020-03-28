@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -6,7 +6,8 @@ import {
   View,
   Dimensions,
   Platform,
-  Linking
+  Linking,
+  ToastAndroid
 } from "react-native";
 import { PaletteCard } from "../components/PaletteCard";
 import { UndoDialog, DialogContainer } from "../components/CommanDialogs";
@@ -21,14 +22,21 @@ import { Header } from "react-navigation";
 import EmptyView from "../components/EmptyView";
 import ActionButton from "react-native-action-button";
 import { Ionicons, Entypo } from "@expo/vector-icons";
-const HomeScreen = function(props) {
-  const { height } = Dimensions.get("window");
+import InAppBilling from "react-native-billing";
+
+const HomeScreen = function (props) {
+  const { height, width } = Dimensions.get("window");
+
   const {
     isLoading,
     allPalettes,
     deletedPalettes,
-    undoDeletionByName
+    undoDeletionByName,
+    isPro,
+    setPurchase
   } = React.useContext(Croma);
+  const toastRef = useRef(null);
+  //const [purchasedMsg, showPurchasedMsg] = useState(false);
   const [pickImgloading, setPickImgLoading] = useState(false);
 
   const pickImage = async () => {
@@ -51,9 +59,40 @@ const HomeScreen = function(props) {
       }
     }
   };
+  const purchase = async function () {
+    try {
+      console.log("starting purchase");
+      await InAppBilling.open();
+      const details = await InAppBilling.purchase("croma_pro");
+      console.log("You purchased: ", details);
+      ToastAndroid.show("Congrats, You are now a pro user!", ToastAndroid.LONG)
+      setPurchase(details);
+    } catch (err) {
+      console.log(err);
+      ToastAndroid.show("Purchas unsucceessful " + err, ToastAndroid.LONG)
+    } finally {
+      await InAppBilling.close();
+    }
+  }
+  // TODO: restore purchase
+  const checkPurchase = async function () {
+    try {
+      await InAppBilling.open();
+      // If subscriptions/products are updated server-side you
+      // will have to update cache with loadOwnedPurchasesFromGoogle()
+      await InAppBilling.loadOwnedPurchasesFromGoogle();
+      const isPurchased = await InAppBilling.isPurchased("croma_pro")
+      console.log("Customer subscribed: ", isPurchased);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      await InAppBilling.close();
+    }
+  }
   useEffect(() => {
     getPermissionAsync();
   }, []);
+  console.log("Is pro------", isPro);
   if (isLoading) {
     return <ActivityIndicator />;
   } else {
@@ -68,7 +107,7 @@ const HomeScreen = function(props) {
               return (
                 <PaletteCard
                   key={name}
-                  colors={allPalettes[name].colors}
+                  colors={allPalettes[name].colors.slice(0, isPro ? allPalettes[name].colors.length : 4)}
                   name={name}
                   navigation={props.navigation}
                 />
@@ -150,11 +189,14 @@ const HomeScreen = function(props) {
               <Entypo name="google-play" style={styles.actionButtonIcon} />
             </ActionButton.Item>
           )}
-          {Platform.OS === "android" && (
+          {Platform.OS === "android" && !isPro && (
             <ActionButton.Item
               buttonColor={Colors.primary}
               title="Unlock pro"
-              onPress={() => console.log("Unlock pro")}
+              onPress={() => {
+                console.log("Unlock pro");
+                purchase();
+              }}
             >
               <Ionicons name="md-unlock" style={styles.actionButtonIcon} />
             </ActionButton.Item>
