@@ -30,7 +30,6 @@ const HomeScreen = function (props) {
   const {
     isLoading,
     allPalettes,
-    loadInitPaletteFromStore,
     deletedPalettes,
     undoDeletionByName,
     isPro,
@@ -90,7 +89,6 @@ const HomeScreen = function (props) {
     }
   }
   useEffect(() => {
-    loadInitPaletteFromStore();
     getPermissionAsync();
   }, []);
   console.log("Is pro------", isPro);
