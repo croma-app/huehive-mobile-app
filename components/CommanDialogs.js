@@ -34,9 +34,7 @@ export const UndoDialog = props => {
 export const TextDialog = props => (
   <View style={styles.undoCard}>
     <View style={{ width: "80%" }}>
-      <Text style={styles.undoText}>
-        {props.text}
-      </Text>
+      <Text style={styles.undoText}>{props.text}</Text>
     </View>
   </View>
 );

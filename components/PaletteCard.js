@@ -19,7 +19,7 @@ export const PaletteCard = props => {
           title: "croma app",
           message: `https://croma.app/#/Main/SavePalette?name=${
             props.name
-            }&colors=${encodeURIComponent(JSON.stringify(props.colors))}`
+          }&colors=${encodeURIComponent(JSON.stringify(props.colors))}`
         },
         {
           dialogTitle: "croma app "
@@ -43,14 +43,16 @@ export const PaletteCard = props => {
   const onShareWeb = event => {
     event.preventDefault();
     event.stopPropagation();
-    Clipboard.setString(`https://croma.app/#/Main/SavePalette?name=${
-      props.name
-      }&colors=${encodeURIComponent(JSON.stringify(props.colors))}`)
+    Clipboard.setString(
+      `https://croma.app/#/Main/SavePalette?name=${
+        props.name
+      }&colors=${encodeURIComponent(JSON.stringify(props.colors))}`
+    );
     setShared(true);
     setTimeout(() => {
       setShared(false);
     }, 3000);
-  }
+  };
   return (
     <Card
       {...props}
@@ -63,28 +65,32 @@ export const PaletteCard = props => {
       <View style={styles.bottom}>
         <Text style={styles.label}>{props.name}</Text>
         <View style={styles.actionButtonsView}>
-          {
-            shared && <Text style={{
-              position: 'absolute',
-              backgroundColor: 'rgb(64, 64, 58)',
-              top: '-35px',
-              right: '-10px',
-              width: '148px',
-              color: '#fff',
-              padding: '5px ',
-              textAlign: 'center',
-              borderRadius: '6px'
-            }}>
-              Copied on Clipboard!
+          {shared && (
+            <Text
+              style={{
+                position: "absolute",
+                backgroundColor: "rgb(64, 64, 58)",
+                top: "-35px",
+                right: "-10px",
+                width: "148px",
+                color: "#fff",
+                padding: "5px ",
+                textAlign: "center",
+                borderRadius: "6px"
+              }}
+            >
+              Copied to Clipboard!
             </Text>
-          }
-          {Platform.OS === "web" ? <Touchable onClick={onShareWeb} style={styles.actionButton}>
-            <FontAwesome size={20} name="share" />
-          </Touchable> : (
-              <Touchable onPress={onShare} style={styles.actionButton}>
-                <FontAwesome size={20} name="share" />
-              </Touchable>
-            )}
+          )}
+          {Platform.OS === "web" ? (
+            <Touchable onClick={onShareWeb} style={styles.actionButton}>
+              <FontAwesome size={20} name="share" />
+            </Touchable>
+          ) : (
+            <Touchable onPress={onShare} style={styles.actionButton}>
+              <FontAwesome size={20} name="share" />
+            </Touchable>
+          )}
           <Touchable
             onPress={event => {
               event.preventDefault();

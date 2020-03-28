@@ -9,7 +9,7 @@ export const initState = {
   isPro: false
 };
 
-const syncStateToStore = function (state) {
+const syncStateToStore = function(state) {
   Storage.setApplicationState(state);
 };
 
@@ -27,9 +27,9 @@ export default function applicationHook(initState) {
   };
 
   const loadInitPaletteFromStore = async () => {
-    // Loading application state from localStorage 
+    // Loading application state from localStorage
     const _state = await Storage.getApplicationState();
-    setState((state) => ({
+    setState(state => ({
       ...state,
       ..._state
     }));
@@ -41,9 +41,14 @@ export default function applicationHook(initState) {
       Storage.setUserAlreadyExists();
       defaultPalettes = {
         name: "Croma example palette",
-        colors: [{ color: "#F0675F" }, { color: "#F3D163" }, { color: '#EBEF5C' }, { color: '#C9EF5B' }]
+        colors: [
+          { color: "#F0675F" },
+          { color: "#F3D163" },
+          { color: "#EBEF5C" },
+          { color: "#C9EF5B" }
+        ]
       };
-      addPalette(defaultPalettes)
+      addPalette(defaultPalettes);
     }
   };
 
@@ -55,12 +60,11 @@ export default function applicationHook(initState) {
     });
   };
 
-  const setPurchase = (details) => {
+  const setPurchase = details => {
     setState(state => {
-      return {...state, isPro: true, purchaseDetails: details};
+      return { ...state, isPro: true, purchaseDetails: details };
     });
-  }
-
+  };
 
   const addColorToPalette = (name, color) => {
     setState(state => {
@@ -151,11 +155,15 @@ export default function applicationHook(initState) {
     addColorToPalette,
     setPurchase
   });
-  
+
   // Sync state to local storage
-  if(Object.keys(state.allPalettes).length !== 0 || Object.keys(state.deletedPalettes).length !== 0 || state.isPro !== initState.isPro){
+  if (
+    Object.keys(state.allPalettes).length !== 0 ||
+    Object.keys(state.deletedPalettes).length !== 0 ||
+    state.isPro !== initState.isPro
+  ) {
     syncStateToStore(state);
-  } 
+  }
   return state;
 }
 

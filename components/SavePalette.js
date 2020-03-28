@@ -10,7 +10,7 @@ export const SavePalette = props => {
   const [paletteName, setPaletteName] = useState(
     props.navigation.getParam("name") ? props.navigation.getParam("name") : ""
   );
-  const [finalColors, setFinalColors] = useState([])
+  const [finalColors, setFinalColors] = useState([]);
   const [isUnlockProNotification, setIsUnlockProNotifiction] = useState(false);
   const [isPaletteNameExist, setIsPaletteNameExist] = React.useState(false);
   const { addPalette, allPalettes, isPro } = React.useContext(Croma);
@@ -20,7 +20,7 @@ export const SavePalette = props => {
     if (typeof colorsFromParams === "string") {
       colorsFromParams = JSON.parse(colorsFromParams);
     }
-    const colors = [...new Set(colorsFromParams || [])]
+    const colors = [...new Set(colorsFromParams || [])];
     setIsUnlockProNotifiction(!isPro && colors.length > 4);
     setFinalColors(colors);
     setTimeout(() => {
@@ -60,8 +60,12 @@ export const SavePalette = props => {
       >
         Save palette
       </CromaButton>
-      {isPaletteNameExist && <TextDialog text={'A palette with same name already exists.'} />}
-      {isUnlockProNotification && <TextDialog text={'Unlock pro to save more than 4 colors!'} />}
+      {isPaletteNameExist && (
+        <TextDialog text={"A palette with same name already exists."} />
+      )}
+      {isUnlockProNotification && (
+        <TextDialog text={"Unlock pro to save more than 4 colors!"} />
+      )}
     </ScrollView>
   );
 };
