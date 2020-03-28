@@ -20,17 +20,12 @@ export const SavePalette = props => {
     if (typeof colorsFromParams === "string") {
       colorsFromParams = JSON.parse(colorsFromParams);
     }
-    const colors = [...new Set(colorsFromParams || [])];
-    if(Platform.OS === 'web'){
-      setFinalColors(colors)
-    }else{
-      setIsUnlockProNotifiction(!isPro && colors.length > 4)
-      setFinalColors(colors.slice(0,4))
-      setTimeout(()=>{
-        setIsUnlockProNotifiction(false);
-      }, 5000)
-    }
-  }, [])
+    setIsUnlockProNotifiction(!isPro && colors.length > 4);
+    setFinalColors([...new Set(colorsFromParams || [])]);
+    setTimeout(() => {
+      setIsUnlockProNotifiction(false);
+    }, 5000);
+  }, []);
   const { title, navigationPath } = props;
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -63,8 +58,8 @@ export const SavePalette = props => {
       >
         Save palette
       </CromaButton>
-      {isPaletteNameExist && <TextDialog text={'A palette with same name already exists.'}/>}
-      {isUnlockProNotification && <TextDialog text={'Unlock pro to save more than 4 colors!'}/>}
+      {isPaletteNameExist && <TextDialog text={'A palette with same name already exists.'} />}
+      {isUnlockProNotification && <TextDialog text={'Unlock pro to save more than 4 colors!'} />}
     </ScrollView>
   );
 };

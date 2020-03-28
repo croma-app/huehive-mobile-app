@@ -1,9 +1,9 @@
 import { AsyncStorage } from "react-native";
-const ALL_PALETTES = "ALL_PALETTES";
+const APPLICATION_STATE_KEY = "APLICATION_STATE";
 const IS_USER_ALREADY_EXIST_KEY = "IS_USER_ALREADY_EXIST";
 export default class Storage {
-  static getAllPalettes = async () => {
-    let palettes = await AsyncStorage.getItem(ALL_PALETTES);
+  static getApplicationState = async () => {
+    let palettes = await AsyncStorage.getItem(APPLICATION_STATE_KEY);
     if (palettes) {
       return JSON.parse(palettes);
     } else {
@@ -11,8 +11,8 @@ export default class Storage {
     }
   };
 
-  static saveAllPalette = async allPalette => {
-    await AsyncStorage.setItem(ALL_PALETTES, JSON.stringify(allPalette));
+  static setApplicationState = async state => {
+    await AsyncStorage.setItem(APPLICATION_STATE_KEY, JSON.stringify(state));
   };
 
   static setUserAlreadyExists = async () => {
