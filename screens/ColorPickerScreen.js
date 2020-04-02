@@ -11,7 +11,7 @@ export default function ColorPickerScreen(props) {
           onChangeColor={color => {
             setColor(color);
           }}
-          style={[{ height: 300, flex: 1 }]}
+          style={[{ height: 350, flex: 1 }]}
         />
         <CromaButton
           onPress={() => {

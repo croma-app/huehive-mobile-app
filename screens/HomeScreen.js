@@ -133,6 +133,7 @@ const HomeScreen = function(props) {
           bgColor="rgba(68, 68, 68, 0.6)"
           hideShadow={Platform.OS === "web" ? true : false}
           buttonColor={Colors.accent}
+          offsetY={60}
           key="action-button-home"
         >
           <ActionButton.Item
@@ -148,6 +149,9 @@ const HomeScreen = function(props) {
                   });
                 })
                 .catch(err => {
+                  if (Platform.OS == 'android') {
+                    ToastAndroid.show("Error while processing image: " + err, ToastAndroid.LONG);
+                  }
                   setPickImgLoading(false);
                 });
             }}

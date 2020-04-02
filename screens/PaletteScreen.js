@@ -61,6 +61,7 @@ export default function PaletteScreen(props) {
           <EmptyView />
         </ScrollView>
         <ActionButton
+          offsetY={60}
           bgColor="rgba(68, 68, 68, 0.6)"
           hideShadow={Platform.OS === "web" ? true : false}
           buttonColor={Colors.accent}
