@@ -1,5 +1,5 @@
 import React from "react";
-import { Platform, Button } from "react-native";
+import { Platform, Linking } from "react-native";
 import { createStackNavigator } from "react-navigation";
 import { createAppContainer } from "react-navigation";
 import ColorDetailsScreen from "../screens/ColorDetailScreen";
@@ -11,6 +11,10 @@ import ColorListScreen from "../screens/ColorListScreen";
 import PaletteScreen from "../screens/PaletteScreen";
 import HomeScreen from "../screens/HomeScreen";
 import Colors from "../constants/Colors";
+import { Entypo } from "@expo/vector-icons";
+import Touchable from "react-native-platform-touchable";
+
+
 
 const config = Platform.select({
   web: { headerMode: "screen" },
@@ -36,7 +40,38 @@ const RootStack = createStackNavigator(
         backgroundColor: Colors.primary,
       },
       headerRight: (
-        <Button color="#fff" title="Github"/>
+        Platform.OS === 'web' ?
+          <>
+            <Touchable
+              style={{ padding: '5px' }}
+              onPress={() => {
+                Linking.openURL(
+                  "https://play.google.com/store/apps/details?id=app.croma"
+                )
+              }}
+            >
+              <Entypo name="google-play" style={{
+                fontSize: 25,
+                height: 25,
+                color: "white"
+              }} />
+            </Touchable>
+            <Touchable
+              style={{ padding: '5px', marginRight: '10px' }}
+              onPress={() => {
+                Linking.openURL(
+                  "https://github.com/croma-app/croma-react"
+                )
+              }}
+            >
+              <Entypo name="github" style={{
+                fontSize: 25,
+                height: 25,
+                color: "white"
+              }} />
+            </Touchable>
+          </>
+          : ''
       ),
       headerTintColor: "#fff"
     }
