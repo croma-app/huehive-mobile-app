@@ -1,5 +1,5 @@
 import React from "react";
-import { Platform } from "react-native";
+import { Platform, Button } from "react-native";
 import { createStackNavigator } from "react-navigation";
 import { createAppContainer } from "react-navigation";
 import ColorDetailsScreen from "../screens/ColorDetailScreen";
@@ -33,8 +33,11 @@ const RootStack = createStackNavigator(
     /* The header config from HomeScreen is now here */
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: Colors.primary
+        backgroundColor: Colors.primary,
       },
+      headerRight: (
+        <Button color="#fff" title="Github"/>
+      ),
       headerTintColor: "#fff"
     }
   }
