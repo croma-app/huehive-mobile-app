@@ -12,17 +12,15 @@ import { Croma } from "../store/store";
 export const PaletteCard = props => {
   const [shared, setShared] = React.useState(false);
   const { deletePaletteByName } = React.useContext(Croma);
-  const onShare = async event => {
+  const onShare = async () => {
     try {
       const result = await Share.share(
         {
-          title: "croma app",
-          message: `https://croma.app/#/Main/SavePalette?name=${
-            props.name
+          message: `Croma - Palette Manager\nColors:\n${props.colors.map((colorObj) => colorObj.color).join('\n')}
+      
+          https://croma.app/#/Main/SavePalette?name=${
+          encodeURIComponent(props.name)
           }&colors=${encodeURIComponent(JSON.stringify(props.colors))}`
-        },
-        {
-          dialogTitle: "croma app "
         }
       );
 
@@ -44,8 +42,10 @@ export const PaletteCard = props => {
     event.preventDefault();
     event.stopPropagation();
     Clipboard.setString(
-      `https://croma.app/#/Main/SavePalette?name=${
-        props.name
+      `Croma - Palette Manager\nColors:\n${props.colors.map((colorObj) => colorObj.color).join('\n')}
+      
+      https://croma.app/#/Main/SavePalette?name=${
+      encodeURIComponent(props.name)
       }&colors=${encodeURIComponent(JSON.stringify(props.colors))}`
     );
     setShared(true);
@@ -87,10 +87,10 @@ export const PaletteCard = props => {
               <FontAwesome size={20} name="share" />
             </Touchable>
           ) : (
-            <Touchable onPress={onShare} style={styles.actionButton}>
-              <FontAwesome size={20} name="share" />
-            </Touchable>
-          )}
+              <Touchable onPress={onShare} style={styles.actionButton}>
+                <FontAwesome size={20} name="share" />
+              </Touchable>
+            )}
           <Touchable
             onPress={event => {
               event.preventDefault();
