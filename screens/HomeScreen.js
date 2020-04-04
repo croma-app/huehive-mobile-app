@@ -24,7 +24,7 @@ import ActionButton from "react-native-action-button";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import InAppBilling from "react-native-billing";
 
-const HomeScreen = function(props) {
+const HomeScreen = function (props) {
   const { height, width } = Dimensions.get("window");
 
   const {
@@ -57,7 +57,7 @@ const HomeScreen = function(props) {
       }
     }
   };
-  const purchase = async function() {
+  const purchase = async function () {
     try {
       console.log("starting purchase");
       await InAppBilling.open();
@@ -73,7 +73,7 @@ const HomeScreen = function(props) {
     }
   };
   // TODO: restore purchase
-  const checkPurchase = async function() {
+  const checkPurchase = async function () {
     try {
       await InAppBilling.open();
       // If subscriptions/products are updated server-side you
@@ -89,6 +89,18 @@ const HomeScreen = function(props) {
   };
   useEffect(() => {
     getPermissionAsync();
+    if (Platform.OS === 'android') {
+      Linking.getInitialURL().then(url => {
+        if (url) {
+          const result = {};
+          url.split("?")[1].split("&").forEach(function(part) {
+            var item = part.split("=");
+            result[item[0]] = decodeURIComponent(item[1]);
+          });
+          props.navigation.navigate('SavePalette',{ colors: [...new Set(JSON.parse(result['colors']) || [])],name: result['name']});
+        }
+      });
+    }
   }, []);
   if (isLoading) {
     return <ActivityIndicator />;
