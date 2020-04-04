@@ -90,6 +90,8 @@ const HomeScreen = function (props) {
   useEffect(() => {
     getPermissionAsync();
     if (Platform.OS === 'android') {
+      // Deep linking code 
+      // https://medium.com/react-native-training/deep-linking-your-react-native-app-d87c39a1ad5e
       Linking.getInitialURL().then(url => {
         if (url) {
           const result = {};
