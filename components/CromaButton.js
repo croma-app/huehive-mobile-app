@@ -7,7 +7,7 @@ export default class CromaButton extends React.Component {
     const { style, onPress, children } = this.props;
     return (
       <Touchable style={[styles.button, style]} onPress={onPress}>
-        <Text style={{ textTransform: "uppercase" }}> {children} </Text>
+        <Text style={styles.text}> {children} </Text>
       </Touchable>
     );
   }
@@ -26,5 +26,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     justifyContent: "center",
     alignItems: "center"
+  },
+  text: {
+    textTransform: "uppercase",
+    fontWeight: "700",
+    color: '#484a4c'
   }
 });
