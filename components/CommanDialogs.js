@@ -16,7 +16,7 @@ export const UndoDialog = props => {
   return (
     <View style={styles.undoCard}>
       <View style={{ width: "80%" }}>
-        <Text style={styles.undoText}>Deleted {name}. tab to dismiss.</Text>
+        <Text style={styles.undoText}>Deleted {name}. </Text>
       </View>
       <Touchable
         onPress={event => {
