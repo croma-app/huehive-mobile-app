@@ -40,7 +40,7 @@ export const SavePalette = props => {
         name={paletteName}
       />
       <View style={styles.card}>
-        <Text style={styles.label}>{title}</Text>
+        <Text style={[styles.label, styles.title]}>{title}</Text>
         <TextInput
           style={styles.input}
           value={paletteName}
@@ -93,9 +93,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     padding: 10
   },
-  label: {
-    flex: 1,
-    color: Colors.darkGrey,
+  title: {
     fontWeight: "700"
   },
   input: {
@@ -111,7 +109,6 @@ const styles = StyleSheet.create({
   },
   label: {
     flex: 1,
-    marginHorizontal: 16,
     color: Colors.darkGrey
   }
 });
