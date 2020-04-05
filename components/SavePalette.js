@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, StyleSheet, TextInput, Platform } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { PalettePreviewCard } from "../components/PalettePreviewCard";
 import Colors from "../constants/Colors";
 import CromaButton from "../components/CromaButton";
 import { Croma } from "../store/store";
@@ -31,6 +32,13 @@ export const SavePalette = props => {
   const { title, navigationPath } = props;
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
+      <PalettePreviewCard
+        colors={finalColors.slice(
+          0,
+          isPro ? finalColors.length : 4
+        )}
+        name={paletteName}
+      />
       <View style={styles.card}>
         <Text style={styles.label}>{title}</Text>
         <TextInput
@@ -94,5 +102,16 @@ const styles = StyleSheet.create({
     flex: 1,
     borderBottomColor: "black",
     borderBottomWidth: 1
+  },
+  bottom: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 16,
+    height: 54
+  },
+  label: {
+    flex: 1,
+    marginHorizontal: 16,
+    color: Colors.darkGrey
   }
 });
