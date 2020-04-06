@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import SingleColorCard from "../components/SingleColorCard";
 import {
@@ -6,7 +6,8 @@ import {
   StyleSheet,
   View,
   Dimensions,
-  Platform
+  Platform,
+  ToastAndroid
 } from "react-native";
 import { UndoDialog, DialogContainer } from "../components/CommanDialogs";
 import { Croma } from "../store/store";
@@ -66,11 +67,15 @@ export default function PaletteScreen(props) {
           hideShadow={Platform.OS === "web" ? true : false}
           buttonColor={Colors.accent}
           onPress={() => {
-            props.navigation.navigate("ColorPicker", {
-              onDone: color => {
-                addColorToPalette(paletteName, color);
-              }
-            });
+            if (Platform.OS === 'android' && colors.length >= 4 && isPro === false) {
+              ToastAndroid.show("Unlock pro to add more than 4 colors!", ToastAndroid.LONG);
+            } else {
+              props.navigation.navigate("ColorPicker", {
+                onDone: color => {
+                  addColorToPalette(paletteName, color);
+                }
+              });
+            }
           }}
         />
       </View>
