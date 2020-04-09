@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end"
   },
   actionButton: {
-    paddingRight: 16
+    padding: 8
   },
   label: {
     flex: 1,
