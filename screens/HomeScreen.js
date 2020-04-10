@@ -59,15 +59,12 @@ const HomeScreen = function (props) {
   };
   const purchase = async function () {
     try {
-      console.log("starting purchase");
       await InAppBilling.open();
       const details = await InAppBilling.purchase("croma_pro");
-      console.log("You purchased: ", details);
       ToastAndroid.show("Congrats, You are now a pro user!", ToastAndroid.LONG);
       setPurchase(details);
     } catch (err) {
-      console.log(err);
-      ToastAndroid.show("Purchas unsucceessful " + err, ToastAndroid.LONG);
+      ToastAndroid.show("Purchase unsucceessful " + err, ToastAndroid.LONG);
     } finally {
       await InAppBilling.close();
     }
@@ -80,9 +77,7 @@ const HomeScreen = function (props) {
       // will have to update cache with loadOwnedPurchasesFromGoogle()
       await InAppBilling.loadOwnedPurchasesFromGoogle();
       const isPurchased = await InAppBilling.isPurchased("croma_pro");
-      console.log("Customer subscribed: ", isPurchased);
     } catch (err) {
-      console.log(err);
     } finally {
       await InAppBilling.close();
     }
@@ -212,7 +207,6 @@ const HomeScreen = function (props) {
               buttonColor={Colors.primary}
               title="Unlock pro"
               onPress={() => {
-                console.log("Unlock pro");
                 purchase();
               }}
             >
