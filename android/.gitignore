@@ -3,6 +3,7 @@
 *.aar
 *.ap_
 *.aab
+*nodes_modules*
 app/src/main/assets/index.android.bundle
 # Files for the ART/Dalvik VM
 *.dex
