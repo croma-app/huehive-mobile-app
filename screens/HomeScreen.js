@@ -12,17 +12,14 @@ import {
 import { PaletteCard } from "../components/PaletteCard";
 import { UndoDialog, DialogContainer } from "../components/CommanDialogs";
 import { Croma } from "../store/store";
-import Colors from "../constants/Colors";
 import * as ImagePicker from "expo-image-picker";
 import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
-import ColorPicker from "../libs/ColorPicker";
 import Jimp from "jimp";
 import { Header } from "react-navigation";
 import EmptyView from "../components/EmptyView";
-import ActionButton from "react-native-action-button";
-import { Ionicons, Entypo } from "@expo/vector-icons";
 import InAppBilling from "react-native-billing";
+import HomeActionButton from '../components/HomeActionButton';
 
 const HomeScreen = function (props) {
   const { height, width } = Dimensions.get("window");
@@ -37,18 +34,7 @@ const HomeScreen = function (props) {
   } = React.useContext(Croma);
   const [pickImgloading, setPickImgLoading] = useState(false);
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      quality: 1,
-      base64: true
-    });
-    if (result.base64 !== undefined) {
-      return await Jimp.read(new Buffer(result.base64, "base64"));
-    } else {
-      return await Jimp.read(result.uri);
-    }
-  };
+  
   const getPermissionAsync = async () => {
     if (Constants.platform.ios) {
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -119,10 +105,11 @@ const HomeScreen = function (props) {
                   )}
                   name={name}
                   navigation={props.navigation}
-                />
-              );
-            })}
+                  />
+                  );
+                })}
             <EmptyView />
+                <HomeActionButton setPickImgLoading={setPickImgLoading} {...props} />
           </ScrollView>
         </View>
 
@@ -137,83 +124,6 @@ const HomeScreen = function (props) {
             );
           })}
         </DialogContainer>
-        {/*Setting box shadow to false because of Issue on the web: https://github.com/mastermoo/react-native-action-button/issues/337 */}
-        <ActionButton
-          bgColor="rgba(68, 68, 68, 0.6)"
-          hideShadow={Platform.OS === "web" ? true : false}
-          buttonColor={Colors.accent}
-          offsetY={60}
-          key="action-button-home"
-        >
-          <ActionButton.Item
-            buttonColor="#9b59b6"
-            title="Get palette from image"
-            onPress={() => {
-              setPickImgLoading(true);
-              pickImage()
-                .then((image, err) => {
-                  setPickImgLoading(false);
-                  props.navigation.navigate("ColorList", {
-                    colors: ColorPicker.getProminentColors(image)
-                  });
-                })
-                .catch(err => {
-                  if (Platform.OS == 'android') {
-                    ToastAndroid.show("Error while processing image: " + err, ToastAndroid.LONG);
-                  }
-                  setPickImgLoading(false);
-                });
-            }}
-          >
-            <Ionicons name="md-camera" style={styles.actionButtonIcon} />
-          </ActionButton.Item>
-          <ActionButton.Item
-            buttonColor="#3498db"
-            title="Get palette from color"
-            onPress={() => {
-              props.navigation.navigate("ColorPicker", {
-                onDone: color => {
-                  props.navigation.navigate("Palettes", {
-                    color: color.color
-                  });
-                }
-              });
-            }}
-          >
-            <Ionicons name="md-color-palette" style={styles.actionButtonIcon} />
-          </ActionButton.Item>
-          <ActionButton.Item
-            buttonColor="#1abc9c"
-            title="Add colors manually"
-            onPress={() => props.navigation.navigate("AddPaletteManually")}
-          >
-            <Ionicons name="md-color-filter" style={styles.actionButtonIcon} />
-          </ActionButton.Item>
-          {Platform.OS === "web" && (
-            <ActionButton.Item
-              buttonColor={Colors.primary}
-              title="Get croma on playstore"
-              onPress={() =>
-                Linking.openURL(
-                  "https://play.google.com/store/apps/details?id=app.croma"
-                )
-              }
-            >
-              <Entypo name="google-play" style={styles.actionButtonIcon} />
-            </ActionButton.Item>
-          )}
-          {Platform.OS === "android" && !isPro && (
-            <ActionButton.Item
-              buttonColor={Colors.primary}
-              title="Unlock pro"
-              onPress={() => {
-                purchase();
-              }}
-            >
-              <Ionicons name="md-unlock" style={styles.actionButtonIcon} />
-            </ActionButton.Item>
-          )}
-        </ActionButton>
       </>
     );
   }
