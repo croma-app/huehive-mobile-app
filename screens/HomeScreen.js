@@ -143,7 +143,9 @@ const HomeScreen = function (props) {
           hideShadow={Platform.OS === "web" ? true : false}
           buttonColor={Colors.accent}
           offsetY={60}
+          className={'testitman'}
           key="action-button-home"
+          style={styles.actionButton}
         >
           <ActionButton.Item
             buttonColor="#9b59b6"
@@ -234,5 +236,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     height: 22,
     color: "white"
+  },
+  actionButton: {
+    position: 'fixed',
+    transform: 'scale(1) rotate(0deg) !important', 
+    bottom: 10,
+    right: 10
   }
 });
