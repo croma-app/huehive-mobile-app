@@ -77,6 +77,7 @@ export default function PaletteScreen(props) {
               });
             }
           }}
+          style={Platform.OS === 'web' ? styles.actionButtonWeb : {}}
         />
       </View>
       <DialogContainer>
@@ -104,5 +105,11 @@ const styles = StyleSheet.create({
   },
   listview: {
     margin: 8
+  },
+  actionButtonWeb: {
+    position: 'fixed',
+    transform: 'scale(1) rotate(0deg) !important', 
+    bottom: 10,
+    right: 10
   }
 });
