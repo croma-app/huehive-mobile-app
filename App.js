@@ -42,6 +42,7 @@ export default function App(props) {
             />
             <View
               style={[{ flex: 1, backgroundColor: "transparent", maxWidth: 600 }]}
+              className={'navigation-workplace'}
             >
               {Platform.OS === "ios" && <StatusBar barStyle="default" />}
               <AppNavigator />
