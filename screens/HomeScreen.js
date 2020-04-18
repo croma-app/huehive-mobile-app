@@ -138,15 +138,12 @@ const HomeScreen = function (props) {
           })}
         </DialogContainer>
         {/*Setting box shadow to false because of Issue on the web: https://github.com/mastermoo/react-native-action-button/issues/337 */}
-        
         <ActionButton
           bgColor="rgba(68, 68, 68, 0.6)"
           hideShadow={Platform.OS === "web" ? true : false}
           buttonColor={Colors.accent}
           offsetY={60}
-          className={'testitman'}
           key="action-button-home"
-          style={Platform.OS === 'web' ? styles.actionButtonWeb : {}}
         >
           <ActionButton.Item
             buttonColor="#9b59b6"
@@ -237,11 +234,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
     height: 22,
     color: "white"
-  },
-  actionButtonWeb: {
-    position: 'fixed',
-    transform: 'scale(1) rotate(0deg) !important', 
-    right: (Dimensions.get("window").width - 600) / 2,
-    left: (Dimensions.get("window").width - 600) / 2
   }
 });
