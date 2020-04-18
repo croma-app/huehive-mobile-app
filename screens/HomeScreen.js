@@ -241,7 +241,7 @@ const styles = StyleSheet.create({
   actionButtonWeb: {
     position: 'fixed',
     transform: 'scale(1) rotate(0deg) !important', 
-    right: (Dimensions.get("window").width - 600) / 2,
-    left: (Dimensions.get("window").width - 600) / 2
+    right: Math.max((Dimensions.get("window").width - 600) / 2, 0),
+    left: Math.max((Dimensions.get("window").width - 600) / 2, 0)
   }
 });
