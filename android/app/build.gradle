@@ -79,7 +79,8 @@ project.ext.react = [
 ]
 apply from: '../../node_modules/react-native-unimodules/gradle.groovy'
 apply from: "../../node_modules/react-native/react.gradle"
-
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 /**
  * Set this to true to create two separate APKs instead of one:
  *   - An APK that only works on ARM devices
@@ -164,6 +165,9 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation 'androidx.navigation:navigation-fragment:2.0.0'
     implementation 'androidx.navigation:navigation-ui:2.0.0'
+    implementation 'com.google.firebase:firebase-analytics:17.2.2'
+    implementation 'com.google.firebase:firebase-ml-vision:24.0.2'
+    implementation "com.google.guava:guava:29.0-android"
     addUnimodulesDependencies()
 
     if (enableHermes) {
