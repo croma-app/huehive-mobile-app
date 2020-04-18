@@ -144,7 +144,6 @@ const HomeScreen = function (props) {
           hideShadow={Platform.OS === "web" ? true : false}
           buttonColor={Colors.accent}
           offsetY={60}
-          className={'testitman'}
           key="action-button-home"
           style={Platform.OS === 'web' ? styles.actionButtonWeb : {}}
         >
