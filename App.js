@@ -4,6 +4,7 @@ import Colors from "./constants/Colors";
 import AppNavigator from "./navigation/AppNavigator";
 import { ActivityIndicator } from "react-native";
 import applicationHook, { initState, Croma } from "./store/store";
+import ErrorBoundary from "./components/ErrorBoundary"
 
 export default function App(props) {
   const [isPalettesLoaded, setIsPalettesLoaded] = useState(false);
@@ -25,28 +26,31 @@ export default function App(props) {
       <ActivityIndicator size="large" color="#ef635f" animating={true} />
     </View>
   ) : (
-    <Croma.Provider value={applicationState}>
-      <View style={[styles.container]}>
-        <StatusBar
-          barStyle="light-content"
-          // dark-content, light-content and default
-          hidden={false}
-          //To hide statusBar
-          backgroundColor={Colors.primaryDark}
-          //Background color of statusBar only works for Android
-          translucent={false}
-          //allowing light, but not detailed shapes
-          networkActivityIndicatorVisible={true}
-        />
-        <View
-          style={[{ flex: 1, backgroundColor: "transparent", maxWidth: 600 }]}
-        >
-          {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-          <AppNavigator />
-        </View>
-      </View>
-    </Croma.Provider>
-  );
+      <Croma.Provider value={applicationState}>
+        <ErrorBoundary>
+          <View style={[styles.container]}>
+            <StatusBar
+              barStyle="light-content"
+              // dark-content, light-content and default
+              hidden={false}
+              //To hide statusBar
+              backgroundColor={Colors.primaryDark}
+              //Background color of statusBar only works for Android
+              translucent={false}
+              //allowing light, but not detailed shapes
+              networkActivityIndicatorVisible={true}
+            />
+            <View
+              style={[{ flex: 1, backgroundColor: "transparent", maxWidth: 600 }]}
+              className={'navigation-workplace'}
+            >
+              {Platform.OS === "ios" && <StatusBar barStyle="default" />}
+              <AppNavigator />
+            </View>
+          </View>
+        </ErrorBoundary>
+      </Croma.Provider>
+    );
 }
 const styles = StyleSheet.create({
   container: {

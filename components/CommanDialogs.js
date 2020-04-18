@@ -1,9 +1,9 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Platform, Dimensions } from "react-native";
 import Touchable from "react-native-platform-touchable";
 
 export const DialogContainer = props => (
-  <View style={{ position: "absolute", bottom: 0, width: "100%" }}>
+  <View style={Platform.OS === 'web' ? styles.DailogContainerWeb : styles.DailogContainer} >
     {props.children}
   </View>
 );
@@ -15,7 +15,7 @@ export const UndoDialog = props => {
   const { name, undoDeletionByName } = props;
   return (
     <View style={styles.undoCard}>
-      <View style={{ width: "80%" }}>
+      <View style={{width: '80%'}}>
         <Text style={styles.undoText}>Deleted {name}. </Text>
       </View>
       <Touchable
@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#303036",
     flexDirection: "row",
     padding: 15,
+    borderRadius: 6,
     marginTop: 1
   },
   undoText: {
@@ -52,5 +53,18 @@ const styles = StyleSheet.create({
   undoButton: {
     fontWeight: "bold",
     color: "#e6be0b"
+  },
+  DailogContainerWeb: {
+    position: 'fixed',
+    bottom: 0,
+    left: 0,
+    width: Math.min(Dimensions.get("window").width , 400) - 10,
+    margin: 5,
+    zIndex: 10
+  },
+  DailogContainer: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
   }
 });
