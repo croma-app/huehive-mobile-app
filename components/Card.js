@@ -1,5 +1,6 @@
 import * as React from "react";
-import { StyleSheet, Animated, Platform } from "react-native";
+import * as Animatable from 'react-native-animatable';
+import { StyleSheet, Platform } from "react-native";
 import Colors from "../constants/Colors";
 import Touchable from "react-native-platform-touchable";
 
@@ -17,8 +18,8 @@ export default class Card extends React.Component {
               onPress: this.props.onPress
             })}
         style={[styles.inner]}
-      >
-        <Animated.View {...this.props}>{this.props.children}</Animated.View>
+      > 
+        <Animatable.View animation="slideInUp" useNativeDriver={true} {...this.props}>{this.props.children}</Animatable.View>
       </Touchable>
     );
   }

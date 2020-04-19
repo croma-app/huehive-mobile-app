@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useRef } from "react";
+import * as Animatable from 'react-native-animatable';
 import { View, Text, StyleSheet, Platform, Dimensions } from "react-native";
 import Touchable from "react-native-platform-touchable";
 
@@ -14,7 +15,7 @@ export const UndoDialog = props => {
   */
   const { name, undoDeletionByName } = props;
   return (
-    <View style={styles.undoCard}>
+    <Animatable.View animation={'fadeInUp'}  style={styles.undoCard}>
       <View style={{width: '80%'}}>
         <Text style={styles.undoText}>Deleted {name}. </Text>
       </View>
@@ -27,7 +28,7 @@ export const UndoDialog = props => {
       >
         <Text style={styles.undoButton}> UNDO </Text>
       </Touchable>
-    </View>
+    </Animatable.View>
   );
 };
 
@@ -65,6 +66,8 @@ const styles = StyleSheet.create({
   DailogContainer: {
     position: "absolute",
     bottom: 0,
-    width: "100%",
+    margin: '1%',
+    width: "98%",
+    zIndex: 10
   }
 });
