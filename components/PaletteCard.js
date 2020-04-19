@@ -12,6 +12,7 @@ import { Croma } from "../store/store";
 export const PaletteCard = props => {
   const [shared, setShared] = React.useState(false);
   const { deletePaletteByName } = React.useContext(Croma);
+  const [ animationType, setAnimationType ] = React.useState('lightSpeedIn');
   const onShare = async () => {
     try {
       const result = await Share.share(
@@ -59,6 +60,7 @@ export const PaletteCard = props => {
       onPress={() => {
         props.navigation.navigate("Palette", props);
       }}
+      animationType={animationType} 
     >
       <MultiColorView {...props}></MultiColorView>
 
@@ -92,11 +94,14 @@ export const PaletteCard = props => {
               </Touchable>
             )}
           <Touchable
-            onPress={event => {
+            {...{[Platform.OS === 'web' ? 'onClick': 'onPress' ]: event => {
               event.preventDefault();
               event.stopPropagation();
-              deletePaletteByName(props.name);
-            }}
+              setAnimationType('lightSpeedOut');
+              setTimeout(()=>{
+                deletePaletteByName(props.name);
+              }, 700)
+            }}}
             style={styles.actionButton}
           >
             <FontAwesome size={20} name="trash" />
