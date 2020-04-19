@@ -12,7 +12,7 @@ import { Croma } from "../store/store";
 export const PaletteCard = props => {
   const [shared, setShared] = React.useState(false);
   const { deletePaletteByName } = React.useContext(Croma);
-  const [ animationType, setAnimationType ] = React.useState('lightSpeedIn');
+  const [ animationType, setAnimationType ] = React.useState('fadeInLeftBig');
   const onShare = async () => {
     try {
       const result = await Share.share(
@@ -97,10 +97,10 @@ export const PaletteCard = props => {
             {...{[Platform.OS === 'web' ? 'onClick': 'onPress' ]: event => {
               event.preventDefault();
               event.stopPropagation();
-              setAnimationType('lightSpeedOut');
+              setAnimationType('fadeOutRightBig');
               setTimeout(()=>{
                 deletePaletteByName(props.name);
-              }, 700)
+              }, 500)
             }}}
             style={styles.actionButton}
           >

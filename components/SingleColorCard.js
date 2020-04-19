@@ -8,7 +8,7 @@ import Touchable from "react-native-platform-touchable";
 export default class SingleColorCard extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { animationType: 'lightSpeedIn' };
+    this.state = { animationType: 'fadeInLeftBig' };
   }
   render() { 
     return (
@@ -25,10 +25,10 @@ export default class SingleColorCard extends React.Component {
                   [Platform.OS === 'web' ? 'onClick' : 'onPress']: event => {
                     event.preventDefault();
                     event.stopPropagation();
-                    this.setState({animationType: 'lightSpeedOut'})
+                    this.setState({animationType: 'fadeOutRightBig'})
                     setTimeout(() => {
                       this.props.colorDeleteFromPalette();
-                    }, 700)
+                    }, 400)
                   }
                 }}
                 style={styles.actionButton}

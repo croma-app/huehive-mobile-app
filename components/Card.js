@@ -7,7 +7,7 @@ import Touchable from "react-native-platform-touchable";
 export default class Card extends React.Component {
   render() {
     return (
-      <Animatable.View animation={this.props.animationType}>
+      <Animatable.View animation={this.props.animationType} duration={500} useNativeDriver={true}>
         <Touchable 
           {...(Platform.OS === "web"
             ? {
