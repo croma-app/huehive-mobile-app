@@ -19,7 +19,7 @@ export default class Card extends React.Component {
             })}
         style={[styles.inner]}
       > 
-        <Animatable.View animation="slideInUp" useNativeDriver={true} {...this.props}>{this.props.children}</Animatable.View>
+        <Animatable.View animation="slideInUp" duration={700} useNativeDriver={true} {...this.props}>{this.props.children}</Animatable.View>
       </Touchable>
     );
   }
