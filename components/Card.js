@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
   inner: {
     backgroundColor: Colors.white,
     marginVertical: 8,
+    boxShadow: '0px 1px 4px #888888',
     elevation: 1
   }
 });
