@@ -51,7 +51,7 @@
                 <data
                     android:host="croma.app"
                     android:scheme="https" />
-                // A
+
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
