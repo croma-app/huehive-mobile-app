@@ -65,6 +65,7 @@ export default function PaletteScreen(props) {
           offsetY={60}
           bgColor="rgba(68, 68, 68, 0.6)"
           hideShadow={Platform.OS === "web" ? true : false}
+          fixNativeFeedbackRadius={true} 
           buttonColor={Colors.accent}
           onPress={() => {
             if (Platform.OS === 'android' && colors.length >= 4 && isPro === false) {
