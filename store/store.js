@@ -9,7 +9,7 @@ export const initState = {
   isPro: false
 };
 
-const syncStateToStore = function(state) {
+const syncStateToStore = function (state) {
   Storage.setApplicationState(state);
 };
 
@@ -22,7 +22,12 @@ export default function applicationHook(initState) {
       const { allPalettes } = state;
       sortPalette(palette);
       allPalettes[palette.name] = palette;
-      return { ...state, allPalettes };
+      // sorting palettes before save 
+      const ordered = {};
+      Object.keys(allPalettes).sort().forEach(function (key) {
+        ordered[key] = allPalettes[key];
+      });
+      return { ...state, allPalettes: ordered };
     });
   };
 
@@ -55,6 +60,7 @@ export default function applicationHook(initState) {
   const removePaletteFromStateByName = name => {
     setState(state => {
       const { deletedPalettes } = state;
+      clearTimeout(deletedPalettes[name]['timeout'])
       delete deletedPalettes[name];
       return { ...state, deletedPalettes };
     });
@@ -77,12 +83,11 @@ export default function applicationHook(initState) {
 
   const deletePaletteByName = async name => {
     setState(state => {
-      const { allPalettes } = state;
-      const { deletedPalettes } = state;
+      const { allPalettes, deletedPalettes } = state;
       if (allPalettes[name]) {
         deletedPalettes[name] = { ...allPalettes[name] };
         delete allPalettes[name];
-        setTimeout(() => {
+        deletedPalettes[name]['timeout'] = setTimeout(() => {
           removePaletteFromStateByName(name);
         }, UNDO_TIMEOUT);
         return { ...state, allPalettes, deletedPalettes };
@@ -106,14 +111,14 @@ export default function applicationHook(initState) {
     setState(state => {
       const { allPalettes } = state;
       const deletedColor = allPalettes[name].colors.splice(colorIndex, 1);
+      deletedColor[0]['timeout'] = setTimeout(() => {
+        clearDeletedColor(name, deletedColor[0]);
+      }, UNDO_TIMEOUT); 
       if (allPalettes[name].deletedColors) {
         allPalettes[name].deletedColors.push({ ...deletedColor[0] });
       } else {
         allPalettes[name].deletedColors = [...deletedColor];
       }
-      setTimeout(() => {
-        clearDeletedColor(name, deletedColor[0].color);
-      }, UNDO_TIMEOUT);
       return { ...state, allPalettes };
     });
   };
@@ -124,6 +129,7 @@ export default function applicationHook(initState) {
       allPalettes[name].colors.push({ color: colorName });
       allPalettes[name].deletedColors.forEach((color, index) => {
         if (color.color === colorName) {
+          clearTimeout(color.timeout)
           allPalettes[name].deletedColors.splice(index, 1);
         }
       });
@@ -132,14 +138,15 @@ export default function applicationHook(initState) {
     });
   };
 
-  const clearDeletedColor = (name, colorName) => {
+  const clearDeletedColor = (name, colorObj) => {
     setState(state => {
       const { allPalettes } = state;
       allPalettes[name].deletedColors.forEach((color, index) => {
-        if (color.color === colorName) {
+        if (color.color === colorObj.color) {
           allPalettes[name].deletedColors.splice(index, 1);
         }
       });
+      clearTimeout(colorObj.timeout)
       return { ...state, allPalettes };
     });
   };
