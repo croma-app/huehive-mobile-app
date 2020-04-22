@@ -1,26 +1,35 @@
 import * as React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Platform } from "react-native";
 import Card from "./Card";
 import Colors from "../constants/Colors";
 import { FontAwesome } from "@expo/vector-icons";
 import Touchable from "react-native-platform-touchable";
 
 export default class SingleColorCard extends React.Component {
-  render() {
+  constructor(props) {
+    super(props)
+    this.state = { animationType: 'fadeInLeftBig' };
+  }
+  render() { 
     return (
-      <Card {...this.props}>
+      <Card {...this.props} animationType={this.state.animationType}>
         <View>
           <View
             style={{ backgroundColor: this.props.color, height: 100 }}
           ></View>
-          <View style={styles.bottom}>
+          <View style={styles.bottom}> 
             <Text style={styles.label}>{this.props.color}</Text>
             <View style={styles.actionButtonsView}>
               <Touchable
-                onPress={event => {
-                  event.preventDefault();
-                  event.stopPropagation();
-                  this.props.colorDeleteFromPalette();
+                {...{
+                  [Platform.OS === 'web' ? 'onClick' : 'onPress']: event => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    this.setState({animationType: 'fadeOutRightBig'})
+                    setTimeout(() => {
+                      this.props.colorDeleteFromPalette();
+                    }, 400)
+                  }
                 }}
                 style={styles.actionButton}
               >
