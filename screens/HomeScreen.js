@@ -145,6 +145,7 @@ const HomeScreen = function (props) {
           buttonColor={Colors.accent}
           offsetY={60}
           key="action-button-home"
+          fixNativeFeedbackRadius={true} 
           style={Platform.OS === 'web' ? styles.actionButtonWeb : {}}
         >
           <ActionButton.Item
