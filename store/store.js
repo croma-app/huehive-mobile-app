@@ -62,7 +62,7 @@ export default function applicationHook(initState) {
         name: "Croma example palette",
         colors: [
           { color: "#f0675f" },
-          { color: "#f3D163" },
+          { color: "#f3d163" },
           { color: "#ebef5c" },
           { color: "#c9ef5b" }
         ]
