@@ -15,7 +15,7 @@ export const UndoDialog = props => {
   */
   const { name, undoDeletionByName } = props;
   return (
-    <Animatable.View animation={'fadeInUpBig'} duration={700} style={styles.undoCard} useNativeDriver={true}>
+    <Animatable.View animation={'fadeInUpBig'} duration={500} style={styles.undoCard} useNativeDriver={true}>
       <View style={{ width: '80%' }}>
         <Text style={styles.undoText}>Deleted {name}. </Text>
       </View>

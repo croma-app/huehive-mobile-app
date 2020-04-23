@@ -21,11 +21,25 @@ export default function applicationHook(initState) {
     setState(state => {
       const { allPalettes } = state;
       sortPalette(palette);
+      if (!palette.createdAt) {
+        palette.createdAt = new Date().valueOf()
+      }
       allPalettes[palette.name] = palette;
       // sorting palettes before save 
+      const allPalettesArray = Object.keys(allPalettes).map((key) => allPalettes[key])
+      allPalettesArray.sort((a, b) => {
+        // Todo - Just a check for old user  
+        if (!a.createdAt) {
+          a.createdAt = 0
+        }
+        if (!b.createdAt) {
+          b.createdAt = 0
+        }
+        return new Date(b.createdAt) - new Date(a.createdAt)
+      });
       const ordered = {};
-      Object.keys(allPalettes).sort().forEach(function (key) {
-        ordered[key] = allPalettes[key];
+      allPalettesArray.forEach(function (_palette) {
+        ordered[_palette.name] = _palette;
       });
       return { ...state, allPalettes: ordered };
     });
@@ -47,10 +61,10 @@ export default function applicationHook(initState) {
       defaultPalettes = {
         name: "Croma example palette",
         colors: [
-          { color: "#F0675F" },
-          { color: "#F3D163" },
-          { color: "#EBEF5C" },
-          { color: "#C9EF5B" }
+          { color: "#f0675f" },
+          { color: "#f3D163" },
+          { color: "#ebef5c" },
+          { color: "#c9ef5b" }
         ]
       };
       addPalette(defaultPalettes);
@@ -113,7 +127,7 @@ export default function applicationHook(initState) {
       const deletedColor = allPalettes[name].colors.splice(colorIndex, 1);
       deletedColor[0]['timeout'] = setTimeout(() => {
         clearDeletedColor(name, deletedColor[0]);
-      }, UNDO_TIMEOUT); 
+      }, UNDO_TIMEOUT);
       if (allPalettes[name].deletedColors) {
         allPalettes[name].deletedColors.push({ ...deletedColor[0] });
       } else {
