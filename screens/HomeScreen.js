@@ -7,7 +7,8 @@ import {
   Dimensions,
   Platform,
   Linking,
-  ToastAndroid
+  ToastAndroid,
+  NativeModules
 } from "react-native";
 import { PaletteCard } from "../components/PaletteCard";
 import { UndoDialog, DialogContainer } from "../components/CommanDialogs";
@@ -138,7 +139,16 @@ const HomeScreen = function (props) {
           })}
         </DialogContainer>
         {/*Setting box shadow to false because of Issue on the web: https://github.com/mastermoo/react-native-action-button/issues/337 */}
-        
+        <ActionButton
+          offsetY={120}
+          bgColor="rgba(68, 68, 68, 0.6)"
+          hideShadow={Platform.OS === "web" ? true : false}
+          fixNativeFeedbackRadius={true} 
+          buttonColor={Colors.accent}
+          onPress={() => {
+            NativeModules.CromaModule.navigateToColorPicker()
+          }}
+          />
         <ActionButton
           bgColor="rgba(68, 68, 68, 0.6)"
           hideShadow={Platform.OS === "web" ? true : false}
