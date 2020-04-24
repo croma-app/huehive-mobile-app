@@ -17,4 +17,6 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="take_picture">Take picture</string>
+    <string name="picker_label">Pick colors</string>
+    <string name="no_color_message">Tap on the screen to pick colors</string>
 </resources>
