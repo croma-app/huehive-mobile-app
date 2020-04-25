@@ -60,7 +60,7 @@ export const SavePalette = props => {
           const palette = { name: paletteName, colors: finalColors };
           addPalette(palette);
           if (navigationPath === "Palette") {
-            props.navigation.navigate(navigationPath, palette);
+            props.navigation.replace(navigationPath, palette);
           } else {
             props.navigation.navigate(navigationPath);
           }
