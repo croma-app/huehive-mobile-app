@@ -15,7 +15,7 @@ export const UndoDialog = props => {
   */
   const { name, undoDeletionByName } = props;
   return (
-    <Animatable.View animation={'fadeInUpBig'} duration={500} style={styles.undoCard} useNativeDriver={true}>
+    <Animatable.View animation={'fadeInUpBig'} duration={500} style={[styles.undoCard, styles.marginAndRadius]} useNativeDriver={true}>
       <View >
         <Text style={styles.undoText}>Deleted {name}. </Text>
       </View>
@@ -33,31 +33,33 @@ export const UndoDialog = props => {
 };
 
 export const TextDialog = props => (
-  <View style={styles.undoCard}>
+  <Animatable.View animation={'fadeInUp'} duration={500} useNativeDriver={true} style={styles.undoCard}>
     <View >
       <Text style={styles.undoText}>{props.text}</Text>
     </View>
-  </View>
+  </Animatable.View>
 );
 
 const styles = StyleSheet.create({
   undoCard: {
     backgroundColor: "#303036",
     padding: 15,
-    borderRadius: 6,
-    margin: 2,
     flexDirection: 'row',
     display: 'flex',
     justifyContent: 'space-between'
   },
+  marginAndRadius: {
+    margin: 2,
+    borderRadius: 6,
+  },
   undoText: {
     color: "#fff",
-    fontSize: 16
+    fontSize: 15
   },
   undoButton: {
     fontWeight: "bold",
     color: "#e6be0b",
-    fontSize: 16
+    fontSize: 15
   },
   DailogContainerWeb: {
     position: 'fixed',
