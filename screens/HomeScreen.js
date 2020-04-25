@@ -146,7 +146,9 @@ const HomeScreen = function (props) {
           fixNativeFeedbackRadius={true} 
           buttonColor={Colors.accent}
           onPress={() => {
-            NativeModules.CromaModule.navigateToColorPicker()
+            NativeModules.CromaModule.navigateToColorPicker((pickedColors) => {
+              console.log("Picked colors: ", pickedColors);
+            });
           }}
           />
         <ActionButton

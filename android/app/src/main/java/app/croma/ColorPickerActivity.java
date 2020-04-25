@@ -38,7 +38,7 @@ public class ColorPickerActivity extends Activity {
             this.finish();
             return;
         }
-        doneButton = (ImageButton) findViewById(R.id.done_button);
+        doneButton = findViewById(R.id.done_button);
         orientation = new RotateView(this, doneButton);
 
         final View noColorHelp = ColorPickerActivity.this.findViewById(R.id.no_color_help);
@@ -72,41 +72,38 @@ public class ColorPickerActivity extends Activity {
         mCamera.setDisplayOrientation(90);
 
         // Create our Preview view and set it as the content of our activity.
-        RelativeLayout rl = (RelativeLayout) this.findViewById(R.id.camera_preview);
+        RelativeLayout rl = this.findViewById(R.id.camera_preview);
         mPreview = new CameraPreview(this, mCamera, rl);
 
-        RelativeLayout preview = (RelativeLayout) findViewById(R.id.camera_preview);
+        RelativeLayout preview = findViewById(R.id.camera_preview);
         preview.setOnTouchListener(mPreview);
         preview.addView(mPreview);
 
         noColorHelp.bringToFront();
         noColorHelp.setVisibility(View.INVISIBLE);
 
-        doneButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mPreview.getColors().size() != 0) {
-                    Set<Integer> set = mPreview.getColors();
-                    Intent intent = new Intent();
-                    ArrayList<Integer> al = new ArrayList<Integer>(set.size());
+        doneButton.setOnClickListener(view -> {
+            if (mPreview.getColors().size() != 0) {
+                Set<Integer> set = mPreview.getColors();
+                Intent intent = new Intent();
+                ArrayList<Integer> al = new ArrayList<>(set.size());
 
-                    for (int c : set) {
-                        al.add(c);
-                    }
-
-                    intent.putIntegerArrayListExtra("colors", al);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                } else {
-                    AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
-                    anim.setDuration(ColorPickerActivity.NO_COLOR_HELP_TIMEOUT);
-
-                    anim.setRepeatCount(1);
-
-                    anim.setRepeatMode(Animation.REVERSE);
-                    anim.setAnimationListener(helpAnimator);
-                    noColorHelp.startAnimation(anim);
+                for (int c : set) {
+                    al.add(c);
                 }
+
+                intent.putIntegerArrayListExtra("colors", al);
+                setResult(RESULT_OK, intent);
+                finish();
+            } else {
+                AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
+                anim.setDuration(ColorPickerActivity.NO_COLOR_HELP_TIMEOUT);
+
+                anim.setRepeatCount(1);
+
+                anim.setRepeatMode(Animation.REVERSE);
+                anim.setAnimationListener(helpAnimator);
+                noColorHelp.startAnimation(anim);
             }
         });
     }
@@ -126,7 +123,7 @@ public class ColorPickerActivity extends Activity {
     // Safely way get an instance of the Camera object.
     private Camera getCameraInstance(){
         Camera c = null;
-        int cameras[] = {Camera.CameraInfo.CAMERA_FACING_FRONT, 0};
+        int[] cameras = {Camera.CameraInfo.CAMERA_FACING_FRONT, 0};
 
         try {
             c = Camera.open(); // Attempt to get a Camera instance
