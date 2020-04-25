@@ -1,8 +1,10 @@
 package app.croma;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -11,13 +13,16 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 
 public class ColorPickerActivity extends Activity {
+    private static final int MY_CAMERA_REQUEST_CODE = 1;
     private Camera mCamera;
     private CameraPreview mPreview;
     private ImageButton doneButton;
@@ -25,11 +30,30 @@ public class ColorPickerActivity extends Activity {
     private HelpAnimator helpAnimator;
 
     private final static int NO_COLOR_HELP_TIMEOUT = 1000;
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_CAMERA_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show();
+                start();
+            } else {
+                Toast.makeText(this, "camera permission denied. This feature can not work without camera permission", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
     @Override
     protected void onStart() {
         super.onStart();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA}, MY_CAMERA_REQUEST_CODE);
+        } else {
+            start();
+        }
+    }
 
+    private void start() {
         setContentView(R.layout.picker);
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -112,12 +136,12 @@ public class ColorPickerActivity extends Activity {
     @Override
     public void onPause() {
         super.onPause();
-
         if (orientation != null) {
             orientation.disable();
         }
-
-        mCamera.release();
+        if (mCamera != null) {
+            mCamera.release();
+        }
     }
 
     // Safely way get an instance of the Camera object.

@@ -6,16 +6,22 @@ import android.os.Bundle;
 
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Callback;
-import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ActivityStarterModule extends ReactContextBaseJavaModule implements ActivityEventListener {
 
     private static final int PICK_COLORS = 1;
-    final ReactApplicationContext reactContext;
-    Callback callback;
+    private final ReactApplicationContext reactContext;
+    private Callback callback;
     public ActivityStarterModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
@@ -32,13 +38,28 @@ public class ActivityStarterModule extends ReactContextBaseJavaModule implements
         this.callback = callback;
         ReactApplicationContext context = getReactApplicationContext();
         Intent intent = new Intent(context, ColorPickerActivity.class);
-        //ColorPickerActivity colorPickerActivity = (ColorPickerActivity) context.getCurrentActivity();
         context.startActivityForResult(intent, PICK_COLORS, new Bundle());
     }
 
     @Override
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
-        this.callback.invoke(data.getIntegerArrayListExtra("colors").toString());
+        if (data != null && requestCode == PICK_COLORS) {
+            try {
+                this.callback.invoke(mapToJsonString(data.getIntegerArrayListExtra("colors")));
+            } catch (JSONException e) {
+                throw new IllegalStateException(e);
+            }
+        }
+    }
+
+    private String mapToJsonString(List<Integer> colors) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        List<JSONObject> colorsObjs = new ArrayList<>();
+        for (int color : colors) {
+            colorsObjs.add(new JSONObject().put("color", String.format("#%06X", (0xFFFFFF & color))));
+        }
+        jsonObject.put("colors", new JSONArray(colorsObjs));
+        return jsonObject.toString();
     }
 
     @Override

@@ -148,6 +148,7 @@ const HomeScreen = function (props) {
           onPress={() => {
             NativeModules.CromaModule.navigateToColorPicker((pickedColors) => {
               console.log("Picked colors: ", pickedColors);
+              props.navigation.navigate("ColorList", JSON.parse(pickedColors));
             });
           }}
           />
