@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <RelativeLayout
+        android:id="@+id/camera_preview"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/no_color_help"
+            android:text="@string/no_color_message"
+            android:textSize="24dp"
+            android:fontFamily="sans-serif-condensed"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:background="#99000000" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="96dp"
+        android:gravity="center"
+        android:id="@+id/button_view"
+        android:background="@color/navigation">
+
+        <ImageButton
+            android:id="@+id/done_button"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:background="@drawable/done_button"
+            android:src="@mipmap/done" />
+
+    </RelativeLayout>
+</LinearLayout>
