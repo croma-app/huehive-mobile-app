@@ -3,4 +3,20 @@
     <string name="RNB_GOOGLE_PLAY_LICENSE_KEY">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhMNoRMMmhFIsgG1D6rZcIkOSqGEAuXLqqm3Wczuq8+qVF6qbIEBucAAoMqsClt8bQmFtynDuXsktguiWcIwgLbm9uGSAYqVp2qAjwLzoeMmVbkP99GnwQvl6yCF63tWt7MtJRmaUfI/8nSr6cJnLJrHx30UQR/MwlK5o5PUPdM7YCuAmiCfZdxFMhoDCY5UwZR7w0PYZ2mS5TBWg77Ef6r6Mg37gJ+X/WM9D4t3w61r6J/wEDSXZOXBxUxpPpYiNrGCBazSV41G+vOf069MHsZZNjEk7kqd7zVTV6bsopw5BTKF9E5roPbXr5YtlG13jKNCDb1gwItM950bGDW+soQIDAQAB
 
 </string>
+    <string name="title_activity_color_picker">ColorPickerActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string name="title_activity_camera_color_picker">CameraColorPickerActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="take_picture">Take picture</string>
+    <string name="picker_label">Pick colors</string>
+    <string name="no_color_message">Tap on the screen to pick colors</string>
 </resources>

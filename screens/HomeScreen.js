@@ -7,7 +7,8 @@ import {
   Dimensions,
   Platform,
   Linking,
-  ToastAndroid
+  ToastAndroid,
+  NativeModules
 } from "react-native";
 import { PaletteCard } from "../components/PaletteCard";
 import { UndoDialog, DialogContainer } from "../components/CommanDialogs";
@@ -138,16 +139,29 @@ const HomeScreen = function (props) {
           })}
         </DialogContainer>
         {/*Setting box shadow to false because of Issue on the web: https://github.com/mastermoo/react-native-action-button/issues/337 */}
-        
         <ActionButton
           bgColor="rgba(68, 68, 68, 0.6)"
           hideShadow={Platform.OS === "web" ? true : false}
           buttonColor={Colors.accent}
           offsetY={60}
+          spacing={15}
           key="action-button-home"
           fixNativeFeedbackRadius={true} 
           style={Platform.OS === 'web' ? styles.actionButtonWeb : {}}
         >
+          { Platform.OS === 'android' && <ActionButton.Item
+            buttonColor="#60f0af"
+            title="Pick colors from camera"
+            onPress={() => {
+              NativeModules.CromaModule.navigateToColorPicker((pickedColors) => {
+                console.log("Picked colors: ", pickedColors);
+                props.navigation.navigate("ColorList", JSON.parse(pickedColors));
+              });
+            }}
+          >
+            <Ionicons name="md-camera" style={styles.actionButtonIcon} />
+          </ActionButton.Item>
+          }
           <ActionButton.Item
             buttonColor="#9b59b6"
             title="Get palette from image"
@@ -168,7 +182,7 @@ const HomeScreen = function (props) {
                 });
             }}
           >
-            <Ionicons name="md-camera" style={styles.actionButtonIcon} />
+            <Ionicons name="md-image" style={styles.actionButtonIcon} />
           </ActionButton.Item>
           <ActionButton.Item
             buttonColor="#3498db"
