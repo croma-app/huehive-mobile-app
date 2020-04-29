@@ -17,10 +17,21 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.google.firebase.ml.vision.text.FirebaseVisionText;
+import com.google.firebase.ml.vision.text.FirebaseVisionText.TextBlock;
+import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback,View.OnTouchListener {
@@ -30,13 +41,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private Set<Integer> colors;
     public CameraPreview(Activity activity, Camera camera, RelativeLayout cameraPreview) {
         super(activity);
-
         mCamera = camera;
-
         this.cameraPreview = cameraPreview;/*(RelativeLayout) activity.findViewById(R.id.camera_preview);*/
-
-        colors = new HashSet<Integer>();
-
+        colors = new HashSet<>();
         mHolder = getHolder();
         mHolder.addCallback(this);
     }
@@ -69,58 +76,63 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
             return true;
         } else if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-
             final int x = (int) motionEvent.getX();
             final int y = (int) motionEvent.getY();
+            mCamera.setPreviewCallback((bytes, camera) -> {
+                camera.setPreviewCallback(null);
+                Bitmap bitmap = getBitmap(bytes, camera);
+                bitmap = rotate(bitmap, 90);
+                bitmap = Bitmap.createScaledBitmap(bitmap, view.getWidth(), view.getHeight(), true);
+                recogniseAndDrawColors(bitmap);
+                Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+                int color = mutableBitmap.getPixel(x, y);
+                Paint paint = new Paint();
+                paint.setAntiAlias(true);
+                paint.setColor(Color.RED);
+                Bitmap cpBitmap = Bitmap.createBitmap(cameraPreview.getWidth(),
+                        cameraPreview.getHeight(), Bitmap.Config.ARGB_8888);
+                Canvas cc = new Canvas(cpBitmap);
+                Canvas canvas = new Canvas(mutableBitmap);
+                canvas.drawCircle(x, y, 5, paint);
+                cc.drawCircle(x, y, 5, paint);
+                cameraPreview.draw(cc);
+                View vc = getColorView(getContext(), x, y, color);
+                colors.add(color);
+                cameraPreview.addView(vc);
 
-            mCamera.setPreviewCallback(new Camera.PreviewCallback() {
-
-                @Override
-                public void onPreviewFrame(byte[] bytes, Camera camera) {
-                    camera.setPreviewCallback(null);
-
-                    Bitmap bitmap = getBitmap(bytes, camera);
-                    bitmap = rotate(bitmap, 90);
-
-                    bitmap = Bitmap.createScaledBitmap(bitmap, view.getWidth(), view.getHeight(), true);
-
-                    Bitmap mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-
-                    int color = mutableBitmap.getPixel(x, y);
-
-                    Paint paint = new Paint();
-                    paint.setAntiAlias(true);
-                    paint.setColor(Color.RED);
-
-                    Bitmap cpBitmap = Bitmap.createBitmap(cameraPreview.getWidth(),
-                            cameraPreview.getHeight(), Bitmap.Config.ARGB_8888);
-
-                    Canvas cc = new Canvas(cpBitmap);
-                    Canvas canvas = new Canvas(mutableBitmap);
-
-                    canvas.drawCircle(x, y, 5, paint);
-                    cc.drawCircle(x, y, 5, paint);
-
-                    cameraPreview.draw(cc);
-
-                    View vc = getColorView(getContext(), x, y, color);
-                    vc.setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                        }
-                    });
-
-                    colors.add(color);
-
-                    cameraPreview.addView(vc);
-                }
             });
         }
 
         return false;
     }
 
+    private void recogniseAndDrawColors(Bitmap bitmap) {
+        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
+        FirebaseVisionTextRecognizer detector = FirebaseVision.getInstance()
+                .getOnDeviceTextRecognizer();
+        Task<FirebaseVisionText> result = detector.processImage(image)
+        .addOnSuccessListener(firebaseVisionText -> {
+            String resultText = firebaseVisionText.getText();
+            List<TextBlock> textBlocks = firebaseVisionText.getTextBlocks();
+            for (TextBlock textBlock : textBlocks) {
+                List<String> colors = extractColors(textBlock.getText());
+                int i = 0;
+                for (String color : colors) {
+                    cameraPreview.addView(getColorTextView(getContext(),
+                            textBlock.getBoundingBox().left, textBlock.getBoundingBox().top + i * 60, color));
+                    i++;
+                }
+            }
+            //cameraPreview.addView(getColorTextView(getContext(), x, y, String.format("#%06X", (0xFFFFFF & color))));
+            Toast.makeText(getContext(), "Result text:" + resultText, Toast.LENGTH_LONG).show();
+        })
+        .addOnFailureListener(e -> {
+            Toast.makeText(getContext(), "Failed:" + e.getMessage(), Toast.LENGTH_LONG).show();
+        });
+    }
+    private List<String> extractColors(String text) {
+        return Arrays.asList("#abcc12", "#fffaaa");
+    }
     private View getColorView(Context ct, int x, int y, int color) {
         int radius = (int) (16 * getResources().getDisplayMetrics().density + 0.5f);
 
@@ -138,12 +150,33 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         DrawTouchDot dc = new DrawTouchDot(ct, color, radius);
 
         r.addView(dc);
-        r.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return false;
-            }
-        });
+        r.setOnTouchListener((view, motionEvent) -> false);
+
+        return r;
+    }
+
+
+    private View getColorTextView(Context ct, int left, int top, String color) {
+        RelativeLayout.LayoutParams params;
+        final float scale = getContext().getResources().getDisplayMetrics().density;
+        int height = (int) (60 * scale + 0.5f);
+        params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                height);
+
+        params.leftMargin = left;
+        params.topMargin = top;
+
+        RelativeLayout r = new RelativeLayout(ct);
+
+        r.setLayoutParams(params);
+
+        TextView textView = new TextView(getContext());
+        textView.setText(color);
+        textView.setBackgroundColor(Color.parseColor(color));
+
+        r.addView(textView);
+        r.setOnTouchListener((view, motionEvent) -> false);
 
         return r;
     }
