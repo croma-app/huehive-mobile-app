@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import InAppBilling from "react-native-billing";
 import Storage from "./../libs/Storage";
+import { Platform, ToastAndroid } from "react-native";
 const UNDO_TIMEOUT = 3000;
 
 export const initState = {
@@ -46,11 +48,13 @@ export default function applicationHook(initState) {
   };
 
   const loadInitPaletteFromStore = async () => {
+    setState((state) => ({ ...state, isLoading: true }));
     // Loading application state from localStorage
     const _state = await Storage.getApplicationState();
     setState(state => ({
       ...state,
-      ..._state
+      ..._state,
+      isLoading: false
     }));
 
     // Setting default palette when user comming first time
@@ -68,6 +72,22 @@ export default function applicationHook(initState) {
         ]
       };
       addPalette(defaultPalettes);
+    }
+    if (Platform.OS !== 'web') {
+      try {
+        await InAppBilling.open();
+        // If subscriptions/products are updated server-side you
+        // will have to update cache with loadOwnedPurchasesFromGoogle()
+        await InAppBilling.loadOwnedPurchasesFromGoogle();
+        isPurchased = await InAppBilling.isPurchased("croma_pro");
+        setState((state) => {
+          return { ...state, isPro: isPurchased }
+        })
+      } catch (err) {
+        ToastAndroid.show("Loading purchase detail failed. " + err, ToastAndroid.LONG);
+      } finally {
+        await InAppBilling.close();
+      }
     }
   };
 
