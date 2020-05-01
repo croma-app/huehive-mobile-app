@@ -10,7 +10,11 @@ import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.YuvImage;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.hardware.Camera;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -20,6 +24,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.flexbox.AlignContent;
+import com.google.android.flexbox.AlignItems;
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexWrap;
+import com.google.android.flexbox.FlexboxLayout;
+import com.google.android.flexbox.JustifyContent;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
@@ -33,6 +43,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import androidx.core.content.ContextCompat;
+import top.defaults.drawabletoolbox.DrawableBuilder;
 
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback,View.OnTouchListener {
     private SurfaceHolder mHolder;
@@ -115,24 +128,19 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             String resultText = firebaseVisionText.getText();
             List<TextBlock> textBlocks = firebaseVisionText.getTextBlocks();
             for (TextBlock textBlock : textBlocks) {
-                List<String> colors = extractColors(textBlock.getText());
-                int i = 0;
-                for (String color : colors) {
+                List<String> colors = Colors.parse(textBlock.getText());
+                Rect rect = textBlock.getBoundingBox();
                     cameraPreview.addView(getColorTextView(getContext(),
-                            textBlock.getBoundingBox().left, textBlock.getBoundingBox().top + i * 60, color));
-                    i++;
-                }
+                            rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top , colors));
+
             }
-            //cameraPreview.addView(getColorTextView(getContext(), x, y, String.format("#%06X", (0xFFFFFF & color))));
             Toast.makeText(getContext(), "Result text:" + resultText, Toast.LENGTH_LONG).show();
         })
         .addOnFailureListener(e -> {
             Toast.makeText(getContext(), "Failed:" + e.getMessage(), Toast.LENGTH_LONG).show();
         });
     }
-    private List<String> extractColors(String text) {
-        return Arrays.asList("#abcc12", "#fffaaa");
-    }
+
     private View getColorView(Context ct, int x, int y, int color) {
         int radius = (int) (16 * getResources().getDisplayMetrics().density + 0.5f);
 
@@ -156,29 +164,56 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     }
 
 
-    private View getColorTextView(Context ct, int left, int top, String color) {
+    private View getColorTextView(Context ct, int left, int top, int w, int h, List<String> colors) {
         RelativeLayout.LayoutParams params;
-        final float scale = getContext().getResources().getDisplayMetrics().density;
-        int height = (int) (60 * scale + 0.5f);
-        params = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                height);
 
+        params = new RelativeLayout.LayoutParams(w, h);
+        FlexboxLayout flexboxLayout = new FlexboxLayout(ct);
+        flexboxLayout.setFlexWrap(FlexWrap.WRAP);
+        flexboxLayout.setAlignContent(AlignContent.FLEX_START);
+        flexboxLayout.setAlignItems(AlignItems.CENTER);
+        flexboxLayout.setJustifyContent(JustifyContent.SPACE_AROUND);
+        flexboxLayout.setBackgroundColor(Color.argb(100, 100, 100, 100));
+        flexboxLayout.setLayoutParams(params);
         params.leftMargin = left;
         params.topMargin = top;
 
-        RelativeLayout r = new RelativeLayout(ct);
+      for (String color : colors) {
+          int intColor = Color.parseColor(color);
+          TextView textView = new TextView(getContext());
+          textView.setText(color);
+          textView.setTextSize(dp(8));
 
-        r.setLayoutParams(params);
+          textView.setPadding(dp(8), dp(8), dp(8), dp(8));
+          textView.setTypeface(null, Typeface.BOLD);
+          textView.setTextColor(isColorDark(intColor) ? Color.WHITE : Color.BLACK);
+          textView.setBackgroundColor(intColor);
+          Drawable sd =  new DrawableBuilder()
+                  .rectangle()
+                  .solidColor(intColor).strokeColor(Color.WHITE).strokeWidth(dp(4))
+                  .cornerRadii(dp(20), dp(20), dp(20), dp(20))
+                  .build();
+          textView.setBackground(sd);
+          flexboxLayout.addView(textView);
+      }
+        flexboxLayout.setOnTouchListener((view, motionEvent) -> false);
 
-        TextView textView = new TextView(getContext());
-        textView.setText(color);
-        textView.setBackgroundColor(Color.parseColor(color));
+        return flexboxLayout;
+    }
 
-        r.addView(textView);
-        r.setOnTouchListener((view, motionEvent) -> false);
+    public boolean isColorDark(int color){
+        double darkness = 1-(0.299*Color.red(color) + 0.587*Color.green(color) + 0.114*Color.blue(color))/255;
+        if(darkness < 0.5){
+            return false; // It's a light color
+        }else{
+            return true; // It's a dark color
+        }
+    }
 
-        return r;
+    private int dp(int px) {
+        final float scale = getContext().getResources().getDisplayMetrics().density;
+        return (int) (px * scale * .5f);
+        //int height = (int) (60 * scale + 0.5f);
     }
 
     private Bitmap rotate(Bitmap b, int a) {
