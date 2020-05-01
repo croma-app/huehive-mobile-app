@@ -86,8 +86,9 @@ public class ColorPickerActivity extends Activity {
         Camera.Parameters params = mCamera.getParameters();
 
         List<String> focusModes = params.getSupportedFocusModes();
-
-        if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
+        if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+            params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+        } else if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
             params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO); // Autofocus mode supported
         }
 
@@ -142,6 +143,11 @@ public class ColorPickerActivity extends Activity {
         if (mCamera != null) {
             mCamera.release();
         }
+    }
+    @Override
+    public void onStop() {
+        super.onStop();
+        mPreview.onStop();
     }
 
     // Safely way get an instance of the Camera object.
