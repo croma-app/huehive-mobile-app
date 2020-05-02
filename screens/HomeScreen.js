@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Color from "pigment/full";
 import {
   ScrollView,
   StyleSheet,
@@ -25,6 +26,7 @@ import ActionButton from "react-native-action-button";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import InAppBilling from "react-native-billing";
 import ShareMenu from 'react-native-share-menu';
+
 
 const HomeScreen = function (props) {
   const { height, width } = Dimensions.get("window");
@@ -89,8 +91,10 @@ const HomeScreen = function (props) {
 
       ShareMenu.getSharedText((text) => {
         if (text && typeof text === 'string') {
-          const matches = text.match(/(^#[0-9a-f]{6})/gim)
-          const colors = matches.map(color => ({ color: color.toLowerCase() }))
+          const colors = Color.parse(text);
+          for (var i = 0, l = colors.length; i < l; i++) {
+            colors[i] = { color: colors[i].tohex().toLowerCase() };
+          }
           props.navigation.navigate('SavePalette', { colors });
         }
       })
