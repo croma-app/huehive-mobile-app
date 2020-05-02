@@ -104,8 +104,8 @@ android {
         applicationId "app.croma"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 17
-        versionName "1.1"
+        versionCode 18
+        versionName "2.0"
     }
     splits {
         abi {
@@ -127,9 +127,13 @@ android {
     }
     buildTypes {
         release {
+            resValue("bool", "FIREBASE_ANALYTICS_DEACTIVATED", "false")
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.release
+        }
+        debug {
+            resValue("bool", "FIREBASE_ANALYTICS_DEACTIVATED", "true")
         }
     }
     // applicationVariants are e.g. debug, release
@@ -168,6 +172,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:17.2.2'
     implementation 'com.google.firebase:firebase-ml-vision:24.0.2'
     implementation "com.google.guava:guava:29.0-android"
+    implementation 'com.google.android:flexbox:2.0.1'
+    implementation 'com.github.duanhong169:drawabletoolbox:1.0.7'
     addUnimodulesDependencies()
 
     if (enableHermes) {

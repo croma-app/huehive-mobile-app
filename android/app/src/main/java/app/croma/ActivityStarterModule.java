@@ -56,7 +56,7 @@ public class ActivityStarterModule extends ReactContextBaseJavaModule implements
         JSONObject jsonObject = new JSONObject();
         List<JSONObject> colorsObjs = new ArrayList<>();
         for (int color : colors) {
-            colorsObjs.add(new JSONObject().put("color", String.format("#%06X", (0xFFFFFF & color))));
+            colorsObjs.add(new JSONObject().put("color", String.format("#%06X", (0xFFFFFF & color)).toLowerCase()));
         }
         jsonObject.put("colors", new JSONArray(colorsObjs));
         return jsonObject.toString();

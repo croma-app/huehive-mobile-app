@@ -101,5 +101,7 @@
     <uses-feature
         android:name="android.hardware.camera.autofocus"
         android:required="false" />
-
+    <meta-data
+        android:name="firebase_analytics_collection_deactivated"
+        android:value="@bool/FIREBASE_ANALYTICS_DEACTIVATED"/>
 </manifest>
