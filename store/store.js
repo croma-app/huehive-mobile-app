@@ -60,7 +60,27 @@ export default function applicationHook(initState) {
     // Setting default palette when user comming first time
     let defaultPalettes = {};
     const isUserAleadyExits = await Storage.checkUserAlreadyExists();
+    
     if (isUserAleadyExits != "true") {
+      if (Platform.OS !== 'web') {
+        try {
+          await InAppBilling.open();
+          // If subscriptions/products are updated server-side you
+          // will have to update cache with loadOwnedPurchasesFromGoogle()
+          await InAppBilling.loadOwnedPurchasesFromGoogle();
+          isPurchased = await InAppBilling.isPurchased("croma_pro");
+          if (isPurchased) {
+            ToastAndroid.show("Your purchase restored successfully..", ToastAndroid.LONG);
+          }
+          setState((state) => {
+            return { ...state, isPro: isPurchased }
+          })
+        } catch (err) {
+          ToastAndroid.show("Loading purchase detail failed. " + err, ToastAndroid.LONG);
+        } finally {
+          await InAppBilling.close();
+        }
+      }
       Storage.setUserAlreadyExists();
       defaultPalettes = {
         name: "Croma example palette",
@@ -73,25 +93,7 @@ export default function applicationHook(initState) {
       };
       addPalette(defaultPalettes);
     }
-    if (Platform.OS !== 'web') {
-      try {
-        await InAppBilling.open();
-        // If subscriptions/products are updated server-side you
-        // will have to update cache with loadOwnedPurchasesFromGoogle()
-        await InAppBilling.loadOwnedPurchasesFromGoogle();
-        isPurchased = await InAppBilling.isPurchased("croma_pro");
-        if (isPurchased) {
-          ToastAndroid.show("Your purchase restored successfully..", ToastAndroid.LONG);
-        }
-        setState((state) => {
-          return { ...state, isPro: isPurchased }
-        })
-      } catch (err) {
-        ToastAndroid.show("Loading purchase detail failed. " + err, ToastAndroid.LONG);
-      } finally {
-        await InAppBilling.close();
-      }
-    }
+    
   };
 
   const removePaletteFromStateByName = name => {
