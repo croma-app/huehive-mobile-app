@@ -70,19 +70,6 @@ const HomeScreen = function (props) {
       await InAppBilling.close();
     }
   };
-  // TODO: restore purchase
-  const checkPurchase = async function () {
-    try {
-      await InAppBilling.open();
-      // If subscriptions/products are updated server-side you
-      // will have to update cache with loadOwnedPurchasesFromGoogle()
-      await InAppBilling.loadOwnedPurchasesFromGoogle();
-      const isPurchased = await InAppBilling.isPurchased("croma_pro");
-    } catch (err) {
-    } finally {
-      await InAppBilling.close();
-    }
-  };
   useEffect(() => {
     getPermissionAsync();
     if (Platform.OS === 'android') {
