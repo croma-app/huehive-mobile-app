@@ -80,6 +80,9 @@ export default function applicationHook(initState) {
         // will have to update cache with loadOwnedPurchasesFromGoogle()
         await InAppBilling.loadOwnedPurchasesFromGoogle();
         isPurchased = await InAppBilling.isPurchased("croma_pro");
+        if (isPurchased) {
+          ToastAndroid.show("Your purchase restored successfully..", ToastAndroid.LONG);
+        }
         setState((state) => {
           return { ...state, isPro: isPurchased }
         })
