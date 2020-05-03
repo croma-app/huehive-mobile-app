@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Color from "pigment/full";
 import {
   ScrollView,
   StyleSheet,
@@ -24,6 +25,8 @@ import EmptyView from "../components/EmptyView";
 import ActionButton from "react-native-action-button";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import InAppBilling from "react-native-billing";
+import ShareMenu from 'react-native-share-menu';
+
 
 const HomeScreen = function (props) {
   const { height, width } = Dimensions.get("window");
@@ -81,13 +84,23 @@ const HomeScreen = function (props) {
       Linking.getInitialURL().then(url => {
         if (url) {
           const result = {};
-          url.split("?")[1].split("&").forEach(function(part) {
+          url.split("?")[1].split("&").forEach(function (part) {
             var item = part.split("=");
             result[item[0]] = decodeURIComponent(item[1]);
           });
-          props.navigation.navigate('SavePalette',{ colors: [...new Set(JSON.parse(result['colors']) || [])],name: result['name']});
+          props.navigation.navigate('SavePalette', { colors: [...new Set(JSON.parse(result['colors']) || [])], name: result['name'] });
         }
       });
+
+      ShareMenu.getSharedText((text) => {
+        if (text && typeof text === 'string') {
+          const colors = Color.parse(text);
+          for (var i = 0, l = colors.length; i < l; i++) {
+            colors[i] = { color: colors[i].tohex().toLowerCase() };
+          }
+          props.navigation.navigate('SavePalette', { colors });
+        }
+      })
     }
   }, []);
   if (isLoading) {
@@ -136,10 +149,10 @@ const HomeScreen = function (props) {
           offsetY={60}
           spacing={15}
           key="action-button-home"
-          fixNativeFeedbackRadius={true} 
+          fixNativeFeedbackRadius={true}
           style={Platform.OS === 'web' ? styles.actionButtonWeb : {}}
         >
-          { Platform.OS === 'android' && <ActionButton.Item
+          {Platform.OS === 'android' && <ActionButton.Item
             buttonColor="#60f0af"
             title="Pick colors from camera"
             onPress={() => {
@@ -258,7 +271,7 @@ const styles = StyleSheet.create({
   },
   actionButtonWeb: {
     position: 'fixed',
-    transform: 'scale(1) rotate(0deg) !important', 
+    transform: 'scale(1) rotate(0deg) !important',
     right: Math.max((Dimensions.get("window").width - 600) / 2, 0),
     left: Math.max((Dimensions.get("window").width - 600) / 2, 0)
   }
