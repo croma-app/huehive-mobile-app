@@ -37,13 +37,16 @@ const HomeScreen = function (props) {
     setPurchase
   } = React.useContext(Croma);
   const [pickImgloading, setPickImgLoading] = useState(false);
-
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+  const pickImageResult = async (base64) => {
+    return await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       quality: 1,
-      base64: true
+      base64: base64
     });
+    
+  }
+  const pickImage = async () => {
+    let result = await pickImageResult(true);
     if (result.base64 !== undefined) {
       return await Jimp.read(new Buffer(result.base64, "base64"));
     } else {
@@ -154,19 +157,33 @@ const HomeScreen = function (props) {
             title="Get palette from image"
             onPress={() => {
               setPickImgLoading(true);
-              pickImage()
-                .then((image, err) => {
-                  setPickImgLoading(false);
-                  props.navigation.navigate("ColorList", {
-                    colors: ColorPicker.getProminentColors(image)
+              if (Platform.OS === 'android') {
+                pickImageResult().then((result, err) =>{
+                  NativeModules.CromaModule.pickTopColorsFromImage(result.uri, (err, pickedColors) => {
+                    if (err) {
+                      ToastAndroid.show("Error while processing image: " + err, ToastAndroid.LONG);
+                    } else {
+                      console.log("Picked colors: ", pickedColors);
+                      props.navigation.navigate("ColorList", JSON.parse(pickedColors));
+                    }
+                    setPickImgLoading(false);
                   });
-                })
-                .catch(err => {
-                  if (Platform.OS == 'android') {
-                    ToastAndroid.show("Error while processing image: " + err, ToastAndroid.LONG);
-                  }
-                  setPickImgLoading(false);
                 });
+              } else {
+                pickImage()
+                  .then((image, err) => {
+                    setPickImgLoading(false);
+                    props.navigation.navigate("ColorList", {
+                      colors: ColorPicker.getProminentColors(image)
+                    });
+                  })
+                  .catch(err => {
+                    if (Platform.OS == 'android') {
+                      ToastAndroid.show("Error while processing image: " + err, ToastAndroid.LONG);
+                    }
+                    setPickImgLoading(false);
+                  });
+                }
             }}
           >
             <Ionicons name="md-image" style={styles.actionButtonIcon} />
