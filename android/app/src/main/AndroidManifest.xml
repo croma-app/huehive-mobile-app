@@ -60,12 +60,11 @@
                     android:scheme="https" />
 
             </intent-filter>
-            <intent-filter>
+            <intent-filter android:label="@string/share_label">
                 <action android:name="android.intent.action.SEND" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:mimeType="text/*" />
+                <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
         <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />

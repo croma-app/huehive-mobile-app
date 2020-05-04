@@ -22,13 +22,8 @@ import org.numixproject.colorextractor.image.Image;
 import org.numixproject.colorextractor.image.KMeansColorPicker;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import androidx.palette.graphics.Palette;
 
 public class CromaModule extends ReactContextBaseJavaModule implements ActivityEventListener {
 
