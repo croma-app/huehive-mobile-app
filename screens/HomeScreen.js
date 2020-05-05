@@ -25,7 +25,7 @@ import EmptyView from "../components/EmptyView";
 import ActionButton from "react-native-action-button";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import InAppBilling from "react-native-billing";
-import ShareMenu from 'react-native-share-menu';
+import ShareMenu from '../libs/ShareMenu';
 
 
 const HomeScreen = function (props) {
