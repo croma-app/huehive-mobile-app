@@ -3,7 +3,6 @@ package app.croma;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -21,7 +20,6 @@ import org.numixproject.colorextractor.image.Color;
 import org.numixproject.colorextractor.image.Image;
 import org.numixproject.colorextractor.image.KMeansColorPicker;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,18 +99,6 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
             super(b.getWidth(), b.getHeight());
             this.image = b;
         }
-
-
-        private static Bitmap create(File f) {
-            Bitmap image;
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            image = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
-
-            return image;
-        }
-
-
         @Override
         public Color getColor(int x, int y) {
             return new Color(image.getPixel(x, y));
