@@ -27,6 +27,7 @@ import { Ionicons, Entypo } from "@expo/vector-icons";
 import InAppBilling from "react-native-billing";
 import ShareMenu from '../libs/ShareMenu';
 
+let uploadedImage = null 
 
 const HomeScreen = function (props) {
   const { height, width } = Dimensions.get("window");
@@ -50,6 +51,8 @@ const HomeScreen = function (props) {
   }
   const pickImage = async () => {
     let result = await pickImageResult(true);
+    uploadedImage = result
+    console.log(uploadedImage, 'check it ')
     if (result.base64 !== undefined) {
       return await Jimp.read(new Buffer(result.base64, "base64"));
     } else {
@@ -186,8 +189,10 @@ const HomeScreen = function (props) {
                 pickImage()
                   .then((image, err) => {
                     setPickImgLoading(false);
+                    console.log('here ', image, uploadedImage)
                     props.navigation.navigate("ColorList", {
-                      colors: ColorPicker.getProminentColors(image)
+                      colors: ColorPicker.getProminentColors(image),
+                      image: uploadedImage
                     });
                   })
                   .catch(err => {
