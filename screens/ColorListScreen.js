@@ -1,21 +1,15 @@
 import React from "react";
 import { SingleColorView } from "../components/SingleColorView";
-import { ScrollView, Image, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import CromaButton from "../components/CromaButton";
 
 export default function ColorListScreen(props) {
   const colors = uniqueColors(props.navigation.getParam("colors"));
-  const image = props.navigation.getParam("image");
-  console.log(image, 'check image ')
   return (
     <ScrollView style={styles.listview} showsVerticalScrollIndicator={false}>
       {colors.map(color => (
         <SingleColorView key={color.color} color={color.color} />
       ))}
-      <Image
-        style={{width: 100, height: 100}}
-        source={image.uri}
-      ></Image>
       <CromaButton
         onPress={() =>
           props.navigation.navigate("SavePalette", { colors: colors })
