@@ -12,6 +12,7 @@ import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,10 +29,12 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
     private static final int PICK_COLORS = 1;
     private final ReactApplicationContext reactContext;
     private Callback callback;
+    private FirebaseAnalytics mFirebaseAnalytics;
     public CromaModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
         this.reactContext.addActivityEventListener(this);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(reactContext);
     }
 
     @Override
@@ -92,6 +95,15 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
             callback.invoke(e);
         }
     }
+    @ReactMethod
+    public void logEvent(String eventId, String data) {
+        //https://firebase.google.com/docs/analytics/events?platform=android
+        System.out.println("EventId: " + eventId + "," + data);
+        Bundle params = new Bundle();
+        params.putString("data", data);
+        mFirebaseAnalytics.logEvent(eventId, params);
+    }
+
     private static class BitmapImage extends Image {
         private Bitmap image;
 

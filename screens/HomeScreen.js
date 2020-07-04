@@ -106,6 +106,9 @@ const HomeScreen = function (props) {
   if (isLoading) {
     return <ActivityIndicator />;
   } else {
+    if (Platform.OS == 'android') {
+      NativeModules.CromaModule.logEvent("startup_palatte_len", "" + Object.keys(allPalettes).length);
+    }
     return (
       <>
         <View
