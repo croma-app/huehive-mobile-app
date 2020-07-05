@@ -24,6 +24,8 @@ import org.numixproject.colorextractor.image.KMeansColorPicker;
 import java.util.ArrayList;
 import java.util.List;
 
+import static app.croma.FirebaseAnalyticsConstants.TIME_TAKEN_TO_PROCESS_MS;
+
 public class CromaModule extends ReactContextBaseJavaModule implements ActivityEventListener {
 
     private static final int PICK_COLORS = 1;
@@ -80,6 +82,7 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
     @ReactMethod
     public void pickTopColorsFromImage(String uri, Callback callback) {
         try {
+            long startTime = System.currentTimeMillis();
             Uri imageUri = Uri.parse(uri);
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(reactContext.getContentResolver(), imageUri);
             Image image = new BitmapImage(bitmap);
@@ -89,6 +92,9 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
             for (Color color : colors) {
                 intColors.add(color.getRGB());
             }
+            Bundle params = new Bundle();
+            params.putLong(TIME_TAKEN_TO_PROCESS_MS, (System.currentTimeMillis() - startTime));
+            mFirebaseAnalytics.logEvent(FirebaseAnalyticsConstants.PICK_COLORS_FROM_IMAGE, params);
             callback.invoke(null, mapToJsonString(intColors));
         } catch (Exception e) {
             e.printStackTrace();
@@ -119,7 +125,6 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
         @Override
         public BitmapImage getScaledInstance(int width, int height) {
             Bitmap resized = Bitmap.createScaledBitmap(this.image, width, height, true);
-
             return new BitmapImage(resized);
         }
     }
