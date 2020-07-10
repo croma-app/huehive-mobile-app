@@ -30,7 +30,6 @@ import ShareMenu from '../libs/ShareMenu';
 
 const HomeScreen = function (props) {
   const { height, width } = Dimensions.get("window");
-
   const {
     isLoading,
     allPalettes,
@@ -46,7 +45,7 @@ const HomeScreen = function (props) {
       quality: 1,
       base64: base64
     });
-    
+
   }
   const pickImage = async () => {
     let result = await pickImageResult(true);
@@ -106,9 +105,7 @@ const HomeScreen = function (props) {
   if (isLoading) {
     return <ActivityIndicator />;
   } else {
-    if (Platform.OS == 'android') {
-      NativeModules.CromaModule.logEvent("startup_palatte_len", "" + Object.keys(allPalettes).length);
-    }
+    logEvent('startup_palatte_len', Object.keys(allPalettes).length)
     return (
       <>
         <View
@@ -160,6 +157,7 @@ const HomeScreen = function (props) {
             title="Pick colors from camera"
             onPress={() => {
               NativeModules.CromaModule.navigateToColorPicker((pickedColors) => {
+                logEvent('pick_colors_from_camera', pickedColors.length)
                 console.log("Picked colors: ", pickedColors);
                 props.navigation.navigate("ColorList", JSON.parse(pickedColors));
               });
@@ -174,8 +172,9 @@ const HomeScreen = function (props) {
             onPress={() => {
               setPickImgLoading(true);
               if (Platform.OS === 'android') {
-                pickImageResult().then((result, err) =>{
+                pickImageResult().then((result, err) => {
                   NativeModules.CromaModule.pickTopColorsFromImage(result.uri, (err, pickedColors) => {
+                    logEvent('get_palette_from_image')
                     if (err) {
                       ToastAndroid.show("Error while processing image: " + err, ToastAndroid.LONG);
                     } else {
@@ -199,7 +198,7 @@ const HomeScreen = function (props) {
                     }
                     setPickImgLoading(false);
                   });
-                }
+              }
             }}
           >
             <Ionicons name="md-image" style={styles.actionButtonIcon} />
@@ -208,6 +207,7 @@ const HomeScreen = function (props) {
             buttonColor="#3498db"
             title="Get palette from color"
             onPress={() => {
+              logEvent('get_palette_from_color')
               props.navigation.navigate("ColorPicker", {
                 onDone: color => {
                   props.navigation.navigate("Palettes", {
@@ -222,7 +222,10 @@ const HomeScreen = function (props) {
           <ActionButton.Item
             buttonColor="#1abc9c"
             title="Add colors manually"
-            onPress={() => props.navigation.navigate("AddPaletteManually")}
+            onPress={() => {
+              logEvent('add_colors_manually')
+              props.navigation.navigate("AddPaletteManually")
+            }}
           >
             <Ionicons name="md-color-filter" style={styles.actionButtonIcon} />
           </ActionButton.Item>
