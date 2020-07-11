@@ -1,4 +1,4 @@
-import { NativeModules } from "react-native";
+import { NativeModules,  Platform } from "react-native";
 
 const logEvent = (eventName, value) => {
     if (Platform.OS == 'android') {
