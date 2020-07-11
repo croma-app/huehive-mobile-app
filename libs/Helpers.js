@@ -6,4 +6,4 @@ const logEvent = (eventName, value) => {
     }
 }
 
-export default logEvent;
+export {logEvent}
