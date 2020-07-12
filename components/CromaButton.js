@@ -30,6 +30,6 @@ const styles = StyleSheet.create({
   text: {
     textTransform: "uppercase",
     fontWeight: "700",
-    color: '#484a4c'
+    color: "#484a4c"
   }
 });
