@@ -24,11 +24,10 @@ import EmptyView from "../components/EmptyView";
 import ActionButton from "react-native-action-button";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import InAppBilling from "react-native-billing";
-import ShareMenu from '../libs/ShareMenu';
-import {logEvent} from '../libs/Helpers'
+import ShareMenu from "../libs/ShareMenu";
+import { logEvent } from "../libs/Helpers";
 
-
-const HomeScreen = function (props) {
+const HomeScreen = function(props) {
   const { height, width } = Dimensions.get("window");
   const {
     isLoading,
@@ -39,14 +38,13 @@ const HomeScreen = function (props) {
     setPurchase
   } = React.useContext(Croma);
   const [pickImgloading, setPickImgLoading] = useState(false);
-  const pickImageResult = async (base64) => {
+  const pickImageResult = async base64 => {
     return await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       quality: 1,
       base64: base64
     });
-
-  }
+  };
   const pickImage = async () => {
     let result = await pickImageResult(true);
     if (result.base64 !== undefined) {
@@ -56,14 +54,14 @@ const HomeScreen = function (props) {
     }
   };
   const getPermissionAsync = async () => {
-    if (Platform.OS == 'ios') {
+    if (Platform.OS == "ios") {
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
       if (status !== "granted") {
         alert("Sorry, we need camera roll permissions to make this work!");
       }
     }
   };
-  const purchase = async function () {
+  const purchase = async function() {
     try {
       await InAppBilling.open();
       const details = await InAppBilling.purchase("croma_pro");
@@ -77,35 +75,41 @@ const HomeScreen = function (props) {
   };
   useEffect(() => {
     getPermissionAsync();
-    if (Platform.OS === 'android') {
-      // Deep linking code 
+    if (Platform.OS === "android") {
+      // Deep linking code
       // https://medium.com/react-native-training/deep-linking-your-react-native-app-d87c39a1ad5e
       Linking.getInitialURL().then(url => {
         if (url) {
           const result = {};
-          url.split("?")[1].split("&").forEach(function (part) {
-            var item = part.split("=");
-            result[item[0]] = decodeURIComponent(item[1]);
+          url
+            .split("?")[1]
+            .split("&")
+            .forEach(function(part) {
+              var item = part.split("=");
+              result[item[0]] = decodeURIComponent(item[1]);
+            });
+          props.navigation.navigate("SavePalette", {
+            colors: [...new Set(JSON.parse(result["colors"]) || [])],
+            name: result["name"]
           });
-          props.navigation.navigate('SavePalette', { colors: [...new Set(JSON.parse(result['colors']) || [])], name: result['name'] });
         }
       });
 
-      ShareMenu.getSharedText((text) => {
-        if (text && typeof text === 'string') {
+      ShareMenu.getSharedText(text => {
+        if (text && typeof text === "string") {
           const colors = Color.parse(text);
           for (var i = 0, l = colors.length; i < l; i++) {
             colors[i] = { color: colors[i].tohex().toLowerCase() };
           }
-          props.navigation.navigate('SavePalette', { colors });
+          props.navigation.navigate("SavePalette", { colors });
         }
-      })
+      });
     }
   }, []);
   if (isLoading) {
     return <ActivityIndicator />;
   } else {
-    logEvent('startup_palatte_len', Object.keys(allPalettes).length)
+    logEvent("startup_palatte_len", Object.keys(allPalettes).length);
     return (
       <>
         <View
@@ -150,39 +154,54 @@ const HomeScreen = function (props) {
           spacing={15}
           key="action-button-home"
           fixNativeFeedbackRadius={true}
-          style={Platform.OS === 'web' ? styles.actionButtonWeb : {}}
+          style={Platform.OS === "web" ? styles.actionButtonWeb : {}}
         >
-          {Platform.OS === 'android' && <ActionButton.Item
-            buttonColor="#60f0af"
-            title="Pick colors from camera"
-            onPress={() => {
-              NativeModules.CromaModule.navigateToColorPicker((pickedColors) => {
-                logEvent('pick_colors_from_camera', pickedColors.length)
-                console.log("Picked colors: ", pickedColors);
-                props.navigation.navigate("ColorList", JSON.parse(pickedColors));
-              });
-            }}
-          >
-            <Ionicons name="md-camera" style={styles.actionButtonIcon} />
-          </ActionButton.Item>
-          }
+          {Platform.OS === "android" && (
+            <ActionButton.Item
+              buttonColor="#60f0af"
+              title="Pick colors from camera"
+              onPress={() => {
+                NativeModules.CromaModule.navigateToColorPicker(
+                  pickedColors => {
+                    logEvent("pick_colors_from_camera", pickedColors.length);
+                    console.log("Picked colors: ", pickedColors);
+                    props.navigation.navigate(
+                      "ColorList",
+                      JSON.parse(pickedColors)
+                    );
+                  }
+                );
+              }}
+            >
+              <Ionicons name="md-camera" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+          )}
           <ActionButton.Item
             buttonColor="#9b59b6"
             title="Get palette from image"
             onPress={() => {
               setPickImgLoading(true);
-              if (Platform.OS === 'android') {
+              if (Platform.OS === "android") {
                 pickImageResult().then((result, err) => {
-                  NativeModules.CromaModule.pickTopColorsFromImage(result.uri, (err, pickedColors) => {
-                    logEvent('get_palette_from_image')
-                    if (err) {
-                      ToastAndroid.show("Error while processing image: " + err, ToastAndroid.LONG);
-                    } else {
-                      console.log("Picked colors: ", pickedColors);
-                      props.navigation.navigate("ColorList", JSON.parse(pickedColors));
+                  NativeModules.CromaModule.pickTopColorsFromImage(
+                    result.uri,
+                    (err, pickedColors) => {
+                      logEvent("get_palette_from_image");
+                      if (err) {
+                        ToastAndroid.show(
+                          "Error while processing image: " + err,
+                          ToastAndroid.LONG
+                        );
+                      } else {
+                        console.log("Picked colors: ", pickedColors);
+                        props.navigation.navigate(
+                          "ColorList",
+                          JSON.parse(pickedColors)
+                        );
+                      }
+                      setPickImgLoading(false);
                     }
-                    setPickImgLoading(false);
-                  });
+                  );
                 });
               } else {
                 pickImage()
@@ -193,8 +212,11 @@ const HomeScreen = function (props) {
                     });
                   })
                   .catch(err => {
-                    if (Platform.OS == 'android') {
-                      ToastAndroid.show("Error while processing image: " + err, ToastAndroid.LONG);
+                    if (Platform.OS == "android") {
+                      ToastAndroid.show(
+                        "Error while processing image: " + err,
+                        ToastAndroid.LONG
+                      );
                     }
                     setPickImgLoading(false);
                   });
@@ -207,7 +229,7 @@ const HomeScreen = function (props) {
             buttonColor="#3498db"
             title="Get palette from color"
             onPress={() => {
-              logEvent('get_palette_from_color')
+              logEvent("get_palette_from_color");
               props.navigation.navigate("ColorPicker", {
                 onDone: color => {
                   props.navigation.navigate("Palettes", {
@@ -223,8 +245,8 @@ const HomeScreen = function (props) {
             buttonColor="#1abc9c"
             title="Add colors manually"
             onPress={() => {
-              logEvent('add_colors_manually')
-              props.navigation.navigate("AddPaletteManually")
+              logEvent("add_colors_manually");
+              props.navigation.navigate("AddPaletteManually");
             }}
           >
             <Ionicons name="md-color-filter" style={styles.actionButtonIcon} />
@@ -276,8 +298,8 @@ const styles = StyleSheet.create({
     color: "white"
   },
   actionButtonWeb: {
-    position: 'fixed',
-    transform: 'scale(1) rotate(0deg) !important',
+    position: "fixed",
+    transform: "scale(1) rotate(0deg) !important",
     right: Math.max((Dimensions.get("window").width - 600) / 2, 0),
     left: Math.max((Dimensions.get("window").width - 600) / 2, 0)
   }

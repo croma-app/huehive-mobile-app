@@ -65,11 +65,18 @@ export default function PaletteScreen(props) {
           offsetY={60}
           bgColor="rgba(68, 68, 68, 0.6)"
           hideShadow={Platform.OS === "web" ? true : false}
-          fixNativeFeedbackRadius={true} 
+          fixNativeFeedbackRadius={true}
           buttonColor={Colors.accent}
           onPress={() => {
-            if (Platform.OS === 'android' && colors.length >= 4 && isPro === false) {
-              ToastAndroid.show("Unlock pro to add more than 4 colors!", ToastAndroid.LONG);
+            if (
+              Platform.OS === "android" &&
+              colors.length >= 4 &&
+              isPro === false
+            ) {
+              ToastAndroid.show(
+                "Unlock pro to add more than 4 colors!",
+                ToastAndroid.LONG
+              );
             } else {
               props.navigation.navigate("ColorPicker", {
                 onDone: color => {
@@ -78,7 +85,7 @@ export default function PaletteScreen(props) {
               });
             }
           }}
-          style={Platform.OS === 'web' ? styles.actionButtonWeb : {}}
+          style={Platform.OS === "web" ? styles.actionButtonWeb : {}}
         />
       </View>
       <DialogContainer>
@@ -108,8 +115,8 @@ const styles = StyleSheet.create({
     margin: 8
   },
   actionButtonWeb: {
-    position: 'fixed',
-    transform: 'scale(1) rotate(0deg) !important', 
+    position: "fixed",
+    transform: "scale(1) rotate(0deg) !important",
     right: Math.max((Dimensions.get("window").width - 600) / 2, 0),
     left: Math.max((Dimensions.get("window").width - 600) / 2, 0)
   }
