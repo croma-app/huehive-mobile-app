@@ -1,5 +1,5 @@
 import React from "react";
-import { Platform, Linking } from "react-native";
+import { Platform, Linking, StyleSheet } from "react-native";
 import { createStackNavigator } from "react-navigation";
 import { createAppContainer } from "react-navigation";
 import ColorDetailsScreen from "../screens/ColorDetailScreen";
@@ -14,10 +14,10 @@ import Colors from "../constants/Colors";
 import { Entypo } from "@expo/vector-icons";
 import Touchable from "react-native-platform-touchable";
 
-const config = Platform.select({
-  web: { headerMode: "screen" },
-  default: {}
+const styles = StyleSheet.create({
+  icon: { fontSize: 25, height: 25, color: "white" }
 });
+
 const RootStack = createStackNavigator(
   {
     ColorDetails: ColorDetailsScreen,
@@ -33,50 +33,49 @@ const RootStack = createStackNavigator(
     initialRouteName: "Home",
     cardStyle: { backgroundColor: "rgb(242, 242, 242)" },
     /* The header config from HomeScreen is now here */
-    defaultNavigationOptions: {
-      headerStyle: {
-        backgroundColor: Colors.primary
-      },
-      headerRight:
-        Platform.OS === "web" ? (
-          <>
-            <Touchable
-              style={{ padding: "5px" }}
-              onPress={() => {
-                Linking.openURL(
-                  "https://play.google.com/store/apps/details?id=app.croma"
-                );
-              }}
-            >
-              <Entypo
-                name="google-play"
-                style={{
-                  fontSize: 25,
-                  height: 25,
-                  color: "white"
-                }}
-              />
-            </Touchable>
-            <Touchable
-              style={{ padding: "5px", marginRight: "10px" }}
-              onPress={() => {
-                Linking.openURL("https://github.com/croma-app/croma-react");
-              }}
-            >
-              <Entypo
-                name="github"
-                style={{
-                  fontSize: 25,
-                  height: 25,
-                  color: "white"
-                }}
-              />
-            </Touchable>
-          </>
-        ) : (
-          ""
+    defaultNavigationOptions: navigation => {
+      return {
+        headerStyle: {
+          backgroundColor: Colors.primary
+        },
+        headerLeft: (
+          <Touchable
+            style={{ padding: 5, marginLeft: 8 }}
+            onPress={() => {
+              console.log(navigation.screenProps);
+              navigation.screenProps.drawer.current.toggle();
+            }}
+          >
+            <Entypo name="menu" style={styles.icon} />
+          </Touchable>
         ),
-      headerTintColor: "#fff"
+        headerRight:
+          Platform.OS === "web" ? (
+            <>
+              <Touchable
+                style={{ padding: "5px" }}
+                onPress={() => {
+                  Linking.openURL(
+                    "https://play.google.com/store/apps/details?id=app.croma"
+                  );
+                }}
+              >
+                <Entypo name="google-play" style={styles.icon} />
+              </Touchable>
+              <Touchable
+                style={{ padding: "5px", marginRight: "10px" }}
+                onPress={() => {
+                  Linking.openURL("https://github.com/croma-app/croma-react");
+                }}
+              >
+                <Entypo name="github" style={styles.icon} />
+              </Touchable>
+            </>
+          ) : (
+            ""
+          ),
+        headerTintColor: "#fff"
+      };
     }
   }
 );
