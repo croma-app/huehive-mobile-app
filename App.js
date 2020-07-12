@@ -6,12 +6,13 @@ import { ActivityIndicator } from "react-native";
 import applicationHook, { initState, Croma } from "./store/store";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Drawer from "react-native-drawer";
-import SideMenu from "./components/SideMenu";
+import HamburgerMenu from "./components/HamburgerMenu";
+import SideMenu from "react-native-side-menu";
 
 export default function App(props) {
   const [isPalettesLoaded, setIsPalettesLoaded] = useState(false);
   const applicationState = applicationHook(initState);
-
+  const [isMenuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
     (async () => {
       await applicationState.loadInitPaletteFromStore();
@@ -23,48 +24,42 @@ export default function App(props) {
       });
     }
   }, []);
-  let _drawer = useRef(null);
   return !isPalettesLoaded ? (
     <View style={{ flex: 1, marginTop: "20%" }}>
       <ActivityIndicator size="large" color="#ef635f" animating={true} />
     </View>
   ) : (
-    <Croma.Provider value={applicationState}>
-      <View style={[styles.container]}>
-        <StatusBar
-          barStyle="light-content"
-          // dark-content, light-content and default
-          hidden={false}
-          //To hide statusBar
-          backgroundColor={Colors.primaryDark}
-          //Background color of statusBar only works for Android
-          translucent={false}
-          //allowing light, but not detailed shapes
-          networkActivityIndicatorVisible={true}
-        />
-        <View
-          style={[{ flex: 1, backgroundColor: "transparent", maxWidth: 600 }]}
-          className={"navigation-workplace"}
-        >
-          {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-          <Drawer
-            type="overlay"
-            tapToClose={true}
-            openDrawerOffset={0.2} // 20% gap on the right side of drawer
-            panCloseMask={0.2}
-            closedDrawerOffset={-3}
-            styles={drawerStyles}
-            tweenHandler={ratio => ({
-              main: { opacity: (2 - ratio) / 2 }
-            })}
-            ref={_drawer}
-            content={<SideMenu />}
+    <SideMenu
+      menu={<HamburgerMenu />}
+      isOpen={isMenuOpen}
+      onChange={isOpen => setMenuOpen(isOpen)}
+    >
+      <Croma.Provider value={applicationState}>
+        <View style={[styles.container]}>
+          <StatusBar
+            barStyle="light-content"
+            // dark-content, light-content and default
+            hidden={false}
+            //To hide statusBar
+            backgroundColor={Colors.primaryDark}
+            //Background color of statusBar only works for Android
+            translucent={false}
+            //allowing light, but not detailed shapes
+            networkActivityIndicatorVisible={true}
+          />
+          <View
+            style={[{ flex: 1, backgroundColor: "transparent", maxWidth: 600 }]}
+            className={"navigation-workplace"}
           >
-            <AppNavigator screenProps={{ drawer: _drawer }} />
-          </Drawer>
+            {Platform.OS === "ios" && <StatusBar barStyle="default" />}
+
+            <AppNavigator
+              screenProps={{ isMenuOpen: isMenuOpen, setMenuOpen: setMenuOpen }}
+            />
+          </View>
         </View>
-      </View>
-    </Croma.Provider>
+      </Croma.Provider>
+    </SideMenu>
   );
 }
 const styles = StyleSheet.create({

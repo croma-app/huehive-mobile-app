@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, View } from "react-native";
-export default function SideMenu(props) {
+export default function HamburgerMenu(props) {
   return (
     <View style={{ backgroundColor: "red", height: 1000, width: 100 }}>
       <Text>Welcome to React Native!</Text>

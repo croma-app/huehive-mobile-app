@@ -43,7 +43,9 @@ const RootStack = createStackNavigator(
             style={{ padding: 5, marginLeft: 8 }}
             onPress={() => {
               console.log(navigation.screenProps);
-              navigation.screenProps.drawer.current.toggle();
+              const isMenuOpen = navigation.screenProps.isMenuOpen;
+              const setMenuOpen = navigation.screenProps.setMenuOpen;
+              setMenuOpen(!isMenuOpen);
             }}
           >
             <Entypo name="menu" style={styles.icon} />
