@@ -30,28 +30,40 @@ export default function App(props) {
     </View>
   ) : (
     <Croma.Provider value={applicationState}>
-      <Drawer ref={_drawer} content={<SideMenu />}>
-        <View style={[styles.container]}>
-          <StatusBar
-            barStyle="light-content"
-            // dark-content, light-content and default
-            hidden={false}
-            //To hide statusBar
-            backgroundColor={Colors.primaryDark}
-            //Background color of statusBar only works for Android
-            translucent={false}
-            //allowing light, but not detailed shapes
-            networkActivityIndicatorVisible={true}
-          />
-          <View
-            style={[{ flex: 1, backgroundColor: "transparent", maxWidth: 600 }]}
-            className={"navigation-workplace"}
+      <View style={[styles.container]}>
+        <StatusBar
+          barStyle="light-content"
+          // dark-content, light-content and default
+          hidden={false}
+          //To hide statusBar
+          backgroundColor={Colors.primaryDark}
+          //Background color of statusBar only works for Android
+          translucent={false}
+          //allowing light, but not detailed shapes
+          networkActivityIndicatorVisible={true}
+        />
+        <View
+          style={[{ flex: 1, backgroundColor: "transparent", maxWidth: 600 }]}
+          className={"navigation-workplace"}
+        >
+          {Platform.OS === "ios" && <StatusBar barStyle="default" />}
+          <Drawer
+            type="overlay"
+            tapToClose={true}
+            openDrawerOffset={0.2} // 20% gap on the right side of drawer
+            panCloseMask={0.2}
+            closedDrawerOffset={-3}
+            styles={drawerStyles}
+            tweenHandler={ratio => ({
+              main: { opacity: (2 - ratio) / 2 }
+            })}
+            ref={_drawer}
+            content={<SideMenu />}
           >
-            {Platform.OS === "ios" && <StatusBar barStyle="default" />}
             <AppNavigator screenProps={{ drawer: _drawer }} />
-          </View>
+          </Drawer>
         </View>
-      </Drawer>
+      </View>
     </Croma.Provider>
   );
 }
@@ -63,3 +75,7 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   }
 });
+const drawerStyles = {
+  drawer: { shadowColor: "#000000", shadowOpacity: 0.8, shadowRadius: 3 },
+  main: { paddingLeft: 3 }
+};
