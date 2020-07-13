@@ -14,8 +14,6 @@ import Colors from "../constants/Colors";
 import { Entypo } from "@expo/vector-icons";
 import Touchable from "react-native-platform-touchable";
 
-
-
 const config = Platform.select({
   web: { headerMode: "screen" },
   default: {}
@@ -33,46 +31,51 @@ const RootStack = createStackNavigator(
   },
   {
     initialRouteName: "Home",
-    cardStyle: { backgroundColor: 'rgb(242, 242, 242)' },
+    cardStyle: { backgroundColor: "rgb(242, 242, 242)" },
     /* The header config from HomeScreen is now here */
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: Colors.primary,
+        backgroundColor: Colors.primary
       },
-      headerRight: (
-        Platform.OS === 'web' ?
+      headerRight:
+        Platform.OS === "web" ? (
           <>
             <Touchable
-              style={{ padding: '5px' }}
+              style={{ padding: "5px" }}
               onPress={() => {
                 Linking.openURL(
                   "https://play.google.com/store/apps/details?id=app.croma"
-                )
+                );
               }}
             >
-              <Entypo name="google-play" style={{
-                fontSize: 25,
-                height: 25,
-                color: "white"
-              }} />
+              <Entypo
+                name="google-play"
+                style={{
+                  fontSize: 25,
+                  height: 25,
+                  color: "white"
+                }}
+              />
             </Touchable>
             <Touchable
-              style={{ padding: '5px', marginRight: '10px' }}
+              style={{ padding: "5px", marginRight: "10px" }}
               onPress={() => {
-                Linking.openURL(
-                  "https://github.com/croma-app/croma-react"
-                )
+                Linking.openURL("https://github.com/croma-app/croma-react");
               }}
             >
-              <Entypo name="github" style={{
-                fontSize: 25,
-                height: 25,
-                color: "white"
-              }} />
+              <Entypo
+                name="github"
+                style={{
+                  fontSize: 25,
+                  height: 25,
+                  color: "white"
+                }}
+              />
             </Touchable>
           </>
-          : ''
-      ),
+        ) : (
+          ""
+        ),
       headerTintColor: "#fff"
     }
   }

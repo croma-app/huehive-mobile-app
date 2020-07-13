@@ -12,18 +12,18 @@ import { Croma } from "../store/store";
 export const PaletteCard = props => {
   const [shared, setShared] = React.useState(false);
   const { deletePaletteByName } = React.useContext(Croma);
-  const [ animationType, setAnimationType ] = React.useState('fadeInLeftBig');
+  const [animationType, setAnimationType] = React.useState("fadeInLeftBig");
   const onShare = async () => {
     try {
-      const result = await Share.share(
-        {
-          message: `Croma - Palette Manager\nColors:\n${props.colors.map((colorObj) => colorObj.color).join('\n')}
+      const result = await Share.share({
+        message: `Croma - Palette Manager\nColors:\n${props.colors
+          .map(colorObj => colorObj.color)
+          .join("\n")}
       
-          https://croma.app/#/Main/SavePalette?name=${
-          encodeURIComponent(props.name)
-          }&colors=${encodeURIComponent(JSON.stringify(props.colors))}`
-        }
-      );
+          https://croma.app/#/Main/SavePalette?name=${encodeURIComponent(
+            props.name
+          )}&colors=${encodeURIComponent(JSON.stringify(props.colors))}`
+      });
 
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -43,11 +43,13 @@ export const PaletteCard = props => {
     event.preventDefault();
     event.stopPropagation();
     Clipboard.setString(
-      `Croma - Palette Manager\nColors:\n${props.colors.map((colorObj) => colorObj.color).join('\n')}
+      `Croma - Palette Manager\nColors:\n${props.colors
+        .map(colorObj => colorObj.color)
+        .join("\n")}
       
-      https://croma.app/#/Main/SavePalette?name=${
-      encodeURIComponent(props.name)
-      }&colors=${encodeURIComponent(JSON.stringify(props.colors))}`
+      https://croma.app/#/Main/SavePalette?name=${encodeURIComponent(
+        props.name
+      )}&colors=${encodeURIComponent(JSON.stringify(props.colors))}`
     );
     setShared(true);
     setTimeout(() => {
@@ -60,7 +62,7 @@ export const PaletteCard = props => {
       onPress={() => {
         props.navigation.navigate("Palette", props);
       }}
-      animationType={animationType} 
+      animationType={animationType}
     >
       <MultiColorView {...props}></MultiColorView>
 
@@ -89,19 +91,21 @@ export const PaletteCard = props => {
               <FontAwesome size={20} name="share" />
             </Touchable>
           ) : (
-              <Touchable onPress={onShare} style={styles.actionButton}>
-                <FontAwesome size={20} name="share" />
-              </Touchable>
-            )}
+            <Touchable onPress={onShare} style={styles.actionButton}>
+              <FontAwesome size={20} name="share" />
+            </Touchable>
+          )}
           <Touchable
-            {...{[Platform.OS === 'web' ? 'onClick': 'onPress' ]: event => {
-              event.preventDefault();
-              event.stopPropagation();
-              setAnimationType('fadeOutRightBig');
-              setTimeout(()=>{
-                deletePaletteByName(props.name);
-              }, 500)
-            }}}
+            {...{
+              [Platform.OS === "web" ? "onClick" : "onPress"]: event => {
+                event.preventDefault();
+                event.stopPropagation();
+                setAnimationType("fadeOutRightBig");
+                setTimeout(() => {
+                  deletePaletteByName(props.name);
+                }, 500);
+              }
+            }}
             style={styles.actionButton}
           >
             <FontAwesome size={20} name="trash" />

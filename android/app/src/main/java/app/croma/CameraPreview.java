@@ -14,6 +14,7 @@ import android.graphics.Typeface;
 import android.graphics.YuvImage;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
+import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -28,6 +29,7 @@ import com.google.android.flexbox.FlexWrap;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.flexbox.JustifyContent;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
@@ -45,12 +47,17 @@ import java.util.TimerTask;
 
 import top.defaults.drawabletoolbox.DrawableBuilder;
 
+import static app.croma.FirebaseAnalyticsConstants.COLOR_PICKER_TEXT_RECOGNITION_COLORS;
+import static app.croma.FirebaseAnalyticsConstants.COLOR_PICKER_TOUCH_TO_GET_COLOR;
+import static app.croma.FirebaseAnalyticsConstants.RECOGNIZED_COLORS_PARAMS;
+
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback,View.OnTouchListener {
     private SurfaceHolder mHolder;
     private Camera mCamera;
     private RelativeLayout cameraPreview;
     private Set<Integer> colors;
     private Timer timer;
+    private FirebaseAnalytics firebaseAnalytics;
     public CameraPreview(Activity activity, Camera cameraObj, RelativeLayout cameraPreview) {
         super(activity);
         mCamera = cameraObj;
@@ -59,6 +66,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         mHolder = getHolder();
         mHolder.addCallback(this);
         timer = new Timer();
+        firebaseAnalytics = FirebaseAnalytics.getInstance(activity);
         timer.scheduleAtFixedRate(new TimerTask(){
             public void run(){
                 synchronized (this) {
@@ -122,7 +130,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                     View vc = getColorView(getContext(), x, y, color);
                     colors.add(color);
                     cameraPreview.addView(vc);
-
+                    firebaseAnalytics.logEvent(COLOR_PICKER_TOUCH_TO_GET_COLOR, new Bundle());
                 });
             }
         }
@@ -153,8 +161,10 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                     cameraPreview.addView(getColorTextView(getContext(),
                             rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, newColors));
                     Toast.makeText(getContext(), newColors.size() + " new colors recognized.", Toast.LENGTH_LONG).show();
+                    Bundle params = new Bundle();
+                    params.putInt(RECOGNIZED_COLORS_PARAMS, newColors.size());
+                    firebaseAnalytics.logEvent(COLOR_PICKER_TEXT_RECOGNITION_COLORS, params);
                 }
-
             }
 
         })

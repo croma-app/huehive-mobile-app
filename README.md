@@ -32,13 +32,7 @@ Run locally:
 
 Build signed apk:
 ``` cd android ```
-
-```
-find app/src/main/res/ -type f -name "*node_modules*" -exec rm -f {} \;
-
-```
-
-```  ./gradlew clean && ./gradlew :app:bundleRelease ```
+``` ./release.sh ```
 
 Ref: https://reactnative.dev/docs/signed-apk-android 
 

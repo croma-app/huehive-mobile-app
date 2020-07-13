@@ -31,12 +31,9 @@ export const SavePalette = props => {
 
   const { title, navigationPath } = props;
   return (
-    <ScrollView style={{margin: 8}} showsVerticalScrollIndicator={false}>
+    <ScrollView style={{ margin: 8 }} showsVerticalScrollIndicator={false}>
       <PalettePreviewCard
-        colors={finalColors.slice(
-          0,
-          isPro ? finalColors.length : 4
-        )}
+        colors={finalColors.slice(0, isPro ? finalColors.length : 4)}
         name={paletteName}
       />
       <View style={styles.card}>

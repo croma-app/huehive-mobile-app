@@ -12,6 +12,7 @@ import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,15 +24,19 @@ import org.numixproject.colorextractor.image.KMeansColorPicker;
 import java.util.ArrayList;
 import java.util.List;
 
+import static app.croma.FirebaseAnalyticsConstants.TIME_TAKEN_TO_PROCESS_MS;
+
 public class CromaModule extends ReactContextBaseJavaModule implements ActivityEventListener {
 
     private static final int PICK_COLORS = 1;
     private final ReactApplicationContext reactContext;
     private Callback callback;
+    private FirebaseAnalytics mFirebaseAnalytics;
     public CromaModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
         this.reactContext.addActivityEventListener(this);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(reactContext);
     }
 
     @Override
@@ -88,6 +93,7 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
     @ReactMethod
     public void pickTopColorsFromImage(String uri, Callback callback) {
         try {
+            long startTime = System.currentTimeMillis();
             Uri imageUri = Uri.parse(uri);
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(reactContext.getContentResolver(), imageUri);
             Image image = new BitmapImage(bitmap);
@@ -97,6 +103,9 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
             for (Color color : colors) {
                 intColors.add(color.getRGB());
             }
+            Bundle params = new Bundle();
+            params.putLong(TIME_TAKEN_TO_PROCESS_MS, (System.currentTimeMillis() - startTime));
+            mFirebaseAnalytics.logEvent(FirebaseAnalyticsConstants.PICK_COLORS_FROM_IMAGE, params);
             callback.invoke(null, mapToJsonString(intColors));
         } catch (Exception e) {
             e.printStackTrace();
@@ -124,6 +133,15 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
             callback.invoke(e);
         }
     }
+    @ReactMethod
+    public void logEvent(String eventId, String data) {
+        //https://firebase.google.com/docs/analytics/events?platform=android
+        System.out.println("EventId: " + eventId + "," + data);
+        Bundle params = new Bundle();
+        params.putString("data", data);
+        mFirebaseAnalytics.logEvent(eventId, params);
+    }
+
     private static class BitmapImage extends Image {
         private Bitmap image;
 
@@ -142,7 +160,6 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
         @Override
         public BitmapImage getScaledInstance(int width, int height) {
             Bitmap resized = Bitmap.createScaledBitmap(this.image, width, height, true);
-
             return new BitmapImage(resized);
         }
     }

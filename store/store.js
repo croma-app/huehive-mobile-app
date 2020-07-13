@@ -11,7 +11,7 @@ export const initState = {
   isPro: false
 };
 
-const syncStateToStore = function (state) {
+const syncStateToStore = function(state) {
   Storage.setApplicationState(state);
 };
 
@@ -24,23 +24,25 @@ export default function applicationHook(initState) {
       const { allPalettes } = state;
       sortPalette(palette);
       if (!palette.createdAt) {
-        palette.createdAt = new Date().valueOf()
+        palette.createdAt = new Date().valueOf();
       }
       allPalettes[palette.name] = palette;
-      // sorting palettes before save 
-      const allPalettesArray = Object.keys(allPalettes).map((key) => allPalettes[key])
+      // sorting palettes before save
+      const allPalettesArray = Object.keys(allPalettes).map(
+        key => allPalettes[key]
+      );
       allPalettesArray.sort((a, b) => {
-        // Todo - Just a check for old user  
+        // Todo - Just a check for old user
         if (!a.createdAt) {
-          a.createdAt = 0
+          a.createdAt = 0;
         }
         if (!b.createdAt) {
-          b.createdAt = 0
+          b.createdAt = 0;
         }
-        return new Date(b.createdAt) - new Date(a.createdAt)
+        return new Date(b.createdAt) - new Date(a.createdAt);
       });
       const ordered = {};
-      allPalettesArray.forEach(function (_palette) {
+      allPalettesArray.forEach(function(_palette) {
         ordered[_palette.name] = _palette;
       });
       return { ...state, allPalettes: ordered };
@@ -48,7 +50,7 @@ export default function applicationHook(initState) {
   };
 
   const loadInitPaletteFromStore = async () => {
-    setState((state) => ({ ...state, isLoading: true }));
+    setState(state => ({ ...state, isLoading: true }));
     // Loading application state from localStorage
     const _state = await Storage.getApplicationState();
     setState(state => ({
@@ -60,9 +62,9 @@ export default function applicationHook(initState) {
     // Setting default palette when user comming first time
     let defaultPalettes = {};
     const isUserAleadyExits = await Storage.checkUserAlreadyExists();
-    
+
     if (isUserAleadyExits != "true") {
-      if (Platform.OS !== 'web') {
+      if (Platform.OS !== "web") {
         try {
           await InAppBilling.open();
           // If subscriptions/products are updated server-side you
@@ -70,13 +72,19 @@ export default function applicationHook(initState) {
           await InAppBilling.loadOwnedPurchasesFromGoogle();
           isPurchased = await InAppBilling.isPurchased("croma_pro");
           if (isPurchased) {
-            ToastAndroid.show("Your purchase restored successfully..", ToastAndroid.LONG);
+            ToastAndroid.show(
+              "Your purchase restored successfully..",
+              ToastAndroid.LONG
+            );
           }
-          setState((state) => {
-            return { ...state, isPro: isPurchased }
-          })
+          setState(state => {
+            return { ...state, isPro: isPurchased };
+          });
         } catch (err) {
-          ToastAndroid.show("Loading purchase detail failed. " + err, ToastAndroid.LONG);
+          ToastAndroid.show(
+            "Loading purchase detail failed. " + err,
+            ToastAndroid.LONG
+          );
         } finally {
           await InAppBilling.close();
         }
@@ -93,13 +101,12 @@ export default function applicationHook(initState) {
       };
       addPalette(defaultPalettes);
     }
-    
   };
 
   const removePaletteFromStateByName = name => {
     setState(state => {
       const { deletedPalettes } = state;
-      clearTimeout(deletedPalettes[name]['timeout'])
+      clearTimeout(deletedPalettes[name]["timeout"]);
       delete deletedPalettes[name];
       return { ...state, deletedPalettes };
     });
@@ -126,7 +133,7 @@ export default function applicationHook(initState) {
       if (allPalettes[name]) {
         deletedPalettes[name] = { ...allPalettes[name] };
         delete allPalettes[name];
-        deletedPalettes[name]['timeout'] = setTimeout(() => {
+        deletedPalettes[name]["timeout"] = setTimeout(() => {
           removePaletteFromStateByName(name);
         }, UNDO_TIMEOUT);
         return { ...state, allPalettes, deletedPalettes };
@@ -150,7 +157,7 @@ export default function applicationHook(initState) {
     setState(state => {
       const { allPalettes } = state;
       const deletedColor = allPalettes[name].colors.splice(colorIndex, 1);
-      deletedColor[0]['timeout'] = setTimeout(() => {
+      deletedColor[0]["timeout"] = setTimeout(() => {
         clearDeletedColor(name, deletedColor[0]);
       }, UNDO_TIMEOUT);
       if (allPalettes[name].deletedColors) {
@@ -168,7 +175,7 @@ export default function applicationHook(initState) {
       allPalettes[name].colors.push({ color: colorName });
       allPalettes[name].deletedColors.forEach((color, index) => {
         if (color.color === colorName) {
-          clearTimeout(color.timeout)
+          clearTimeout(color.timeout);
           allPalettes[name].deletedColors.splice(index, 1);
         }
       });
@@ -185,7 +192,7 @@ export default function applicationHook(initState) {
           allPalettes[name].deletedColors.splice(index, 1);
         }
       });
-      clearTimeout(colorObj.timeout)
+      clearTimeout(colorObj.timeout);
       return { ...state, allPalettes };
     });
   };
