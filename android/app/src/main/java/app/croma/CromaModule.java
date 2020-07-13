@@ -116,6 +116,7 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
     @ReactMethod
     public void getBitmap(String uri, int width, int height, Callback callback) {
         try {
+            long startTime = System.currentTimeMillis();
             Uri imageUri = Uri.parse(uri);
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(reactContext.getContentResolver(), imageUri);
             BitmapImage image = new BitmapImage(bitmap);
@@ -127,7 +128,11 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
                 }
             }
             // TODO: find a efficient way to send it back.
-            callback.invoke(null, toJson(imageMatrix));
+            String resultJson = toJson(imageMatrix);
+            Bundle params = new Bundle();
+            params.putLong(TIME_TAKEN_TO_PROCESS_MS, (System.currentTimeMillis() - startTime));
+            mFirebaseAnalytics.logEvent(FirebaseAnalyticsConstants.GET_BITMAP, params);
+            callback.invoke(null, resultJson);
         } catch (Exception e) {
             e.printStackTrace();
             callback.invoke(e);
