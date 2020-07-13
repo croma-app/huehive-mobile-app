@@ -5,7 +5,6 @@ import AppNavigator from "./navigation/AppNavigator";
 import { ActivityIndicator } from "react-native";
 import applicationHook, { initState, Croma } from "./store/store";
 import ErrorBoundary from "./components/ErrorBoundary";
-import Drawer from "react-native-drawer";
 import HamburgerMenu from "./components/HamburgerMenu";
 import SideMenu from "react-native-side-menu";
 
@@ -70,7 +69,3 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   }
 });
-const drawerStyles = {
-  drawer: { shadowColor: "#000000", shadowOpacity: 0.8, shadowRadius: 3 },
-  main: { paddingLeft: 3 }
-};
