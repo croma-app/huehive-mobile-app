@@ -68,6 +68,17 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
         return jsonObject.toString();
     }
 
+    private String toJson(int arr[][]) throws JSONException {
+
+        // loop through your elements
+        List<JSONArray> list = new ArrayList<>(arr.length);
+        for (int i=0; i < arr.length; i++){
+            list.add(new JSONArray(arr[i]));
+        }
+        JSONArray parentJsonArray = new JSONArray(list);
+        return parentJsonArray.toString();
+    }
+
     @Override
     public void onNewIntent(Intent intent) {
 
@@ -92,6 +103,27 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
             callback.invoke(e);
         }
     }
+
+    @ReactMethod
+    public void getBitmap(String uri, int width, int height, Callback callback) {
+        try {
+            Uri imageUri = Uri.parse(uri);
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(reactContext.getContentResolver(), imageUri);
+            BitmapImage image = new BitmapImage(bitmap);
+            image = image.getScaledInstance(width, height);
+            int imageMatrix[][] = new int[width][height];
+            for (int i = 0;i < width; i++) {
+                for (int j = 0;j < height; j++) {
+                    imageMatrix[i][j] = image.getColor(i, j).getRGB();
+                }
+            }
+            // TODO: find a efficient way to send it back.
+            callback.invoke(null, toJson(imageMatrix));
+        } catch (Exception e) {
+            e.printStackTrace();
+            callback.invoke(e);
+        }
+    }
     private static class BitmapImage extends Image {
         private Bitmap image;
 
@@ -104,6 +136,9 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
             return new Color(image.getPixel(x, y));
         }
 
+        public Bitmap getImage() {
+            return image;
+        }
         @Override
         public BitmapImage getScaledInstance(int width, int height) {
             Bitmap resized = Bitmap.createScaledBitmap(this.image, width, height, true);

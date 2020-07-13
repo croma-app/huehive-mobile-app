@@ -172,6 +172,9 @@ const HomeScreen = function (props) {
               setPickImgLoading(true);
               if (Platform.OS === 'android') {
                 pickImageResult().then((result, err) =>{
+                  NativeModules.CromaModule.getBitmap(result.uri, 20, 20, (err, bitmap) => {
+                    console.log("bitmap:", bitmap);
+                  });
                   NativeModules.CromaModule.pickTopColorsFromImage(result.uri, (err, pickedColors) => {
                     if (err) {
                       ToastAndroid.show("Error while processing image: " + err, ToastAndroid.LONG);
