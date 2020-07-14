@@ -184,9 +184,6 @@ const HomeScreen = function(props) {
               if (Platform.OS === 'android') {
                 pickImageResult().then((result, err) =>{
                   logEvent("get_palette_from_image");
-                  NativeModules.CromaModule.getBitmap(result.uri, 20, 20, (err, bitmap) => {
-                    console.log("bitmap:", bitmap);
-                  });
                   props.navigation.navigate("ImagePreview", {
                     image: result,
                   });

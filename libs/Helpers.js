@@ -6,4 +6,10 @@ const logEvent = (eventName, value) => {
   }
 };
 
-export { logEvent };
+
+
+const getImageBitmap = function(uri, height, width, callback) {
+  NativeModules.CromaModule.getBitmap(uri, height, width, callback);
+} 
+
+export { logEvent, getImageBitmap };
