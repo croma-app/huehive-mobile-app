@@ -2,17 +2,24 @@ import React from "react";
 import { ScrollView, Image, View,  StyleSheet, NativeModules, Dimensions } from "react-native";
 import CromaButton from "../components/CromaButton";
 import {getImageBitmap} from "../libs/Helpers";
-import Jimp from "jimp";
 import Color from "pigment/full";
 import Touchable from "react-native-platform-touchable";
 
 
 const _toHexColor = function (intColor) {
-  let rgba = Jimp.intToRGBA(intColor); // TODO: Need to optimize this once everything else starts working.
+  let rgba = getRGB(intColor); // TODO: Need to optimize this once everything else starts working.
   let color = new Color(
     "rgb(" + rgba.r + ", " + rgba.g + ", " + rgba.b + ")"
   );
   return color.tohex();
+}
+
+const getRGB = function(intColor) {
+  return {
+    b: intColor & 0X000000FF,
+    g: (intColor & 0X0000FF00) >> 8,
+    r: (intColor & 0X00FF0000) >> 16
+  }
 }
 
 export default function ImagePreviewScreen(props) {
