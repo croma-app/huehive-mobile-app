@@ -1,7 +1,4 @@
 import React from "react";
-import { Platform, Linking } from "react-native";
-import { createStackNavigator } from "react-navigation";
-import { createAppContainer } from "react-navigation";
 import ColorDetailsScreen from "../screens/ColorDetailScreen";
 import ColorPickerScreen from "../screens/ColorPickerScreen";
 import PalettesScreen from "../screens/PalettesScreen";
@@ -10,9 +7,13 @@ import AddPaletteManuallyScreen from "../screens/AddPaletteManuallyScreen";
 import ColorListScreen from "../screens/ColorListScreen";
 import PaletteScreen from "../screens/PaletteScreen";
 import HomeScreen from "../screens/HomeScreen";
+import ImagePreviewScreen from "../screens/ImagePreviewScreen";
 import Colors from "../constants/Colors";
-import { Entypo } from "@expo/vector-icons";
 import Touchable from "react-native-platform-touchable";
+import { createStackNavigator } from "react-navigation";
+import { createAppContainer } from "react-navigation";
+import { Entypo } from "@expo/vector-icons";
+import { Platform, Linking } from "react-native";
 
 const config = Platform.select({
   web: { headerMode: "screen" },
@@ -27,7 +28,8 @@ const RootStack = createStackNavigator(
     ColorList: ColorListScreen,
     Palette: PaletteScreen,
     Home: HomeScreen,
-    AddPaletteManually: AddPaletteManuallyScreen
+    AddPaletteManually: AddPaletteManuallyScreen,
+    ImagePreview: ImagePreviewScreen
   },
   {
     initialRouteName: "Home",

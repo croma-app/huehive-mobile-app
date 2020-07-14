@@ -181,30 +181,16 @@ const HomeScreen = function(props) {
             title="Get palette from image"
             onPress={() => {
               setPickImgLoading(true);
-              if (Platform.OS === "android") {
-                pickImageResult().then((result, err) => {
+              if (Platform.OS === 'android') {
+                pickImageResult().then((result, err) =>{
+                  logEvent("get_palette_from_image");
                   NativeModules.CromaModule.getBitmap(result.uri, 20, 20, (err, bitmap) => {
                     console.log("bitmap:", bitmap);
                   });
-                  NativeModules.CromaModule.pickTopColorsFromImage(
-                    result.uri,
-                    (err, pickedColors) => {
-                      logEvent("get_palette_from_image");
-                      if (err) {
-                        ToastAndroid.show(
-                          "Error while processing image: " + err,
-                          ToastAndroid.LONG
-                        );
-                      } else {
-                        console.log("Picked colors: ", pickedColors);
-                        props.navigation.navigate(
-                          "ColorList",
-                          JSON.parse(pickedColors)
-                        );
-                      }
-                      setPickImgLoading(false);
-                    }
-                  );
+                  props.navigation.navigate("ImagePreview", {
+                    image: result,
+                  });
+                  setPickImgLoading(false);
                 });
               } else {
                 pickImage()

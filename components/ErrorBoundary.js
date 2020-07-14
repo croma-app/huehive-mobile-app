@@ -7,12 +7,15 @@ export default class ErrorBoundary extends React.Component {
     this.state = { hasError: false };
   }
 
-  componentDidCatch(error, info) {
-    if (Platform.OS === "web") {
-      window.location = "/";
+    componentDidCatch(error, info) {
+        if (process.env.NODE_ENV !== 'development') {
+            if (Platform.OS === 'web') {
+                window.location = '/';
+            }
+        }
+        this.setState({ hasError: true });
     }
-    this.setState({ hasError: true });
-  }
+  
 
   render() {
     if (this.state.hasError) {
