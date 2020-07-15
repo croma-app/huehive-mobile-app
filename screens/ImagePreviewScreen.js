@@ -4,6 +4,7 @@ import CromaButton from "../components/CromaButton";
 import {getImageBitmap} from "../libs/Helpers";
 import Color from "pigment/full";
 import Touchable from "react-native-platform-touchable";
+import { bitmap } from "jimp";
 
 
 const _toHexColor = function (intColor) {
@@ -22,14 +23,16 @@ const getRGB = function(intColor) {
   }
 }
 
+
 export default function ImagePreviewScreen(props) {
   const image = props.navigation.getParam('image');
   const [pickedColors, setPickedColors] = React.useState(null);
-  const [pickedBgColor, setPickedBgColor] = React.useState('#ffffff')
+  const [pickedBgColor, setPickedBgColor] = React.useState([])
   const [imageBitmap, setImageBitmap] = React.useState(null)
   const img = React.useRef(null);
   const dimensions = Dimensions.get('window');
-
+  const imageWidth = dimensions.width - 16
+  const imageHeight = dimensions.height - 100
   React.useEffect(() => {
     NativeModules.CromaModule.pickTopColorsFromImage(image.uri, (err, pickedColors) => {
       if (err) {
@@ -40,7 +43,7 @@ export default function ImagePreviewScreen(props) {
         //props.navigation.navigate("ColorList", JSON.parse(pickedColors));
       }
     });
-    getImageBitmap(image.uri, dimensions.width, dimensions.height - 200, (err, bitmap) => {
+    getImageBitmap(image.uri, imageWidth, imageHeight, (err, bitmap) => {
       setImageBitmap(JSON.parse(bitmap));
     })
   }, [image])
@@ -49,18 +52,16 @@ export default function ImagePreviewScreen(props) {
     const x = parseInt(e.nativeEvent.locationX);
     const y = parseInt(e.nativeEvent.locationY);
     const hex = _toHexColor(imageBitmap[x][y])
-    setPickedBgColor(hex);
+    pickedBgColor.push([x, y, hex])
+    setPickedBgColor([...pickedBgColor]);
   };
 
   return (
-    <ScrollView style={styles.listview} showsVerticalScrollIndicator={false}>
-      <View style={{ height: 100, backgroundColor: pickedBgColor, width: 100 }}>
-
-      </View>
+    <View style={styles.listview} showsVerticalScrollIndicator={false}>
       <Touchable onPress={onImageClick}>
         <Image
           ref={img}
-          style={{ width: dimensions.width, height: dimensions.height - 200 }}
+          style={{ width: imageWidth, height: imageHeight }}
           source={
             {
               uri: image.uri
@@ -69,6 +70,26 @@ export default function ImagePreviewScreen(props) {
         >
         </Image>
       </Touchable>
+      {
+        pickedBgColor.length > 0 && pickedBgColor.map((color)=>{
+          return <View style={{ 
+            position: 'absolute',
+            borderRadius: 100,
+            left: color[0],
+            top: color[1],
+            height: 20,
+            backgroundColor: color[2],
+            width: 20,
+            shadowColor: '#fff',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.8,
+            shadowRadius: 2,
+            elevation: 5
+          }}>
+          </View> 
+        })
+      }
+      
       <CromaButton
         onPress={() =>
           props.navigation.navigate("ColorList", pickedColors)
@@ -76,7 +97,7 @@ export default function ImagePreviewScreen(props) {
       >
         {pickedColors && 'SAVE'}
       </CromaButton>
-    </ScrollView>
+    </View>
   );
 }
 function uniqueColors(colors) {
