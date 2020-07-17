@@ -1,15 +1,42 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Header } from "react-navigation";
+import { Text, View, StyleSheet, Image } from "react-native";
+import Colors from "../constants/Colors";
 export default function HamburgerMenu(props) {
   return (
-    <View style={{ backgroundColor: "red", height: 1000, width: 100 }}>
-      <Text>Welcome to React Native!</Text>
-      <Text>To get started, edit index.ios.js</Text>
-      <Text>
-        Press Cmd+R to reload,{"\n"}
-        Cmd+Control+Z for dev menu fjdaskjkfa adsfkla kjfasldj jasdlkfj asdfjla
-        kljfasd lkjasdf llajdsfl asdklfjas fjasd alksdjf asdklfjasfajsd
-      </Text>
+    <View style={[styles.container]}>
+      <View style={[styles.titleArea]}>
+        <Image
+          style={styles.logo}
+          source={require("../assets/images/dots.png")}
+        />
+        <Text style={styles.title}>Croma - Save you colors</Text>
+      </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "column"
+  },
+  titleArea: {
+    backgroundColor: Colors.primary,
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 12,
+    height: Header.HEIGHT
+  },
+  logo: {
+    width: 48,
+    height: 48,
+    padding: 12
+  },
+  title: {
+    fontWeight: "800",
+    textAlignVertical: "center",
+    padding: 12,
+    color: "white"
+  }
+});
