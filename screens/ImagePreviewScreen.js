@@ -43,7 +43,7 @@ export default function ImagePreviewScreen(props) {
         //props.navigation.navigate("ColorList", JSON.parse(pickedColors));
       }
     });
-    getImageBitmap(image.uri, imageWidth, imageHeight, (err, bitmap) => {
+    getImageBitmap(image.uri, 50, 60, (err, bitmap) => {
       setImageBitmap(JSON.parse(bitmap));
     })
   }, [image])
@@ -58,8 +58,8 @@ export default function ImagePreviewScreen(props) {
 
   return (
     <View style={styles.listview} showsVerticalScrollIndicator={false}>
-      <Touchable onPress={onImageClick}>
-        <Image
+      {/* <Touchable onPress={onImageClick}>
+        {<Image
           ref={img}
           style={{ width: imageWidth, height: imageHeight }}
           source={
@@ -68,35 +68,32 @@ export default function ImagePreviewScreen(props) {
             }
           }
         >
-        </Image>
-      </Touchable>
+        </Image> }
+      </Touchable> */}
       {
-        pickedBgColor.length > 0 && pickedBgColor.map((color)=>{
-          return <View style={{ 
-            position: 'absolute',
-            borderRadius: 100,
-            left: color[0],
-            top: color[1],
-            height: 20,
-            backgroundColor: color[2],
-            width: 20,
-            shadowColor: '#fff',
-            shadowOffset: { width: 0, height: 2 },
-            shadowOpacity: 0.8,
-            shadowRadius: 2,
-            elevation: 5
-          }}>
-          </View> 
+        imageBitmap  && imageBitmap.map((color, i)=>{
+          return color.map((pixel, j)=>{
+            return <View style={{ 
+              position: 'absolute',
+              left: j,
+              top: i,
+              height: 1,
+              backgroundColor: _toHexColor(imageBitmap[i][j]),
+              width: 1,
+            }} >
+
+            </View>
+          }) 
         })
       }
-      
+{/*       
       <CromaButton
         onPress={() =>
           props.navigation.navigate("ColorList", pickedColors)
         }
       >
         {pickedColors && 'SAVE'}
-      </CromaButton>
+      </CromaButton> */}
     </View>
   );
 }
