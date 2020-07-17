@@ -3,6 +3,8 @@ package app.croma;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -21,6 +23,7 @@ import org.numixproject.colorextractor.image.Color;
 import org.numixproject.colorextractor.image.Image;
 import org.numixproject.colorextractor.image.KMeansColorPicker;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,9 +124,10 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(reactContext.getContentResolver(), imageUri);
             BitmapImage image = new BitmapImage(bitmap);
             image = image.getScaledInstance(width, height);
-            int imageMatrix[][] = new int[width][height];
-            for (int i = 0;i < width; i++) {
-                for (int j = 0;j < height; j++) {
+            image = new BitmapImage(rotateImageToCorrectOrientation(image.getImage(), imageUri.getPath()));
+            int imageMatrix[][] = new int[image.getWidth()][image.getHeight()];
+            for (int i = 0;i < image.getWidth(); i++) {
+                for (int j = 0;j < image.getHeight(); j++) {
                     imageMatrix[i][j] = image.getColor(i, j).getRGB();
                 }
             }
@@ -167,5 +171,31 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
             Bitmap resized = Bitmap.createScaledBitmap(this.image, width, height, true);
             return new BitmapImage(resized);
         }
+    }
+
+    public  Bitmap rotateImageToCorrectOrientation(Bitmap bitmap, String path) throws IOException {
+        int rotate = 0;
+        ExifInterface exif;
+        exif = new ExifInterface(path);
+        int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_NORMAL);
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                rotate = 270;
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                rotate = 180;
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                rotate = 90;
+                break;
+        }
+        rotate -= 90;
+        rotate += 360;
+        rotate %= 360;
+        Matrix matrix = new Matrix();
+        matrix.postRotate(rotate);
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+                bitmap.getHeight(), matrix, true);
     }
 }
