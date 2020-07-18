@@ -16,15 +16,16 @@ export default function HamburgerMenu(props) {
       </View>
       <View style={styles.menu}>
         <Touchable
+          style={[styles.menuItem]}
           onPress={() => {
             Linking.openURL("https://github.com/croma-app/croma-react");
           }}
         >
-          <View style={[styles.github, styles.menuItem]}>
+          <View style={styles.menuItemView}>
             <View style={styles.menuIcon}>
               <Entypo name="github" style={styles.icon} />
             </View>
-            <Text style={styles.githubText}>View Source on github</Text>
+            <Text style={styles.textAreaMenuItem}>View Source on github</Text>
           </View>
         </Touchable>
       </View>
@@ -58,28 +59,27 @@ const styles = StyleSheet.create({
   },
   menu: {
     flex: 1,
-    flexDirection: "column"
+    flexDirection: "column",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    alignSelf: "stretch"
   },
-  github: {},
   menuItem: {
-    flex: 1,
-    height: 60,
-    flexDirection: "row",
-    borderColor: "#cccccc",
-    borderBottomWidth: 1,
-    alignItems: "center"
+    height: 60
   },
-  githubText: {
+  menuItemView: {
+    flex: 1,
+    flexDirection: "row"
+  },
+  textAreaMenuItem: {
     fontWeight: "800",
     textAlignVertical: "center",
-    padding: 12
+    padding: 12,
+    alignItems: "center"
   },
-  menuIcon: {
-    borderColor: "#cccccc",
-    borderRightWidth: 1
-  },
+  menuIcon: {},
   icon: {
-    fontSize: 25,
+    fontSize: 36,
     padding: 12,
     color: "black"
   }
