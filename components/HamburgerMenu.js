@@ -12,6 +12,10 @@ export default function HamburgerMenu(props) {
         />
         <Text style={styles.title}>Croma - Save you colors</Text>
       </View>
+      <View style={styles.menu}>
+        <View style={styles.github}></View>
+      </View>
+      <View></View>
     </View>
   );
 }
@@ -38,5 +42,7 @@ const styles = StyleSheet.create({
     textAlignVertical: "center",
     padding: 12,
     color: "white"
-  }
+  },
+  menu: {},
+  github: {}
 });

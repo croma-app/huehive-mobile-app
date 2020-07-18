@@ -38,19 +38,6 @@ const RootStack = createStackNavigator(
         headerStyle: {
           backgroundColor: Colors.primary
         },
-        headerLeft: (
-          <Touchable
-            style={{ padding: 5, marginLeft: 8 }}
-            onPress={() => {
-              console.log(navigation.screenProps);
-              const isMenuOpen = navigation.screenProps.isMenuOpen;
-              const setMenuOpen = navigation.screenProps.setMenuOpen;
-              setMenuOpen(!isMenuOpen);
-            }}
-          >
-            <Entypo name="menu" style={styles.icon} />
-          </Touchable>
-        ),
         headerRight:
           Platform.OS === "web" ? (
             <>

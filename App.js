@@ -10,8 +10,11 @@ import SideMenu from "react-native-side-menu";
 
 export default function App(props) {
   const [isPalettesLoaded, setIsPalettesLoaded] = useState(false);
+
   const applicationState = applicationHook(initState);
-  const [isMenuOpen, setMenuOpen] = useState(false);
+  const isMenuOpen = applicationState.isMenuOpen;
+  const setMenu = applicationState.setMenu;
+  console.log("SetMenu", setMenu);
   useEffect(() => {
     (async () => {
       await applicationState.loadInitPaletteFromStore();
@@ -31,7 +34,7 @@ export default function App(props) {
     <SideMenu
       menu={<HamburgerMenu />}
       isOpen={isMenuOpen}
-      onChange={isOpen => setMenuOpen(isOpen)}
+      onChange={isOpen => setMenu(isOpen)}
     >
       <Croma.Provider value={applicationState}>
         <View style={[styles.container]}>
@@ -52,9 +55,7 @@ export default function App(props) {
           >
             {Platform.OS === "ios" && <StatusBar barStyle="default" />}
 
-            <AppNavigator
-              screenProps={{ isMenuOpen: isMenuOpen, setMenuOpen: setMenuOpen }}
-            />
+            <AppNavigator />
           </View>
         </View>
       </Croma.Provider>

@@ -18,6 +18,7 @@ import Colors from "../constants/Colors";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import ColorPicker from "../libs/ColorPicker";
+import Touchable from "react-native-platform-touchable";
 import Jimp from "jimp";
 import { Header } from "react-navigation";
 import EmptyView from "../components/EmptyView";
@@ -35,6 +36,8 @@ const HomeScreen = function(props) {
     deletedPalettes,
     undoDeletionByName,
     isPro,
+    isMenuOpen,
+    setMenu,
     setPurchase
   } = React.useContext(Croma);
   const [pickImgloading, setPickImgLoading] = useState(false);
@@ -74,6 +77,7 @@ const HomeScreen = function(props) {
     }
   };
   useEffect(() => {
+    props.navigation.setParams({ isMenuOpen: isMenuOpen, setMenu: setMenu });
     getPermissionAsync();
     if (Platform.OS === "android") {
       // Deep linking code
@@ -106,6 +110,7 @@ const HomeScreen = function(props) {
       });
     }
   }, []);
+
   if (isLoading) {
     return <ActivityIndicator />;
   } else {
@@ -283,8 +288,24 @@ const HomeScreen = function(props) {
 
 export default HomeScreen;
 
-HomeScreen.navigationOptions = {
-  title: "Croma"
+HomeScreen.navigationOptions = ({ navigation }) => {
+  return {
+    headerLeft: (
+      <Touchable
+        style={{ marginLeft: 8 }}
+        onPress={() => {
+          console.log("navigation", navigation);
+          const isMenuOpen = navigation.getParam("isMenuOpen");
+          const setMenu = navigation.getParam("setMenu");
+          console.log("menu", isMenuOpen, setMenu);
+          setMenu(!isMenuOpen);
+        }}
+      >
+        <Entypo name="menu" style={styles.icon} />
+      </Touchable>
+    ),
+    title: "Croma"
+  };
 };
 
 const styles = StyleSheet.create({
@@ -302,5 +323,6 @@ const styles = StyleSheet.create({
     transform: "scale(1) rotate(0deg) !important",
     right: Math.max((Dimensions.get("window").width - 600) / 2, 0),
     left: Math.max((Dimensions.get("window").width - 600) / 2, 0)
-  }
+  },
+  icon: { fontSize: 25, height: 25, color: "white" }
 });
