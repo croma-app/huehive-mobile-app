@@ -179,23 +179,36 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
         exif = new ExifInterface(path);
         int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
                 ExifInterface.ORIENTATION_NORMAL);
+        Matrix matrix = new Matrix();
         switch (orientation) {
-            case ExifInterface.ORIENTATION_ROTATE_270:
-                rotate = 270;
+            case ExifInterface.ORIENTATION_NORMAL:
+                return bitmap;
+            case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
+                matrix.setScale(-1, 1);
                 break;
             case ExifInterface.ORIENTATION_ROTATE_180:
-                rotate = 180;
+                matrix.setRotate(180);
+                break;
+            case ExifInterface.ORIENTATION_FLIP_VERTICAL:
+                matrix.setRotate(180);
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_TRANSPOSE:
+                matrix.setRotate(90);
+                matrix.postScale(-1, 1);
                 break;
             case ExifInterface.ORIENTATION_ROTATE_90:
-                rotate = 90;
+                matrix.setRotate(90);
+                break;
+            case ExifInterface.ORIENTATION_TRANSVERSE:
+                matrix.setRotate(-90);
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                matrix.setRotate(-90);
                 break;
         }
-        rotate -= 90;
-        rotate += 360;
-        rotate %= 360;
-        Matrix matrix = new Matrix();
-        matrix.postRotate(rotate);
-        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
-                bitmap.getHeight(), matrix, true);
+       return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+               bitmap.getHeight(), matrix, true);
     }
 }

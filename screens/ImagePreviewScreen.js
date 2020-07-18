@@ -43,7 +43,7 @@ export default function ImagePreviewScreen(props) {
         //props.navigation.navigate("ColorList", JSON.parse(pickedColors));
       }
     });
-    getImageBitmap(image.uri, 50, 60, (err, bitmap) => {
+    getImageBitmap(image.uri, 100, 120, (err, bitmap) => {
       setImageBitmap(JSON.parse(bitmap));
     })
   }, [image])
@@ -75,8 +75,8 @@ export default function ImagePreviewScreen(props) {
           return color.map((pixel, j)=>{
             return <View style={{ 
               position: 'absolute',
-              left: j,
-              top: i,
+              left: i,
+              top: j,
               height: 1,
               backgroundColor: _toHexColor(imageBitmap[i][j]),
               width: 1,
