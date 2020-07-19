@@ -1,9 +1,22 @@
 import React from "react";
 import { Header } from "react-navigation";
-import { Text, View, StyleSheet, Image, Linking } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  Linking,
+  NativeModules
+} from "react-native";
 import Colors from "../constants/Colors";
-import { Entypo } from "@expo/vector-icons";
+import {
+  Entypo,
+  MaterialIcons,
+  MaterialCommunityIcons,
+  Foundation
+} from "@expo/vector-icons";
 import Touchable from "react-native-platform-touchable";
+import { logEvent } from "../libs/Helpers";
 export default function HamburgerMenu(props) {
   return (
     <View style={[styles.container]}>
@@ -18,33 +31,66 @@ export default function HamburgerMenu(props) {
         <Touchable
           style={[styles.menuItem]}
           onPress={() => {
-            Linking.openURL("https://github.com/croma-app/croma-react");
+            NativeModules.CromaModule.navigateToColorPicker(pickedColors => {
+              logEvent("pick_text_colors_from_camera", pickedColors.length);
+              props.navigation.navigate("ColorList", JSON.parse(pickedColors));
+            });
           }}
         >
           <View style={styles.menuItemView}>
             <View style={styles.menuIcon}>
-              <Entypo name="github" style={styles.icon} />
+              <Foundation name="text-color" style={styles.icon} />
             </View>
-            <Text style={styles.textAreaMenuItem}>View Source on Github</Text>
+            <Text style={styles.textAreaMenuItem}>
+              Read hex codes using camera
+            </Text>
           </View>
         </Touchable>
-
-        <Touchable
-          style={[styles.menuItem]}
-          onPress={() => {
-            Linking.openURL("market://details?id=app.croma");
-          }}
+        <MenuLink
+          link={"https://github.com/croma-app/croma-react/issues/new"}
+          icon={
+            <MaterialCommunityIcons name="lightbulb-on" style={styles.icon} />
+          }
         >
-          <View style={styles.menuItemView}>
-            <View style={styles.menuIcon}>
-              <Entypo name="github" style={styles.icon} />
-            </View>
-            <Text style={styles.textAreaMenuItem}>Like the App? Rate us</Text>
-          </View>
-        </Touchable>
+          Feedback or suggestions?
+        </MenuLink>
+        <MenuLink
+          link={"https://github.com/croma-app/croma-react"}
+          icon={<Entypo name="github" style={styles.icon} />}
+        >
+          View Source on Github
+        </MenuLink>
+        <MenuLink
+          link={"market://details?id=app.croma"}
+          icon={<MaterialIcons name="rate-review" style={styles.icon} />}
+        >
+          Like the App? Rate us
+        </MenuLink>
+        <MenuLink
+          link={"https://croma.app"}
+          icon={<MaterialCommunityIcons name="web" style={styles.icon} />}
+        >
+          https://croma.app
+        </MenuLink>
       </View>
       <View></View>
     </View>
+  );
+}
+
+function MenuLink(props) {
+  return (
+    <Touchable
+      style={[styles.menuItem]}
+      onPress={() => {
+        Linking.openURL(props.link);
+      }}
+    >
+      <View style={styles.menuItemView}>
+        <View style={styles.menuIcon}>{props.icon}</View>
+        <Text style={styles.textAreaMenuItem}>{props.children}</Text>
+      </View>
+    </Touchable>
   );
 }
 

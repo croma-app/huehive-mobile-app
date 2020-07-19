@@ -56,7 +56,7 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
 
     @ReactMethod
     public void getConfigString(String key, Promise promise) {
-        promise.resolve(firebaseRemoteConfig.getString(key));
+        promise.resolve(BuildConfig.DEBUG ? "true" : firebaseRemoteConfig.getString(key));
     }
 
     @ReactMethod

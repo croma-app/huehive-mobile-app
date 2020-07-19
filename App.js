@@ -21,7 +21,6 @@ export default function App(props) {
   const setMenu = applicationState.setMenu;
   const isSideMenuEnabled = applicationState.isSideMenuEnabled;
   const setSideMenuEnabled = applicationState.setSideMenuEnabled;
-  console.log("SetMenu", setMenu);
   useEffect(() => {
     (async () => {
       await applicationState.loadInitPaletteFromStore();

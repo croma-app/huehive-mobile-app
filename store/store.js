@@ -14,7 +14,12 @@ export const initState = {
 };
 
 const syncStateToStore = function(state) {
+  // TODO: We need to find a better way to do storage management. isMenuOpen should not be saved.
+  // Fix this in a generic way with better storage management.
+  const isMenuOpen = state.isMenuOpen;
+  delete state.isMenuOpen;
   Storage.setApplicationState(state);
+  state.isMenuOpen = isMenuOpen;
 };
 
 const sortPalette = palette =>

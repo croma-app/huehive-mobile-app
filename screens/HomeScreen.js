@@ -80,7 +80,7 @@ const HomeScreen = function(props) {
   useEffect(() => {
     if (isSideMenuEnabled) {
       props.navigation.setParams({
-        isSideMenuEnabled: true,
+        isSideMenuEnabled: isSideMenuEnabled,
         isMenuOpen: isMenuOpen,
         setMenu: setMenu
       });
@@ -121,7 +121,7 @@ const HomeScreen = function(props) {
   if (isLoading) {
     return <ActivityIndicator />;
   } else {
-    logEvent("startup_palatte_len", Object.keys(allPalettes).length);
+    logEvent("startup_palatte_len", Object.keys(allPalettes).length + "");
     return (
       <>
         <View
@@ -304,7 +304,6 @@ HomeScreen.navigationOptions = ({ navigation }) => {
       <Touchable
         style={{ marginLeft: 8 }}
         onPress={() => {
-          console.log("navigation", navigation);
           const isMenuOpen = navigation.getParam("isMenuOpen");
           const setMenu = navigation.getParam("setMenu");
           console.log("menu", isMenuOpen, setMenu);
