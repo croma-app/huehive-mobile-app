@@ -313,8 +313,8 @@ HomeScreen.navigationOptions = ({ navigation }) => {
         <Entypo name="menu" style={styles.icon} />
       </Touchable>
     );
+    result.headerTitleContainerStyle = { left: 32 };
   }
-  result.headerTitleContainerStyle = { left: 32 };
   return result;
 };
 
