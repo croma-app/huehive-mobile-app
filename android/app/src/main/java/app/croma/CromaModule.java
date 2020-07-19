@@ -122,9 +122,9 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
             long startTime = System.currentTimeMillis();
             Uri imageUri = Uri.parse(uri);
             Bitmap bitmap = MediaStore.Images.Media.getBitmap(reactContext.getContentResolver(), imageUri);
+            bitmap = rotateImageToCorrectOrientation(bitmap, imageUri.getPath());
             BitmapImage image = new BitmapImage(bitmap);
             image = image.getScaledInstance(width, height);
-            image = new BitmapImage(rotateImageToCorrectOrientation(image.getImage(), imageUri.getPath()));
             int imageMatrix[][] = new int[image.getWidth()][image.getHeight()];
             for (int i = 0;i < image.getWidth(); i++) {
                 for (int j = 0;j < image.getHeight(); j++) {
