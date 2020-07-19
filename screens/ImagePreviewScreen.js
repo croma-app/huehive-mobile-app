@@ -5,6 +5,7 @@ import {getImageBitmap} from "../libs/Helpers";
 import Color from "pigment/full";
 import Touchable from "react-native-platform-touchable";
 import { bitmap } from "jimp";
+import { HORIZONTAL_ALIGN_CENTER } from "jimp";
 
 
 const _toHexColor = function (intColor) {
@@ -23,27 +24,26 @@ const getRGB = function(intColor) {
   }
 }
 
-
+const dimensions = Dimensions.get('window');
 export default function ImagePreviewScreen(props) {
   const image = props.navigation.getParam('image');
-  const [pickedColors, setPickedColors] = React.useState(null);
-  const [pickedBgColor, setPickedBgColor] = React.useState([])
+  const [defaultPickedColors, setDefaultPickedColors] = React.useState(null);
+  const [pickedColors, setPickedColor] = React.useState([])
   const [imageBitmap, setImageBitmap] = React.useState(null)
   const img = React.useRef(null);
-  const dimensions = Dimensions.get('window');
-  const imageWidth = dimensions.width - 16
-  const imageHeight = dimensions.height - 100
+  const imageWidth = dimensions.width 
+  const imageHeight = dimensions.height - 95
   React.useEffect(() => {
     NativeModules.CromaModule.pickTopColorsFromImage(image.uri, (err, pickedColors) => {
       if (err) {
         ToastAndroid.show("Error while processing image: " + err, ToastAndroid.LONG);
       } else {
         console.log("Picked colors: ", pickedColors);
-        setPickedColors(JSON.parse(pickedColors));
+        setDefaultPickedColors(JSON.parse(pickedColors));
         //props.navigation.navigate("ColorList", JSON.parse(pickedColors));
       }
     });
-    getImageBitmap(image.uri, 100, 120, (err, bitmap) => {
+    getImageBitmap(image.uri, imageWidth, imageHeight, (err, bitmap) => {
       setImageBitmap(JSON.parse(bitmap));
     })
   }, [image])
@@ -52,14 +52,14 @@ export default function ImagePreviewScreen(props) {
     const x = parseInt(e.nativeEvent.locationX);
     const y = parseInt(e.nativeEvent.locationY);
     const hex = _toHexColor(imageBitmap[x][y])
-    pickedBgColor.push([x, y, hex])
-    setPickedBgColor([...pickedBgColor]);
+    pickedColors.push([x, y, hex])
+    setPickedColor([...pickedColors]);
   };
 
   return (
-    <View style={styles.listview} showsVerticalScrollIndicator={false}>
-      {/* <Touchable onPress={onImageClick}>
-        {<Image
+    <ScrollView showsVerticalScrollIndicator={false}>
+      <Touchable onPress={onImageClick}>
+        <Image
           ref={img}
           style={{ width: imageWidth, height: imageHeight }}
           source={
@@ -68,9 +68,10 @@ export default function ImagePreviewScreen(props) {
             }
           }
         >
-        </Image> }
-      </Touchable> */}
-      {
+        </Image> 
+      </Touchable>
+      {/* {
+        // <-- code for check bitmap image --> 
         imageBitmap  && imageBitmap.map((color, i)=>{
           return color.map((pixel, j)=>{
             return <View style={{ 
@@ -85,16 +86,43 @@ export default function ImagePreviewScreen(props) {
             </View>
           }) 
         })
-      }
-{/*       
-      <CromaButton
-        onPress={() =>
-          props.navigation.navigate("ColorList", pickedColors)
-        }
-      >
-        {pickedColors && 'SAVE'}
-      </CromaButton> */}
-    </View>
+      } */}
+      {pickedColors.length > 0 && pickedColors.map((colorData)=> {
+        return <View style={{ 
+          position: 'absolute',
+          left: colorData[0],
+          top: colorData[1],
+          height: 30,
+          backgroundColor: colorData[2],
+          width: 30,
+          borderStyle: 'solid',
+          borderColor: '#fff',
+          borderRadius: 100,
+          borderWidth: 2
+        }} >
+
+        </View>
+      })}
+      <View style={styles.doneButton}>
+        <Touchable onPress={() =>{
+            defaultPickedColors.colors = uniqueColors([...defaultPickedColors.colors, 
+              ...pickedColors.map((colorData)=> ({color: colorData[2]}))
+            ]) 
+            props.navigation.navigate("ColorList", defaultPickedColors)
+          }
+        }>
+          <View style={styles.doneImage}>
+            <Image
+              source={require('../assets/images/done.png')}
+              style={{
+                height: 40,
+                width: 40
+              }}
+            />
+          </View>
+        </Touchable>
+      </View>
+    </ScrollView>
   );
 }
 function uniqueColors(colors) {
@@ -114,7 +142,18 @@ ImagePreviewScreen.navigationOptions = {
 };
 
 const styles = StyleSheet.create({
-  listview: {
-    margin: 8
+  doneButton: {
+    height: 95,
+    width: dimensions.width,
+    backgroundColor: '#222222',
+    padding: 20,
+    alignItems: "center"
+  },
+  doneImage: {
+    height: 55,
+    width: 55,
+    backgroundColor: '#00f5ab',
+    padding: 8,
+    borderRadius: 100,
   }
 });
