@@ -38,6 +38,7 @@ const HomeScreen = function(props) {
     isPro,
     isMenuOpen,
     setMenu,
+    isSideMenuEnabled,
     setPurchase
   } = React.useContext(Croma);
   const [pickImgloading, setPickImgLoading] = useState(false);
@@ -77,7 +78,13 @@ const HomeScreen = function(props) {
     }
   };
   useEffect(() => {
-    props.navigation.setParams({ isMenuOpen: isMenuOpen, setMenu: setMenu });
+    if (isSideMenuEnabled) {
+      props.navigation.setParams({
+        isSideMenuEnabled: true,
+        isMenuOpen: isMenuOpen,
+        setMenu: setMenu
+      });
+    }
     getPermissionAsync();
     if (Platform.OS === "android") {
       // Deep linking code
@@ -289,8 +296,11 @@ const HomeScreen = function(props) {
 export default HomeScreen;
 
 HomeScreen.navigationOptions = ({ navigation }) => {
-  return {
-    headerLeft: (
+  const result = {
+    title: "Croma"
+  };
+  if (navigation.getParam("isSideMenuEnabled")) {
+    result.headerLeft = (
       <Touchable
         style={{ marginLeft: 8 }}
         onPress={() => {
@@ -303,9 +313,9 @@ HomeScreen.navigationOptions = ({ navigation }) => {
       >
         <Entypo name="menu" style={styles.icon} />
       </Touchable>
-    ),
-    title: "Croma"
-  };
+    );
+  }
+  return result;
 };
 
 const styles = StyleSheet.create({

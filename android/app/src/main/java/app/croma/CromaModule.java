@@ -9,10 +9,12 @@ import android.provider.MediaStore;
 
 import com.facebook.react.bridge.ActivityEventListener;
 import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,16 +34,29 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
     private final ReactApplicationContext reactContext;
     private Callback callback;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private FirebaseRemoteConfig firebaseRemoteConfig;
     public CromaModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
         this.reactContext.addActivityEventListener(this);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(reactContext);
+        firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        if (BuildConfig.DEBUG) {
+            firebaseRemoteConfig.fetch(0); // it's async, Do we need this?
+            firebaseRemoteConfig.activate();
+        } else {
+            firebaseRemoteConfig.fetchAndActivate();
+        }
     }
 
     @Override
     public String getName() {
         return "CromaModule";
+    }
+
+    @ReactMethod
+    public void getConfigString(String key, Promise promise) {
+        promise.resolve(firebaseRemoteConfig.getString(key));
     }
 
     @ReactMethod

@@ -25,7 +25,21 @@ export default function HamburgerMenu(props) {
             <View style={styles.menuIcon}>
               <Entypo name="github" style={styles.icon} />
             </View>
-            <Text style={styles.textAreaMenuItem}>View Source on github</Text>
+            <Text style={styles.textAreaMenuItem}>View Source on Github</Text>
+          </View>
+        </Touchable>
+
+        <Touchable
+          style={[styles.menuItem]}
+          onPress={() => {
+            Linking.openURL("market://details?id=app.croma");
+          }}
+        >
+          <View style={styles.menuItemView}>
+            <View style={styles.menuIcon}>
+              <Entypo name="github" style={styles.icon} />
+            </View>
+            <Text style={styles.textAreaMenuItem}>Like the App? Rate us</Text>
           </View>
         </Touchable>
       </View>
