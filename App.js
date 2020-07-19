@@ -49,6 +49,34 @@ export default function App(props) {
       onChange={isOpen => setMenu(isOpen)}
     >
       <Croma.Provider value={applicationState}>
+        <ErrorBoundary>
+          <View style={[styles.container]}>
+            <StatusBar
+              barStyle="light-content"
+              // dark-content, light-content and default
+              hidden={false}
+              //To hide statusBar
+              backgroundColor={Colors.primaryDark}
+              //Background color of statusBar only works for Android
+              translucent={false}
+              //allowing light, but not detailed shapes
+              networkActivityIndicatorVisible={true}
+            />
+            <View
+              style={[
+                { flex: 1, backgroundColor: "transparent", maxWidth: 600 }
+              ]}
+              className={"navigation-workplace"}
+            >
+              <AppNavigator />
+            </View>
+          </View>
+        </ErrorBoundary>
+      </Croma.Provider>
+    </SideMenu>
+  ) : (
+    <Croma.Provider value={applicationState}>
+      <ErrorBoundary>
         <View style={[styles.container]}>
           <StatusBar
             barStyle="light-content"
@@ -68,29 +96,7 @@ export default function App(props) {
             <AppNavigator />
           </View>
         </View>
-      </Croma.Provider>
-    </SideMenu>
-  ) : (
-    <Croma.Provider value={applicationState}>
-      <View style={[styles.container]}>
-        <StatusBar
-          barStyle="light-content"
-          // dark-content, light-content and default
-          hidden={false}
-          //To hide statusBar
-          backgroundColor={Colors.primaryDark}
-          //Background color of statusBar only works for Android
-          translucent={false}
-          //allowing light, but not detailed shapes
-          networkActivityIndicatorVisible={true}
-        />
-        <View
-          style={[{ flex: 1, backgroundColor: "transparent", maxWidth: 600 }]}
-          className={"navigation-workplace"}
-        >
-          <AppNavigator />
-        </View>
-      </View>
+      </ErrorBoundary>
     </Croma.Provider>
   );
 }
