@@ -8,11 +8,18 @@ export const initState = {
   allPalettes: {},
   deletedPalettes: {},
   isLoading: false,
-  isPro: false
+  isPro: false,
+  isMenuOpen: false,
+  isSideMenuEnabled: false
 };
 
 const syncStateToStore = function(state) {
+  // TODO: We need to find a better way to do storage management. isMenuOpen should not be saved.
+  // Fix this in a generic way with better storage management.
+  const isMenuOpen = state.isMenuOpen;
+  delete state.isMenuOpen;
   Storage.setApplicationState(state);
+  state.isMenuOpen = isMenuOpen;
 };
 
 const sortPalette = palette =>
@@ -117,6 +124,17 @@ export default function applicationHook(initState) {
       return { ...state, isPro: true, purchaseDetails: details };
     });
   };
+  const setMenu = isMenuOpen => {
+    setState(state => {
+      return { ...state, isMenuOpen: isMenuOpen };
+    });
+  };
+
+  const setSideMenuEnabled = isSideMenuEnabled => {
+    setState(state => {
+      return { ...state, isSideMenuEnabled: isSideMenuEnabled };
+    });
+  };
 
   const addColorToPalette = (name, color) => {
     setState(state => {
@@ -206,7 +224,9 @@ export default function applicationHook(initState) {
     colorDeleteFromPalette,
     undoColorDeletion,
     addColorToPalette,
-    setPurchase
+    setPurchase,
+    setMenu,
+    setSideMenuEnabled
   });
 
   // Sync state to local storage

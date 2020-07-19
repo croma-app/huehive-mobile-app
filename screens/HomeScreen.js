@@ -18,6 +18,7 @@ import Colors from "../constants/Colors";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import ColorPicker from "../libs/ColorPicker";
+import Touchable from "react-native-platform-touchable";
 import Jimp from "jimp";
 import { Header } from "react-navigation";
 import EmptyView from "../components/EmptyView";
@@ -35,6 +36,9 @@ const HomeScreen = function(props) {
     deletedPalettes,
     undoDeletionByName,
     isPro,
+    isMenuOpen,
+    setMenu,
+    isSideMenuEnabled,
     setPurchase
   } = React.useContext(Croma);
   const [pickImgloading, setPickImgLoading] = useState(false);
@@ -74,6 +78,13 @@ const HomeScreen = function(props) {
     }
   };
   useEffect(() => {
+    if (isSideMenuEnabled) {
+      props.navigation.setParams({
+        isSideMenuEnabled: isSideMenuEnabled,
+        isMenuOpen: isMenuOpen,
+        setMenu: setMenu
+      });
+    }
     getPermissionAsync();
     if (Platform.OS === "android") {
       // Deep linking code
@@ -106,10 +117,11 @@ const HomeScreen = function(props) {
       });
     }
   }, []);
+
   if (isLoading) {
     return <ActivityIndicator />;
   } else {
-    logEvent("startup_palatte_len", Object.keys(allPalettes).length);
+    logEvent("startup_palatte_len", Object.keys(allPalettes).length + "");
     return (
       <>
         <View
@@ -283,8 +295,27 @@ const HomeScreen = function(props) {
 
 export default HomeScreen;
 
-HomeScreen.navigationOptions = {
-  title: "Croma"
+HomeScreen.navigationOptions = ({ navigation }) => {
+  const result = {
+    title: "Croma"
+  };
+  if (navigation.getParam("isSideMenuEnabled")) {
+    result.headerLeft = (
+      <Touchable
+        style={{ marginLeft: 8 }}
+        onPress={() => {
+          const isMenuOpen = navigation.getParam("isMenuOpen");
+          const setMenu = navigation.getParam("setMenu");
+          console.log("menu", isMenuOpen, setMenu);
+          setMenu(!isMenuOpen);
+        }}
+      >
+        <Entypo name="menu" style={styles.icon} />
+      </Touchable>
+    );
+    result.headerTitleContainerStyle = { left: 32 };
+  }
+  return result;
 };
 
 const styles = StyleSheet.create({
@@ -302,5 +333,6 @@ const styles = StyleSheet.create({
     transform: "scale(1) rotate(0deg) !important",
     right: Math.max((Dimensions.get("window").width - 600) / 2, 0),
     left: Math.max((Dimensions.get("window").width - 600) / 2, 0)
-  }
+  },
+  icon: { fontSize: 24, height: 24, color: "white" }
 });
