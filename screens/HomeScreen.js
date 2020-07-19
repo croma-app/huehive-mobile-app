@@ -314,6 +314,7 @@ HomeScreen.navigationOptions = ({ navigation }) => {
       </Touchable>
     );
   }
+  result.headerTitleContainerStyle = { left: 32 };
   return result;
 };
 
@@ -333,5 +334,5 @@ const styles = StyleSheet.create({
     right: Math.max((Dimensions.get("window").width - 600) / 2, 0),
     left: Math.max((Dimensions.get("window").width - 600) / 2, 0)
   },
-  icon: { fontSize: 25, height: 25, color: "white" }
+  icon: { fontSize: 24, height: 24, color: "white" }
 });
