@@ -1,11 +1,8 @@
 import React from "react";
 import { ScrollView, Image, View,  StyleSheet, NativeModules, Dimensions } from "react-native";
-import CromaButton from "../components/CromaButton";
 import {getImageBitmap} from "../libs/Helpers";
 import Color from "pigment/full";
 import Touchable from "react-native-platform-touchable";
-import { bitmap } from "jimp";
-import { HORIZONTAL_ALIGN_CENTER } from "jimp";
 
 
 const _toHexColor = function (intColor) {
@@ -31,8 +28,10 @@ export default function ImagePreviewScreen(props) {
   const [pickedColors, setPickedColor] = React.useState([])
   const [imageBitmap, setImageBitmap] = React.useState(null)
   const img = React.useRef(null);
-  const imageWidth = dimensions.width 
-  const imageHeight = dimensions.height - 95
+  //const imageWidth = dimensions.width 
+  //const imageHeight = dimensions.height - 95
+  const imageWidth = 20 
+  const imageHeight = 35
   React.useEffect(() => {
     NativeModules.CromaModule.pickTopColorsFromImage(image.uri, (err, pickedColors) => {
       if (err) {
@@ -45,6 +44,7 @@ export default function ImagePreviewScreen(props) {
     });
     getImageBitmap(image.uri, imageWidth, imageHeight, (err, bitmap) => {
       setImageBitmap(JSON.parse(bitmap));
+      console.error(JSON.parse(bitmap))
     })
   }, [image])
 
@@ -57,11 +57,11 @@ export default function ImagePreviewScreen(props) {
   };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <Touchable onPress={onImageClick}>
+    <View showsVerticalScrollIndicator={false}>
+      {/* <Touchable onPress={onImageClick}>
         <Image
           ref={img}
-          style={{ width: imageWidth, height: imageHeight }}
+          style={{ width: imageWidth, height: imageHeight, resizeMode: 'stretch' }}
           source={
             {
               uri: image.uri
@@ -69,8 +69,8 @@ export default function ImagePreviewScreen(props) {
           }
         >
         </Image> 
-      </Touchable>
-      {/* {
+      </Touchable> */}
+      {
         // <-- code for check bitmap image --> 
         imageBitmap  && imageBitmap.map((color, i)=>{
           return color.map((pixel, j)=>{
@@ -86,12 +86,12 @@ export default function ImagePreviewScreen(props) {
             </View>
           }) 
         })
-      } */}
+      }
       {pickedColors.length > 0 && pickedColors.map((colorData)=> {
         return <View style={{ 
           position: 'absolute',
-          left: colorData[0],
-          top: colorData[1],
+          left: colorData[0] -15,
+          top: colorData[1] - 15,
           height: 30,
           backgroundColor: colorData[2],
           width: 30,
@@ -103,7 +103,7 @@ export default function ImagePreviewScreen(props) {
 
         </View>
       })}
-      <View style={styles.doneButton}>
+      {/* <View style={styles.doneButton}>
         <Touchable onPress={() =>{
             defaultPickedColors.colors = uniqueColors([...defaultPickedColors.colors, 
               ...pickedColors.map((colorData)=> ({color: colorData[2]}))
@@ -121,8 +121,8 @@ export default function ImagePreviewScreen(props) {
             />
           </View>
         </Touchable>
-      </View>
-    </ScrollView>
+      </View> */}
+    </View>
   );
 }
 function uniqueColors(colors) {
