@@ -8,13 +8,14 @@ import MultiColorView from "./MultiColorView";
 import { FontAwesome } from "@expo/vector-icons";
 import Touchable from "react-native-platform-touchable";
 import { Croma } from "../store/store";
-
+import { logEvent } from "../libs/Helpers";
 export const PaletteCard = props => {
   const [shared, setShared] = React.useState(false);
   const { deletePaletteByName } = React.useContext(Croma);
   const [animationType, setAnimationType] = React.useState("fadeInLeftBig");
   const onShare = async () => {
     try {
+      logEvent("home_screen_palette_card_share", props.colors.length + "");
       const result = await Share.share({
         message: `Croma - Palette Manager\nColors:\n${props.colors
           .map(colorObj => colorObj.color)

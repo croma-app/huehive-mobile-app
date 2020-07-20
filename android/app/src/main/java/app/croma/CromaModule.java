@@ -2,6 +2,7 @@ package app.croma;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -59,6 +60,19 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
         promise.resolve(BuildConfig.DEBUG ? "true" : firebaseRemoteConfig.getString(key));
     }
 
+    @ReactMethod
+    public void getAppInstallTime(Promise promise) {
+        try {
+            long time = reactContext.getPackageManager()
+                    .getPackageInfo(reactContext.getPackageName(), 0)
+                    .firstInstallTime;
+
+            promise.resolve(time + "");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            promise.reject(e);
+        }
+    }
     @ReactMethod
     public void navigateToColorPicker(Callback callback) {
         this.callback = callback;

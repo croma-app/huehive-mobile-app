@@ -13,6 +13,7 @@ import applicationHook, { initState, Croma } from "./store/store";
 import ErrorBoundary from "./components/ErrorBoundary";
 import HamburgerMenu from "./components/HamburgerMenu";
 import SideMenu from "react-native-side-menu";
+import { logEvent } from "./libs/Helpers";
 
 export default function App(props) {
   const [isPalettesLoaded, setIsPalettesLoaded] = useState(false);
@@ -46,7 +47,10 @@ export default function App(props) {
     <SideMenu
       menu={<HamburgerMenu />}
       isOpen={isMenuOpen}
-      onChange={isOpen => setMenu(isOpen)}
+      onChange={isOpen => {
+        logEvent("app_hamburger_menu_open");
+        setMenu(isOpen);
+      }}
     >
       <Croma.Provider value={applicationState}>
         <ErrorBoundary>

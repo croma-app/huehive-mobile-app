@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Header } from "react-navigation";
 import {
   Text,
@@ -18,6 +18,13 @@ import {
 import Touchable from "react-native-platform-touchable";
 import { logEvent } from "../libs/Helpers";
 export default function HamburgerMenu(props) {
+  const [appInstallTime, setAppInstallTime] = useState(null);
+  useEffect(() => {
+    (async () => {
+      const appInstallTime = await NativeModules.CromaModule.getAppInstallTime();
+      setAppInstallTime(parseInt(appInstallTime, 10));
+    })();
+  });
   return (
     <View style={[styles.container]}>
       <View style={[styles.titleArea]}>
@@ -47,6 +54,7 @@ export default function HamburgerMenu(props) {
           </View>
         </Touchable>
         <MenuLink
+          id={"feedback"}
           link={"https://github.com/croma-app/croma-react/issues/new"}
           icon={
             <MaterialCommunityIcons name="lightbulb-on" style={styles.icon} />
@@ -55,18 +63,23 @@ export default function HamburgerMenu(props) {
           Feedback or suggestions?
         </MenuLink>
         <MenuLink
+          id={"github-repo"}
           link={"https://github.com/croma-app/croma-react"}
           icon={<Entypo name="github" style={styles.icon} />}
         >
           View Source on Github
         </MenuLink>
+        {hasRateUsPeriodExpired(appInstallTime) && (
+          <MenuLink
+            id={"rate-us"}
+            link={"market://details?id=app.croma"}
+            icon={<MaterialIcons name="rate-review" style={styles.icon} />}
+          >
+            Like the App? Rate us
+          </MenuLink>
+        )}
         <MenuLink
-          link={"market://details?id=app.croma"}
-          icon={<MaterialIcons name="rate-review" style={styles.icon} />}
-        >
-          Like the App? Rate us
-        </MenuLink>
-        <MenuLink
+          id={"web-link"}
           link={"https://croma.app"}
           icon={<MaterialCommunityIcons name="web" style={styles.icon} />}
         >
@@ -76,6 +89,14 @@ export default function HamburgerMenu(props) {
       <View></View>
     </View>
   );
+
+  function hasRateUsPeriodExpired(appInstallTime) {
+    if (appInstallTime == null) return false;
+    return appInstallTime + tenDaysDurationMillis() < new Date().getTime();
+  }
+  function tenDaysDurationMillis() {
+    return 10 * 24 * 60 * 60 * 1000;
+  }
 }
 
 function MenuLink(props) {
@@ -83,6 +104,7 @@ function MenuLink(props) {
     <Touchable
       style={[styles.menuItem]}
       onPress={() => {
+        logEvent("hamburger_menu_link_" + props.id);
         Linking.openURL(props.link);
       }}
     >
