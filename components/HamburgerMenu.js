@@ -17,6 +17,7 @@ import {
 } from "@expo/vector-icons";
 import Touchable from "react-native-platform-touchable";
 import { logEvent } from "../libs/Helpers";
+import { ScrollView } from "react-native-gesture-handler";
 export default function HamburgerMenu(props) {
   const [appInstallTime, setAppInstallTime] = useState(null);
   useEffect(() => {
@@ -34,59 +35,63 @@ export default function HamburgerMenu(props) {
         />
         <Text style={styles.title}>Croma - Save you colors</Text>
       </View>
-      <View style={styles.menu}>
-        <Touchable
-          style={[styles.menuItem]}
-          onPress={() => {
-            NativeModules.CromaModule.navigateToColorPicker(pickedColors => {
-              logEvent("pick_text_colors_from_camera", pickedColors.length);
-              props.navigation.navigate("ColorList", JSON.parse(pickedColors));
-            });
-          }}
-        >
-          <View style={styles.menuItemView}>
-            <View style={styles.menuIcon}>
-              <Foundation name="text-color" style={styles.icon} />
-            </View>
-            <Text style={styles.textAreaMenuItem}>
-              Read hex codes using camera
-            </Text>
-          </View>
-        </Touchable>
-        <MenuLink
-          id={"feedback"}
-          link={"https://github.com/croma-app/croma-react/issues/new"}
-          icon={
-            <MaterialCommunityIcons name="lightbulb-on" style={styles.icon} />
-          }
-        >
-          Feedback or suggestions?
-        </MenuLink>
-        <MenuLink
-          id={"github-repo"}
-          link={"https://github.com/croma-app/croma-react"}
-          icon={<Entypo name="github" style={styles.icon} />}
-        >
-          View Source on Github
-        </MenuLink>
-        {hasRateUsPeriodExpired(appInstallTime) && (
-          <MenuLink
-            id={"rate-us"}
-            link={"market://details?id=app.croma"}
-            icon={<MaterialIcons name="rate-review" style={styles.icon} />}
+      <ScrollView>
+        <View style={styles.menu}>
+          <Touchable
+            style={[styles.menuItem]}
+            onPress={() => {
+              NativeModules.CromaModule.navigateToColorPicker(pickedColors => {
+                logEvent("pick_text_colors_from_camera", pickedColors.length);
+                props.navigation.navigate(
+                  "ColorList",
+                  JSON.parse(pickedColors)
+                );
+              });
+            }}
           >
-            Like the App? Rate us
+            <View style={styles.menuItemView}>
+              <View style={styles.menuIcon}>
+                <Foundation name="text-color" style={styles.icon} />
+              </View>
+              <Text style={styles.textAreaMenuItem}>
+                Read hex codes using camera
+              </Text>
+            </View>
+          </Touchable>
+          <MenuLink
+            id={"feedback"}
+            link={"https://github.com/croma-app/croma-react/issues/new"}
+            icon={
+              <MaterialCommunityIcons name="lightbulb-on" style={styles.icon} />
+            }
+          >
+            Feedback or suggestions?
           </MenuLink>
-        )}
-        <MenuLink
-          id={"web-link"}
-          link={"https://croma.app"}
-          icon={<MaterialCommunityIcons name="web" style={styles.icon} />}
-        >
-          https://croma.app
-        </MenuLink>
-      </View>
-      <View></View>
+          <MenuLink
+            id={"github-repo"}
+            link={"https://github.com/croma-app/croma-react"}
+            icon={<Entypo name="github" style={styles.icon} />}
+          >
+            View Source on Github
+          </MenuLink>
+          {hasRateUsPeriodExpired(appInstallTime) && (
+            <MenuLink
+              id={"rate-us"}
+              link={"market://details?id=app.croma"}
+              icon={<MaterialIcons name="rate-review" style={styles.icon} />}
+            >
+              Like the App? Rate us
+            </MenuLink>
+          )}
+          <MenuLink
+            id={"web-link"}
+            link={"https://croma.app"}
+            icon={<MaterialCommunityIcons name="web" style={styles.icon} />}
+          >
+            https://croma.app
+          </MenuLink>
+        </View>
+      </ScrollView>
     </View>
   );
 
@@ -115,7 +120,8 @@ function MenuLink(props) {
     </Touchable>
   );
 }
-
+const menuHeight = 55;
+const padding = 10;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -125,18 +131,18 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.primary,
     flexDirection: "row",
     alignItems: "center",
-    padding: 12,
+    padding: padding,
     height: Header.HEIGHT
   },
   logo: {
     width: 48,
     height: 48,
-    padding: 12
+    padding: padding
   },
   title: {
     fontWeight: "800",
     textAlignVertical: "center",
-    padding: 12,
+    padding: padding,
     color: "white"
   },
   menu: {
@@ -147,7 +153,7 @@ const styles = StyleSheet.create({
     alignSelf: "stretch"
   },
   menuItem: {
-    height: 60
+    height: menuHeight
   },
   menuItemView: {
     flex: 1,
@@ -156,13 +162,13 @@ const styles = StyleSheet.create({
   textAreaMenuItem: {
     fontWeight: "800",
     textAlignVertical: "center",
-    padding: 12,
+    padding: padding,
     alignItems: "center"
   },
   menuIcon: {},
   icon: {
-    fontSize: 36,
-    padding: 12,
+    fontSize: menuHeight - 2 * padding,
+    padding: padding,
     color: "black"
   }
 });
