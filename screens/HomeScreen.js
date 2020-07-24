@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { PaletteCard } from "../components/PaletteCard";
 import { UndoDialog, DialogContainer } from "../components/CommanDialogs";
-import { Croma } from "../store/store";
+import { CromaContext } from "../store/store";
 import Colors from "../constants/Colors";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
@@ -27,6 +27,7 @@ import { Ionicons, Entypo } from "@expo/vector-icons";
 import InAppBilling from "react-native-billing";
 import ShareMenu from "../libs/ShareMenu";
 import { logEvent } from "../libs/Helpers";
+import { navigationObject } from "../store/store";
 
 const HomeScreen = function(props) {
   const { height, width } = Dimensions.get("window");
@@ -40,7 +41,7 @@ const HomeScreen = function(props) {
     setMenu,
     isSideMenuEnabled,
     setPurchase
-  } = React.useContext(Croma);
+  } = React.useContext(CromaContext);
   const [pickImgloading, setPickImgLoading] = useState(false);
   const pickImageResult = async base64 => {
     return await ImagePicker.launchImageLibraryAsync({
@@ -78,6 +79,10 @@ const HomeScreen = function(props) {
     }
   };
   useEffect(() => {
+    // setting navigation object global
+    if (!navigationObject.navigation) {
+      navigationObject.navigation = props.navigation;
+    }
     if (isSideMenuEnabled) {
       props.navigation.setParams({
         isSideMenuEnabled: isSideMenuEnabled,

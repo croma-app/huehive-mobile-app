@@ -18,7 +18,9 @@ import {
 import Touchable from "react-native-platform-touchable";
 import { logEvent } from "../libs/Helpers";
 import { ScrollView } from "react-native-gesture-handler";
+import { navigationObject } from "../store/store";
 export default function HamburgerMenu(props) {
+  const { setMenu } = props;
   const [appInstallTime, setAppInstallTime] = useState(null);
   useEffect(() => {
     (async () => {
@@ -42,7 +44,8 @@ export default function HamburgerMenu(props) {
             onPress={() => {
               NativeModules.CromaModule.navigateToColorPicker(pickedColors => {
                 logEvent("pick_text_colors_from_camera", pickedColors.length);
-                props.navigation.navigate(
+                setMenu(false);
+                navigationObject.navigation.navigate(
                   "ColorList",
                   JSON.parse(pickedColors)
                 );

@@ -240,4 +240,9 @@ export default function applicationHook(initState) {
   return state;
 }
 
-export const Croma = React.createContext();
+export const navigationObject = {
+  navigation: null
+};
+
+export const CromaContext = React.createContext();
+export const NavigationContext = React.createContext();

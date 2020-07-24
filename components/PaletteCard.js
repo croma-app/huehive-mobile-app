@@ -7,11 +7,11 @@ import { Share } from "react-native";
 import MultiColorView from "./MultiColorView";
 import { FontAwesome } from "@expo/vector-icons";
 import Touchable from "react-native-platform-touchable";
-import { Croma } from "../store/store";
+import { CromaContext } from "../store/store";
 import { logEvent } from "../libs/Helpers";
 export const PaletteCard = props => {
   const [shared, setShared] = React.useState(false);
-  const { deletePaletteByName } = React.useContext(Croma);
+  const { deletePaletteByName } = React.useContext(CromaContext);
   const [animationType, setAnimationType] = React.useState("fadeInLeftBig");
   const onShare = async () => {
     try {
