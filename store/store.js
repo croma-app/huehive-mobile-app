@@ -245,4 +245,3 @@ export const navigationObject = {
 };
 
 export const CromaContext = React.createContext();
-export const NavigationContext = React.createContext();
