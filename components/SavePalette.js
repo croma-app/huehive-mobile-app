@@ -4,7 +4,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { PalettePreviewCard } from "../components/PalettePreviewCard";
 import Colors from "../constants/Colors";
 import CromaButton from "../components/CromaButton";
-import { Croma } from "../store/store";
+import { CromaContext } from "../store/store";
 import { TextDialog } from "./CommanDialogs";
 
 export const SavePalette = props => {
@@ -14,7 +14,7 @@ export const SavePalette = props => {
   const [finalColors, setFinalColors] = useState([]);
   const [isUnlockProNotification, setIsUnlockProNotifiction] = useState(false);
   const [isPaletteNameExist, setIsPaletteNameExist] = React.useState(false);
-  const { addPalette, allPalettes, isPro } = React.useContext(Croma);
+  const { addPalette, allPalettes, isPro } = React.useContext(CromaContext);
 
   useEffect(() => {
     let colorsFromParams = props.navigation.getParam("colors");

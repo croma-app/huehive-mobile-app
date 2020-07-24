@@ -10,7 +10,7 @@ import {
   ToastAndroid
 } from "react-native";
 import { UndoDialog, DialogContainer } from "../components/CommanDialogs";
-import { Croma } from "../store/store";
+import { CromaContext } from "../store/store";
 import ActionButton from "react-native-action-button";
 import Colors from "../constants/Colors";
 import { Header } from "react-navigation";
@@ -24,7 +24,7 @@ export default function PaletteScreen(props) {
     colorDeleteFromPalette,
     undoColorDeletion,
     addColorToPalette
-  } = React.useContext(Croma);
+  } = React.useContext(CromaContext);
   const colors = allPalettes[paletteName].colors;
   const deletedColors = allPalettes[paletteName].deletedColors
     ? allPalettes[paletteName].deletedColors
