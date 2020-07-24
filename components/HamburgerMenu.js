@@ -12,8 +12,7 @@ import Colors from "../constants/Colors";
 import {
   Entypo,
   MaterialIcons,
-  MaterialCommunityIcons,
-  Foundation
+  MaterialCommunityIcons
 } from "@expo/vector-icons";
 import Touchable from "react-native-platform-touchable";
 import { logEvent } from "../libs/Helpers";
@@ -40,7 +39,7 @@ export default function HamburgerMenu(props) {
       <ScrollView>
         <View style={styles.menu}>
           <Touchable
-            style={[styles.menuItem]}
+            style={styles.menuItem}
             onPress={() => {
               NativeModules.CromaModule.navigateToColorPicker(pickedColors => {
                 logEvent("pick_text_colors_from_camera", pickedColors.length);
@@ -54,11 +53,12 @@ export default function HamburgerMenu(props) {
           >
             <View style={styles.menuItemView}>
               <View style={styles.menuIcon}>
-                <Foundation name="text-color" style={styles.icon} />
+                <MaterialCommunityIcons
+                  name="credit-card-scan"
+                  style={styles.icon}
+                />
               </View>
-              <Text style={styles.textAreaMenuItem}>
-                Read hex codes using camera
-              </Text>
+              <Text style={styles.textAreaMenuItem}>Scan color codes</Text>
             </View>
           </Touchable>
           <MenuLink
@@ -75,7 +75,7 @@ export default function HamburgerMenu(props) {
             link={"https://github.com/croma-app/croma-react"}
             icon={<Entypo name="github" style={styles.icon} />}
           >
-            View Source on Github
+            View source on Github
           </MenuLink>
           {hasRateUsPeriodExpired(appInstallTime) && (
             <MenuLink
@@ -123,7 +123,7 @@ function MenuLink(props) {
     </Touchable>
   );
 }
-const menuHeight = 55;
+const menuHeight = 50;
 const padding = 10;
 const styles = StyleSheet.create({
   container: {
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     textAlignVertical: "center",
     padding: padding,
-    alignItems: "center"
+    alignItems: "flex-start"
   },
   menuIcon: {},
   icon: {

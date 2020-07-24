@@ -137,6 +137,7 @@ public class ColorPickerActivity extends Activity {
     @Override
     public void onPause() {
         super.onPause();
+        mPreview.onStop();
         if (orientation != null) {
             orientation.disable();
         }
@@ -147,7 +148,6 @@ public class ColorPickerActivity extends Activity {
     @Override
     public void onStop() {
         super.onStop();
-        mPreview.onStop();
     }
 
     // Safely way get an instance of the Camera object.

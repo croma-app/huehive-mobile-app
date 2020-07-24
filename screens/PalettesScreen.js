@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import Color from "pigment/full";
 import { PalettePreviewCard } from "../components/PalettePreviewCard";
 export default function PalettesScreen(props) {
