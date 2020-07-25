@@ -12,7 +12,8 @@ import Colors from "../constants/Colors";
 import {
   Entypo,
   MaterialIcons,
-  MaterialCommunityIcons
+  MaterialCommunityIcons,
+  FontAwesome5
 } from "@expo/vector-icons";
 import Touchable from "react-native-platform-touchable";
 import { logEvent } from "../libs/Helpers";
@@ -42,7 +43,10 @@ export default function HamburgerMenu(props) {
             style={styles.menuItem}
             onPress={() => {
               NativeModules.CromaModule.navigateToColorPicker(pickedColors => {
-                logEvent("pick_text_colors_from_camera", pickedColors.length);
+                logEvent(
+                  "hamburger_menu_pick_text_colors",
+                  pickedColors.length
+                );
                 setMenu(false);
                 navigationObject.navigation.navigate(
                   "ColorList",
@@ -93,6 +97,21 @@ export default function HamburgerMenu(props) {
           >
             https://croma.app
           </MenuLink>
+          <Touchable
+            style={styles.menuItem}
+            onPress={() => {
+              logEvent("hamburger_menu_pro_benefits");
+              setMenu(false);
+              navigationObject.navigation.navigate("ProVersion");
+            }}
+          >
+            <View style={styles.menuItemView}>
+              <View style={styles.menuIcon}>
+                <FontAwesome5 name="unlock" style={styles.icon} />
+              </View>
+              <Text style={styles.textAreaMenuItem}>Pro benefites</Text>
+            </View>
+          </Touchable>
         </View>
       </ScrollView>
     </View>

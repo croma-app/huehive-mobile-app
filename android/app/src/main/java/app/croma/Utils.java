@@ -4,13 +4,15 @@ package app.croma;
 import android.content.Context;
 import android.content.pm.PackageManager;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 public class Utils {
-
+    public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     // Format and encode the string
     public static String getEncodedString(String text) {
         String regex = "((#([0-9a-f]{6}))|(#([0-9a-f]{3})))|(((rgba?)|(cmyk)|(lab))([\\s+]?\\([\\s+]?(\\d+)[\\s+]?,[\\s+]?(\\d+)[\\s+]?,[\\s+]?(\\d+)[\\s+]?[)]))|((l[\\*]?a[\\*]?b[\\*]?)([\\s+]?\\([\\s+]?(\\d+)[\\s+]?,[\\s+]?[-]?[\\s+]?(\\d+)[\\s+]?,[\\s+]?[-]?[\\s+]?(\\d+)[\\s+]?[)]))|(((hsva?)|(hsba?)|(hsla?))([\\s+]?\\([\\s+]?(\\d+)[\\s+]?,[\\s+]?(\\d+)[%]?[\\s+]?,[\\s+]?(\\d+)[%]?[\\s+]?[)]))";
@@ -49,10 +51,14 @@ public class Utils {
         }
     }
 
-    public static String makePaletteUrl(String query) {
-        return "#/palette/show?palette=" + query;
+    public static boolean isLong(String data) {
+        try {
+            Long.parseLong(data);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
-
 
 
 }
