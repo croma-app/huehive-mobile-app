@@ -81,6 +81,15 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
         context.startActivityForResult(intent, PICK_COLORS, new Bundle());
     }
 
+    @ReactMethod
+    public void navigateToImageColorPicker(String uri, Callback callback) {
+        this.callback = callback;
+        ReactApplicationContext context = getReactApplicationContext();
+        Intent intent = new Intent(context, ImageColorPickerActivity.class);
+        intent.putExtra("uri", uri);
+        context.startActivityForResult(intent, PICK_COLORS, new Bundle());
+    }
+
     @Override
     public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
         if (data != null && requestCode == PICK_COLORS) {

@@ -18,7 +18,15 @@ import Touchable from "react-native-platform-touchable";
 import { logEvent } from "../libs/Helpers";
 import { ScrollView } from "react-native-gesture-handler";
 import { navigationObject } from "../store/store";
+import * as ImagePicker from "expo-image-picker";
 export default function HamburgerMenu(props) {
+  const pickImageResult = async base64 => {
+    return await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      quality: 1,
+      base64: base64
+    });
+  };
   const { setMenu } = props;
   const [appInstallTime, setAppInstallTime] = useState(null);
   useEffect(() => {
@@ -93,6 +101,29 @@ export default function HamburgerMenu(props) {
           >
             https://croma.app
           </MenuLink>
+          <Touchable
+            style={styles.menuItem}
+            onPress={async () => {
+              const imageResult = await pickImageResult();
+              NativeModules.CromaModule.navigateToImageColorPicker(
+                imageResult.uri,
+                pickedColors => {
+                  setMenu(false);
+                  navigationObject.navigation.navigate(
+                    "ColorList",
+                    JSON.parse(pickedColors)
+                  );
+                }
+              );
+            }}
+          >
+            <View style={styles.menuItemView}>
+              <View style={styles.menuIcon}>
+                <MaterialCommunityIcons name="image" style={styles.icon} />
+              </View>
+              <Text style={styles.textAreaMenuItem}>From image</Text>
+            </View>
+          </Touchable>
         </View>
       </ScrollView>
     </View>
