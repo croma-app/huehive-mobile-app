@@ -39,3 +39,23 @@ Ref: https://reactnative.dev/docs/signed-apk-android
 Bundle
 
 `./bundle-android.sh`
+
+### Hooks
+
+https://pre-commit.com/
+
+### Code styling
+
+https://github.com/google/google-java-format
+
+https://github.com/sherter/google-java-format-gradle-plugin
+
+https://github.com/typicode/husky
+
+Fix java files
+
+```
+
+./gradlew goJF
+
+```
