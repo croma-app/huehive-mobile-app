@@ -117,21 +117,13 @@ public class ColorPickerActivity extends Activity {
           if (mPreview.getColors().size() != 0) {
             Set<Integer> set = mPreview.getColors();
             Intent intent = new Intent();
-            ArrayList<Integer> al = new ArrayList<>(set.size());
-
-            for (int c : set) {
-              al.add(c);
-            }
-
-            intent.putIntegerArrayListExtra("colors", al);
+            intent.putIntegerArrayListExtra("colors", new ArrayList<>(set));
             setResult(RESULT_OK, intent);
             finish();
           } else {
             AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
             anim.setDuration(ColorPickerActivity.NO_COLOR_HELP_TIMEOUT);
-
             anim.setRepeatCount(1);
-
             anim.setRepeatMode(Animation.REVERSE);
             anim.setAnimationListener(helpAnimator);
             noColorHelp.startAnimation(anim);
