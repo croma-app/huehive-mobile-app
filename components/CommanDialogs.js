@@ -15,7 +15,7 @@ export const DialogContainer = props => (
 
 export const UndoDialog = props => {
   /*
-    Todo - need to add deletion based on type 
+    Todo - need to add deletion based on type
   */
   const { name, undoDeletionByName } = props;
   return (
