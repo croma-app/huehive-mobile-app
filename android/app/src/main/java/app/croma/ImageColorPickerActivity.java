@@ -6,11 +6,9 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -32,7 +30,8 @@ public class ImageColorPickerActivity extends AppCompatActivity {
     ImageButton doneButton = findViewById(R.id.done_button);
     final Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
     RelativeLayout imageDisplayArea = this.findViewById(R.id.image_display_area);
-    imageView.setOnTouchListener((v, event) -> {
+    imageView.setOnTouchListener(
+        (v, event) -> {
           int left = v.getLeft();
           int top = v.getTop();
           int x = (int) event.getX();
