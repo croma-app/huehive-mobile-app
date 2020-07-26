@@ -24,20 +24,5 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="96dp"
-        android:gravity="center"
-        android:id="@+id/button_view"
-        android:background="@color/navigation">
-
-        <ImageButton
-            android:id="@+id/done_button"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:background="@drawable/done_button"
-            android:src="@mipmap/done" />
-
-    </RelativeLayout>
+    <include layout="@layout/navigation_area" />
 </LinearLayout>

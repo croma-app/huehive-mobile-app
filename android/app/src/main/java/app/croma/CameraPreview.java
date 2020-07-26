@@ -1,5 +1,6 @@
 package app.croma;
 
+import static app.croma.DrawTouchDot.getColorView;
 import static app.croma.FirebaseAnalyticsConstants.COLOR_PICKER_TEXT_RECOGNITION_COLORS;
 import static app.croma.FirebaseAnalyticsConstants.COLOR_PICKER_TOUCH_TO_GET_COLOR;
 import static app.croma.FirebaseAnalyticsConstants.RECOGNIZED_COLORS_PARAMS;
@@ -189,20 +190,6 @@ public class CameraPreview extends SurfaceView
                   Toast.makeText(getContext(), "Failed:" + e.getMessage(), Toast.LENGTH_LONG)
                       .show();
                 });
-  }
-
-  private View getColorView(Context ct, int x, int y, int color) {
-    int radius = (int) (16 * getResources().getDisplayMetrics().density + 0.5f);
-    RelativeLayout.LayoutParams params;
-    params = new RelativeLayout.LayoutParams(radius * 2, radius * 2);
-    params.leftMargin = x - radius;
-    params.topMargin = y - radius;
-    RelativeLayout r = new RelativeLayout(ct);
-    r.setLayoutParams(params);
-    DrawTouchDot dc = new DrawTouchDot(ct, color, radius);
-    r.addView(dc);
-    r.setOnTouchListener((view, motionEvent) -> false);
-    return r;
   }
 
   private View getColorTextView(Context ct, int left, int top, int w, int h, List<String> colors) {
