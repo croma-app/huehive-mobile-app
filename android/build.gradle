@@ -19,7 +19,12 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
-
+plugins {
+    id 'com.github.sherter.google-java-format' version '0.8'
+}
+googleJavaFormat {
+    toolVersion = '1.7'
+}
 allprojects {
     repositories {
         mavenLocal()
@@ -41,3 +46,4 @@ task wrapper(type: Wrapper) {
     gradleVersion = '4.7'
     distributionUrl = distributionUrl.replace("bin", "all")
 }
+

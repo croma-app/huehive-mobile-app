@@ -88,5 +88,4 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <uses-permission android:name="com.android.vending.BILLING" />
-
 </manifest>
