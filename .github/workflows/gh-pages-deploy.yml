@@ -34,7 +34,7 @@ jobs:
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
-        CLEAN: true, 
+        CLEAN: true,
         SSH: true,
         BRANCH: gh-pages
         FOLDER: web-build

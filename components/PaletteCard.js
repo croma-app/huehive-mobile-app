@@ -20,7 +20,7 @@ export const PaletteCard = props => {
         message: `Croma - Palette Manager\nColors:\n${props.colors
           .map(colorObj => colorObj.color)
           .join("\n")}
-      
+
           https://croma.app/#/Main/SavePalette?name=${encodeURIComponent(
             props.name
           )}&colors=${encodeURIComponent(JSON.stringify(props.colors))}`
@@ -47,7 +47,7 @@ export const PaletteCard = props => {
       `Croma - Palette Manager\nColors:\n${props.colors
         .map(colorObj => colorObj.color)
         .join("\n")}
-      
+
       https://croma.app/#/Main/SavePalette?name=${encodeURIComponent(
         props.name
       )}&colors=${encodeURIComponent(JSON.stringify(props.colors))}`
