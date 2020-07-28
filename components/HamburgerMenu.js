@@ -12,13 +12,22 @@ import Colors from "../constants/Colors";
 import {
   Entypo,
   MaterialIcons,
-  MaterialCommunityIcons
+  MaterialCommunityIcons,
+  Ionicons
 } from "@expo/vector-icons";
 import Touchable from "react-native-platform-touchable";
 import { logEvent } from "../libs/Helpers";
 import { ScrollView } from "react-native-gesture-handler";
 import { navigationObject } from "../store/store";
+import * as ImagePicker from "expo-image-picker";
 export default function HamburgerMenu(props) {
+  const pickImageResult = async base64 => {
+    return await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      quality: 1,
+      base64: base64
+    });
+  };
   const { setMenu } = props;
   const [appInstallTime, setAppInstallTime] = useState(null);
   useEffect(() => {
@@ -41,8 +50,51 @@ export default function HamburgerMenu(props) {
           <Touchable
             style={styles.menuItem}
             onPress={() => {
+              logEvent("hm_create_new_palette");
+              setMenu(false);
+              navigationObject.navigation.navigate("AddPaletteManually");
+            }}
+          >
+            <View style={styles.menuItemView}>
+              <View style={styles.menuIcon}>
+                <Ionicons name="md-color-filter" style={styles.icon} />
+              </View>
+              <Text style={styles.textAreaMenuItem}>Create new palette</Text>
+            </View>
+          </Touchable>
+          <Touchable
+            style={styles.menuItem}
+            onPress={async () => {
+              const imageResult = await pickImageResult();
+              NativeModules.CromaModule.navigateToImageColorPicker(
+                imageResult.uri,
+                pickedColors => {
+                  setMenu(false);
+                  navigationObject.navigation.navigate(
+                    "ColorList",
+                    JSON.parse(pickedColors)
+                  );
+                }
+              );
+            }}
+          >
+            <View style={styles.menuItemView}>
+              <View style={styles.menuIcon}>
+                <MaterialCommunityIcons name="image" style={styles.icon} />
+              </View>
+              <Text style={styles.textAreaMenuItem}>
+                Pick colors from an image
+              </Text>
+            </View>
+          </Touchable>
+          <Touchable
+            style={styles.menuItem}
+            onPress={() => {
               NativeModules.CromaModule.navigateToColorPicker(pickedColors => {
-                logEvent("pick_text_colors_from_camera", pickedColors.length);
+                logEvent(
+                  "hm_pick_text_colors_from_camera",
+                  pickedColors.length
+                );
                 setMenu(false);
                 navigationObject.navigation.navigate(
                   "ColorList",
@@ -100,10 +152,10 @@ export default function HamburgerMenu(props) {
 
   function hasRateUsPeriodExpired(appInstallTime) {
     if (appInstallTime == null) return false;
-    return appInstallTime + tenDaysDurationMillis() < new Date().getTime();
+    return appInstallTime + fiveDaysDurationMillis() < new Date().getTime();
   }
-  function tenDaysDurationMillis() {
-    return 10 * 24 * 60 * 60 * 1000;
+  function fiveDaysDurationMillis() {
+    return 5 * 24 * 60 * 60 * 1000;
   }
 }
 
@@ -112,7 +164,7 @@ function MenuLink(props) {
     <Touchable
       style={[styles.menuItem]}
       onPress={() => {
-        logEvent("hamburger_menu_link_" + props.id);
+        logEvent("hm_link_" + props.id);
         Linking.openURL(props.link);
       }}
     >
