@@ -46,8 +46,16 @@ public class ImageColorPickerActivity extends AppCompatActivity {
           firebaseAnalytics.logEvent(IMAGE_COLOR_PICKER_DONE, new Bundle());
           finish();
         });
-    final Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+    final Bitmap bitmap[] = {null};
     RelativeLayout imageDisplayArea = this.findViewById(R.id.image_display_area);
+    imageView.post(
+        () ->
+            bitmap[0] =
+                Bitmap.createScaledBitmap(
+                    ((BitmapDrawable) imageView.getDrawable()).getBitmap(),
+                    imageView.getWidth(),
+                    imageView.getHeight(),
+                    true));
     imageView.setOnTouchListener(
         (v, event) -> {
           if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -55,7 +63,7 @@ public class ImageColorPickerActivity extends AppCompatActivity {
             int top = v.getTop();
             int x = (int) event.getX();
             int y = (int) event.getY();
-            int pixel = bitmap.getPixel(x, y);
+            int pixel = bitmap[0].getPixel(x, y);
             colors.add(pixel);
             View vc = getColorView(ImageColorPickerActivity.this, x + left, y + top, pixel);
             imageDisplayArea.addView(vc);
