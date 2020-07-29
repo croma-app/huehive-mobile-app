@@ -20,13 +20,13 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.numixproject.colorextractor.image.Color;
 import org.numixproject.colorextractor.image.Image;
 import org.numixproject.colorextractor.image.KMeansColorPicker;
-import java.util.Map;
 
 public class CromaModule extends ReactContextBaseJavaModule implements ActivityEventListener {
 
