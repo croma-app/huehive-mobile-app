@@ -28,6 +28,7 @@ import InAppBilling from "react-native-billing";
 import ShareMenu from "../libs/ShareMenu";
 import { logEvent } from "../libs/Helpers";
 import { navigationObject } from "../store/store";
+import { purchase } from "../libs/Helpers";
 
 const HomeScreen = function(props) {
   const { height, width } = Dimensions.get("window");
@@ -66,18 +67,10 @@ const HomeScreen = function(props) {
       }
     }
   };
-  const purchase = async function() {
-    try {
-      await InAppBilling.open();
-      const details = await InAppBilling.purchase("croma_pro");
-      ToastAndroid.show("Congrats, You are now a pro user!", ToastAndroid.LONG);
-      setPurchase(details);
-    } catch (err) {
-      ToastAndroid.show("Purchase unsucceessful " + err, ToastAndroid.LONG);
-    } finally {
-      await InAppBilling.close();
-    }
+  const purchasePro = () => {
+    purchase(setPurchase);
   };
+
   useEffect(() => {
     // setting navigation object global
     if (!navigationObject.navigation) {
@@ -287,9 +280,7 @@ const HomeScreen = function(props) {
             <ActionButton.Item
               buttonColor={Colors.primary}
               title="Unlock pro"
-              onPress={() => {
-                purchase();
-              }}
+              onPress={purchasePro}
             >
               <Ionicons name="md-unlock" style={styles.actionButtonIcon} />
             </ActionButton.Item>

@@ -14,10 +14,10 @@ function isObject(value) {
   return value && typeof value === "object" && value.constructor === Object;
 }
 
-const purchase = async function(setPurchase) {
+const purchase = async function(setPurchase, purchaseType = "croma_pro") {
   try {
     await InAppBilling.open();
-    const details = await InAppBilling.purchase("croma_pro");
+    const details = await InAppBilling.purchase(purchaseType);
     ToastAndroid.show("Congrats, You are now a pro user!", ToastAndroid.LONG);
     setPurchase(details);
   } catch (err) {

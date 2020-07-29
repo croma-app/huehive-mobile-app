@@ -2,8 +2,17 @@ import React from "react";
 import { ScrollView, StyleSheet, Text } from "react-native";
 import { View } from "react-native-animatable";
 import CromaButton from "../components/CromaButton";
+import { CromaContext } from "../store/store";
+import { purchase } from "../libs/Helpers";
 
 export default function PalettesScreen(props) {
+  const { setPurchase } = React.useContext(CromaContext);
+  const purchaseDevelopment = () => {
+    purchase(setPurchase, "support_development");
+  };
+  const purchasePro = () => {
+    purchase(setPurchase);
+  };
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View>
@@ -14,7 +23,7 @@ export default function PalettesScreen(props) {
         <CromaButton
           style={{ backgroundColor: "#ff5c59" }}
           textStyle={{ color: "#fff" }}
-          onPress={() => props.navigation.navigate("SavePalette", { colors })}
+          onPress={purchaseDevelopment}
         >
           Unlock pro
         </CromaButton>
@@ -22,11 +31,7 @@ export default function PalettesScreen(props) {
           2. Support the development efferts to keep the app awesome and simple
           without any ads and annoying notifications 😊
         </Text>
-        <CromaButton
-          onPress={() => props.navigation.navigate("SavePalette", { colors })}
-        >
-          Support development
-        </CromaButton>
+        <CromaButton onPress={purchasePro}>Support development</CromaButton>
       </View>
     </ScrollView>
   );
