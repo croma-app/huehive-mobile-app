@@ -6,7 +6,7 @@ import { CromaContext } from "../store/store";
 import { purchase } from "../libs/Helpers";
 
 export default function PalettesScreen(props) {
-  const { setPurchase } = React.useContext(CromaContext);
+  const { isPro, setPurchase } = React.useContext(CromaContext);
   const purchaseDevelopment = () => {
     purchase(setPurchase, "support_development");
   };
@@ -23,15 +23,17 @@ export default function PalettesScreen(props) {
         <CromaButton
           style={{ backgroundColor: "#ff5c59" }}
           textStyle={{ color: "#fff" }}
-          onPress={purchaseDevelopment}
+          onPress={purchasePro}
         >
-          Unlock pro
+          {isPro ? "You are a pro user! Enjoy the app" : "Unlock pro"}
         </CromaButton>
         <Text style={styles.line}>
           2. Support the development efferts to keep the app awesome and simple
           without any ads and annoying notifications 😊
         </Text>
-        <CromaButton onPress={purchasePro}>Support development</CromaButton>
+        <CromaButton onPress={purchaseDevelopment}>
+          Support development
+        </CromaButton>
       </View>
     </ScrollView>
   );
@@ -45,7 +47,7 @@ const styles = StyleSheet.create({
   title: {
     paddingTop: 12,
     paddingBottom: 12,
-    fontSize: 15
+    fontSize: 18
   },
   line: {
     paddingBottom: 4
