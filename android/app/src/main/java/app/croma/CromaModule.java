@@ -142,6 +142,26 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
     mFirebaseAnalytics.logEvent(eventId, params);
   }
 
+
+  private void putData(Bundle bundle, String key, Object data) {
+      if (data instanceof Integer) {
+          bundle.putInt(key,( Integer) data);
+      } if (data instanceof Long) {
+          bundle.putLong(key, (Long) data);
+      } else {
+          bundle.putString(key, data.toString());
+      }
+  }
+
+
+  public Map<String, Object> parseBundleMap(String data) {
+      try {
+          return Utils.OBJECT_MAPPER.readValue(data, Map.class);
+      } catch (JsonProcessingException e) {
+          return null;
+      }
+  }
+
   private static class BitmapImage extends Image {
     private Bitmap image;
 
@@ -151,86 +171,14 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
     }
 
     @Override
-    public void onNewIntent(Intent intent) {
-
+    public Color getColor(int x, int y) {
+      return new Color(image.getPixel(x, y));
     }
 
-
-    @ReactMethod
-    public void pickTopColorsFromImage(String uri, Callback callback) {
-        try {
-            long startTime = System.currentTimeMillis();
-            Uri imageUri = Uri.parse(uri);
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(reactContext.getContentResolver(), imageUri);
-            Image image = new BitmapImage(bitmap);
-            KMeansColorPicker k = new KMeansColorPicker();
-            List<Color> colors = k.getUsefulColors(image, 6);
-            List<Integer> intColors = new ArrayList<>();
-            for (Color color : colors) {
-                intColors.add(color.getRGB());
-            }
-            Bundle params = new Bundle();
-            params.putLong(TIME_TAKEN_TO_PROCESS_MS, (System.currentTimeMillis() - startTime));
-            mFirebaseAnalytics.logEvent(FirebaseAnalyticsConstants.PICK_COLORS_FROM_IMAGE, params);
-            callback.invoke(null, mapToJsonString(intColors));
-        } catch (Exception e) {
-            e.printStackTrace();
-            callback.invoke(e);
-        }
-    }
-    @ReactMethod
-    public void logEvent(String eventId, String data) {
-        //https://firebase.google.com/docs/analytics/events?platform=android
-        Map<String, Object> bundleMap = parseBundleMap(data);
-        Bundle params = new Bundle();
-        if (bundleMap == null) {
-            putData(params, "data", data);
-        } else {
-            for (Map.Entry<String, Object> entry : bundleMap.entrySet()) {
-                String key = entry.getKey();
-                Object value = entry.getValue();
-                putData(params, key, value);
-            }
-        }
-        mFirebaseAnalytics.logEvent(eventId, params);
-    }
-
-    private void putData(Bundle bundle, String key, Object data) {
-        if (data instanceof Integer) {
-            bundle.putInt(key,( Integer) data);
-        } if (data instanceof Long) {
-            bundle.putLong(key, (Long) data);
-        } else {
-            bundle.putString(key, data.toString());
-        }
-    }
-
-
-    public Map<String, Object> parseBundleMap(String data) {
-        try {
-            return Utils.OBJECT_MAPPER.readValue(data, Map.class);
-        } catch (JsonProcessingException e) {
-            return null;
-        }
-    }
-
-    private static class BitmapImage extends Image {
-        private Bitmap image;
-
-        public BitmapImage(Bitmap b) {
-            super(b.getWidth(), b.getHeight());
-            this.image = b;
-        }
-        @Override
-        public Color getColor(int x, int y) {
-            return new Color(image.getPixel(x, y));
-        }
-
-        @Override
-        public BitmapImage getScaledInstance(int width, int height) {
-            Bitmap resized = Bitmap.createScaledBitmap(this.image, width, height, true);
-            return new BitmapImage(resized);
-        }
+    @Override
+    public BitmapImage getScaledInstance(int width, int height) {
+      Bitmap resized = Bitmap.createScaledBitmap(this.image, width, height, true);
+      return new BitmapImage(resized);
     }
   }
 }
