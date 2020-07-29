@@ -32,7 +32,7 @@ export default function PalettesScreen(props) {
           without any ads and annoying notifications 😊
         </Text>
         <CromaButton onPress={purchaseDevelopment}>
-          Support development
+          Support app development
         </CromaButton>
       </View>
     </ScrollView>
@@ -47,9 +47,11 @@ const styles = StyleSheet.create({
   title: {
     paddingTop: 12,
     paddingBottom: 12,
-    fontSize: 18
+    fontSize: 20,
+    fontWeight: "bold"
   },
   line: {
-    paddingBottom: 4
+    paddingBottom: 4,
+    fontSize: 15
   }
 });
