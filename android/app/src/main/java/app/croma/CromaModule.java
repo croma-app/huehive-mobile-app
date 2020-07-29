@@ -144,10 +144,13 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
   @ReactMethod
   public void logEvent(String eventId, String data) {
     // https://firebase.google.com/docs/analytics/events?platform=android
-    System.out.println("EventId: " + eventId + "," + data);
-    Bundle params = new Bundle();
-    params.putString("data", data);
-    mFirebaseAnalytics.logEvent(eventId, params);
+    if (BuildConfig.DEBUG) {
+      System.out.println("Skipping logging event for debug release. EventId: " + eventId + "," + data);
+    } else {
+      Bundle params = new Bundle();
+      params.putString("data", data);
+      mFirebaseAnalytics.logEvent(eventId, params);
+    }
   }
 
   private static class BitmapImage extends Image {

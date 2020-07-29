@@ -95,6 +95,7 @@ const HomeScreen = function(props) {
       // Deep linking code
       // https://medium.com/react-native-training/deep-linking-your-react-native-app-d87c39a1ad5e
       Linking.getInitialURL().then(url => {
+        logEvent("deep_linking_open_link");
         if (url) {
           const result = {};
           url
@@ -114,6 +115,7 @@ const HomeScreen = function(props) {
       ShareMenu.getSharedText(text => {
         if (text && typeof text === "string") {
           const colors = Color.parse(text);
+          logEvent("get_shared_text", { length: colors.length });
           for (var i = 0, l = colors.length; i < l; i++) {
             colors[i] = { color: colors[i].tohex().toLowerCase() };
           }

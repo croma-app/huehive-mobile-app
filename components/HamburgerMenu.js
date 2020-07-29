@@ -127,7 +127,7 @@ export default function HamburgerMenu(props) {
             link={"https://github.com/croma-app/croma-react"}
             icon={<Entypo name="github" style={styles.icon} />}
           >
-            View source on Github
+            Contribute 👨‍💻
           </MenuLink>
           {hasRateUsPeriodExpired(appInstallTime) && (
             <MenuLink
