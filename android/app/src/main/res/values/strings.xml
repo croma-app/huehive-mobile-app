@@ -20,4 +20,6 @@
     <string name="picker_label">Pick colors</string>
     <string name="no_color_message">Tap on the screen to pick colors</string>
     <string name="share_label">Extract colors</string>
+
+    <string name="title_activity_image_color_picker">ImageColorPickerActivity</string>
 </resources>

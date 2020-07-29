@@ -102,6 +102,7 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
       colorsObjs.add(
           new JSONObject().put("color", String.format("#%06X", (0xFFFFFF & color)).toLowerCase()));
     }
+
     jsonObject.put("colors", new JSONArray(colorsObjs));
     return jsonObject.toString();
   }
@@ -131,6 +132,15 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
       e.printStackTrace();
       callback.invoke(e);
     }
+  }
+
+  @ReactMethod
+  public void navigateToImageColorPicker(String uri, Callback callback) {
+    this.callback = callback;
+    ReactApplicationContext context = getReactApplicationContext();
+    Intent intent = new Intent(context, ImageColorPickerActivity.class);
+    intent.putExtra("uri", uri);
+    context.startActivityForResult(intent, PICK_COLORS, new Bundle());
   }
 
   @ReactMethod

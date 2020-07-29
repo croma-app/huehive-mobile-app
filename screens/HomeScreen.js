@@ -253,16 +253,20 @@ const HomeScreen = function(props) {
           >
             <Ionicons name="md-color-palette" style={styles.actionButtonIcon} />
           </ActionButton.Item>
-          <ActionButton.Item
-            buttonColor="#1abc9c"
-            title="Add colors manually"
-            onPress={() => {
-              logEvent("add_colors_manually");
-              props.navigation.navigate("AddPaletteManually");
-            }}
-          >
-            <Ionicons name="md-color-filter" style={styles.actionButtonIcon} />
-          </ActionButton.Item>
+          {Platform.OS === "web" && (
+            <ActionButton.Item
+              buttonColor="#1abc9c"
+              title="Create new palette"
+              onPress={() => {
+                props.navigation.navigate("AddPaletteManually");
+              }}
+            >
+              <Ionicons
+                name="md-color-filter"
+                style={styles.actionButtonIcon}
+              />
+            </ActionButton.Item>
+          )}
           {Platform.OS === "web" && (
             <ActionButton.Item
               buttonColor={Colors.primary}
