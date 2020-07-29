@@ -166,7 +166,7 @@ const HomeScreen = function(props) {
         <ActionButton
           bgColor="rgba(68, 68, 68, 0.6)"
           hideShadow={Platform.OS === "web" ? true : false}
-          buttonColor={Colors.accent}
+          buttonColor={Colors.fabPrimary}
           offsetY={60}
           spacing={15}
           key="action-button-home"
