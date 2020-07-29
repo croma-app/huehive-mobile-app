@@ -142,24 +142,23 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
     mFirebaseAnalytics.logEvent(eventId, params);
   }
 
-
   private void putData(Bundle bundle, String key, Object data) {
-      if (data instanceof Integer) {
-          bundle.putInt(key,( Integer) data);
-      } if (data instanceof Long) {
-          bundle.putLong(key, (Long) data);
-      } else {
-          bundle.putString(key, data.toString());
-      }
+    if (data instanceof Integer) {
+      bundle.putInt(key, (Integer) data);
+    }
+    if (data instanceof Long) {
+      bundle.putLong(key, (Long) data);
+    } else {
+      bundle.putString(key, data.toString());
+    }
   }
 
-
   public Map<String, Object> parseBundleMap(String data) {
-      try {
-          return Utils.OBJECT_MAPPER.readValue(data, Map.class);
-      } catch (JsonProcessingException e) {
-          return null;
-      }
+    try {
+      return Utils.OBJECT_MAPPER.readValue(data, Map.class);
+    } catch (JsonProcessingException e) {
+      return null;
+    }
   }
 
   private static class BitmapImage extends Image {
