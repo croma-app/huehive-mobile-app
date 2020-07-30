@@ -146,11 +146,21 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
   @ReactMethod
   public void logEvent(String eventId, String data) {
     // https://firebase.google.com/docs/analytics/events?platform=android
-    if (BuildConfig.DEBUG) {
-      System.out.println("Skipping logging event for debug release. EventId: " + eventId + "," + data);
+    Map<String, Object> bundleMap = parseBundleMap(data);
+    Bundle params = new Bundle();
+    if (bundleMap == null) {
+      putData(params, "data", data);
     } else {
-      Bundle params = new Bundle();
-      params.putString("data", data);
+      for (Map.Entry<String, Object> entry : bundleMap.entrySet()) {
+        String key = entry.getKey();
+        Object value = entry.getValue();
+        putData(params, key, value);
+      }
+    }
+    if (BuildConfig.DEBUG) {
+      System.out.println(
+          "Skipping logging event for debug release. EventId: " + eventId + "," + params);
+    } else {
       mFirebaseAnalytics.logEvent(eventId, params);
     }
   }
