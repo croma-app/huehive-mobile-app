@@ -121,7 +121,7 @@ const HomeScreen = function(props) {
   if (isLoading) {
     return <ActivityIndicator />;
   } else {
-    logEvent("home_screen_palattes", {
+    logEvent("home_screen", {
       length: Object.keys(allPalettes).length
     });
     return (

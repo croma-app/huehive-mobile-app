@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, Text } from "react-native";
 import { View } from "react-native-animatable";
 import CromaButton from "../components/CromaButton";
 import { CromaContext } from "../store/store";
-import { purchase } from "../libs/Helpers";
+import { purchase, logEvent } from "../libs/Helpers";
 
 export default function PalettesScreen(props) {
   const { isPro, setPurchase } = React.useContext(CromaContext);
@@ -13,6 +13,7 @@ export default function PalettesScreen(props) {
   const purchasePro = () => {
     purchase(setPurchase);
   };
+  logEvent("pro_version_screen");
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View>

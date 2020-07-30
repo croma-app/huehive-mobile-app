@@ -15,6 +15,7 @@ import ActionButton from "react-native-action-button";
 import Colors from "../constants/Colors";
 import { Header } from "react-navigation";
 import EmptyView from "../components/EmptyView";
+import { logEvent } from "../libs/Helpers";
 export default function PaletteScreen(props) {
   const { height, width } = Dimensions.get("window");
   const paletteName = props.navigation.getParam("name");
@@ -33,6 +34,7 @@ export default function PaletteScreen(props) {
   const deleteColor = index => {
     colorDeleteFromPalette(props.navigation.getParam("name"), index);
   };
+  logEvent("palette_screen");
 
   return (
     <>
@@ -68,6 +70,7 @@ export default function PaletteScreen(props) {
           fixNativeFeedbackRadius={true}
           buttonColor={Colors.fabPrimary}
           onPress={() => {
+            logEvent("palette_screen_add_color");
             if (
               Platform.OS === "android" &&
               colors.length >= 4 &&
@@ -77,6 +80,7 @@ export default function PaletteScreen(props) {
                 "Unlock pro to add more than 4 colors!",
                 ToastAndroid.LONG
               );
+              props.navigation.navigate("ProVersion");
             } else {
               props.navigation.navigate("ColorPicker", {
                 onDone: color => {
