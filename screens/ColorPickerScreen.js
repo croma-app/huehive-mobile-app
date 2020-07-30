@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { ScrollView, View, StyleSheet } from "react-native";
 import CromaButton from "../components/CromaButton";
 import { CromaColorPicker as ColorPicker } from "croma-color-picker";
+import { logEvent } from "../libs/Helpers";
 export default function ColorPickerScreen(props) {
   const [color, setColor] = useState("#db0a5b");
+  logEvent("color_picker_screen");
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>

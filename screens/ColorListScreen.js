@@ -2,9 +2,11 @@ import React from "react";
 import { SingleColorView } from "../components/SingleColorView";
 import { ScrollView, StyleSheet } from "react-native";
 import CromaButton from "../components/CromaButton";
+import { logEvent } from "../libs/Helpers";
 
 export default function ColorListScreen(props) {
   const colors = uniqueColors(props.navigation.getParam("colors"));
+  logEvent("color_list_screen");
   return (
     <ScrollView style={styles.listview} showsVerticalScrollIndicator={false}>
       {colors.map(color => (
