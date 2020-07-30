@@ -15,10 +15,12 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -150,6 +152,25 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
       Bundle params = new Bundle();
       params.putString("data", data);
       mFirebaseAnalytics.logEvent(eventId, params);
+    }
+  }
+
+  private void putData(Bundle bundle, String key, Object data) {
+    if (data instanceof Integer) {
+      bundle.putInt(key, (Integer) data);
+    }
+    if (data instanceof Long) {
+      bundle.putLong(key, (Long) data);
+    } else {
+      bundle.putString(key, data.toString());
+    }
+  }
+
+  public Map<String, Object> parseBundleMap(String data) {
+    try {
+      return Utils.OBJECT_MAPPER.readValue(data, Map.class);
+    } catch (JsonProcessingException e) {
+      return null;
     }
   }
 
