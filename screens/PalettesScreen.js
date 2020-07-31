@@ -2,6 +2,7 @@ import React from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import Color from "pigment/full";
 import { PalettePreviewCard } from "../components/PalettePreviewCard";
+import { logEvent } from "../libs/Helpers";
 export default function PalettesScreen(props) {
   // Convert camelCase to sentence
   const parseCamelCase = text => {
@@ -32,6 +33,7 @@ export default function PalettesScreen(props) {
       );
     }
   }
+  logEvent("palettes_screen");
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {items}

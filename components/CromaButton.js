@@ -4,10 +4,10 @@ import Touchable from "react-native-platform-touchable";
 
 export default class CromaButton extends React.Component {
   render() {
-    const { style, onPress, children } = this.props;
+    const { style, onPress, children, textStyle } = this.props;
     return (
       <Touchable style={[styles.button, style]} onPress={onPress}>
-        <Text style={styles.text}> {children} </Text>
+        <Text style={[styles.text, textStyle]}> {children} </Text>
       </Touchable>
     );
   }

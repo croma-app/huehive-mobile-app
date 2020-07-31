@@ -2,11 +2,13 @@ package app.croma;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utils {
+  public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
   // Format and encode the string
   public static String getEncodedString(String text) {
@@ -39,6 +41,14 @@ public class Utils {
     return query;
   }
 
+  public static boolean isLong(String data) {
+    try {
+      Long.parseLong(data);
+      return true;
+    } catch (NumberFormatException e) {
+      return false;
+    }
+  }
   // Check if device has a camera
   public static boolean checkCameraHardware(Context context) {
     if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {

@@ -92,3 +92,4 @@ app/src/main/res/drawable-xhdpi/
 app/src/main/res/drawable-xxhdpi/
 app/src/main/res/drawable-xxxhdpi/
 app/src/main/res/raw/
+app/src/main/java/app/croma/generated/BasePackageList.java
