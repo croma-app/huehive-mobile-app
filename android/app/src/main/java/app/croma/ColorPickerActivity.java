@@ -134,7 +134,9 @@ public class ColorPickerActivity extends Activity {
   @Override
   public void onPause() {
     super.onPause();
-    mPreview.onStop();
+    if (mPreview != null) {
+      mPreview.onStop();
+    }
     if (orientation != null) {
       orientation.disable();
     }

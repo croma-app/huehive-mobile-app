@@ -19,7 +19,7 @@
             android:configChanges="orientation|screenSize"
             android:icon="@mipmap/ic_camera"
             android:label="@string/picker_label"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+            android:theme="@style/FullscreenTheme"></activity>
         <activity
             android:name=".MainActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
