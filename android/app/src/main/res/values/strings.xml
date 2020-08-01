@@ -11,6 +11,7 @@
     <string name="take_picture">Take picture</string>
     <string name="picker_label">Pick colors</string>
     <string name="color_picker_help_msg">1. Tap on the screen to pick colors \n OR \n 2. Extract colors from text by pointing camera to text</string>
+    <string name="image_color_picker_help_msg">Tap on the screen to pick colors</string>
     <string name="tooltip_pick_color_btn">Touch on screen to pick colors</string>
     <string name="share_label">Extract colors</string>
 

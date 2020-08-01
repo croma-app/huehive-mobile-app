@@ -20,10 +20,6 @@ This will generate web-build directory. Relative path does not work with this so
 `expo start -w` for starting the web version.
 `expo start -w --no-dev` for production version.
 
-### Prettier
-
-`prettier --write "**/*.js"`
-
 ### Android
 
 Run locally:
@@ -39,10 +35,6 @@ Ref: https://reactnative.dev/docs/signed-apk-android
 Bundle
 
 `./bundle-android.sh`
-
-### Hooks
-
-https://pre-commit.com/
 
 ### Code styling
 

@@ -21,11 +21,12 @@ import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import org.jetbrains.annotations.NotNull;
 
 public class ColorPickerActivity extends Activity {
 
   private static final int MY_CAMERA_REQUEST_CODE = 1;
-  private static final String TEXT_COLOR_PICKER_COUNT = "text_color_picker_count";
+  private static final String COLOR_PICKER_HELP_COUNT = "color_picker_help_count";
   private static final int HELP_MSG_MAX_COUNT = 3;
   private Camera mCamera;
   private CameraPreview mPreview;
@@ -77,8 +78,7 @@ public class ColorPickerActivity extends Activity {
     }
     doneButton = findViewById(R.id.done_button);
     orientation = new RotateView(this, doneButton);
-    final View showHelpView = ColorPickerActivity.this.findViewById(R.id.help_msg);
-    helpAnimator = new HelpAnimator(showHelpView);
+
     if (orientation.canDetectOrientation()) {
       orientation.enable();
     }
@@ -111,12 +111,8 @@ public class ColorPickerActivity extends Activity {
     RelativeLayout preview = findViewById(R.id.camera_preview);
     preview.setOnTouchListener(mPreview);
     preview.addView(mPreview);
-
-    showHelpView.bringToFront();
-    showHelpView.setVisibility(View.INVISIBLE);
-    if (colorPickerMsgCount() < HELP_MSG_MAX_COUNT) {
-      showHelp(showHelpView);
-    }
+    final View showHelpView = this.findViewById(R.id.help_msg);
+    handleHelpMsg(showHelpView);
     doneButton.setOnClickListener(
         view -> {
           if (mPreview.getColors().size() != 0) {
@@ -134,6 +130,17 @@ public class ColorPickerActivity extends Activity {
             showHelpView.startAnimation(anim);
           }
         });
+  }
+
+  @NotNull
+  private View handleHelpMsg(View showHelpView) {
+    helpAnimator = new HelpAnimator(showHelpView);
+    showHelpView.bringToFront();
+    showHelpView.setVisibility(View.INVISIBLE);
+    if (colorPickerMsgCount() < HELP_MSG_MAX_COUNT) {
+      showHelp(showHelpView);
+    }
+    return showHelpView;
   }
 
   private void showHelp(View showHelpView) {
@@ -155,13 +162,13 @@ public class ColorPickerActivity extends Activity {
   private void incColorPickerMsgCount() {
     SharedPreferences sharedpreferences = getSharedPreferences();
     Editor editor = sharedpreferences.edit();
-    editor.putInt(TEXT_COLOR_PICKER_COUNT, colorPickerMsgCount() + 1);
+    editor.putInt(COLOR_PICKER_HELP_COUNT, colorPickerMsgCount() + 1);
     editor.commit();
   }
 
   private int colorPickerMsgCount() {
     SharedPreferences sharedPreferences = getSharedPreferences();
-    return sharedPreferences.getInt(TEXT_COLOR_PICKER_COUNT, 0);
+    return sharedPreferences.getInt(COLOR_PICKER_HELP_COUNT, 0);
   }
 
   @Override
