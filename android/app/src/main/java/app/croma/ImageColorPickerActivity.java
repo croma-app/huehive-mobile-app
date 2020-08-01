@@ -100,11 +100,11 @@ public class ImageColorPickerActivity extends AppCompatActivity {
 
   private void showHelp(View showHelpView) {
     AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
-    anim.setDuration(3000);
+    anim.setDuration(2500);
     anim.setRepeatCount(1);
     anim.setRepeatMode(Animation.REVERSE);
     anim.setAnimationListener(helpAnimator);
-    anim.setStartOffset(1500);
+    anim.setStartOffset(800);
     showHelpView.startAnimation(anim);
     incColorPickerMsgCount();
   }

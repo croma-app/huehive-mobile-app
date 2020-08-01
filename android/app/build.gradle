@@ -99,13 +99,19 @@ def enableProguardInReleaseBuilds = false
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
-
+    Properties versionProps = new Properties()
+    def versionPropsFile = file('version.properties')
+    if(versionPropsFile.exists())
+        versionProps.load(new FileInputStream(versionPropsFile))
+    def code = (versionProps['VERSION_CODE'] ?: "0").toInteger() + 1
+    versionProps['VERSION_CODE'] = code.toString()
+    versionProps.store(versionPropsFile.newWriter(), null)
     defaultConfig {
         applicationId "app.croma"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 27
-        versionName "2.6"
+        versionCode code
+        versionName "2.7"
     }
     splits {
         abi {

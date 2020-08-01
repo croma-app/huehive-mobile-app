@@ -34,7 +34,7 @@ public class ColorPickerActivity extends Activity {
   private RotateView orientation;
   private HelpAnimator helpAnimator;
 
-  private static final int NO_COLOR_HELP_TIMEOUT = 3000;
+  private static final int NO_COLOR_HELP_TIMEOUT = 2500;
 
   @Override
   public void onRequestPermissionsResult(
@@ -149,7 +149,7 @@ public class ColorPickerActivity extends Activity {
     anim.setRepeatCount(1);
     anim.setRepeatMode(Animation.REVERSE);
     anim.setAnimationListener(helpAnimator);
-    anim.setStartOffset(1500);
+    anim.setStartOffset(800);
     showHelpView.startAnimation(anim);
     incColorPickerMsgCount();
   }
