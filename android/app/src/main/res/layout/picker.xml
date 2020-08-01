@@ -13,14 +13,15 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:id="@+id/no_color_help"
-            android:text="@string/no_color_message"
+            android:id="@+id/help_msg"
+            android:text="@string/color_picker_help_msg"
             android:textSize="24dp"
+            android:textColor="#ffffff"
             android:fontFamily="sans-serif-condensed"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:gravity="center"
-            android:background="#99000000" />
+            android:background="#aa000000" />
 
     </RelativeLayout>
 

@@ -14,6 +14,7 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:background="@drawable/done_button"
+      android:tooltipText="@string/tooltip_pick_color_btn"
         android:src="@mipmap/done" />
 
 </RelativeLayout>

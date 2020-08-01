@@ -9,7 +9,18 @@
         android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="0dp">
-
+        <TextView
+          android:layout_width="fill_parent"
+          android:layout_height="fill_parent"
+          android:id="@+id/help_msg"
+          android:text="@string/image_color_picker_help_msg"
+          android:textSize="24dp"
+          android:textColor="#ffffff"
+          android:fontFamily="sans-serif-condensed"
+          android:layout_alignParentBottom="true"
+          android:layout_centerHorizontal="true"
+          android:gravity="center"
+          android:background="#aa000000" />
         <ImageView
           android:id="@+id/main_image_view"
           android:layout_centerInParent="true"
