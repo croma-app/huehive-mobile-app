@@ -6,10 +6,10 @@ import android.view.animation.Animation;
 
 public class HelpAnimator implements Animation.AnimationListener {
   private Animation animation;
-  private View noColorHelp;
+  private View showHelpView;
 
-  public HelpAnimator(View noColorHelp) {
-    this.noColorHelp = noColorHelp;
+  public HelpAnimator(View showHelpView) {
+    this.showHelpView = showHelpView;
   }
 
   public void cancelGracefully() {
@@ -20,9 +20,9 @@ public class HelpAnimator implements Animation.AnimationListener {
 
   @Override
   public void onAnimationStart(Animation animation) {
-    noColorHelp.bringToFront();
+    showHelpView.bringToFront();
     this.animation = animation;
-    noColorHelp.setOnTouchListener(
+    showHelpView.setOnTouchListener(
         new View.OnTouchListener() {
 
           @Override
@@ -35,7 +35,7 @@ public class HelpAnimator implements Animation.AnimationListener {
 
   @Override
   public void onAnimationEnd(Animation animation) {
-    noColorHelp.setOnTouchListener(null);
+    showHelpView.setOnTouchListener(null);
     // ignore
   }
 

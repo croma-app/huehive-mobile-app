@@ -5,20 +5,13 @@
 </string>
     <string name="title_activity_color_picker">ColorPickerActivity</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-
     <string name="title_activity_camera_color_picker">CameraColorPickerActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="take_picture">Take picture</string>
     <string name="picker_label">Pick colors</string>
-    <string name="no_color_message">Tap on the screen to pick colors</string>
+    <string name="color_picker_help_msg">1. Tap on the screen to pick colors \n OR \n 2. Extract colors from text by pointing camera to text</string>
+    <string name="tooltip_pick_color_btn">Touch on screen to pick colors</string>
     <string name="share_label">Extract colors</string>
 
     <string name="title_activity_image_color_picker">ImageColorPickerActivity</string>

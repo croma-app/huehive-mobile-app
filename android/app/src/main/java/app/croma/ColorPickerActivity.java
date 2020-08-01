@@ -1,8 +1,12 @@
 package app.croma;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
@@ -19,14 +23,17 @@ import java.util.List;
 import java.util.Set;
 
 public class ColorPickerActivity extends Activity {
+
   private static final int MY_CAMERA_REQUEST_CODE = 1;
+  private static final String TEXT_COLOR_PICKER_COUNT = "text_color_picker_count";
+  private static final int HELP_MSG_MAX_COUNT = 3;
   private Camera mCamera;
   private CameraPreview mPreview;
   private ImageButton doneButton;
   private RotateView orientation;
   private HelpAnimator helpAnimator;
 
-  private static final int NO_COLOR_HELP_TIMEOUT = 1000;
+  private static final int NO_COLOR_HELP_TIMEOUT = 3000;
 
   @Override
   public void onRequestPermissionsResult(
@@ -58,6 +65,7 @@ public class ColorPickerActivity extends Activity {
     }
   }
 
+  @SuppressLint("SourceLockedOrientationActivity")
   private void start() {
     setContentView(R.layout.picker);
     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -69,18 +77,13 @@ public class ColorPickerActivity extends Activity {
     }
     doneButton = findViewById(R.id.done_button);
     orientation = new RotateView(this, doneButton);
-
-    final View noColorHelp = ColorPickerActivity.this.findViewById(R.id.no_color_help);
-
-    helpAnimator = new HelpAnimator(noColorHelp);
-
+    final View showHelpView = ColorPickerActivity.this.findViewById(R.id.help_msg);
+    helpAnimator = new HelpAnimator(showHelpView);
     if (orientation.canDetectOrientation()) {
       orientation.enable();
     }
-
     // Create an instance of Camera
     mCamera = getCameraInstance();
-
     if (mCamera == null) {
       Toast.makeText(this, "No camera is available ", Toast.LENGTH_LONG).show();
       this.finish();
@@ -109,9 +112,11 @@ public class ColorPickerActivity extends Activity {
     preview.setOnTouchListener(mPreview);
     preview.addView(mPreview);
 
-    noColorHelp.bringToFront();
-    noColorHelp.setVisibility(View.INVISIBLE);
-
+    showHelpView.bringToFront();
+    showHelpView.setVisibility(View.INVISIBLE);
+    if (colorPickerMsgCount() < HELP_MSG_MAX_COUNT) {
+      showHelp(showHelpView);
+    }
     doneButton.setOnClickListener(
         view -> {
           if (mPreview.getColors().size() != 0) {
@@ -126,9 +131,37 @@ public class ColorPickerActivity extends Activity {
             anim.setRepeatCount(1);
             anim.setRepeatMode(Animation.REVERSE);
             anim.setAnimationListener(helpAnimator);
-            noColorHelp.startAnimation(anim);
+            showHelpView.startAnimation(anim);
           }
         });
+  }
+
+  private void showHelp(View showHelpView) {
+    AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
+    anim.setDuration(ColorPickerActivity.NO_COLOR_HELP_TIMEOUT);
+    anim.setRepeatCount(1);
+    anim.setRepeatMode(Animation.REVERSE);
+    anim.setAnimationListener(helpAnimator);
+    anim.setStartOffset(1500);
+    showHelpView.startAnimation(anim);
+    incColorPickerMsgCount();
+  }
+
+  private SharedPreferences getSharedPreferences() {
+    return getSharedPreferences(
+        SharedPreferencesConstants.COLOR_PICKER_ACTIVITY, Context.MODE_PRIVATE);
+  }
+
+  private void incColorPickerMsgCount() {
+    SharedPreferences sharedpreferences = getSharedPreferences();
+    Editor editor = sharedpreferences.edit();
+    editor.putInt(TEXT_COLOR_PICKER_COUNT, colorPickerMsgCount() + 1);
+    editor.commit();
+  }
+
+  private int colorPickerMsgCount() {
+    SharedPreferences sharedPreferences = getSharedPreferences();
+    return sharedPreferences.getInt(TEXT_COLOR_PICKER_COUNT, 0);
   }
 
   @Override
@@ -171,7 +204,6 @@ public class ColorPickerActivity extends Activity {
         }
       }
     }
-
     return c; // Returns null if camera is unavailable
   }
 }
