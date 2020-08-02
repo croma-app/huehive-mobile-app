@@ -71,6 +71,9 @@ export default function HamburgerMenu(props) {
                 imageResult.uri,
                 pickedColors => {
                   setMenu(false);
+                  logEvent("hm_pick_colors_from_img", {
+                    length: pickedColors.length
+                  });
                   navigationObject.navigation.navigate(
                     "ColorList",
                     JSON.parse(pickedColors)
@@ -148,7 +151,7 @@ export default function HamburgerMenu(props) {
           <Touchable
             style={styles.menuItem}
             onPress={() => {
-              logEvent("hamburger_menu_pro_benefits");
+              logEvent("hm_pro_benefits");
               setMenu(false);
               navigationObject.navigation.navigate("ProVersion");
             }}

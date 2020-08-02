@@ -168,8 +168,7 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
   private void putData(Bundle bundle, String key, Object data) {
     if (data instanceof Integer) {
       bundle.putInt(key, (Integer) data);
-    }
-    if (data instanceof Long) {
+    } else if (data instanceof Long) {
       bundle.putLong(key, (Long) data);
     } else {
       bundle.putString(key, data.toString());
