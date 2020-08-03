@@ -20,8 +20,10 @@ const purchase = async function(setPurchase, purchaseType = "croma_pro") {
     const details = await InAppBilling.purchase(purchaseType);
     ToastAndroid.show("Congrats, You are now a pro user!", ToastAndroid.LONG);
     setPurchase(details);
+    return true;
   } catch (err) {
     ToastAndroid.show(`Purchase unsucceessful ${err}`, ToastAndroid.LONG);
+    return false;
   } finally {
     await InAppBilling.close();
   }

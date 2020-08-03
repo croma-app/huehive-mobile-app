@@ -5,13 +5,17 @@ import CromaButton from "../components/CromaButton";
 import { CromaContext } from "../store/store";
 import { purchase, logEvent } from "../libs/Helpers";
 
-export default function PalettesScreen(props) {
+export default function ProScreen(props) {
   const { isPro, setPurchase } = React.useContext(CromaContext);
   const purchaseDevelopment = () => {
     purchase(setPurchase, "support_development");
   };
-  const purchasePro = () => {
-    purchase(setPurchase);
+  const purchasePro = async () => {
+    if (await purchase(setPurchase)) {
+      logEvent("pro_version_screen_pur_pro_success");
+    } else {
+      logEvent("pro_version_screen_pur_pro_failed");
+    }
   };
   logEvent("pro_version_screen");
   return (
