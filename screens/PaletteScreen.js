@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import { UndoDialog, DialogContainer } from "../components/CommanDialogs";
 import { CromaContext } from "../store/store";
-import { AntDesign, MaterialIcons } from "@expo/vector-icons";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 import ActionButton from "react-native-action-button";
 import Colors from "../constants/Colors";
 import { Header } from "react-navigation";
@@ -159,7 +159,7 @@ const CustomHeader = props => {
             {props.navigation.getParam("name")}
           </Text>
           <Touchable onPress={onEdit}>
-            <AntDesign name="edit" size={24} color="white" />
+            <Feather name="edit" size={24} color="white" />
           </Touchable>
         </>
       )}
