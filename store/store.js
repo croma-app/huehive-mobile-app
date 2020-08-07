@@ -57,9 +57,13 @@ export default function applicationHook(initState) {
   };
 
   const renamePalette = (oldName, name) => {
+    if (oldName === name) {
+      return;
+    }
     setState(state => {
       const { allPalettes } = state;
       allPalettes[name] = allPalettes[oldName];
+      allPalettes[name]["name"] = name;
       delete allPalettes[oldName];
       return { ...state, allPalettes };
     });
@@ -247,6 +251,7 @@ export default function applicationHook(initState) {
   ) {
     syncStateToStore(state);
   }
+  console.log(state, "check state");
   return state;
 }
 
