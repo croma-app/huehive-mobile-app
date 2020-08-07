@@ -120,6 +120,7 @@ const CustomHeader = props => {
     renamePalette(props.navigation.getParam("name"), paletteName);
     //setting new name in query params
     props.navigation.setParams({ name: paletteName });
+    setIsEditingPaletteName(false);
   };
   const onEdit = () => {
     setIsEditingPaletteName(true);
