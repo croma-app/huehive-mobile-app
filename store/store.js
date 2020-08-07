@@ -56,6 +56,15 @@ export default function applicationHook(initState) {
     });
   };
 
+  const renamePalette = (oldName, name) => {
+    setState(state => {
+      const { allPalettes } = state;
+      allPalettes[name] = allPalettes[oldName];
+      delete allPalettes[oldName];
+      return { ...state, allPalettes };
+    });
+  };
+
   const loadInitPaletteFromStore = async () => {
     setState(state => ({ ...state, isLoading: true }));
     // Loading application state from localStorage
@@ -221,6 +230,7 @@ export default function applicationHook(initState) {
     undoDeletionByName,
     deletePaletteByName,
     addPalette,
+    renamePalette,
     colorDeleteFromPalette,
     undoColorDeletion,
     addColorToPalette,
