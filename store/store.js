@@ -22,36 +22,41 @@ const syncStateToStore = function(state) {
   state.isMenuOpen = isMenuOpen;
 };
 
-const sortPalette = palette =>
+const sortPaletteColors = palette =>
   palette.colors.sort((a, b) => (a.color > b.color ? 1 : -1));
+
+const sortPalettes = allPalettes => {
+  // sorting palettes before save
+  const allPalettesArray = Object.keys(allPalettes).map(
+    key => allPalettes[key]
+  );
+  allPalettesArray.sort((a, b) => {
+    // Just a check for old user
+    if (!a.createdAt) {
+      a.createdAt = 0;
+    }
+    if (!b.createdAt) {
+      b.createdAt = 0;
+    }
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
+  const ordered = {};
+  allPalettesArray.forEach(function(_palette) {
+    ordered[_palette.name] = _palette;
+  });
+  return ordered;
+};
 
 export default function applicationHook(initState) {
   const addPalette = async palette => {
     setState(state => {
       const { allPalettes } = state;
-      sortPalette(palette);
+      sortPaletteColors(palette);
       if (!palette.createdAt) {
         palette.createdAt = new Date().valueOf();
       }
       allPalettes[palette.name] = palette;
-      // sorting palettes before save
-      const allPalettesArray = Object.keys(allPalettes).map(
-        key => allPalettes[key]
-      );
-      allPalettesArray.sort((a, b) => {
-        // Todo - Just a check for old user
-        if (!a.createdAt) {
-          a.createdAt = 0;
-        }
-        if (!b.createdAt) {
-          b.createdAt = 0;
-        }
-        return new Date(b.createdAt) - new Date(a.createdAt);
-      });
-      const ordered = {};
-      allPalettesArray.forEach(function(_palette) {
-        ordered[_palette.name] = _palette;
-      });
+      const ordered = sortPalettes(allPalettes);
       return { ...state, allPalettes: ordered };
     });
   };
@@ -65,7 +70,8 @@ export default function applicationHook(initState) {
       allPalettes[name] = allPalettes[oldName];
       allPalettes[name]["name"] = name;
       delete allPalettes[oldName];
-      return { ...state, allPalettes };
+      const ordered = sortPalettes(allPalettes);
+      return { ...state, allPalettes: ordered };
     });
   };
 
@@ -153,7 +159,7 @@ export default function applicationHook(initState) {
     setState(state => {
       const { allPalettes } = state;
       allPalettes[name].colors = allPalettes[name].colors.concat(color);
-      sortPalette(allPalettes[name]);
+      sortPaletteColors(allPalettes[name]);
       return { ...state, allPalettes };
     });
   };
@@ -210,7 +216,7 @@ export default function applicationHook(initState) {
           allPalettes[name].deletedColors.splice(index, 1);
         }
       });
-      sortPalette(allPalettes[name]);
+      sortPaletteColors(allPalettes[name]);
       return { ...state, allPalettes };
     });
   };
