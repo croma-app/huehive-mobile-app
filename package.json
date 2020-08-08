@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
+    "@octokit/rest": "^18.0.3",
     "@react-navigation/web": "^1.0.0-alpha.9",
     "croma-color-picker": "^1.1.0",
     "expo": "^36.0.0",

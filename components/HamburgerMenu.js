@@ -21,6 +21,7 @@ import { logEvent } from "../libs/Helpers";
 import { ScrollView } from "react-native-gesture-handler";
 import { navigationObject } from "../store/store";
 import * as ImagePicker from "expo-image-picker";
+import { Octokit } from "@octokit/rest";
 export default function HamburgerMenu(props) {
   const pickImageResult = async base64 => {
     return await ImagePicker.launchImageLibraryAsync({
@@ -161,6 +162,58 @@ export default function HamburgerMenu(props) {
                 <FontAwesome5 name="unlock" style={styles.icon} />
               </View>
               <Text style={styles.textAreaMenuItem}>Pro benefites</Text>
+            </View>
+          </Touchable>
+
+          <Touchable
+            style={styles.menuItem}
+            onPress={async () => {
+              logEvent("hm_import_from_git");
+              const octokit = new Octokit({
+                auth: "*"
+              });
+              /* octokit.repos.createForAuthenticatedUser({
+                name: "repo-from-script-test",
+                private: "yes"
+              }); */
+              /*  octokit.repos.getContent({
+                owner: 'kamalkishor1991',
+                repo: 'repo-from-script-test',
+                path: 'readme.md'
+              })
+              
+                .then(result => {
+                  // content will be base64 encoded
+                  const content = Buffer.from(result.data.content, 'base64').toString()
+                  console.log(content)
+                }); */
+              let res = await octokit.repos.getContent({
+                owner: "kamalkishor1991",
+                path: "package.json",
+                repo: "repo-from-script-test"
+              });
+              const content = Buffer.from(
+                res.data.content,
+                "base64"
+              ).toString();
+              console.log("content: " + content);
+              octokit.repos.createOrUpdateFileContents({
+                owner: "kamalkishor1991",
+                repo: "repo-from-script-test",
+                path: "package.json",
+                message: "test",
+                content: Buffer.from("new updated content ").toString("base64"),
+                branch: "master",
+                sha: res.data.sha
+              });
+              //https://octokit.github.io/rest.js/v16#api-Repos-updateFile
+            }}
+          >
+            <View style={styles.menuItemView}>
+              <View style={styles.menuIcon}>
+                <FontAwesome5 name="git" style={styles.icon} />
+              </View>
+              <Text style={styles.textAreaMenuItem}>import from git</Text>
             </View>
           </Touchable>
         </View>

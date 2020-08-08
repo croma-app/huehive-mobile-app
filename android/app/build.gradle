@@ -85,7 +85,7 @@ apply plugin: 'com.google.gms.google-services'
  * Set this to true to create two separate APKs instead of one:
  *   - An APK that only works on ARM devices
  *   - An APK that only works on x86 devices
- * The advantage is the size of the APK is reduced by about 4MB.
+ * The advantage is the size of the APK is reduced by about 4MB.system
  * Upload all the APKs to the Play Store and people will download
  * the correct one based on the CPU architecture of their device.
  */
