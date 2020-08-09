@@ -4,6 +4,7 @@ import { View } from "react-native-animatable";
 import CromaButton from "../components/CromaButton";
 import { CromaContext } from "../store/store";
 import { purchase, logEvent } from "../libs/Helpers";
+import { Fontisto } from '@expo/vector-icons'; 
 
 export default function ProScreen(props) {
   const { isPro, setPurchase } = React.useContext(CromaContext);
@@ -37,7 +38,7 @@ export default function ProScreen(props) {
           without any ads and annoying notifications 😊
         </Text>
         <CromaButton onPress={purchaseDevelopment}>
-          Support app development
+          Buy me a coffee  ☕
         </CromaButton>
       </View>
     </ScrollView>
