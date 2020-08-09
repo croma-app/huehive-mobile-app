@@ -1,21 +1,25 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 
 import SingleColorCard from "../components/SingleColorCard";
 import {
   ScrollView,
   StyleSheet,
   View,
+  Text,
   Dimensions,
   Platform,
-  ToastAndroid
+  ToastAndroid,
+  TextInput
 } from "react-native";
 import { UndoDialog, DialogContainer } from "../components/CommanDialogs";
 import { CromaContext } from "../store/store";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
 import ActionButton from "react-native-action-button";
 import Colors from "../constants/Colors";
 import { Header } from "react-navigation";
 import EmptyView from "../components/EmptyView";
 import { logEvent } from "../libs/Helpers";
+import Touchable from "react-native-platform-touchable";
 export default function PaletteScreen(props) {
   const { height, width } = Dimensions.get("window");
   const paletteName = props.navigation.getParam("name");
@@ -105,9 +109,66 @@ export default function PaletteScreen(props) {
     </>
   );
 }
+
+const CustomHeader = props => {
+  const { renamePalette } = useContext(CromaContext);
+  const [isEditingPaletteName, setIsEditingPaletteName] = useState(false);
+  const [paletteName, setPaletteName] = useState(
+    props.navigation.getParam("name")
+  );
+  const onDone = () => {
+    renamePalette(props.navigation.getParam("name"), paletteName);
+    //setting new name in query params
+    props.navigation.setParams({ name: paletteName });
+    setIsEditingPaletteName(false);
+  };
+  const onEdit = () => {
+    setIsEditingPaletteName(true);
+  };
+  return (
+    <View
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        width: "95%"
+      }}
+    >
+      {isEditingPaletteName ? (
+        <>
+          <TextInput
+            style={styles.input}
+            value={paletteName}
+            autoFocus={true}
+            onChangeText={name => {
+              setPaletteName(name);
+            }}
+          />
+          <Touchable onPress={onDone} style={{ marginTop: 12 }}>
+            <MaterialIcons name="done" size={24} color="white" />
+          </Touchable>
+        </>
+      ) : (
+        <>
+          <Text
+            style={{
+              color: "#ffffff",
+              fontSize: 18
+            }}
+          >
+            {props.navigation.getParam("name")}
+          </Text>
+          <Touchable onPress={onEdit}>
+            <Feather name="edit" size={24} color="white" />
+          </Touchable>
+        </>
+      )}
+    </View>
+  );
+};
 PaletteScreen.navigationOptions = ({ navigation }) => {
   return {
-    title: navigation.getParam("name")
+    headerTitle: <CustomHeader navigation={navigation}></CustomHeader>
   };
 };
 
@@ -123,5 +184,9 @@ const styles = StyleSheet.create({
     transform: "scale(1) rotate(0deg) !important",
     right: Math.max((Dimensions.get("window").width - 600) / 2, 0),
     left: Math.max((Dimensions.get("window").width - 600) / 2, 0)
+  },
+  input: {
+    color: "#ffffff",
+    fontSize: 18
   }
 });
