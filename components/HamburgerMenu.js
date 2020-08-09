@@ -22,6 +22,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { navigationObject } from "../store/store";
 import * as ImagePicker from "expo-image-picker";
 import { Octokit } from "@octokit/rest";
+import { authorize } from "react-native-app-auth";
 export default function HamburgerMenu(props) {
   const pickImageResult = async base64 => {
     return await ImagePicker.launchImageLibraryAsync({
@@ -169,9 +170,27 @@ export default function HamburgerMenu(props) {
             style={styles.menuItem}
             onPress={async () => {
               logEvent("hm_import_from_git");
+              const config = {
+                redirectUrl: "https://croma.app/oauth/github",
+                clientId: "7c314acf0acaae3133fa",
+                clientSecret: "cb11b965876b36ff7fd682588dff284b49543343",
+                scopes: ["identity"],
+                serviceConfiguration: {
+                  authorizationEndpoint:
+                    "https://github.com/login/oauth/authorize",
+                  tokenEndpoint: "https://github.com/login/oauth/access_token",
+                  revocationEndpoint:
+                    "https://github.com/settings/connections/applications/<client-id>"
+                }
+              };
+
+              // Log in to get an authentication token
+              const authState = await authorize(config);
+              console.log("AuthState: ", authState);
               const octokit = new Octokit({
                 auth: "*"
               });
+
               /* octokit.repos.createForAuthenticatedUser({
                 name: "repo-from-script-test",
                 private: "yes"
