@@ -4,7 +4,6 @@ import { View } from "react-native-animatable";
 import CromaButton from "../components/CromaButton";
 import { CromaContext } from "../store/store";
 import { purchase, logEvent } from "../libs/Helpers";
-import { Fontisto } from '@expo/vector-icons'; 
 
 export default function ProScreen(props) {
   const { isPro, setPurchase } = React.useContext(CromaContext);
