@@ -257,7 +257,6 @@ export default function applicationHook(initState) {
   ) {
     syncStateToStore(state);
   }
-  console.log(state, "check state");
   return state;
 }
 
