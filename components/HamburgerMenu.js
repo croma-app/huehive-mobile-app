@@ -171,16 +171,16 @@ export default function HamburgerMenu(props) {
             onPress={async () => {
               logEvent("hm_import_from_git");
               const config = {
-                redirectUrl: "https://croma.app/oauth/github",
+                redirectUrl: "app.croma://oauthredirect",
                 clientId: "7c314acf0acaae3133fa",
                 clientSecret: "cb11b965876b36ff7fd682588dff284b49543343",
-                scopes: ["identity"],
+                scopes: ["identity", "repo"],
                 serviceConfiguration: {
                   authorizationEndpoint:
                     "https://github.com/login/oauth/authorize",
                   tokenEndpoint: "https://github.com/login/oauth/access_token",
                   revocationEndpoint:
-                    "https://github.com/settings/connections/applications/<client-id>"
+                    "https://github.com/settings/connections/applications/7c314acf0acaae3133fa"
                 }
               };
 
@@ -188,13 +188,13 @@ export default function HamburgerMenu(props) {
               const authState = await authorize(config);
               console.log("AuthState: ", authState);
               const octokit = new Octokit({
-                auth: "*"
+                auth: authState.accessToken
               });
 
-              /* octokit.repos.createForAuthenticatedUser({
-                name: "repo-from-script-test",
+              octokit.repos.createForAuthenticatedUser({
+                name: "repo-from-script-test-2",
                 private: "yes"
-              }); */
+              });
               /*  octokit.repos.getContent({
                 owner: 'kamalkishor1991',
                 repo: 'repo-from-script-test',
@@ -206,7 +206,7 @@ export default function HamburgerMenu(props) {
                   const content = Buffer.from(result.data.content, 'base64').toString()
                   console.log(content)
                 }); */
-              let res = await octokit.repos.getContent({
+              /* let res = await octokit.repos.getContent({
                 owner: "kamalkishor1991",
                 path: "package.json",
                 repo: "repo-from-script-test"
@@ -224,7 +224,7 @@ export default function HamburgerMenu(props) {
                 content: Buffer.from("new updated content ").toString("base64"),
                 branch: "master",
                 sha: res.data.sha
-              });
+              }); */
               //https://octokit.github.io/rest.js/v16#api-Repos-updateFile
             }}
           >
