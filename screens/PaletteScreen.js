@@ -123,6 +123,7 @@ const CustomHeader = props => {
     setIsEditingPaletteName(false);
   };
   const onEdit = () => {
+    logEvent("edit_palette_name");
     setIsEditingPaletteName(true);
   };
   return (
