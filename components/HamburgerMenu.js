@@ -44,7 +44,7 @@ export default function HamburgerMenu(props) {
           style={styles.logo}
           source={require("../assets/images/dots.png")}
         />
-        <Text style={styles.title}>Croma - Save you colors</Text>
+        <Text style={styles.title}> Save you colors </Text>
       </View>
       <ScrollView>
         <View style={styles.menu}>
@@ -57,7 +57,7 @@ export default function HamburgerMenu(props) {
             }}
           >
             <View style={styles.menuItemView}>
-              <View style={styles.menuIcon}>
+              <View style={[styles.menuIcon, { paddingLeft: 4 }]}>
                 <Ionicons name="md-color-filter" style={styles.icon} />
               </View>
               <Text style={styles.textAreaMenuItem}>Create new palette</Text>
@@ -157,7 +157,7 @@ export default function HamburgerMenu(props) {
             }}
           >
             <View style={styles.menuItemView}>
-              <View style={styles.menuIcon}>
+              <View style={[styles.menuIcon, { paddingLeft: 4 }]}>
                 <FontAwesome5 name="unlock" style={styles.icon} />
               </View>
               <Text style={styles.textAreaMenuItem}>Pro benefites</Text>
@@ -205,7 +205,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: padding,
-    height: Header.HEIGHT
+    height: Header.HEIGHT,
+    fontWeight: "bold"
   },
   logo: {
     width: 48,
@@ -213,17 +214,18 @@ const styles = StyleSheet.create({
     padding: padding
   },
   title: {
-    fontWeight: "800",
+    fontWeight: "bold",
     textAlignVertical: "center",
     padding: padding,
-    color: "white"
+    color: "white",
+    fontSize: 18
   },
   menu: {
     flex: 1,
-    flexDirection: "column",
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    alignSelf: "stretch"
+    flexDirection: "column"
+    //alignItems: "flex-start",
+    //justifyContent: "flex-start",
+    //alignSelf: "stretch"
   },
   menuItem: {
     height: menuHeight
@@ -233,15 +235,16 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   textAreaMenuItem: {
-    fontWeight: "800",
+    fontWeight: "bold",
     textAlignVertical: "center",
     padding: padding,
-    alignItems: "flex-start"
+    alignItems: "flex-start",
+    color: "black"
   },
   menuIcon: {},
   icon: {
     fontSize: menuHeight - 2 * padding,
     padding: padding,
-    color: "black"
+    color: "rgb(23 22 22);"
   }
 });
