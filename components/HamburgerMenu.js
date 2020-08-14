@@ -33,10 +33,16 @@ export default function HamburgerMenu(props) {
   };
   const { setMenu } = props;
   const [appInstallTime, setAppInstallTime] = useState(null);
+  const [fileSync, setFileSync] = useState(false);
   useEffect(() => {
     (async () => {
       const appInstallTime = await NativeModules.CromaModule.getAppInstallTime();
       setAppInstallTime(parseInt(appInstallTime, 10));
+      setFileSync(
+        (await NativeModules.CromaModule.getConfigString(
+          "file-sync-menu-item"
+        )) === "true"
+      );
     })();
   });
   return (
@@ -166,77 +172,22 @@ export default function HamburgerMenu(props) {
             </View>
           </Touchable>
 
-          <Touchable
-            style={styles.menuItem}
-            onPress={async () => {
-              setMenu(false);
-              navigationObject.navigation.navigate("SyncPalettes");
-              /* logEvent("hm_import_from_git");
-              const config = {
-                redirectUrl: "app.croma://oauthredirect",
-                clientId: "7c314acf0acaae3133fa",
-                clientSecret: "cb11b965876b36ff7fd682588dff284b49543343",
-                scopes: ["identity", "repo"],
-                serviceConfiguration: {
-                  authorizationEndpoint:
-                    "https://github.com/login/oauth/authorize",
-                  tokenEndpoint: "https://github.com/login/oauth/access_token",
-                  revocationEndpoint:
-                    "https://github.com/settings/connections/applications/7c314acf0acaae3133fa"
-                }
-              };
-
-              // Log in to get an authentication token
-              const authState = await authorize(config);
-              console.log("AuthState: ", authState);
-              const octokit = new Octokit({
-                auth: authState.accessToken
-              });
-
-              octokit.repos.createForAuthenticatedUser({
-                name: "repo-from-script-test-2",
-                private: "yes"
-              }); */
-              /*  octokit.repos.getContent({
-                owner: 'kamalkishor1991',
-                repo: 'repo-from-script-test',
-                path: 'readme.md'
-              })
-              
-                .then(result => {
-                  // content will be base64 encoded
-                  const content = Buffer.from(result.data.content, 'base64').toString()
-                  console.log(content)
-                }); */
-              /* let res = await octokit.repos.getContent({
-                owner: "kamalkishor1991",
-                path: "package.json",
-                repo: "repo-from-script-test"
-              });
-              const content = Buffer.from(
-                res.data.content,
-                "base64"
-              ).toString();
-              console.log("content: " + content);
-              octokit.repos.createOrUpdateFileContents({
-                owner: "kamalkishor1991",
-                repo: "repo-from-script-test",
-                path: "package.json",
-                message: "test",
-                content: Buffer.from("new updated content ").toString("base64"),
-                branch: "master",
-                sha: res.data.sha
-              }); */
-              //https://octokit.github.io/rest.js/v16#api-Repos-updateFile
-            }}
-          >
-            <View style={styles.menuItemView}>
-              <View style={styles.menuIcon}>
-                <FontAwesome5 name="git" style={styles.icon} />
+          {fileSync && (
+            <Touchable
+              style={styles.menuItem}
+              onPress={async () => {
+                setMenu(false);
+                navigationObject.navigation.navigate("SyncPalettes");
+              }}
+            >
+              <View style={styles.menuItemView}>
+                <View style={styles.menuIcon}>
+                  <FontAwesome5 name="file-import" style={styles.icon} />
+                </View>
+                <Text style={styles.textAreaMenuItem}>import from git</Text>
               </View>
-              <Text style={styles.textAreaMenuItem}>import from git</Text>
-            </View>
-          </Touchable>
+            </Touchable>
+          )}
         </View>
       </ScrollView>
     </View>

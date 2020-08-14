@@ -107,7 +107,20 @@ function GithubView(props) {
       </View>
       <View>
         <Text>Update all your palettes from color-palettes repo</Text>
-        <CromaButton>Sync palettes from your github repo</CromaButton>
+        <CromaButton
+          onPress={() => {
+            (async () => {
+              content = await readFromGithubRepo(
+                githubData.authState.accessToken,
+                githubUser.login,
+                "croma-color-palettes"
+              );
+              ToastAndroid.show("Content" + content, ToastAndroid.LONG);
+            })();
+          }}
+        >
+          Sync palettes from your github repo
+        </CromaButton>
       </View>
     </View>
   );
@@ -156,6 +169,17 @@ async function writeToGithubRepo(
     branch: "master",
     sha: sha
   });
+}
+async function readFromGithubRepo(accessToken, username, repoName) {
+  const octokit = new Octokit({
+    auth: accessToken
+  });
+  let result = await octokit.repos.getContent({
+    owner: username,
+    path: "croma.json",
+    repo: repoName
+  });
+  return Buffer.from(result.data.content, "base64").toString();
 }
 
 SyncPalettesScreen.navigationOptions = ({ navigation }) => {
