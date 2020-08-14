@@ -21,8 +21,6 @@ import { logEvent } from "../libs/Helpers";
 import { ScrollView } from "react-native-gesture-handler";
 import { navigationObject } from "../store/store";
 import * as ImagePicker from "expo-image-picker";
-import { Octokit } from "@octokit/rest";
-import { authorize } from "react-native-app-auth";
 export default function HamburgerMenu(props) {
   const pickImageResult = async base64 => {
     return await ImagePicker.launchImageLibraryAsync({

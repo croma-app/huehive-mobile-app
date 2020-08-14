@@ -1,7 +1,6 @@
 import { AsyncStorage } from "react-native";
 const APPLICATION_STATE_KEY = "APLICATION_STATE";
 const IS_USER_ALREADY_EXIST_KEY = "IS_USER_ALREADY_EXIST";
-const USER_KEY = "USER_STATE";
 export default class Storage {
   static getApplicationState = async () => {
     let state = await AsyncStorage.getItem(APPLICATION_STATE_KEY);
