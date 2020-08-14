@@ -59,7 +59,7 @@ export default function HamburgerMenu(props) {
             }}
           >
             <View style={styles.menuItemView}>
-              <View style={styles.menuIcon}>
+              <View style={[styles.menuIcon, { paddingLeft: 4 }]}>
                 <Ionicons name="md-color-filter" style={styles.icon} />
               </View>
               <Text style={styles.textAreaMenuItem}>Create new palette</Text>
@@ -159,7 +159,7 @@ export default function HamburgerMenu(props) {
             }}
           >
             <View style={styles.menuItemView}>
-              <View style={styles.menuIcon}>
+              <View style={[styles.menuIcon, { paddingLeft: 4 }]}>
                 <FontAwesome5 name="unlock" style={styles.icon} />
               </View>
               <Text style={styles.textAreaMenuItem}>Pro benefites</Text>

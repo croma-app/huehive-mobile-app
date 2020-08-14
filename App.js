@@ -19,22 +19,11 @@ export default function App(props) {
   const [isPalettesLoaded, setIsPalettesLoaded] = useState(false);
   const applicationState = applicationHook(initState);
 
-  const {
-    isMenuOpen,
-    setMenu,
-    isSideMenuEnabled,
-    setSideMenuEnabled
-  } = applicationState;
+  const { isMenuOpen, setMenu } = applicationState;
 
   useEffect(() => {
     (async () => {
       await applicationState.loadInitPaletteFromStore();
-      if (Platform.OS === "android") {
-        const value = await NativeModules.CromaModule.getConfigString(
-          "hamburgerMenu"
-        );
-        setSideMenuEnabled(value === "true");
-      }
       setIsPalettesLoaded(true);
     })();
     if (Platform.OS === "web") {
@@ -71,7 +60,7 @@ export default function App(props) {
   );
 
   const WithSideMenu = MainContent => {
-    return isSideMenuEnabled ? (
+    return Platform.OS == "android" ? (
       <SideMenu
         menu={<HamburgerMenu setMenu={setMenu} />}
         isOpen={isMenuOpen}

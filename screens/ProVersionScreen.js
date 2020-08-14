@@ -37,7 +37,7 @@ export default function ProScreen(props) {
           without any ads and annoying notifications 😊
         </Text>
         <CromaButton onPress={purchaseDevelopment}>
-          Support app development
+          Buy me a coffee  ☕
         </CromaButton>
       </View>
     </ScrollView>

@@ -24,7 +24,6 @@ import { Header } from "react-navigation";
 import EmptyView from "../components/EmptyView";
 import ActionButton from "react-native-action-button";
 import { Ionicons, Entypo } from "@expo/vector-icons";
-import InAppBilling from "react-native-billing";
 import ShareMenu from "../libs/ShareMenu";
 import { logEvent } from "../libs/Helpers";
 import { navigationObject } from "../store/store";
@@ -40,7 +39,6 @@ const HomeScreen = function(props) {
     isPro,
     isMenuOpen,
     setMenu,
-    isSideMenuEnabled,
     setPurchase
   } = React.useContext(CromaContext);
   const [pickImgloading, setPickImgLoading] = useState(false);
@@ -76,13 +74,11 @@ const HomeScreen = function(props) {
     if (!navigationObject.navigation) {
       navigationObject.navigation = props.navigation;
     }
-    if (isSideMenuEnabled) {
-      props.navigation.setParams({
-        isSideMenuEnabled: isSideMenuEnabled,
-        isMenuOpen: isMenuOpen,
-        setMenu: setMenu
-      });
-    }
+    props.navigation.setParams({
+      isMenuOpen: isMenuOpen,
+      setMenu: setMenu
+    });
+
     getPermissionAsync();
     if (Platform.OS === "android") {
       // Deep linking code
@@ -303,14 +299,13 @@ HomeScreen.navigationOptions = ({ navigation }) => {
   const result = {
     title: "Croma"
   };
-  if (navigation.getParam("isSideMenuEnabled")) {
+  if (Platform.OS == "android") {
     result.headerLeft = (
       <Touchable
         style={{ marginLeft: 8 }}
         onPress={() => {
           const isMenuOpen = navigation.getParam("isMenuOpen");
           const setMenu = navigation.getParam("setMenu");
-          console.log("menu", isMenuOpen, setMenu);
           setMenu(!isMenuOpen);
         }}
       >
