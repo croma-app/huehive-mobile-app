@@ -9,7 +9,8 @@ export const initState = {
   deletedPalettes: {},
   isLoading: false,
   isPro: false,
-  isMenuOpen: false
+  isMenuOpen: false,
+  user: {}
 };
 
 const syncStateToStore = function(state) {
@@ -147,6 +148,11 @@ export default function applicationHook(initState) {
       return { ...state, isMenuOpen: isMenuOpen };
     });
   };
+  const setUser = user => {
+    setState(state => {
+      return { ...state, user: user };
+    });
+  };
 
   const addColorToPalette = (name, color) => {
     setState(state => {
@@ -238,7 +244,8 @@ export default function applicationHook(initState) {
     undoColorDeletion,
     addColorToPalette,
     setPurchase,
-    setMenu
+    setMenu,
+    setUser
   });
 
   // Sync state to local storage

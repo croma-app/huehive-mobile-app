@@ -169,7 +169,9 @@ export default function HamburgerMenu(props) {
           <Touchable
             style={styles.menuItem}
             onPress={async () => {
-              logEvent("hm_import_from_git");
+              setMenu(false);
+              navigationObject.navigation.navigate("SyncPalettes");
+              /* logEvent("hm_import_from_git");
               const config = {
                 redirectUrl: "app.croma://oauthredirect",
                 clientId: "7c314acf0acaae3133fa",
@@ -194,7 +196,7 @@ export default function HamburgerMenu(props) {
               octokit.repos.createForAuthenticatedUser({
                 name: "repo-from-script-test-2",
                 private: "yes"
-              });
+              }); */
               /*  octokit.repos.getContent({
                 owner: 'kamalkishor1991',
                 repo: 'repo-from-script-test',
