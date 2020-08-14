@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text } from "react-native";
+import { ScrollView, StyleSheet, Text, ToastAndroid } from "react-native";
 import { View } from "react-native-animatable";
 import CromaButton from "../components/CromaButton";
 import { CromaContext } from "../store/store";
@@ -15,11 +15,7 @@ export default function SyncPalettesScreen(props) {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View>
-        {user && user.github && user.github.user && (
-          <View>
-            <Text>Welcome {user.github.user.login}</Text>
-          </View>
-        )}
+        {user && user.github && <GithubView user={user} />}
         <Touchable
           style={styles.menuItem}
           onPress={() => {
@@ -67,7 +63,110 @@ export default function SyncPalettesScreen(props) {
   }
 }
 
+function GithubView(props) {
+  const { user, setUser, isPro } = React.useContext(CromaContext);
+  const githubData = user.github;
+  const githubUser = user.github.user;
+  const jsonToSync = { time: new Date() };
+  return (
+    <View style={styles.githubContainer}>
+      <View>
+        <Text>Welcome {githubUser.login}</Text>
+      </View>
+      <View style={styles.syncToGithub}>
+        <Text>
+          This will create a repo named color-palettes in your github account.{" "}
+        </Text>
+        {isPro ? (
+          <Text> Since you are a pro user. It will create a private repo</Text>
+        ) : (
+          <Text>
+            By default the repository will be public. Unlock pro to create a
+            private repository.
+          </Text>
+        )}
+        <CromaButton
+          onPress={() => {
+            (async () => {
+              await writeToGithubRepo(
+                githubData.authState.accessToken,
+                githubUser.login,
+                "croma-color-palettes",
+                JSON.stringify(jsonToSync),
+                isPro
+              );
+              ToastAndroid.show(
+                "Palettes are synced to github repo croma-color-palettes",
+                ToastAndroid.LONG
+              );
+            })();
+          }}
+        >
+          Sync palettes to your github repo
+        </CromaButton>
+      </View>
+      <View>
+        <Text>Update all your palettes from color-palettes repo</Text>
+        <CromaButton>Sync palettes from your github repo</CromaButton>
+      </View>
+    </View>
+  );
+}
+
+async function writeToGithubRepo(
+  accessToken,
+  username,
+  repoName,
+  contentStr,
+  privateRepo
+) {
+  const octokit = new Octokit({
+    auth: accessToken
+  });
+  try {
+    //TODO: check if repo exist
+    await octokit.repos.createForAuthenticatedUser({
+      name: repoName,
+      description:
+        "Created by - Croma - https://play.google.com/store/apps/details?id=app.croma",
+      private: privateRepo ? "yes" : "no"
+    });
+  } catch (e) {
+    // ignore if already exist
+  }
+  let sha = undefined;
+  try {
+    let res = await octokit.repos.getContent({
+      owner: username,
+      path: "croma.json",
+      repo: repoName
+    });
+    sha = res.data.sha;
+  } catch (e) {
+    console.log("Exception: ", e);
+    // file not found
+  }
+
+  await octokit.repos.createOrUpdateFileContents({
+    owner: username,
+    repo: repoName,
+    path: "croma.json",
+    message: "update color palettes - from croma android app.",
+    content: Buffer.from(contentStr).toString("base64"),
+    branch: "master",
+    sha: sha
+  });
+}
+
+SyncPalettesScreen.navigationOptions = ({ navigation }) => {
+  return {
+    title: "Import/Export your palettes"
+  };
+};
 const styles = StyleSheet.create({
+  container: {
+    padding: 12
+  },
   icon: {
     fontSize: 25,
     padding: 12,
