@@ -31,10 +31,16 @@ export default function HamburgerMenu(props) {
   };
   const { setMenu } = props;
   const [appInstallTime, setAppInstallTime] = useState(null);
+  const [fileSync, setFileSync] = useState(false);
   useEffect(() => {
     (async () => {
       const appInstallTime = await NativeModules.CromaModule.getAppInstallTime();
       setAppInstallTime(parseInt(appInstallTime, 10));
+      setFileSync(
+        (await NativeModules.CromaModule.getConfigString(
+          "file-sync-menu-item"
+        )) === "true"
+      );
     })();
   });
   return (
@@ -163,6 +169,23 @@ export default function HamburgerMenu(props) {
               <Text style={styles.textAreaMenuItem}>Pro benefites</Text>
             </View>
           </Touchable>
+
+          {fileSync && (
+            <Touchable
+              style={styles.menuItem}
+              onPress={async () => {
+                setMenu(false);
+                navigationObject.navigation.navigate("SyncPalettes");
+              }}
+            >
+              <View style={styles.menuItemView}>
+                <View style={styles.menuIcon}>
+                  <FontAwesome5 name="file-import" style={styles.icon} />
+                </View>
+                <Text style={styles.textAreaMenuItem}>import from git</Text>
+              </View>
+            </Touchable>
+          )}
         </View>
       </ScrollView>
     </View>
