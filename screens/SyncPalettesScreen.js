@@ -23,16 +23,22 @@ export default function SyncPalettesScreen(props) {
   );
   const importFromFile = async () => {
     const palettesFromFile = await importPalettes();
-    Object.keys(palettesFromFile).forEach(palette => {
-      if (!allPalettes[palette] && palette != "version") {
-        addPalette(palettesFromFile[palette]);
-      }
-    });
-    longToast("Imported sucessfully.");
+    addExportedPalettes(palettesFromFile, allPalettes, addPalette);
   };
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View>
+        <CromaButton
+          onPress={() => {
+            saveFile(allPalettes);
+          }}
+        >
+          Export palettes as a file
+        </CromaButton>
+        <CromaButton onPress={importFromFile}>
+          Import palettes from file
+        </CromaButton>
+
         {user && user.github && <GithubView user={user} />}
         <Touchable
           style={styles.menuItem}
@@ -50,16 +56,6 @@ export default function SyncPalettesScreen(props) {
             </Text>
           </View>
         </Touchable>
-        <CromaButton onPress={importFromFile}>
-          Import palettes from file
-        </CromaButton>
-        <CromaButton
-          onPress={() => {
-            saveFile(allPalettes);
-          }}
-        >
-          Export palettes as a file
-        </CromaButton>
       </View>
     </ScrollView>
   );
@@ -91,11 +87,25 @@ export default function SyncPalettesScreen(props) {
   }
 }
 
+function addExportedPalettes(palettesFromFile, allPalettes, addPalette) {
+  let added = 0;
+  const palettes = palettesFromJsonString(palettesFromFile);
+  palettes.forEach(palette => {
+    if (!allPalettes[palette.name]) {
+      addPalette(palette);
+      added++;
+    }
+  });
+  longToast(added + " palettes added sucessfully.");
+}
+
 function GithubView(props) {
-  const { user, setUser, isPro } = React.useContext(CromaContext);
+  const { user, setUser, allPalettes, addPalette, isPro } = React.useContext(
+    CromaContext
+  );
   const githubData = user.github;
   const githubUser = user.github.user;
-  const jsonToSync = { time: new Date() };
+
   return (
     <View style={styles.githubContainer}>
       <View>
@@ -121,7 +131,7 @@ function GithubView(props) {
                   githubData.authState.accessToken,
                   githubUser.login,
                   "croma-color-palettes",
-                  JSON.stringify(jsonToSync),
+                  palettesToJsonString(allPalettes),
                   isPro
                 );
                 ToastAndroid.show(
@@ -145,12 +155,16 @@ function GithubView(props) {
         <CromaButton
           onPress={() => {
             (async () => {
-              content = await readFromGithubRepo(
+              const fileContentFromGithub = await readFromGithubRepo(
                 githubData.authState.accessToken,
                 githubUser.login,
                 "croma-color-palettes"
               );
-              ToastAndroid.show("Content" + content, ToastAndroid.LONG);
+              addExportedPalettes(
+                fileContentFromGithub,
+                allPalettes,
+                addPalette
+              );
             })();
           }}
         >
@@ -245,7 +259,7 @@ const importPalettes = async () => {
     };
     const file = await DocumentPicker.pick(options);
     const contents = await RNFS.readFile(file.fileCopyUri, "utf8");
-    return JSON.parse(contents);
+    return contents;
   } catch (error) {
     console.error(error);
   }
@@ -259,8 +273,7 @@ const saveFile = async allPalettes => {
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
       const path = RNFS.DownloadDirectoryPath + "/croma.palettes.txt";
       // write the file
-      allPalettes["version"] = "V1";
-      RNFS.writeFile(path, JSON.stringify(allPalettes), "utf8")
+      RNFS.writeFile(path, palettesToJsonString(allPalettes), "utf8")
         .then(success => {
           longToast("Saved in Downloads...");
         })
@@ -274,11 +287,34 @@ const saveFile = async allPalettes => {
     longToast(err);
   }
 };
-
+const palettesToJsonString = allPalettes => {
+  allPalettes = JSON.parse(JSON.stringify(allPalettes));
+  var jsonToExport = {};
+  jsonToExport.version = "V1";
+  jsonToExport.createdAt = new Date();
+  jsonToExport.palettes = [];
+  Object.values(allPalettes).forEach(palette => {
+    palette.createdAt = new Date(palette.createdAt);
+    jsonToExport.palettes.push(palette);
+  });
+  return JSON.stringify(jsonToExport, null, 2);
+};
 SyncPalettesScreen.navigationOptions = ({ navigation }) => {
   return {
     title: "Import/Export your palettes"
   };
+};
+const palettesFromJsonString = exportedPalettesStr => {
+  exportedPalettes = JSON.parse(exportedPalettesStr);
+  const palettes = [];
+  exportedPalettes.palettes.forEach(palette => {
+    const p = {};
+    console.log("color:", palette);
+    p.name = palette.name;
+    p.colors = palette.colors;
+    palettes.push(p);
+  });
+  return palettes;
 };
 const styles = StyleSheet.create({
   container: {
