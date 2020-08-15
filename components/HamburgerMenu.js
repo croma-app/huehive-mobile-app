@@ -122,22 +122,7 @@ export default function HamburgerMenu(props) {
               <Text style={styles.textAreaMenuItem}>Scan color codes</Text>
             </View>
           </Touchable>
-          <MenuLink
-            id={"feedback"}
-            link={"https://github.com/croma-app/croma-react/issues/new"}
-            icon={
-              <MaterialCommunityIcons name="lightbulb-on" style={styles.icon} />
-            }
-          >
-            Feedback or suggestions?
-          </MenuLink>
-          <MenuLink
-            id={"github-repo"}
-            link={"https://github.com/croma-app/croma-react"}
-            icon={<Entypo name="github" style={styles.icon} />}
-          >
-            Contribute 👨‍💻
-          </MenuLink>
+
           {hasRateUsPeriodExpired(appInstallTime) && (
             <MenuLink
               id={"rate-us"}
@@ -147,13 +132,7 @@ export default function HamburgerMenu(props) {
               Like the App? Rate us
             </MenuLink>
           )}
-          <MenuLink
-            id={"web-link"}
-            link={"https://croma.app"}
-            icon={<MaterialCommunityIcons name="web" style={styles.icon} />}
-          >
-            https://croma.app
-          </MenuLink>
+
           <Touchable
             style={styles.menuItem}
             onPress={() => {
@@ -186,6 +165,21 @@ export default function HamburgerMenu(props) {
               </View>
             </Touchable>
           )}
+          <Touchable
+            style={styles.menuItem}
+            onPress={() => {
+              logEvent("hm_about_us");
+              setMenu(false);
+              navigationObject.navigation.navigate("AboutUs");
+            }}
+          >
+            <View style={styles.menuItemView}>
+              <View style={[styles.menuIcon, { paddingLeft: 4 }]}>
+                <FontAwesome5 name="info-circle" style={styles.icon} />
+              </View>
+              <Text style={styles.textAreaMenuItem}>About Us</Text>
+            </View>
+          </Touchable>
         </View>
       </ScrollView>
     </View>
