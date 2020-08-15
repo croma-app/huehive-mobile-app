@@ -88,17 +88,24 @@ function GithubView(props) {
         <CromaButton
           onPress={() => {
             (async () => {
-              await writeToGithubRepo(
-                githubData.authState.accessToken,
-                githubUser.login,
-                "croma-color-palettes",
-                JSON.stringify(jsonToSync),
-                isPro
-              );
-              ToastAndroid.show(
-                "Palettes are synced to github repo croma-color-palettes",
-                ToastAndroid.LONG
-              );
+              try {
+                await writeToGithubRepo(
+                  githubData.authState.accessToken,
+                  githubUser.login,
+                  "croma-color-palettes",
+                  JSON.stringify(jsonToSync),
+                  isPro
+                );
+                ToastAndroid.show(
+                  "Palettes are synced to github repo croma-color-palettes",
+                  ToastAndroid.LONG
+                );
+              } catch (e) {
+                ToastAndroid.show(
+                  "Error while calling github APIs " + e.toString(),
+                  ToastAndroid.LONG
+                );
+              }
             })();
           }}
         >
@@ -136,29 +143,8 @@ async function writeToGithubRepo(
   const octokit = new Octokit({
     auth: accessToken
   });
-  try {
-    //TODO: check if repo exist
-    await octokit.repos.createForAuthenticatedUser({
-      name: repoName,
-      description:
-        "Created by - Croma - https://play.google.com/store/apps/details?id=app.croma",
-      private: privateRepo ? "yes" : "no"
-    });
-  } catch (e) {
-    // ignore if already exist
-  }
-  let sha = undefined;
-  try {
-    let res = await octokit.repos.getContent({
-      owner: username,
-      path: "croma.json",
-      repo: repoName
-    });
-    sha = res.data.sha;
-  } catch (e) {
-    console.log("Exception: ", e);
-    // file not found
-  }
+  await createRepoIfDoesNotExist(octokit, repoName, privateRepo);
+  const sha = await getExistingFileSHAIfExist(octokit, username, repoName);
 
   await octokit.repos.createOrUpdateFileContents({
     owner: username,
@@ -170,6 +156,44 @@ async function writeToGithubRepo(
     sha: sha
   });
 }
+async function getExistingFileSHAIfExist(octokit, username, repoName) {
+  let sha = undefined;
+  try {
+    let res = await octokit.repos.getContent({
+      owner: username,
+      path: "croma.json",
+      repo: repoName
+    });
+    sha = res.data.sha;
+  } catch (e) {
+    if (e.status != 404) {
+      throw e;
+    }
+  }
+  return sha;
+}
+
+async function createRepoIfDoesNotExist(octokit, repoName, privateRepo) {
+  try {
+    await octokit.repos.createForAuthenticatedUser({
+      name: repoName,
+      description:
+        "Created by - Croma - https://play.google.com/store/apps/details?id=app.croma",
+      private: privateRepo
+    });
+  } catch (e) {
+    if (
+      !(
+        e.errors &&
+        e.errors[0] &&
+        e.errors[0].message === "name already exists on this account"
+      )
+    ) {
+      throw e;
+    }
+  }
+}
+
 async function readFromGithubRepo(accessToken, username, repoName) {
   const octokit = new Octokit({
     auth: accessToken

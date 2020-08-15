@@ -34,7 +34,7 @@ Ref: https://reactnative.dev/docs/signed-apk-android
 
 Bundle
 
-`./bundle-android.sh`
+`./bundle-and-run-android.sh`
 
 ### Code styling
 
