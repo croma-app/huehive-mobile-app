@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ActivityIndicator,
   View,
-  Text,
   Dimensions,
   Platform,
   Linking,
@@ -24,7 +23,7 @@ import Jimp from "jimp";
 import { Header } from "react-navigation";
 import EmptyView from "../components/EmptyView";
 import ActionButton from "react-native-action-button";
-import { Ionicons, Entypo, MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, Entypo } from "@expo/vector-icons";
 import ShareMenu from "../libs/ShareMenu";
 import { logEvent } from "../libs/Helpers";
 import { navigationObject } from "../store/store";
@@ -298,7 +297,7 @@ export default HomeScreen;
 
 HomeScreen.navigationOptions = ({ navigation }) => {
   const result = {
-    headerTitle: <CustomHeader navigation={navigation}></CustomHeader>
+    title: "Croma"
   };
   if (Platform.OS == "android") {
     result.headerLeft = (
@@ -318,21 +317,6 @@ HomeScreen.navigationOptions = ({ navigation }) => {
   return result;
 };
 
-const CustomHeader = props => {
-  return (
-    <View style={styles.header}>
-      <Text style={styles.title}>{props.navigation.getParam("name")}</Text>
-      <Touchable
-        onPress={() => {
-          props.navigation.navigate("ImportExport");
-        }}
-      >
-        <MaterialIcons name="import-export" size={24} color="white" />
-      </Touchable>
-    </View>
-  );
-};
-
 const styles = StyleSheet.create({
   container: {
     margin: 8,
@@ -349,15 +333,5 @@ const styles = StyleSheet.create({
     right: Math.max((Dimensions.get("window").width - 600) / 2, 0),
     left: Math.max((Dimensions.get("window").width - 600) / 2, 0)
   },
-  icon: { fontSize: 24, height: 24, color: "white" },
-  title: {
-    color: "#ffffff",
-    fontSize: 18
-  },
-  header: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "95%"
-  }
+  icon: { fontSize: 24, height: 24, color: "white" }
 });

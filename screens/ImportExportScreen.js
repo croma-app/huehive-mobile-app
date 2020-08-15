@@ -5,49 +5,30 @@ import {
   StyleSheet,
   PermissionsAndroid
 } from "react-native";
+import DocumentPicker from "react-native-document-picker";
 import { View } from "react-native-animatable";
 import { CromaContext } from "../store/store";
 import CromaButton from "../components/CromaButton";
 import { purchase, logEvent } from "../libs/Helpers";
-const longToast = function(msg) {
-  ToastAndroid.show(msg, ToastAndroid.LONG);
-};
-const exportPalettes = allPalettes => {
-  var RNFS = require("react-native-fs");
-
-  var path = RNFS.DownloadDirectoryPath + "/croma.palettes.json";
-  // write the file
-  allPalettes["version"] = "V1";
-  RNFS.writeFile(path, JSON.stringify(allPalettes), "utf8")
-    .then(success => {
-      longToast("Saved in Downloads...");
-    })
-    .catch(err => {
-      longToast(err.message);
-    });
-};
-
-saveFile = async allPalettes => {
-  try {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-    );
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      exportPalettes(allPalettes);
-    } else {
-      longToast("Permission denied");
-    }
-  } catch (err) {
-    longToast(err);
-  }
-};
+const RNFS = require("react-native-fs");
 
 export default function ImportExportScreen(props) {
-  const { allPalettes } = useContext(CromaContext);
+  const { allPalettes, addPalette } = useContext(CromaContext);
+  const importFromFile = async () => {
+    const palettesFromFile = await importPalettes();
+    Object.keys(palettesFromFile).forEach(palette => {
+      if (!allPalettes[palette] && palette != "version") {
+        addPalette(palettesFromFile[palette]);
+      }
+    });
+    longToast("Imported sucessfully.");
+  };
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View>
-        <CromaButton>Import palettes from file</CromaButton>
+        <CromaButton onPress={importFromFile}>
+          Import palettes from file
+        </CromaButton>
         <CromaButton
           onPress={() => {
             saveFile(allPalettes);

@@ -1,5 +1,11 @@
-import React from "react";
-import { ScrollView, StyleSheet, Text, ToastAndroid } from "react-native";
+import React, { useContext } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  PermissionsAndroid
+} from "react-native";
 import { View } from "react-native-animatable";
 import CromaButton from "../components/CromaButton";
 import { CromaContext } from "../store/store";
@@ -8,10 +14,22 @@ import { Entypo } from "@expo/vector-icons";
 import { logEvent } from "../libs/Helpers";
 import { Octokit } from "@octokit/rest";
 import { authorize } from "react-native-app-auth";
+import DocumentPicker from "react-native-document-picker";
+const RNFS = require("react-native-fs");
 
 export default function SyncPalettesScreen(props) {
-  const { user, setUser } = React.useContext(CromaContext);
-  console.log("User: ", user);
+  const { user, setUser, allPalettes, addPalette } = React.useContext(
+    CromaContext
+  );
+  const importFromFile = async () => {
+    const palettesFromFile = await importPalettes();
+    Object.keys(palettesFromFile).forEach(palette => {
+      if (!allPalettes[palette] && palette != "version") {
+        addPalette(palettesFromFile[palette]);
+      }
+    });
+    longToast("Imported sucessfully.");
+  };
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View>
@@ -32,6 +50,16 @@ export default function SyncPalettesScreen(props) {
             </Text>
           </View>
         </Touchable>
+        <CromaButton onPress={importFromFile}>
+          Import palettes from file
+        </CromaButton>
+        <CromaButton
+          onPress={() => {
+            saveFile(allPalettes);
+          }}
+        >
+          Export palettes as a file
+        </CromaButton>
       </View>
     </ScrollView>
   );
@@ -205,6 +233,47 @@ async function readFromGithubRepo(accessToken, username, repoName) {
   });
   return Buffer.from(result.data.content, "base64").toString();
 }
+
+const longToast = function(msg) {
+  ToastAndroid.show(msg, ToastAndroid.LONG);
+};
+
+const importPalettes = async () => {
+  try {
+    const options = {
+      type: DocumentPicker.types.plainText
+    };
+    const file = await DocumentPicker.pick(options);
+    const contents = await RNFS.readFile(file.fileCopyUri, "utf8");
+    return JSON.parse(contents);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const saveFile = async allPalettes => {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      const path = RNFS.DownloadDirectoryPath + "/croma.palettes.txt";
+      // write the file
+      allPalettes["version"] = "V1";
+      RNFS.writeFile(path, JSON.stringify(allPalettes), "utf8")
+        .then(success => {
+          longToast("Saved in Downloads...");
+        })
+        .catch(err => {
+          longToast(err.message);
+        });
+    } else {
+      longToast("Permission denied");
+    }
+  } catch (err) {
+    longToast(err);
+  }
+};
 
 SyncPalettesScreen.navigationOptions = ({ navigation }) => {
   return {

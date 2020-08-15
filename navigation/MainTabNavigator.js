@@ -11,7 +11,6 @@ import ColorListScreen from "../screens/ColorListScreen";
 import PaletteScreen from "../screens/PaletteScreen";
 import HomeScreen from "../screens/HomeScreen";
 import ProVersionScreen from "../screens/ProVersionScreen";
-import ImportExportScreen from "../screens/ImportExportScreen";
 import SyncPalettesScreen from "../screens/SyncPalettesScreen";
 import Colors from "../constants/Colors";
 import { Entypo } from "@expo/vector-icons";
@@ -32,7 +31,6 @@ const RootStack = createStackNavigator(
     Home: HomeScreen,
     AddPaletteManually: AddPaletteManuallyScreen,
     ProVersion: ProVersionScreen,
-    ImportExport: ImportExportScreen,
     SyncPalettes: SyncPalettesScreen
   },
   {
