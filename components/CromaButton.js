@@ -1,17 +1,44 @@
-import * as React from "react";
-import { StyleSheet, Text } from "react-native";
+import React, { useState } from "react";
 import Touchable from "react-native-platform-touchable";
+import { StyleSheet, Text, ActivityIndicator } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 
-export default class CromaButton extends React.Component {
-  render() {
-    const { style, onPress, children, textStyle } = this.props;
-    return (
-      <Touchable style={[styles.button, style]} onPress={onPress}>
-        <Text style={[styles.text, textStyle]}> {children} </Text>
-      </Touchable>
-    );
-  }
-}
+const LOADER_DEFAULT = 0;
+const LOADER_LOADING = 1;
+const LOADER_DONE = 2;
+
+const CromaButton = function(props) {
+  const { style, onPress, onPressWithLoader, children, textStyle } = props;
+  const [loaderState, setLoaderState] = useState(LOADER_DEFAULT);
+  const _onPress = async () => {
+    if (onPressWithLoader) {
+      try {
+        setLoaderState(LOADER_LOADING);
+        await onPressWithLoader();
+        setLoaderState(LOADER_DONE);
+      } catch (error) {
+        setLoaderState(LOADER_DEFAULT);
+        console.error(error);
+      }
+    } else {
+      onPress();
+    }
+  };
+  return (
+    <Touchable style={[styles.button, style]} onPress={_onPress}>
+      {loaderState === LOADER_LOADING ? (
+        <ActivityIndicator />
+      ) : (
+        <>
+          <Text style={[styles.text, textStyle]}> {children} </Text>
+          {loaderState === LOADER_DONE && (
+            <MaterialIcons name="cloud-done" size={24} color="green" />
+          )}
+        </>
+      )}
+    </Touchable>
+  );
+};
 
 const styles = StyleSheet.create({
   button: {
@@ -25,7 +52,9 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
+    display: "flex",
+    flexDirection: "row"
   },
   text: {
     textTransform: "uppercase",
@@ -33,3 +62,5 @@ const styles = StyleSheet.create({
     color: "#484a4c"
   }
 });
+
+export default CromaButton;

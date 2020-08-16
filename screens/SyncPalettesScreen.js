@@ -29,13 +29,13 @@ export default function SyncPalettesScreen(props) {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View>
         <CromaButton
-          onPress={() => {
-            saveFile(allPalettes);
+          onPressWithLoader={async () => {
+            await saveFile(allPalettes);
           }}
         >
           Export palettes as a file
         </CromaButton>
-        <CromaButton onPress={importFromFile}>
+        <CromaButton onPressWithLoader={importFromFile}>
           Import palettes from file
         </CromaButton>
 
