@@ -152,6 +152,7 @@ export default function HamburgerMenu(props) {
               style={styles.menuItem}
               onPress={async () => {
                 setMenu(false);
+                logEvent("hm_sync_palettes");
                 navigationObject.navigation.navigate("SyncPalettes");
               }}
             >

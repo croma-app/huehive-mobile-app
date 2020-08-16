@@ -31,66 +31,70 @@ export default function SyncPalettesScreen(props) {
       <View>
         <View style={styles.fileContainer}>
           <Text style={material.headline}>Export to file</Text>
-          <Text style={material.body1}>
-            Export all palettes to your downloads directory
-          </Text>
-
-          <CromaButton
-            onPressWithLoader={async () => {
-              await saveFile(allPalettes);
-            }}
-          >
-            Export palettes as a file
-          </CromaButton>
-          <Text style={material.body1}>
-            Import palettes from previously saved file.
-          </Text>
-          <CromaButton
-            onPressWithLoader={() => {
-              logEvent("sync_palettes_screen_import");
-              importFromFile();
-            }}
-          >
-            Import palettes from file
-          </CromaButton>
+          <View style={{ padding: 10 }}>
+            <Text style={material.body1}>
+              Export all palettes to your downloads directory
+            </Text>
+            <CromaButton
+              onPressWithLoader={async () => {
+                logEvent("sync_palettes_screen_export");
+                await saveFile(allPalettes);
+              }}
+            >
+              Export palettes as a file
+            </CromaButton>
+            <Text style={material.body1}>
+              Import palettes from previously saved file.
+            </Text>
+            <CromaButton
+              onPressWithLoader={() => {
+                logEvent("sync_palettes_screen_import");
+                importFromFile();
+              }}
+            >
+              Import palettes from file
+            </CromaButton>
+          </View>
         </View>
         <View style={styles.githubContainer}>
           <Text style={material.headline}>Github sync</Text>
-          {user && user.github && <GithubView user={user} />}
-          {user && user.github && (
-            <Touchable
-              style={[styles.githubButton]}
-              onPress={() => {
-                logEvent("github_logout");
-                githubLogout();
-              }}
-            >
-              <View style={styles.githubButtonView}>
-                <View style={styles.githubIcon}>
-                  <AntDesign name="github" style={styles.icon} />
+          <View style={{ padding: 10 }}>
+            {user && user.github && <GithubView user={user} />}
+            {user && user.github && (
+              <Touchable
+                style={[styles.githubButton]}
+                onPress={() => {
+                  logEvent("github_logout");
+                  githubLogout();
+                }}
+              >
+                <View style={styles.githubButtonView}>
+                  <View style={styles.githubIcon}>
+                    <AntDesign name="github" style={styles.icon} />
+                  </View>
+                  <Text style={styles.githubText}>logout from github</Text>
                 </View>
-                <Text style={styles.githubText}>logout from github</Text>
-              </View>
-            </Touchable>
-          )}
-          {!(user && user.github) && (
-            <Touchable
-              style={[styles.githubButton]}
-              onPress={() => {
-                logEvent("github_login");
-                githubLogin();
-              }}
-            >
-              <View style={styles.githubButtonView}>
-                <View style={styles.githubIcon}>
-                  <AntDesign name="github" style={styles.icon} />
+              </Touchable>
+            )}
+            {!(user && user.github) && (
+              <Touchable
+                style={[styles.githubButton]}
+                onPress={() => {
+                  logEvent("github_login");
+                  githubLogin();
+                }}
+              >
+                <View style={styles.githubButtonView}>
+                  <View style={styles.githubIcon}>
+                    <AntDesign name="github" style={styles.icon} />
+                  </View>
+                  <Text style={styles.githubText}>
+                    Github login to sync palettes
+                  </Text>
                 </View>
-                <Text style={styles.githubText}>
-                  Github login to sync palettes
-                </Text>
-              </View>
-            </Touchable>
-          )}
+              </Touchable>
+            )}
+          </View>
         </View>
       </View>
     </ScrollView>
