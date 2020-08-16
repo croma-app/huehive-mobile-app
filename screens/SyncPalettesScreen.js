@@ -41,7 +41,7 @@ export default function SyncPalettesScreen(props) {
                 await saveFile(allPalettes);
               }}
             >
-              Export palettes as a file
+              Export palettes to a file
             </CromaButton>
             <Text style={material.body1}>
               Import palettes from previously saved file.
