@@ -156,7 +156,8 @@ function GithubView(props) {
       </View>
       <View style={[styles.syncToGithub]}>
         <Text style={[material.body1]}>
-          This will create a repo named color-palettes in your github account.{" "}
+          This will create a repo named croma-color-palettes in your github
+          account.{" "}
         </Text>
         {isPro ? (
           <Text style={[material.body1]}>
