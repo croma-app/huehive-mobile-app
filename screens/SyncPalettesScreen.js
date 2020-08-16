@@ -293,16 +293,16 @@ const saveFile = async allPalettes => {
     );
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
       const path = RNFS.DownloadDirectoryPath + "/croma.palettes.txt";
-      // write the file
-      RNFS.writeFile(path, palettesToJsonString(allPalettes), "utf8")
-        .then(success => {
-          longToast("Saved in Downloads...");
-        })
-        .catch(err => {
-          longToast(err.message);
-        });
+      const isFileExists = await RNFS.exists(path);
+      if (isFileExists) {
+        // remove old file
+        await RNFS.unlink(path);
+      }
+      // write a new file
+      await RNFS.writeFile(path, palettesToJsonString(allPalettes), "utf8");
+      longToast("Saved in Downloads!");
     } else {
-      longToast("Permission denied");
+      longToast("Permission denied!");
     }
   } catch (err) {
     longToast(err);
