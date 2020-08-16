@@ -34,19 +34,18 @@ export default function SyncPalettesScreen(props) {
           <Text style={material.body1}>
             Export all palettes to your downloads directory
           </Text>
-          <CromaButton
-            onPress={() => {
-              logEvent("sync_palettes_screen_export");
-              saveFile(allPalettes);
-            }}
-          >
-            Export palettes to a file
-          </CromaButton>
           <Text style={material.body1}>
             Import palettes from previously saved file.
           </Text>
           <CromaButton
-            onPress={() => {
+            onPressWithLoader={async () => {
+              await saveFile(allPalettes);
+            }}
+          >
+            Export palettes as a file
+          </CromaButton>
+          <CromaButton
+            onPressWithLoader={() => {
               logEvent("sync_palettes_screen_import");
               importFromFile();
             }}
@@ -166,27 +165,25 @@ function GithubView(props) {
           </Text>
         )}
         <CromaButton
-          onPress={() => {
-            (async () => {
-              try {
-                await writeToGithubRepo(
-                  githubData.authState.accessToken,
-                  githubUser.login,
-                  "croma-color-palettes",
-                  palettesToJsonString(allPalettes),
-                  isPro
-                );
-                ToastAndroid.show(
-                  "Palettes are synced to github repo croma-color-palettes",
-                  ToastAndroid.LONG
-                );
-              } catch (e) {
-                ToastAndroid.show(
-                  "Error while calling github APIs " + e.toString(),
-                  ToastAndroid.LONG
-                );
-              }
-            })();
+          onPressWithLoader={async () => {
+            try {
+              await writeToGithubRepo(
+                githubData.authState.accessToken,
+                githubUser.login,
+                "croma-color-palettes",
+                palettesToJsonString(allPalettes),
+                isPro
+              );
+              ToastAndroid.show(
+                "Palettes are synced to github repo croma-color-palettes",
+                ToastAndroid.LONG
+              );
+            } catch (e) {
+              ToastAndroid.show(
+                "Error while calling github APIs " + e.toString(),
+                ToastAndroid.LONG
+              );
+            }
           }}
         >
           Sync palettes to your github repo
@@ -197,19 +194,13 @@ function GithubView(props) {
           Update all your palettes from color-palettes repo
         </Text>
         <CromaButton
-          onPress={() => {
-            (async () => {
-              const fileContentFromGithub = await readFromGithubRepo(
-                githubData.authState.accessToken,
-                githubUser.login,
-                "croma-color-palettes"
-              );
-              addExportedPalettes(
-                fileContentFromGithub,
-                allPalettes,
-                addPalette
-              );
-            })();
+          onPressWithLoader={async () => {
+            const fileContentFromGithub = await readFromGithubRepo(
+              githubData.authState.accessToken,
+              githubUser.login,
+              "croma-color-palettes"
+            );
+            addExportedPalettes(fileContentFromGithub, allPalettes, addPalette);
           }}
         >
           Sync palettes from your github repo
@@ -316,16 +307,16 @@ const saveFile = async allPalettes => {
     );
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
       const path = RNFS.DownloadDirectoryPath + "/croma.palettes.txt";
-      // write the file
-      RNFS.writeFile(path, palettesToJsonString(allPalettes), "utf8")
-        .then(success => {
-          longToast("Saved in Downloads...");
-        })
-        .catch(err => {
-          longToast(err.message);
-        });
+      const isFileExists = await RNFS.exists(path);
+      if (isFileExists) {
+        // remove old file
+        await RNFS.unlink(path);
+      }
+      // write a new file
+      await RNFS.writeFile(path, palettesToJsonString(allPalettes), "utf8");
+      longToast("Saved in Downloads!");
     } else {
-      longToast("Permission denied");
+      longToast("Permission denied!");
     }
   } catch (err) {
     longToast(err);
