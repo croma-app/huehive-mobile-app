@@ -10,7 +10,7 @@ import { View } from "react-native-animatable";
 import CromaButton from "../components/CromaButton";
 import { CromaContext } from "../store/store";
 import Touchable from "react-native-platform-touchable";
-import { Entypo } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { logEvent } from "../libs/Helpers";
 import { Octokit } from "@octokit/rest";
 import { authorize } from "react-native-app-auth";
@@ -40,22 +40,40 @@ export default function SyncPalettesScreen(props) {
         </CromaButton>
 
         {user && user.github && <GithubView user={user} />}
-        <Touchable
-          style={styles.menuItem}
-          onPress={() => {
-            logEvent("github_login");
-            githubLogin();
-          }}
-        >
-          <View style={styles.menuItemView}>
-            <View style={styles.menuIcon}>
-              <Entypo name="github" style={styles.icon} />
+        {user && user.github && (
+          <Touchable
+            style={[styles.githubButton]}
+            onPress={() => {
+              logEvent("github_logout");
+              githubLogout();
+            }}
+          >
+            <View style={styles.githubButtonView}>
+              <View style={styles.githubIcon}>
+                <AntDesign name="github" style={styles.icon} />
+              </View>
+              <Text style={styles.githubText}>logout from github</Text>
             </View>
-            <Text style={styles.textAreaMenuItem}>
-              Github login to sync palettes
-            </Text>
-          </View>
-        </Touchable>
+          </Touchable>
+        )}
+        {!(user && user.github) && (
+          <Touchable
+            style={[styles.githubButton]}
+            onPress={() => {
+              logEvent("github_login");
+              githubLogin();
+            }}
+          >
+            <View style={styles.githubButtonView}>
+              <View style={styles.githubIcon}>
+                <AntDesign name="github" style={styles.icon} />
+              </View>
+              <Text style={styles.githubText}>
+                Github login to sync palettes
+              </Text>
+            </View>
+          </Touchable>
+        )}
       </View>
     </ScrollView>
   );
@@ -84,6 +102,9 @@ export default function SyncPalettesScreen(props) {
     const response = await octokit.request("/user");
     console.log("AuthState data: ", response);
     setUser({ ...user, github: { authState: authState, user: response.data } });
+  }
+  async function githubLogout() {
+    setUser({ ...user, github: undefined });
   }
 }
 
@@ -323,16 +344,31 @@ const styles = StyleSheet.create({
   icon: {
     fontSize: 25,
     padding: 12,
-    color: "black"
+    color: "white"
   },
-  menuItemView: {
+  githubButton: {
+    backgroundColor: "#333333",
+    shadowColor: "rgba(0,0,0, .4)",
+    shadowOffset: { height: 1, width: 1 },
+    shadowOpacity: 1,
+    shadowRadius: 1,
+    elevation: 2,
+    height: 50,
+    marginTop: 10,
+    marginBottom: 10,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  githubButtonView: {
     flex: 1,
     flexDirection: "row"
   },
-  textAreaMenuItem: {
+  githubText: {
     fontWeight: "800",
     textAlignVertical: "center",
     padding: 12,
-    alignItems: "flex-start"
+    color: "white",
+    alignItems: "flex-start",
+    textTransform: "uppercase"
   }
 });
