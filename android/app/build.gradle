@@ -109,7 +109,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode code
-        versionName "2.7"
+        versionName "2.8"
         // Deprecated. Used by net.openid:appauth
         manifestPlaceholders = [
                 'appAuthRedirectScheme': 'app.croma'

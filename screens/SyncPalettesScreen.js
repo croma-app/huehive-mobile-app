@@ -1,37 +1,101 @@
-import React from "react";
-import { ScrollView, StyleSheet, Text, ToastAndroid } from "react-native";
+import React, { useContext } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  PermissionsAndroid
+} from "react-native";
 import { View } from "react-native-animatable";
 import CromaButton from "../components/CromaButton";
 import { CromaContext } from "../store/store";
 import Touchable from "react-native-platform-touchable";
-import { Entypo } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { logEvent } from "../libs/Helpers";
 import { Octokit } from "@octokit/rest";
 import { authorize } from "react-native-app-auth";
+import DocumentPicker from "react-native-document-picker";
+import { material } from "react-native-typography";
+const RNFS = require("react-native-fs");
 
 export default function SyncPalettesScreen(props) {
-  const { user, setUser } = React.useContext(CromaContext);
-  console.log("User: ", user);
+  const { user, setUser, allPalettes, addPalette } = React.useContext(
+    CromaContext
+  );
+  const importFromFile = async () => {
+    const palettesFromFile = await importPalettes();
+    addExportedPalettes(palettesFromFile, allPalettes, addPalette);
+  };
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View>
-        {user && user.github && <GithubView user={user} />}
-        <Touchable
-          style={styles.menuItem}
-          onPress={() => {
-            logEvent("github_login");
-            githubLogin();
-          }}
-        >
-          <View style={styles.menuItemView}>
-            <View style={styles.menuIcon}>
-              <Entypo name="github" style={styles.icon} />
-            </View>
-            <Text style={styles.textAreaMenuItem}>
-              Github login to sync palettes
+        <View style={styles.fileContainer}>
+          <Text style={material.headline}>Export to file</Text>
+          <View style={{ padding: 10 }}>
+            <Text style={material.body1}>
+              Export all palettes to your downloads directory
             </Text>
+            <CromaButton
+              onPressWithLoader={async () => {
+                logEvent("sync_palettes_screen_export");
+                await saveFile(allPalettes);
+              }}
+            >
+              Export palettes to a file
+            </CromaButton>
+            <Text style={material.body1}>
+              Import palettes from previously saved file.
+            </Text>
+            <CromaButton
+              onPressWithLoader={() => {
+                logEvent("sync_palettes_screen_import");
+                importFromFile();
+              }}
+            >
+              Import palettes from file
+            </CromaButton>
           </View>
-        </Touchable>
+        </View>
+        <View style={styles.githubContainer}>
+          <Text style={material.headline}>Github sync</Text>
+          <View style={{ padding: 10 }}>
+            {user && user.github && <GithubView user={user} />}
+            {user && user.github && (
+              <Touchable
+                style={[styles.githubButton]}
+                onPress={() => {
+                  logEvent("github_logout");
+                  githubLogout();
+                }}
+              >
+                <View style={styles.githubButtonView}>
+                  <View style={styles.githubIcon}>
+                    <AntDesign name="github" style={styles.icon} />
+                  </View>
+                  <Text style={styles.githubText}>logout from github</Text>
+                </View>
+              </Touchable>
+            )}
+            {!(user && user.github) && (
+              <Touchable
+                style={[styles.githubButton]}
+                onPress={() => {
+                  logEvent("github_login");
+                  githubLogin();
+                }}
+              >
+                <View style={styles.githubButtonView}>
+                  <View style={styles.githubIcon}>
+                    <AntDesign name="github" style={styles.icon} />
+                  </View>
+                  <Text style={styles.githubText}>
+                    Github login to sync palettes
+                  </Text>
+                </View>
+              </Touchable>
+            )}
+          </View>
+        </View>
       </View>
     </ScrollView>
   );
@@ -61,69 +125,88 @@ export default function SyncPalettesScreen(props) {
     console.log("AuthState data: ", response);
     setUser({ ...user, github: { authState: authState, user: response.data } });
   }
+  async function githubLogout() {
+    setUser({ ...user, github: undefined });
+  }
+}
+
+function addExportedPalettes(palettesFromFile, allPalettes, addPalette) {
+  let added = 0;
+  const palettes = palettesFromJsonString(palettesFromFile);
+  palettes.forEach(palette => {
+    if (!allPalettes[palette.name]) {
+      addPalette(palette);
+      added++;
+    }
+  });
+  longToast(added + " palettes added sucessfully.");
 }
 
 function GithubView(props) {
-  const { user, setUser, isPro } = React.useContext(CromaContext);
+  const { user, setUser, allPalettes, addPalette, isPro } = React.useContext(
+    CromaContext
+  );
   const githubData = user.github;
   const githubUser = user.github.user;
-  const jsonToSync = { time: new Date() };
+
   return (
-    <View style={styles.githubContainer}>
+    <View>
       <View>
-        <Text>Welcome {githubUser.login}</Text>
+        <Text style={[material.body2]}>Welcome {githubUser.login}</Text>
       </View>
-      <View style={styles.syncToGithub}>
-        <Text>
-          This will create a repo named color-palettes in your github account.{" "}
+      <View style={[styles.syncToGithub]}>
+        <Text style={[material.body1]}>
+          This will create a repo named croma-color-palettes in your github
+          account.{" "}
         </Text>
         {isPro ? (
-          <Text> Since you are a pro user. It will create a private repo</Text>
+          <Text style={[material.body1]}>
+            {" "}
+            Since you are a pro user. It will create a private repo
+          </Text>
         ) : (
-          <Text>
+          <Text style={[material.body2]}>
             By default the repository will be public. Unlock pro to create a
             private repository.
           </Text>
         )}
         <CromaButton
-          onPress={() => {
-            (async () => {
-              try {
-                await writeToGithubRepo(
-                  githubData.authState.accessToken,
-                  githubUser.login,
-                  "croma-color-palettes",
-                  JSON.stringify(jsonToSync),
-                  isPro
-                );
-                ToastAndroid.show(
-                  "Palettes are synced to github repo croma-color-palettes",
-                  ToastAndroid.LONG
-                );
-              } catch (e) {
-                ToastAndroid.show(
-                  "Error while calling github APIs " + e.toString(),
-                  ToastAndroid.LONG
-                );
-              }
-            })();
+          onPressWithLoader={async () => {
+            try {
+              await writeToGithubRepo(
+                githubData.authState.accessToken,
+                githubUser.login,
+                "croma-color-palettes",
+                palettesToJsonString(allPalettes),
+                isPro
+              );
+              ToastAndroid.show(
+                "Palettes are synced to github repo croma-color-palettes",
+                ToastAndroid.LONG
+              );
+            } catch (e) {
+              ToastAndroid.show(
+                "Error while calling github APIs " + e.toString(),
+                ToastAndroid.LONG
+              );
+            }
           }}
         >
           Sync palettes to your github repo
         </CromaButton>
       </View>
       <View>
-        <Text>Update all your palettes from color-palettes repo</Text>
+        <Text style={[material.body1]}>
+          Update all your palettes from color-palettes repo
+        </Text>
         <CromaButton
-          onPress={() => {
-            (async () => {
-              content = await readFromGithubRepo(
-                githubData.authState.accessToken,
-                githubUser.login,
-                "croma-color-palettes"
-              );
-              ToastAndroid.show("Content" + content, ToastAndroid.LONG);
-            })();
+          onPressWithLoader={async () => {
+            const fileContentFromGithub = await readFromGithubRepo(
+              githubData.authState.accessToken,
+              githubUser.login,
+              "croma-color-palettes"
+            );
+            addExportedPalettes(fileContentFromGithub, allPalettes, addPalette);
           }}
         >
           Sync palettes from your github repo
@@ -206,10 +289,73 @@ async function readFromGithubRepo(accessToken, username, repoName) {
   return Buffer.from(result.data.content, "base64").toString();
 }
 
+const longToast = function(msg) {
+  ToastAndroid.show(msg, ToastAndroid.LONG);
+};
+
+const importPalettes = async () => {
+  try {
+    const options = {
+      type: DocumentPicker.types.plainText
+    };
+    const file = await DocumentPicker.pick(options);
+    const contents = await RNFS.readFile(file.fileCopyUri, "utf8");
+    return contents;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const saveFile = async allPalettes => {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      const path = RNFS.DownloadDirectoryPath + "/croma.palettes.txt";
+      const isFileExists = await RNFS.exists(path);
+      if (isFileExists) {
+        // remove old file
+        await RNFS.unlink(path);
+      }
+      // write a new file
+      await RNFS.writeFile(path, palettesToJsonString(allPalettes), "utf8");
+      longToast("Saved in Downloads!");
+    } else {
+      longToast("Permission denied!");
+    }
+  } catch (err) {
+    longToast(err);
+  }
+};
+const palettesToJsonString = allPalettes => {
+  allPalettes = JSON.parse(JSON.stringify(allPalettes));
+  var jsonToExport = {};
+  jsonToExport.version = "V1";
+  jsonToExport.createdAt = new Date();
+  jsonToExport.palettes = [];
+  Object.values(allPalettes).forEach(palette => {
+    palette.createdAt = new Date(palette.createdAt);
+    jsonToExport.palettes.push(palette);
+  });
+  return JSON.stringify(jsonToExport, null, 2);
+};
 SyncPalettesScreen.navigationOptions = ({ navigation }) => {
   return {
     title: "Import/Export your palettes"
   };
+};
+const palettesFromJsonString = exportedPalettesStr => {
+  exportedPalettes = JSON.parse(exportedPalettesStr);
+  const palettes = [];
+  exportedPalettes.palettes.forEach(palette => {
+    const p = {};
+    console.log("color:", palette);
+    p.name = palette.name;
+    p.colors = palette.colors;
+    palettes.push(p);
+  });
+  return palettes;
 };
 const styles = StyleSheet.create({
   container: {
@@ -218,16 +364,35 @@ const styles = StyleSheet.create({
   icon: {
     fontSize: 25,
     padding: 12,
-    color: "black"
+    color: "white"
   },
-  menuItemView: {
+  githubButton: {
+    backgroundColor: "#333333",
+    shadowColor: "rgba(0,0,0, .4)",
+    shadowOffset: { height: 1, width: 1 },
+    shadowOpacity: 1,
+    shadowRadius: 1,
+    elevation: 2,
+    height: 50,
+    marginTop: 10,
+    marginBottom: 10,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  githubButtonView: {
     flex: 1,
     flexDirection: "row"
   },
-  textAreaMenuItem: {
+  githubText: {
     fontWeight: "800",
     textAlignVertical: "center",
     padding: 12,
-    alignItems: "flex-start"
+    color: "white",
+    alignItems: "flex-start",
+    textTransform: "uppercase"
+  },
+  githubContainer: {
+    marginTop: 24,
+    marginBottom: 24
   }
 });

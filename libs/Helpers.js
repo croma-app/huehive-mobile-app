@@ -2,6 +2,9 @@ import { NativeModules, Platform, ToastAndroid } from "react-native";
 import InAppBilling from "react-native-billing";
 
 const logEvent = (eventName, value) => {
+  if (eventName.length > 40) {
+    throw "eventName length should be smaller then equal to 40";
+  }
   if (Platform.OS === "android") {
     NativeModules.CromaModule.logEvent(
       eventName,
