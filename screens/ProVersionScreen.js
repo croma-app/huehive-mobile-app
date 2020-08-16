@@ -4,6 +4,7 @@ import { View } from "react-native-animatable";
 import CromaButton from "../components/CromaButton";
 import { CromaContext } from "../store/store";
 import { purchase, logEvent } from "../libs/Helpers";
+import { material } from "react-native-typography";
 
 export default function ProScreen(props) {
   const { isPro, setPurchase } = React.useContext(CromaContext);
@@ -22,7 +23,7 @@ export default function ProScreen(props) {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View>
         <Text style={styles.title}>PRO BENEFITS</Text>
-        <Text style={styles.line}>
+        <Text style={[styles.line]}>
           1. Add more than 4 colors in a palette 🎨
         </Text>
         <CromaButton
@@ -37,7 +38,7 @@ export default function ProScreen(props) {
           without any ads and annoying notifications 😊
         </Text>
         <CromaButton onPress={purchaseDevelopment}>
-          Buy me a coffee  ☕
+          Buy me a coffee ☕
         </CromaButton>
       </View>
     </ScrollView>
@@ -56,6 +57,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   line: {
+    ...material.body1,
     paddingBottom: 4,
     fontSize: 15
   }

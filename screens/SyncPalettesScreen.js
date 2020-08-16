@@ -15,6 +15,7 @@ import { logEvent } from "../libs/Helpers";
 import { Octokit } from "@octokit/rest";
 import { authorize } from "react-native-app-auth";
 import DocumentPicker from "react-native-document-picker";
+import { material } from "react-native-typography";
 const RNFS = require("react-native-fs");
 
 export default function SyncPalettesScreen(props) {
@@ -28,52 +29,69 @@ export default function SyncPalettesScreen(props) {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View>
-        <CromaButton
-          onPress={() => {
-            saveFile(allPalettes);
-          }}
-        >
-          Export palettes as a file
-        </CromaButton>
-        <CromaButton onPress={importFromFile}>
-          Import palettes from file
-        </CromaButton>
-
-        {user && user.github && <GithubView user={user} />}
-        {user && user.github && (
-          <Touchable
-            style={[styles.githubButton]}
+        <View style={styles.fileContainer}>
+          <Text style={material.headline}>Export to file</Text>
+          <Text style={material.body1}>
+            Export all palettes to your downloads directory
+          </Text>
+          <CromaButton
             onPress={() => {
-              logEvent("github_logout");
-              githubLogout();
+              logEvent("sync_palettes_screen_export");
+              saveFile(allPalettes);
             }}
           >
-            <View style={styles.githubButtonView}>
-              <View style={styles.githubIcon}>
-                <AntDesign name="github" style={styles.icon} />
-              </View>
-              <Text style={styles.githubText}>logout from github</Text>
-            </View>
-          </Touchable>
-        )}
-        {!(user && user.github) && (
-          <Touchable
-            style={[styles.githubButton]}
+            Export palettes to a file
+          </CromaButton>
+          <Text style={material.body1}>
+            Import palettes from previously saved file.
+          </Text>
+          <CromaButton
             onPress={() => {
-              logEvent("github_login");
-              githubLogin();
+              logEvent("sync_palettes_screen_import");
+              importFromFile();
             }}
           >
-            <View style={styles.githubButtonView}>
-              <View style={styles.githubIcon}>
-                <AntDesign name="github" style={styles.icon} />
+            Import palettes from file
+          </CromaButton>
+        </View>
+        <View style={styles.githubContainer}>
+          <Text style={material.headline}>Github sync</Text>
+          {user && user.github && <GithubView user={user} />}
+          {user && user.github && (
+            <Touchable
+              style={[styles.githubButton]}
+              onPress={() => {
+                logEvent("github_logout");
+                githubLogout();
+              }}
+            >
+              <View style={styles.githubButtonView}>
+                <View style={styles.githubIcon}>
+                  <AntDesign name="github" style={styles.icon} />
+                </View>
+                <Text style={styles.githubText}>logout from github</Text>
               </View>
-              <Text style={styles.githubText}>
-                Github login to sync palettes
-              </Text>
-            </View>
-          </Touchable>
-        )}
+            </Touchable>
+          )}
+          {!(user && user.github) && (
+            <Touchable
+              style={[styles.githubButton]}
+              onPress={() => {
+                logEvent("github_login");
+                githubLogin();
+              }}
+            >
+              <View style={styles.githubButtonView}>
+                <View style={styles.githubIcon}>
+                  <AntDesign name="github" style={styles.icon} />
+                </View>
+                <Text style={styles.githubText}>
+                  Github login to sync palettes
+                </Text>
+              </View>
+            </Touchable>
+          )}
+        </View>
       </View>
     </ScrollView>
   );
@@ -128,18 +146,21 @@ function GithubView(props) {
   const githubUser = user.github.user;
 
   return (
-    <View style={styles.githubContainer}>
+    <View>
       <View>
-        <Text>Welcome {githubUser.login}</Text>
+        <Text style={[material.body2]}>Welcome {githubUser.login}</Text>
       </View>
-      <View style={styles.syncToGithub}>
-        <Text>
+      <View style={[styles.syncToGithub]}>
+        <Text style={[material.body1]}>
           This will create a repo named color-palettes in your github account.{" "}
         </Text>
         {isPro ? (
-          <Text> Since you are a pro user. It will create a private repo</Text>
+          <Text style={[material.body1]}>
+            {" "}
+            Since you are a pro user. It will create a private repo
+          </Text>
         ) : (
-          <Text>
+          <Text style={[material.body2]}>
             By default the repository will be public. Unlock pro to create a
             private repository.
           </Text>
@@ -172,7 +193,9 @@ function GithubView(props) {
         </CromaButton>
       </View>
       <View>
-        <Text>Update all your palettes from color-palettes repo</Text>
+        <Text style={[material.body1]}>
+          Update all your palettes from color-palettes repo
+        </Text>
         <CromaButton
           onPress={() => {
             (async () => {
@@ -370,5 +393,9 @@ const styles = StyleSheet.create({
     color: "white",
     alignItems: "flex-start",
     textTransform: "uppercase"
+  },
+  githubContainer: {
+    marginTop: 24,
+    marginBottom: 24
   }
 });
