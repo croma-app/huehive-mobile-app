@@ -32,7 +32,7 @@ const CromaButton = function(props) {
         <>
           <Text style={[styles.text, textStyle]}> {children} </Text>
           {loaderState === LOADER_DONE && (
-            <MaterialIcons name="cloud-done" size={24} color="green" />
+            <MaterialIcons name="check-circle" size={24} color="green" />
           )}
         </>
       )}
