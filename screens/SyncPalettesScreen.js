@@ -41,7 +41,7 @@ export default function SyncPalettesScreen(props) {
                 await saveFile(allPalettes);
               }}
             >
-              Export palettes as a file
+              Export palettes to a file
             </CromaButton>
             <Text style={material.body1}>
               Import palettes from previously saved file.
@@ -156,7 +156,8 @@ function GithubView(props) {
       </View>
       <View style={[styles.syncToGithub]}>
         <Text style={[material.body1]}>
-          This will create a repo named color-palettes in your github account.{" "}
+          This will create a repo named croma-color-palettes in your github
+          account.{" "}
         </Text>
         {isPro ? (
           <Text style={[material.body1]}>

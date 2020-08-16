@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import Colors from "../constants/Colors";
 import {
-  Entypo,
   MaterialIcons,
   MaterialCommunityIcons,
   FontAwesome5,
@@ -38,7 +37,7 @@ export default function HamburgerMenu(props) {
       setAppInstallTime(parseInt(appInstallTime, 10));
       setFileSync(
         (await NativeModules.CromaModule.getConfigString(
-          "file-sync-menu-item"
+          "file_sync_menu_item"
         )) === "true"
       );
     })();
