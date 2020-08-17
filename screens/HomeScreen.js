@@ -71,9 +71,7 @@ const HomeScreen = function(props) {
 
   useEffect(() => {
     // setting navigation object global
-    if (!navigationObject.navigation) {
-      navigationObject.navigation = props.navigation;
-    }
+    navigationObject.navigation = props.navigation;
     props.navigation.setParams({
       isMenuOpen: isMenuOpen,
       setMenu: setMenu
