@@ -82,8 +82,8 @@ const HomeScreen = function(props) {
       // Deep linking code
       // https://medium.com/react-native-training/deep-linking-your-react-native-app-d87c39a1ad5e
       Linking.getInitialURL().then(url => {
-        logEvent("deep_linking_open_link");
         if (url) {
+          logEvent("deep_linking_open_link");
           const result = {};
           url
             .split("?")[1]
