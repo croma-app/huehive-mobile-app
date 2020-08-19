@@ -73,6 +73,6 @@ const RootStack = createStackNavigator(
   }
 );
 
-const AppContainer = createAppContainer(RootStack);
+export const AppContainer = createAppContainer(RootStack);
 
 export default RootStack;

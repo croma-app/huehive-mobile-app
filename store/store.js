@@ -4,15 +4,6 @@ import Storage from "./../libs/Storage";
 import { Platform, ToastAndroid } from "react-native";
 const UNDO_TIMEOUT = 3000;
 
-export const initState = {
-  allPalettes: {},
-  deletedPalettes: {},
-  isLoading: false,
-  isPro: false,
-  isMenuOpen: false,
-  user: {}
-};
-
 const syncStateToStore = function(state) {
   // TODO: We need to find a better way to do storage management. isMenuOpen should not be saved.
   // Fix this in a generic way with better storage management.
@@ -47,7 +38,7 @@ const sortPalettes = allPalettes => {
   return ordered;
 };
 
-export default function applicationHook(initState) {
+export default function applicationHook() {
   const addPalette = async palette => {
     setState(state => {
       const { allPalettes } = state;
@@ -232,9 +223,15 @@ export default function applicationHook(initState) {
       return { ...state, allPalettes };
     });
   };
-
   const [state, setState] = useState({
-    ...initState,
+    ...{
+      allPalettes: {},
+      deletedPalettes: {},
+      isLoading: false,
+      isPro: false,
+      isMenuOpen: false,
+      user: {}
+    },
     loadInitPaletteFromStore,
     undoDeletionByName,
     deletePaletteByName,
@@ -252,15 +249,11 @@ export default function applicationHook(initState) {
   if (
     Object.keys(state.allPalettes).length !== 0 ||
     Object.keys(state.deletedPalettes).length !== 0 ||
-    state.isPro !== initState.isPro
+    state.isPro === true
   ) {
     syncStateToStore(state);
   }
   return state;
 }
-
-export const navigationObject = {
-  navigation: null
-};
 
 export const CromaContext = React.createContext();

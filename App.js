@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import Colors from "./constants/Colors";
 import AppNavigator from "./navigation/AppNavigator";
+import { AppContainer } from "./navigation/MainTabNavigator";
 import { ActivityIndicator } from "react-native";
 import applicationHook, { initState, CromaContext } from "./store/store";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -18,7 +19,9 @@ import { logEvent } from "./libs/Helpers";
 export default function App(props) {
   const [isPalettesLoaded, setIsPalettesLoaded] = useState(false);
   const applicationState = applicationHook(initState);
-
+  const navigationObject = {
+    navigation: null
+  };
   const { isMenuOpen, setMenu } = applicationState;
 
   useEffect(() => {
@@ -52,7 +55,13 @@ export default function App(props) {
             style={[{ flex: 1, backgroundColor: "transparent", maxWidth: 600 }]}
             className={"navigation-workplace"}
           >
-            <AppNavigator />
+            <AppContainer
+              ref={nav => {
+                if (nav) {
+                  navigationObject.navigation = nav._navigation;
+                }
+              }}
+            />
           </View>
         </View>
       </ErrorBoundary>
@@ -62,7 +71,7 @@ export default function App(props) {
   const WithSideMenu = MainContent => {
     return Platform.OS == "android" ? (
       <SideMenu
-        menu={<HamburgerMenu setMenu={setMenu} />}
+        menu={<HamburgerMenu navigater={navigationObject} setMenu={setMenu} />}
         isOpen={isMenuOpen}
         onChange={isOpen => {
           logEvent("app_hamburger_menu_open");
