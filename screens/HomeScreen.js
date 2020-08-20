@@ -26,7 +26,6 @@ import ActionButton from "react-native-action-button";
 import { Ionicons, Entypo } from "@expo/vector-icons";
 import ShareMenu from "../libs/ShareMenu";
 import { logEvent } from "../libs/Helpers";
-import { navigationObject } from "../store/store";
 import { purchase } from "../libs/Helpers";
 
 const HomeScreen = function(props) {
@@ -70,8 +69,6 @@ const HomeScreen = function(props) {
   };
 
   useEffect(() => {
-    // setting navigation object global
-    navigationObject.navigation = props.navigation;
     props.navigation.setParams({
       isMenuOpen: isMenuOpen,
       setMenu: setMenu

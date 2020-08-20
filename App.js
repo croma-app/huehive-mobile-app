@@ -10,7 +10,7 @@ import Colors from "./constants/Colors";
 import AppNavigator from "./navigation/AppNavigator";
 import { AppContainer } from "./navigation/MainTabNavigator";
 import { ActivityIndicator } from "react-native";
-import applicationHook, { initState, CromaContext } from "./store/store";
+import applicationHook, { CromaContext } from "./store/store";
 import ErrorBoundary from "./components/ErrorBoundary";
 import HamburgerMenu from "./components/HamburgerMenu";
 import SideMenu from "react-native-side-menu";
@@ -18,7 +18,7 @@ import { logEvent } from "./libs/Helpers";
 
 export default function App(props) {
   const [isPalettesLoaded, setIsPalettesLoaded] = useState(false);
-  const applicationState = applicationHook(initState);
+  const applicationState = applicationHook();
   const navigationObject = {
     navigation: null
   };
@@ -57,6 +57,7 @@ export default function App(props) {
           >
             <AppContainer
               ref={nav => {
+                // https://reactnavigation.org/docs/3.x/app-containers
                 if (nav) {
                   navigationObject.navigation = nav._navigation;
                 }

@@ -7,10 +7,11 @@ const UNDO_TIMEOUT = 3000;
 const syncStateToStore = function(state) {
   // TODO: We need to find a better way to do storage management. isMenuOpen should not be saved.
   // Fix this in a generic way with better storage management.
-  const isMenuOpen = state.isMenuOpen;
-  delete state.isMenuOpen;
-  Storage.setApplicationState(state);
-  state.isMenuOpen = isMenuOpen;
+  const stateCopy = JSON.parse(JSON.stringify(state));
+  const isMenuOpen = stateCopy.isMenuOpen;
+  delete stateCopy.isMenuOpen;
+  delete stateCopy.isStoreLoaded;
+  Storage.setApplicationState(stateCopy);
 };
 
 const sortPaletteColors = palette =>
@@ -118,6 +119,7 @@ export default function applicationHook() {
       };
       addPalette(defaultPalettes);
     }
+    setStoreLoaded(true);
   };
 
   const removePaletteFromStateByName = name => {
@@ -223,6 +225,13 @@ export default function applicationHook() {
       return { ...state, allPalettes };
     });
   };
+
+  const setStoreLoaded = isStoreLoaded => {
+    setState(state => {
+      return { ...state, isStoreLoaded };
+    });
+  };
+
   const [state, setState] = useState({
     ...{
       allPalettes: {},
@@ -230,7 +239,8 @@ export default function applicationHook() {
       isLoading: false,
       isPro: false,
       isMenuOpen: false,
-      user: {}
+      user: {},
+      isStoreLoaded: false
     },
     loadInitPaletteFromStore,
     undoDeletionByName,
@@ -242,15 +252,11 @@ export default function applicationHook() {
     addColorToPalette,
     setPurchase,
     setMenu,
-    setUser
+    setUser,
+    setStoreLoaded
   });
-
   // Sync state to local storage
-  if (
-    Object.keys(state.allPalettes).length !== 0 ||
-    Object.keys(state.deletedPalettes).length !== 0 ||
-    state.isPro === true
-  ) {
+  if (state.isStoreLoaded === true) {
     syncStateToStore(state);
   }
   return state;
