@@ -18,7 +18,6 @@ import {
 import Touchable from "react-native-platform-touchable";
 import { logEvent } from "../libs/Helpers";
 import { ScrollView } from "react-native-gesture-handler";
-import { navigationObject } from "../store/store";
 import * as ImagePicker from "expo-image-picker";
 export default function HamburgerMenu(props) {
   const pickImageResult = async base64 => {
@@ -58,7 +57,8 @@ export default function HamburgerMenu(props) {
             onPress={() => {
               logEvent("hm_create_new_palette");
               setMenu(false);
-              navigationObject.navigation.navigate("AddPaletteManually");
+              //console.error(props, 'check it man ')
+              props.navigater.navigation.navigate("AddPaletteManually");
             }}
           >
             <View style={styles.menuItemView}>
@@ -79,7 +79,7 @@ export default function HamburgerMenu(props) {
                   logEvent("hm_pick_colors_from_img", {
                     length: pickedColors.length
                   });
-                  navigationObject.navigation.navigate(
+                  props.navigater.navigation.navigate(
                     "ColorList",
                     JSON.parse(pickedColors)
                   );
@@ -104,7 +104,7 @@ export default function HamburgerMenu(props) {
                   length: pickedColors.length
                 });
                 setMenu(false);
-                navigationObject.navigation.navigate(
+                props.navigater.navigation.navigate(
                   "ColorList",
                   JSON.parse(pickedColors)
                 );
@@ -135,7 +135,7 @@ export default function HamburgerMenu(props) {
             onPress={() => {
               logEvent("hm_pro_benefits");
               setMenu(false);
-              navigationObject.navigation.navigate("ProVersion");
+              props.navigater.navigation.navigate("ProVersion");
             }}
           >
             <View style={styles.menuItemView}>
@@ -152,7 +152,7 @@ export default function HamburgerMenu(props) {
               onPress={async () => {
                 setMenu(false);
                 logEvent("hm_sync_palettes");
-                navigationObject.navigation.navigate("SyncPalettes");
+                props.navigater.navigation.navigate("SyncPalettes");
               }}
             >
               <View style={styles.menuItemView}>

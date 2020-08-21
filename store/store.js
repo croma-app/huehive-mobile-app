@@ -4,22 +4,14 @@ import Storage from "./../libs/Storage";
 import { Platform, ToastAndroid } from "react-native";
 const UNDO_TIMEOUT = 3000;
 
-export const initState = {
-  allPalettes: {},
-  deletedPalettes: {},
-  isLoading: false,
-  isPro: false,
-  isMenuOpen: false,
-  user: {}
-};
-
 const syncStateToStore = function(state) {
   // TODO: We need to find a better way to do storage management. isMenuOpen should not be saved.
   // Fix this in a generic way with better storage management.
-  const isMenuOpen = state.isMenuOpen;
-  delete state.isMenuOpen;
-  Storage.setApplicationState(state);
-  state.isMenuOpen = isMenuOpen;
+  const stateCopy = JSON.parse(JSON.stringify(state));
+  const isMenuOpen = stateCopy.isMenuOpen;
+  delete stateCopy.isMenuOpen;
+  delete stateCopy.isStoreLoaded;
+  Storage.setApplicationState(stateCopy);
 };
 
 const sortPaletteColors = palette =>
@@ -47,7 +39,7 @@ const sortPalettes = allPalettes => {
   return ordered;
 };
 
-export default function applicationHook(initState) {
+export default function applicationHook() {
   const addPalette = async palette => {
     setState(state => {
       const { allPalettes } = state;
@@ -127,6 +119,7 @@ export default function applicationHook(initState) {
       };
       addPalette(defaultPalettes);
     }
+    setStoreLoaded(true);
   };
 
   const removePaletteFromStateByName = name => {
@@ -233,8 +226,22 @@ export default function applicationHook(initState) {
     });
   };
 
+  const setStoreLoaded = isStoreLoaded => {
+    setState(state => {
+      return { ...state, isStoreLoaded };
+    });
+  };
+
   const [state, setState] = useState({
-    ...initState,
+    ...{
+      allPalettes: {},
+      deletedPalettes: {},
+      isLoading: false,
+      isPro: false,
+      isMenuOpen: false,
+      user: {},
+      isStoreLoaded: false
+    },
     loadInitPaletteFromStore,
     undoDeletionByName,
     deletePaletteByName,
@@ -245,22 +252,14 @@ export default function applicationHook(initState) {
     addColorToPalette,
     setPurchase,
     setMenu,
-    setUser
+    setUser,
+    setStoreLoaded
   });
-
   // Sync state to local storage
-  if (
-    Object.keys(state.allPalettes).length !== 0 ||
-    Object.keys(state.deletedPalettes).length !== 0 ||
-    state.isPro !== initState.isPro
-  ) {
+  if (state.isStoreLoaded === true) {
     syncStateToStore(state);
   }
   return state;
 }
-
-export const navigationObject = {
-  navigation: null
-};
 
 export const CromaContext = React.createContext();
