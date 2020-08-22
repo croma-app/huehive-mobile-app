@@ -165,17 +165,20 @@ const HomeScreen = function(props) {
             <ActionButton.Item
               buttonColor="#60f0af"
               title="Pick colors from camera"
-              onPress={() => {
-                NativeModules.CromaModule.navigateToColorPicker(
-                  pickedColors => {
-                    logEvent("pick_colors_from_camera", pickedColors.length);
-                    console.log("Picked colors: ", pickedColors);
-                    props.navigation.navigate(
-                      "ColorList",
-                      JSON.parse(pickedColors)
-                    );
-                  }
-                );
+              onPress={async () => {
+                try {
+                  const pickedColors = await NativeModules.CromaModule.navigateToColorPicker();
+                  logEvent("pick_colors_from_camera", pickedColors.length);
+                  console.log("Picked colors: ", pickedColors);
+                  props.navigation.navigate(
+                    "ColorList",
+                    JSON.parse(pickedColors)
+                  );
+                } catch (error) {
+                  ToastAndroid.show(
+                    "Error while picking color from camera - " + error
+                  );
+                }
               }}
             >
               <Ionicons name="md-camera" style={styles.actionButtonIcon} />
@@ -184,47 +187,37 @@ const HomeScreen = function(props) {
           <ActionButton.Item
             buttonColor="#9b59b6"
             title="Get palette from image"
-            onPress={() => {
-              setPickImgLoading(true);
-              if (Platform.OS === "android") {
-                pickImageResult().then((result, err) => {
-                  NativeModules.CromaModule.pickTopColorsFromImage(
-                    result.uri,
-                    (err, pickedColors) => {
-                      logEvent("get_palette_from_image");
-                      if (err) {
-                        ToastAndroid.show(
-                          "Error while processing image: " + err,
-                          ToastAndroid.LONG
-                        );
-                      } else {
-                        console.log("Picked colors: ", pickedColors);
-                        props.navigation.navigate(
-                          "ColorList",
-                          JSON.parse(pickedColors)
-                        );
-                      }
-                      setPickImgLoading(false);
-                    }
-                  );
-                });
-              } else {
-                pickImage()
-                  .then((image, err) => {
-                    setPickImgLoading(false);
-                    props.navigation.navigate("ColorList", {
-                      colors: ColorPicker.getProminentColors(image)
-                    });
-                  })
-                  .catch(err => {
-                    if (Platform.OS == "android") {
-                      ToastAndroid.show(
-                        "Error while processing image: " + err,
-                        ToastAndroid.LONG
-                      );
-                    }
-                    setPickImgLoading(false);
+            onPress={async () => {
+              try {
+                setPickImgLoading(true);
+                if (Platform.OS === "android") {
+                  const result = await pickImageResult();
+                  console.log("Result: ", result);
+                  if (!result.cancelled) {
+                    const pickedColors = await NativeModules.CromaModule.pickTopColorsFromImage(
+                      result.uri
+                    );
+                    logEvent("get_palette_from_image");
+                    props.navigation.navigate(
+                      "ColorList",
+                      JSON.parse(pickedColors)
+                    );
+                  }
+                } else {
+                  const image = await pickImage();
+                  props.navigation.navigate("ColorList", {
+                    colors: ColorPicker.getProminentColors(image)
                   });
+                }
+              } catch (error) {
+                if (Platform.OS === "android") {
+                  ToastAndroid.show(
+                    "Error while extracting colors - " + error,
+                    ToastAndroid.LONG
+                  );
+                }
+              } finally {
+                setPickImgLoading(false);
               }
             }}
           >

@@ -72,19 +72,19 @@ export default function HamburgerMenu(props) {
             style={styles.menuItem}
             onPress={async () => {
               const imageResult = await pickImageResult();
-              NativeModules.CromaModule.navigateToImageColorPicker(
-                imageResult.uri,
-                pickedColors => {
-                  setMenu(false);
-                  logEvent("hm_pick_colors_from_img", {
-                    length: pickedColors.length
-                  });
-                  props.navigater.navigation.navigate(
-                    "ColorList",
-                    JSON.parse(pickedColors)
-                  );
-                }
-              );
+              if (!imageResult.cancelled) {
+                const pickedColors = await NativeModules.CromaModule.navigateToImageColorPicker(
+                  imageResult.uri
+                );
+                setMenu(false);
+                logEvent("hm_pick_colors_from_img", {
+                  length: pickedColors.length
+                });
+                props.navigater.navigation.navigate(
+                  "ColorList",
+                  JSON.parse(pickedColors)
+                );
+              }
             }}
           >
             <View style={styles.menuItemView}>
@@ -98,17 +98,16 @@ export default function HamburgerMenu(props) {
           </Touchable>
           <Touchable
             style={styles.menuItem}
-            onPress={() => {
-              NativeModules.CromaModule.navigateToColorPicker(pickedColors => {
-                logEvent("hm_pick_text_colors_from_camera", {
-                  length: pickedColors.length
-                });
-                setMenu(false);
-                props.navigater.navigation.navigate(
-                  "ColorList",
-                  JSON.parse(pickedColors)
-                );
+            onPress={async () => {
+              const pickedColors = await NativeModules.CromaModule.navigateToColorPicker();
+              logEvent("hm_pick_text_colors_from_camera", {
+                length: pickedColors.length
               });
+              setMenu(false);
+              props.navigater.navigation.navigate(
+                "ColorList",
+                JSON.parse(pickedColors)
+              );
             }}
           >
             <View style={styles.menuItemView}>
