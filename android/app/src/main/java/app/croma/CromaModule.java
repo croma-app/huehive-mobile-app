@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import com.facebook.react.bridge.ActivityEventListener;
-import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -32,7 +31,7 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
 
   private static final int PICK_COLORS = 1;
   private final ReactApplicationContext reactContext;
-  private Callback callback;
+  private Promise promise;
   private FirebaseAnalytics mFirebaseAnalytics;
   private FirebaseRemoteConfig firebaseRemoteConfig;
 
@@ -77,8 +76,8 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
   }
 
   @ReactMethod
-  public void navigateToColorPicker(Callback callback) {
-    this.callback = callback;
+  public void navigateToColorPicker(Promise promise) {
+    this.promise = promise;
     ReactApplicationContext context = getReactApplicationContext();
     Intent intent = new Intent(context, ColorPickerActivity.class);
     context.startActivityForResult(intent, PICK_COLORS, new Bundle());
@@ -88,9 +87,9 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
   public void onActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
     if (data != null && requestCode == PICK_COLORS) {
       try {
-        this.callback.invoke(mapToJsonString(data.getIntegerArrayListExtra("colors")));
+        this.promise.resolve(mapToJsonString(data.getIntegerArrayListExtra("colors")));
       } catch (JSONException e) {
-        throw new IllegalStateException(e);
+        this.promise.reject(e);
       }
     }
   }
@@ -111,7 +110,7 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
   public void onNewIntent(Intent intent) {}
 
   @ReactMethod
-  public void pickTopColorsFromImage(String uri, Callback callback) {
+  public void pickTopColorsFromImage(String uri, Promise promise) {
     try {
       long startTime = System.currentTimeMillis();
       Uri imageUri = Uri.parse(uri);
@@ -127,16 +126,16 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
       Bundle params = new Bundle();
       params.putLong(TIME_TAKEN_TO_PROCESS_MS, (System.currentTimeMillis() - startTime));
       mFirebaseAnalytics.logEvent(FirebaseAnalyticsConstants.PICK_COLORS_FROM_IMAGE, params);
-      callback.invoke(null, mapToJsonString(intColors));
+      promise.resolve(mapToJsonString(intColors));
     } catch (Exception e) {
       e.printStackTrace();
-      callback.invoke(e);
+      promise.reject(e);
     }
   }
 
   @ReactMethod
-  public void navigateToImageColorPicker(String uri, Callback callback) {
-    this.callback = callback;
+  public void navigateToImageColorPicker(String uri, Promise promise) {
+    this.promise = promise;
     ReactApplicationContext context = getReactApplicationContext();
     Intent intent = new Intent(context, ImageColorPickerActivity.class);
     intent.putExtra("uri", uri);
