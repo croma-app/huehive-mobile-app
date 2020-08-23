@@ -26,6 +26,7 @@ export default function SyncPalettesScreen(props) {
     const palettesFromFile = await importPalettes();
     addExportedPalettes(palettesFromFile, allPalettes, addPalette);
   };
+  logEvent("sync_palettes_screen");
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View>
@@ -77,22 +78,28 @@ export default function SyncPalettesScreen(props) {
               </Touchable>
             )}
             {!(user && user.github) && (
-              <Touchable
-                style={[styles.githubButton]}
-                onPress={() => {
-                  logEvent("github_login");
-                  githubLogin();
-                }}
-              >
-                <View style={styles.githubButtonView}>
-                  <View style={styles.githubIcon}>
-                    <AntDesign name="github" style={styles.icon} />
+              <View>
+                <Text style={material.body1}>
+                  Login using github to sync your palettes to a github
+                  repository
+                </Text>
+                <Touchable
+                  style={[styles.githubButton]}
+                  onPress={() => {
+                    logEvent("github_login");
+                    githubLogin();
+                  }}
+                >
+                  <View style={styles.githubButtonView}>
+                    <View style={styles.githubIcon}>
+                      <AntDesign name="github" style={styles.icon} />
+                    </View>
+                    <Text style={styles.githubText}>
+                      Github login to sync palettes
+                    </Text>
                   </View>
-                  <Text style={styles.githubText}>
-                    Github login to sync palettes
-                  </Text>
-                </View>
-              </Touchable>
+                </Touchable>
+              </View>
             )}
           </View>
         </View>
