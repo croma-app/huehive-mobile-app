@@ -14,7 +14,7 @@
     "@expo/vector-icons": "^10.0.0",
     "@octokit/rest": "^18.0.3",
     "@react-navigation/web": "^1.0.0-alpha.9",
-    "croma-color-picker": "^1.1.0",
+    "croma-color-picker": "^1.1.2",
     "expo": "^36.0.0",
     "expo-image-picker": "~8.0.1",
     "jimp": "^0.9.3",
