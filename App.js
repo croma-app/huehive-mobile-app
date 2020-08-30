@@ -28,7 +28,17 @@ export default function App(props) {
     (async () => {
       await applicationState.loadInitPaletteFromStore();
       setIsPalettesLoaded(true);
+      const isFree =
+        (await NativeModules.CromaModule.getConfigString("isProFree")) ===
+        "true";
+      if (isFree) {
+        applicationState.setPurchase({
+          platfrom: "android",
+          isProFree: true
+        });
+      }
     })();
+
     if (Platform.OS === "web") {
       applicationState.setPurchase({
         platfrom: "web"
