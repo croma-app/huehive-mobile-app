@@ -26,6 +26,9 @@ export default function ProScreen(props) {
         <Text style={[styles.line]}>
           1. Add more than 4 colors in a palette 🎨
         </Text>
+        <Text style={[styles.line]}>
+          2. Export/sync colors to private github repository
+        </Text>
         <CromaButton
           style={{ backgroundColor: "#ff5c59" }}
           textStyle={{ color: "#fff" }}
@@ -34,7 +37,7 @@ export default function ProScreen(props) {
           {isPro ? "You are a pro user! Enjoy the app" : "Unlock pro"}
         </CromaButton>
         <Text style={styles.line}>
-          2. Support the development efferts to keep the app awesome and simple
+          3. Support the development efferts to keep the app awesome and simple
           without any ads and annoying notifications 😊
         </Text>
         <CromaButton onPress={purchaseDevelopment}>

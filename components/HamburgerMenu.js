@@ -29,16 +29,10 @@ export default function HamburgerMenu(props) {
   };
   const { setMenu } = props;
   const [appInstallTime, setAppInstallTime] = useState(null);
-  const [fileSync, setFileSync] = useState(false);
   useEffect(() => {
     (async () => {
       const appInstallTime = await NativeModules.CromaModule.getAppInstallTime();
       setAppInstallTime(parseInt(appInstallTime, 10));
-      setFileSync(
-        (await NativeModules.CromaModule.getConfigString(
-          "file_sync_menu_item"
-        )) === "true"
-      );
     })();
   });
   return (
@@ -144,26 +138,23 @@ export default function HamburgerMenu(props) {
               <Text style={styles.textAreaMenuItem}>Pro benefites</Text>
             </View>
           </Touchable>
-
-          {fileSync && (
-            <Touchable
-              style={styles.menuItem}
-              onPress={async () => {
-                setMenu(false);
-                logEvent("hm_sync_palettes");
-                props.navigater.navigation.navigate("SyncPalettes");
-              }}
-            >
-              <View style={styles.menuItemView}>
-                <View style={styles.menuIcon}>
-                  <FontAwesome5 name="file-import" style={styles.icon} />
-                </View>
-                <Text style={styles.textAreaMenuItem}>
-                  import/export palettes
-                </Text>
+          <Touchable
+            style={styles.menuItem}
+            onPress={async () => {
+              setMenu(false);
+              logEvent("hm_sync_palettes");
+              props.navigater.navigation.navigate("SyncPalettes");
+            }}
+          >
+            <View style={styles.menuItemView}>
+              <View style={styles.menuIcon}>
+                <FontAwesome5 name="file-import" style={styles.icon} />
               </View>
-            </Touchable>
-          )}
+              <Text style={styles.textAreaMenuItem}>
+                import/export palettes
+              </Text>
+            </View>
+          </Touchable>
         </View>
       </ScrollView>
     </View>
