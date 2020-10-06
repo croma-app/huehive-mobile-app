@@ -155,6 +155,33 @@ export default function HamburgerMenu(props) {
               </Text>
             </View>
           </Touchable>
+
+          <Touchable
+            style={styles.menuItem}
+            onPress={async () => {
+              setMenu(false);
+              logEvent("hm_matrial_palettes");
+              props.navigater.navigation.navigate("CommonPalettes", {
+                palettes: [
+                  {
+                    name: "test",
+                    colors: [
+                      { color: "#aaaaaa" },
+                      { color: "#cccccc" },
+                      { color: "#fa0000" }
+                    ]
+                  }
+                ]
+              });
+            }}
+          >
+            <View style={styles.menuItemView}>
+              <View style={styles.menuIcon}>
+                <FontAwesome5 name="file-import" style={styles.icon} />
+              </View>
+              <Text style={styles.textAreaMenuItem}>Palettes</Text>
+            </View>
+          </Touchable>
         </View>
       </ScrollView>
     </View>
