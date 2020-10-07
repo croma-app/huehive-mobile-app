@@ -4,6 +4,11 @@
 
 ![](Croma_web.gif)
 
+### Installation guide 
+- Installation: npm install
+- Runing on web: npm run web 
+- Runing on android: npm run android 
+
 # referances
 
 - https://github.com/numixproject/croma
@@ -49,3 +54,6 @@ Fix java files
 ```
 
 ### [Browse react native vector icons](https://oblador.github.io/react-native-vector-icons/)
+
+
+
