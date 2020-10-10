@@ -13,7 +13,7 @@ import HomeScreen from "../screens/HomeScreen";
 import ProVersionScreen from "../screens/ProVersionScreen";
 import SyncPalettesScreen from "../screens/SyncPalettesScreen";
 import CommonPalettesScreen from "../screens/CommonPalettesScreen";
-import ExplorePalettesScreen from "../screens/ExplorePalettesScreen";
+import PaletteLibraryScreen from "../screens/PaletteLibraryScreen";
 import Colors from "../constants/Colors";
 import { Entypo } from "@expo/vector-icons";
 import Touchable from "react-native-platform-touchable";
@@ -35,7 +35,7 @@ const RootStack = createStackNavigator(
     ProVersion: ProVersionScreen,
     SyncPalettes: SyncPalettesScreen,
     CommonPalettes: CommonPalettesScreen,
-    ExplorePalettes: ExplorePalettesScreen
+    PaletteLibrary: PaletteLibraryScreen
   },
   {
     initialRouteName: "Home",

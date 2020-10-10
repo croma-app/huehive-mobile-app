@@ -65,6 +65,24 @@ export default function HamburgerMenu(props) {
           <Touchable
             style={styles.menuItem}
             onPress={async () => {
+              setMenu(false);
+              logEvent("hm_palette_library");
+              props.navigater.navigation.navigate("PaletteLibrary");
+            }}
+          >
+            <View style={styles.menuItemView}>
+              <View style={styles.menuIcon}>
+                <MaterialCommunityIcons
+                  name="palette-swatch"
+                  style={styles.icon}
+                />
+              </View>
+              <Text style={styles.textAreaMenuItem}>Palette library</Text>
+            </View>
+          </Touchable>
+          <Touchable
+            style={styles.menuItem}
+            onPress={async () => {
               const imageResult = await pickImageResult();
               if (!imageResult.cancelled) {
                 const pickedColors = await NativeModules.CromaModule.navigateToImageColorPicker(
@@ -153,22 +171,6 @@ export default function HamburgerMenu(props) {
               <Text style={styles.textAreaMenuItem}>
                 import/export palettes
               </Text>
-            </View>
-          </Touchable>
-
-          <Touchable
-            style={styles.menuItem}
-            onPress={async () => {
-              setMenu(false);
-              logEvent("hm_matrial_palettes");
-              props.navigater.navigation.navigate("ExplorePalettes");
-            }}
-          >
-            <View style={styles.menuItemView}>
-              <View style={styles.menuIcon}>
-                <FontAwesome5 name="file-import" style={styles.icon} />
-              </View>
-              <Text style={styles.textAreaMenuItem}>Palettes</Text>
             </View>
           </Touchable>
         </View>

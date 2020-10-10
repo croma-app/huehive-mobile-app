@@ -1,11 +1,12 @@
 import * as React from "react";
-import { ScrollView, StyleSheet, Text } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { logEvent } from "../libs/Helpers";
 import Touchable from "react-native-platform-touchable";
+import { material } from "react-native-typography";
 const allPalettes = require("../constants/palettes/palettes").default;
 
-export default function ExplorePalettesScreen(props) {
-  logEvent("explore_palettes_screen");
+export default function PaletteLibraryScreen(props) {
+  logEvent("palette_library_screen");
   console.log("AllPalettes: ", JSON.stringify(allPalettes));
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -17,16 +18,34 @@ export default function ExplorePalettesScreen(props) {
               props.navigation.navigate("CommonPalettes", { input: palettes });
             }}
           >
-            <Text>{palettes.name}</Text>
+            <View>
+              <View>
+                <Text style={styles.title}>{palettes.name}</Text>
+              </View>
+              <View>
+                <Text style={styles.desc}>{palettes.desc}</Text>
+              </View>
+            </View>
           </Touchable>
         );
       })}
     </ScrollView>
   );
 }
+PaletteLibraryScreen.navigationOptions = ({ navigation }) => {
+  return {
+    title: "Palette library"
+  };
+};
 const styles = StyleSheet.create({
   container: {
     paddingLeft: 12,
     paddingRight: 12
+  },
+  title: {
+    ...material.title
+  },
+  desc: {
+    ...material.body1
   }
 });

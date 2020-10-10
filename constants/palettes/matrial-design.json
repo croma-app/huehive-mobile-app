@@ -1,5 +1,6 @@
 {
   "name": "Matrial design",
+  "desc": "Standard colors from matrial design color system",
   "palettes": [
     {
       "name": "red",
