@@ -14,7 +14,7 @@ export default function ExplorePalettesScreen(props) {
           <Touchable
             onPress={() => {
               logEvent("hm_matrial_palettes");
-              props.navigation.navigate("CommonPalettes", palettes);
+              props.navigation.navigate("CommonPalettes", { input: palettes });
             }}
           >
             <Text>{palettes.name}</Text>
