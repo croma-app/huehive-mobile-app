@@ -161,18 +161,7 @@ export default function HamburgerMenu(props) {
             onPress={async () => {
               setMenu(false);
               logEvent("hm_matrial_palettes");
-              props.navigater.navigation.navigate("CommonPalettes", {
-                palettes: [
-                  {
-                    name: "test",
-                    colors: [
-                      { color: "#aaaaaa" },
-                      { color: "#cccccc" },
-                      { color: "#fa0000" }
-                    ]
-                  }
-                ]
-              });
+              props.navigater.navigation.navigate("ExplorePalettes");
             }}
           >
             <View style={styles.menuItemView}>
