@@ -1,0 +1,57 @@
+{
+  "name": "Color wheels",
+  "desc": "A color wheel is an illustrative organization of colors around a circle, showing the relationships between primary colors, secondary colors, and tertiary colors.",
+  "palettes": [
+    {
+      "name": "The RGB Color Wheel",
+      "colors": [
+        { "color": "#ff0000" },
+        { "color": "#ff8000" },
+        { "color": "#ffff00" },
+        { "color": "#80ff00" },
+        { "color": "#00ff00" },
+        { "color": "#00ff80" },
+        { "color": "#00ffff" },
+        { "color": "#0080ff" },
+        { "color": "#0000ff" },
+        { "color": "#8000ff" },
+        { "color": "#ff00ff" },
+        { "color": "#ff0080" }
+      ]
+    },
+    {
+      "name": "The CMY(K) Color Wheel",
+      "colors": [
+        { "color": "#00ffff" },
+        { "color": "#0080ff" },
+        { "color": "#0000ff" },
+        { "color": "#8000ff" },
+        { "color": "#ff00ff" },
+        { "color": "#ff0080" },
+        { "color": "#ff0000" },
+        { "color": "#ff8000" },
+        { "color": "#ffff00" },
+        { "color": "#80ff00" },
+        { "color": "#00ff00" },
+        { "color": "#00ff80" }
+      ]
+    },
+    {
+      "name": "The RYB Color Wheel",
+      "colors": [
+        { "color": "#fe2712" },
+        { "color": "#fc600a" },
+        { "color": "#fb9902" },
+        { "color": "#fccc1a" },
+        { "color": "#fefe33" },
+        { "color": "#b2d732" },
+        { "color": "#66b032" },
+        { "color": "#347c98" },
+        { "color": "#0247fe" },
+        { "color": "#4424d6" },
+        { "color": "#8601af" },
+        { "color": "#c21460" }
+      ]
+    }
+  ]
+}
