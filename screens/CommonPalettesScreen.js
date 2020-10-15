@@ -7,11 +7,6 @@ import { PalettePreviewCard } from "../components/PalettePreviewCard";
 export default function CommonPalettesScreen(props) {
   logEvent("common_palettes_screen");
   const palettes = props.navigation.getParam("input").palettes;
-  console.log(
-    "palettes",
-    palettes,
-    palettes.map(p => p.name)
-  );
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {palettes.map(palette => (

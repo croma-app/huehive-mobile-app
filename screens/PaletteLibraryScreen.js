@@ -8,7 +8,6 @@ const allPalettes = require("../constants/palettes/palettes").default;
 
 export default function PaletteLibraryScreen(props) {
   logEvent("palette_library_screen");
-  console.log("AllPalettes: ", JSON.stringify(allPalettes));
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {allPalettes.map(palettes => {
