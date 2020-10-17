@@ -6,6 +6,7 @@ import { logEvent } from "../libs/Helpers";
 
 export default function ColorListScreen(props) {
   const colors = uniqueColors(props.navigation.getParam("colors"));
+  const suggestedName = props.navigation.getParam("suggestedName");
   logEvent("color_list_screen");
   return (
     <ScrollView style={styles.listview} showsVerticalScrollIndicator={false}>
@@ -14,7 +15,10 @@ export default function ColorListScreen(props) {
       ))}
       <CromaButton
         onPress={() =>
-          props.navigation.navigate("SavePalette", { colors: colors })
+          props.navigation.navigate("SavePalette", {
+            colors: colors,
+            name: suggestedName
+          })
         }
       >
         SAVE AS NEW PALETTE
