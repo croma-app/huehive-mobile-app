@@ -4,13 +4,7 @@ import { View, Text, StyleSheet, Platform, Dimensions } from "react-native";
 import Touchable from "react-native-platform-touchable";
 
 export const DialogContainer = props => (
-  <View
-    style={
-      Platform.OS === "web" ? styles.DailogContainerWeb : styles.DailogContainer
-    }
-  >
-    {props.children}
-  </View>
+  <View style={styles.DialogContainer}>{props.children}</View>
 );
 
 export const UndoDialog = props => {
@@ -75,18 +69,20 @@ const styles = StyleSheet.create({
     color: "#e6be0b",
     fontSize: 15
   },
-  DailogContainerWeb: {
-    position: "fixed",
-    bottom: 0,
-    left: 0,
-    width: Math.min(Dimensions.get("window").width, 400) - 10,
-    margin: 5,
-    zIndex: 10
-  },
-  DailogContainer: {
-    position: "absolute",
-    bottom: 0,
-    width: "100%",
-    zIndex: 10
-  }
+  DialogContainer:
+    Platform.OS === "web"
+      ? {
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          width: Math.min(Dimensions.get("window").width, 400) - 10,
+          margin: 5,
+          zIndex: 10
+        }
+      : {
+          position: "absolute",
+          bottom: 0,
+          width: "100%",
+          zIndex: 10
+        }
 });

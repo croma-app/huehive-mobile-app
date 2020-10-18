@@ -5,7 +5,7 @@ import { PalettePreviewCard } from "../components/PalettePreviewCard";
 import Colors from "../constants/Colors";
 import CromaButton from "../components/CromaButton";
 import { CromaContext } from "../store/store";
-import { TextDialog } from "./CommanDialogs";
+import { TextDialog } from "./CommonDialogs";
 
 export const SavePalette = props => {
   const [paletteName, setPaletteName] = useState(
