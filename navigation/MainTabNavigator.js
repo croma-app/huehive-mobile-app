@@ -15,6 +15,7 @@ import SyncPalettesScreen from "../screens/SyncPalettesScreen";
 import Colors from "../constants/Colors";
 import { Entypo } from "@expo/vector-icons";
 import Touchable from "react-native-platform-touchable";
+import AboutUsScreen from "../screens/AboutUsScreen";
 
 const styles = StyleSheet.create({
   icon: { fontSize: 25, height: 25, color: "white" }
@@ -31,7 +32,8 @@ const RootStack = createStackNavigator(
     Home: HomeScreen,
     AddPaletteManually: AddPaletteManuallyScreen,
     ProVersion: ProVersionScreen,
-    SyncPalettes: SyncPalettesScreen
+    SyncPalettes: SyncPalettesScreen,
+    AboutUs: AboutUsScreen
   },
   {
     initialRouteName: "Home",

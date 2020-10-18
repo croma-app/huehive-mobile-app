@@ -155,6 +155,24 @@ export default function HamburgerMenu(props) {
               </Text>
             </View>
           </Touchable>
+          <Touchable
+            style={styles.menuItem}
+            onPress={async () => {
+              setMenu(false);
+              logEvent("hm_about_us");
+              props.navigater.navigation.navigate("AboutUs");
+            }}
+          >
+            <View style={styles.menuItemView}>
+              <View style={{ ...styles.menuIcon, paddingLeft: 4 }}>
+                <MaterialCommunityIcons
+                  name="information-outline"
+                  style={styles.icon}
+                />
+              </View>
+              <Text style={styles.textAreaMenuItem}>About us</Text>
+            </View>
+          </Touchable>
         </View>
       </ScrollView>
     </View>
