@@ -12,6 +12,7 @@ import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 
 const GITHUB_URL = "https://github.com/croma-app/croma-react";
 const GITHUB_ISSUES_URL = "https://github.com/croma-app/croma-react/issues/new";
+const CROMA_APP_URL = "https://croma.app/#/";
 
 const AboutUsScreen = () => {
   return (
@@ -23,27 +24,40 @@ const AboutUsScreen = () => {
           palettes on the go.
         </Text>
       </View>
-      <View style={styles.githubView}>
+      <View style={styles.linksMainView}>
         <TouchableOpacity onPress={() => Linking.openURL(`${GITHUB_URL}`)}>
-          <View style={styles.githubLinkView}>
-            <MaterialCommunityIcons name="github-circle" size={40} />
-            <Text style={[styles.line, styles.githubSubtitle]}>
+          <View style={styles.linkView}>
+            <MaterialCommunityIcons name="github-circle" style={styles.icon} />
+            <Text style={[styles.line, styles.subtitle]}>
               Find us on Github !
             </Text>
-            <Text style={[styles.line, styles.githubLink]}>{GITHUB_URL}</Text>
+            <Text style={[styles.line, styles.link]}>{GITHUB_URL}</Text>
           </View>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => Linking.openURL(`${GITHUB_ISSUES_URL}`)}
         >
-          <View style={styles.githubLinkView}>
-            <MaterialIcons name="feedback" size={40} />
-            <Text style={[styles.line, styles.githubSubtitle]}>
+          <View style={styles.linkView}>
+            <MaterialIcons name="feedback" style={styles.icon} />
+            <Text style={[styles.line, styles.subtitle]}>
               Do you have a suggestion ?
             </Text>
-            <Text style={[styles.line, styles.githubLink]}>
-              {GITHUB_ISSUES_URL}
+            <Text style={[styles.line, styles.link]}>{GITHUB_ISSUES_URL}</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => Linking.openURL(`${CROMA_APP_URL}`)}>
+          <View style={styles.linkView}>
+            <MaterialCommunityIcons
+              name="palette-outline"
+              style={styles.icon}
+            />
+            <Text style={[styles.line, styles.subtitle]}>
+              Lightweight web version
             </Text>
+            <Text style={[styles.line, styles.subtitle]}>
+              to preview and share palettes
+            </Text>
+            <Text style={[styles.line, styles.link]}>{CROMA_APP_URL}</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -62,25 +76,25 @@ const styles = StyleSheet.create({
   },
   line: {
     ...material.body1,
-    paddingBottom: 4,
     fontSize: 15,
     textAlign: "justify"
   },
   icon: {
-    fontSize: 10,
+    fontSize: 40,
     color: "black"
   },
-  githubView: {
-    paddingVertical: 50
+  linksMainView: {
+    paddingVertical: 15
   },
-  githubLinkView: {
+  linkView: {
     paddingVertical: 20,
     alignItems: "center"
   },
-  githubSubtitle: {
-    fontSize: 18
+  subtitle: {
+    fontSize: 18,
+    textAlign: "center"
   },
-  githubLink: {
+  link: {
     fontSize: 14
   }
 });
