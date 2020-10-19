@@ -11,7 +11,7 @@ import {
   ToastAndroid,
   TextInput
 } from "react-native";
-import { UndoDialog, DialogContainer } from "../components/CommanDialogs";
+import { UndoDialog, DialogContainer } from "../components/CommonDialogs";
 import { CromaContext } from "../store/store";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import ActionButton from "react-native-action-button";
@@ -21,7 +21,7 @@ import EmptyView from "../components/EmptyView";
 import { logEvent } from "../libs/Helpers";
 import Touchable from "react-native-platform-touchable";
 export default function PaletteScreen(props) {
-  const { height, width } = Dimensions.get("window");
+  const { height } = Dimensions.get("window");
   const paletteName = props.navigation.getParam("name");
   const {
     isPro,
@@ -93,7 +93,7 @@ export default function PaletteScreen(props) {
               });
             }
           }}
-          style={Platform.OS === "web" ? styles.actionButtonWeb : {}}
+          style={styles.actionButton}
         />
       </View>
       <DialogContainer>
@@ -180,12 +180,15 @@ const styles = StyleSheet.create({
   listview: {
     margin: 8
   },
-  actionButtonWeb: {
-    position: "fixed",
-    transform: "scale(1) rotate(0deg) !important",
-    right: Math.max((Dimensions.get("window").width - 600) / 2, 0),
-    left: Math.max((Dimensions.get("window").width - 600) / 2, 0)
-  },
+  actionButton:
+    Platform.OS === "web"
+      ? {
+          position: "fixed",
+          transform: "scale(1) rotate(0deg) !important",
+          right: Math.max((Dimensions.get("window").width - 600) / 2, 0),
+          left: Math.max((Dimensions.get("window").width - 600) / 2, 0)
+        }
+      : {},
   input: {
     color: "#ffffff",
     fontSize: 18

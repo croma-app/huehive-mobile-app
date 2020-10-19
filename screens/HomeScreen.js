@@ -12,7 +12,7 @@ import {
   NativeModules
 } from "react-native";
 import { PaletteCard } from "../components/PaletteCard";
-import { UndoDialog, DialogContainer } from "../components/CommanDialogs";
+import { UndoDialog, DialogContainer } from "../components/CommonDialogs";
 import { CromaContext } from "../store/store";
 import Colors from "../constants/Colors";
 import * as ImagePicker from "expo-image-picker";
@@ -159,7 +159,7 @@ const HomeScreen = function(props) {
           spacing={15}
           key="action-button-home"
           fixNativeFeedbackRadius={true}
-          style={Platform.OS === "web" ? styles.actionButtonWeb : {}}
+          style={styles.actionButton}
         >
           {Platform.OS === "android" && (
             <ActionButton.Item
@@ -315,11 +315,14 @@ const styles = StyleSheet.create({
     height: 22,
     color: "white"
   },
-  actionButtonWeb: {
-    position: "fixed",
-    transform: "scale(1) rotate(0deg) !important",
-    right: Math.max((Dimensions.get("window").width - 600) / 2, 0),
-    left: Math.max((Dimensions.get("window").width - 600) / 2, 0)
-  },
+  actionButton:
+    Platform.OS === "web"
+      ? {
+          position: "fixed",
+          transform: "scale(1) rotate(0deg) !important",
+          right: Math.max((Dimensions.get("window").width - 600) / 2, 0),
+          left: Math.max((Dimensions.get("window").width - 600) / 2, 0)
+        }
+      : {},
   icon: { fontSize: 24, height: 24, color: "white" }
 });
