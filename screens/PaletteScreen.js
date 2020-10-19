@@ -21,7 +21,7 @@ import EmptyView from "../components/EmptyView";
 import { logEvent } from "../libs/Helpers";
 import Touchable from "react-native-platform-touchable";
 export default function PaletteScreen(props) {
-  const { height, width } = Dimensions.get("window");
+  const { height } = Dimensions.get("window");
   const paletteName = props.navigation.getParam("name");
   const {
     isPro,
