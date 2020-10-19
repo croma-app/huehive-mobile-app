@@ -9,12 +9,14 @@ import {
 import React from "react";
 import { material } from "react-native-typography";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { logEvent } from "../libs/Helpers";
 
 const GITHUB_URL = "https://github.com/croma-app/croma-react";
 const GITHUB_ISSUES_URL = "https://github.com/croma-app/croma-react/issues/new";
 const CROMA_APP_URL = "https://croma.app/#/";
 
 const AboutUsScreen = () => {
+  logEvent("about_us_screen");
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View>
@@ -47,10 +49,7 @@ const AboutUsScreen = () => {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => Linking.openURL(`${CROMA_APP_URL}`)}>
           <View style={styles.linkView}>
-            <MaterialCommunityIcons
-              name="palette-outline"
-              style={styles.icon}
-            />
+            <MaterialCommunityIcons name="web" style={styles.icon} />
             <Text style={[styles.line, styles.subtitle]}>
               Lightweight web version
             </Text>
@@ -72,7 +71,7 @@ AboutUsScreen.navigationOptions = {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 12,
-    paddingVertical: 50
+    paddingVertical: 12
   },
   line: {
     ...material.body1,
