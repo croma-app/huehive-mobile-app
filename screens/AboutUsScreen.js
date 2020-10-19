@@ -1,10 +1,10 @@
 import {
+  Linking,
   ScrollView,
-  View,
   StyleSheet,
   Text,
-  Linking,
-  TouchableOpacity
+  TouchableOpacity,
+  View
 } from "react-native";
 import React from "react";
 import { material } from "react-native-typography";
@@ -13,10 +13,9 @@ import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 const GITHUB_URL = "https://github.com/croma-app/croma-react";
 const GITHUB_ISSUES_URL = "https://github.com/croma-app/croma-react/issues/new";
 
-export default () => {
+const AboutUsScreen = () => {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <Text style={styles.title}>About us</Text>
       <View>
         <Text style={styles.line}>
           Croma is a simple color palette manager and color picker made for
@@ -52,16 +51,14 @@ export default () => {
   );
 };
 
+AboutUsScreen.navigationOptions = {
+  title: "About Us"
+};
+
 const styles = StyleSheet.create({
   container: {
-    paddingLeft: 12,
-    paddingRight: 12
-  },
-  title: {
-    paddingTop: 12,
-    paddingBottom: 12,
-    fontSize: 20,
-    fontWeight: "bold"
+    paddingHorizontal: 12,
+    paddingVertical: 50
   },
   line: {
     ...material.body1,
@@ -87,3 +84,5 @@ const styles = StyleSheet.create({
     fontSize: 14
   }
 });
+
+export default AboutUsScreen;
