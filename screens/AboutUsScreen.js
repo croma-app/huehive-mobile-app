@@ -29,7 +29,7 @@ export default () => {
           <View style={styles.githubLinkView}>
             <MaterialCommunityIcons name="github-circle" size={40} />
             <Text style={[styles.line, styles.githubSubtitle]}>
-              Find us in Github !
+              Find us on Github !
             </Text>
             <Text style={[styles.line, styles.githubLink]}>{GITHUB_URL}</Text>
           </View>
