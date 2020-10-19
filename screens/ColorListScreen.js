@@ -1,6 +1,6 @@
 import React from "react";
 import { SingleColorView } from "../components/SingleColorView";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View, Text, Platform } from "react-native";
 import CromaButton from "../components/CromaButton";
 import { logEvent } from "../libs/Helpers";
 import Touchable from "react-native-platform-touchable";
@@ -41,6 +41,8 @@ function uniqueColors(colors) {
 }
 
 const CustomHeader = props => {
+  const colors = uniqueColors(props.navigation.getParam("colors"));
+  const suggestedName = props.navigation.getParam("suggestedName");
   return (
     <View
       style={{
@@ -50,19 +52,37 @@ const CustomHeader = props => {
         width: "95%"
       }}
     >
-      {
-        <>
-          <Touchable onPress={{}} style={{ marginTop: 12 }}>
-            <MaterialIcons name="done" size={24} color="white" />
-          </Touchable>
-        </>
-      }
+      <Text
+        style={{
+          color: "#ffffff",
+          fontSize: 18
+        }}
+      >
+        Colors
+      </Text>
+      <>
+        <Touchable
+          onPress={() =>
+            props.navigation.navigate("SavePalette", {
+              colors: colors,
+              name: suggestedName
+            })
+          }
+        >
+          <MaterialIcons name="done" size={24} color="white" />
+        </Touchable>
+      </>
     </View>
   );
 };
 ColorListScreen.navigationOptions = ({ navigation }) => {
   return {
-    headerTitle: <CustomHeader navigation={navigation}></CustomHeader>
+    headerTitle:
+      Platform.OS == "android" ? (
+        <CustomHeader navigation={navigation}></CustomHeader>
+      ) : (
+        "Colors"
+      )
   };
 };
 const styles = StyleSheet.create({
