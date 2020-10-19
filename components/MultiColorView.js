@@ -3,7 +3,7 @@ import { StyleSheet, View, Text } from "react-native";
 export default function MultiColorView(props) {
   const styles = StyleSheet.create({
     palette: {
-      alignItems: "stretch",
+      flex: 1,
       flexDirection: "row",
       height: 112
     },

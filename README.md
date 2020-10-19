@@ -5,9 +5,9 @@
 ![](Croma_web.gif)
 
 ### Installation guide 
-- Installation: npm install
-- Runing on web: npm run web 
-- Runing on android: npm run android 
+- Installation: `npm install`
+- Runing on web: `npm run web` 
+- Runing on android: `./bundle-and-run-android.sh`
 
 # referances
 
