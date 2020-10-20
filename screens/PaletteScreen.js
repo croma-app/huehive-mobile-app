@@ -16,7 +16,7 @@ import { CromaContext } from "../store/store";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import ActionButton from "react-native-action-button";
 import Colors from "../constants/Colors";
-import { Header } from "react-navigation";
+import { Header } from "react-navigation-stack";
 import EmptyView from "../components/EmptyView";
 import { logEvent } from "../libs/Helpers";
 import Touchable from "react-native-platform-touchable";

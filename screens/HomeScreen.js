@@ -20,7 +20,7 @@ import * as Permissions from "expo-permissions";
 import ColorPicker from "../libs/ColorPicker";
 import Touchable from "react-native-platform-touchable";
 import Jimp from "jimp";
-import { Header } from "react-navigation";
+import { Header } from "react-navigation-stack";
 import EmptyView from "../components/EmptyView";
 import ActionButton from "react-native-action-button";
 import { Ionicons, Entypo } from "@expo/vector-icons";

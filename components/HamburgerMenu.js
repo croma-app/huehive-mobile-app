@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Header } from "react-navigation";
+import { Header } from "react-navigation-stack";
 import {
   Text,
   View,

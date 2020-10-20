@@ -1,6 +1,6 @@
 import React from "react";
 import { Platform, Linking, StyleSheet } from "react-native";
-import { createStackNavigator } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
 import ColorDetailsScreen from "../screens/ColorDetailScreen";
 import ColorPickerScreen from "../screens/ColorPickerScreen";
