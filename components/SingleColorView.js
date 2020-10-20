@@ -1,12 +1,24 @@
 import * as React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, ToastAndroid, Clipboard } from "react-native";
+import Touchable from "react-native-platform-touchable";
 
 export class SingleColorView extends React.Component {
   render() {
     return (
-      <View style={[styles.container, { backgroundColor: this.props.color }]}>
+      <Touchable
+        onPress={() => {
+          if (Platform.OS === "android") {
+            ToastAndroid.show(
+              this.props.color + " copied to clipboard!",
+              ToastAndroid.LONG
+            );
+          }
+          Clipboard.setString(this.props.color);
+        }}
+        style={[styles.container, { backgroundColor: this.props.color }]}
+      >
         <Text style={styles.colorText}>{this.props.color}</Text>
-      </View>
+      </Touchable>
     );
   }
 }
