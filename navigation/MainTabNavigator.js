@@ -43,7 +43,7 @@ const RootStack = createStackNavigator(
     initialRouteName: "Home",
     cardStyle: { backgroundColor: "rgb(242, 242, 242)" },
     /* The header config from HomeScreen is now here */
-    defaultNavigationOptions: navigation => {
+    defaultNavigationOptions: _navigation => {
       return {
         headerStyle: {
           backgroundColor: Colors.primary
