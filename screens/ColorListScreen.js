@@ -13,7 +13,7 @@ export default function ColorListScreen(props) {
   return (
     <ScrollView style={styles.listview} showsVerticalScrollIndicator={false}>
       {colors.map(color => (
-        <SingleColorView key={color.color} color={color.color} />
+        <SingleColorView key={color.color} color={color} />
       ))}
       <CromaButton
         onPress={() =>
