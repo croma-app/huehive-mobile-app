@@ -15,16 +15,18 @@ export default function ColorListScreen(props) {
       {colors.map(color => (
         <SingleColorView key={color.color} color={color} />
       ))}
-      <CromaButton
-        onPress={() =>
-          props.navigation.navigate("SavePalette", {
-            colors: colors,
-            name: suggestedName
-          })
-        }
-      >
-        SAVE AS NEW PALETTE
-      </CromaButton>
+      {Platform.OS == "web" && (
+        <CromaButton
+          onPress={() =>
+            props.navigation.navigate("SavePalette", {
+              colors: colors,
+              name: suggestedName
+            })
+          }
+        >
+          SAVE AS NEW PALETTE
+        </CromaButton>
+      )}
     </ScrollView>
   );
 }
