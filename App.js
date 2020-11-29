@@ -67,14 +67,19 @@ export default function App(props) {
             style={[{ flex: 1, backgroundColor: "transparent", maxWidth: 600 }]}
             className={"navigation-workplace"}
           >
-            <AppContainer
-              ref={nav => {
-                // https://reactnavigation.org/docs/3.x/app-containers
-                if (nav) {
-                  navigationObject.navigation = nav._navigation;
-                }
-              }}
-            />
+            {// Added AppNavigator in web to support URL based navigation
+            Platform.OS == "web" ? (
+              <AppNavigator />
+            ) : (
+              <AppContainer
+                ref={nav => {
+                  // https://reactnavigation.org/docs/3.x/app-containers
+                  if (nav) {
+                    navigationObject.navigation = nav._navigation;
+                  }
+                }}
+              />
+            )}
           </View>
         </View>
       </ErrorBoundary>

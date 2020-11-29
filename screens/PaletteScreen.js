@@ -58,7 +58,7 @@ export default function PaletteScreen(props) {
                     color: colorObj.color
                   })
                 }
-                color={colorObj.color}
+                color={colorObj}
                 colorDeleteFromPalette={() => {
                   deleteColor(index);
                 }}
