@@ -12,6 +12,7 @@ import {
   getDrawerNavigator,
   getStackNavigator
 } from "./navigation/MainTabNavigator";
+import AppNavigator from "./navigation/AppNavigator";
 import applicationHook, { CromaContext } from "./store/store";
 import ErrorBoundary from "./components/ErrorBoundary";
 import NavigationContainer from "@react-navigation/native/src/NavigationContainer";
@@ -69,7 +70,12 @@ export default function App() {
             style={[{ flex: 1, backgroundColor: "transparent" }]}
             className={"navigation-workplace"}
           >
-            <NavigationContainer>{navigator}</NavigationContainer>
+            {// Added AppNavigator in web to support URL based navigation
+            Platform.OS == "web" ? (
+              <AppNavigator />
+            ) : (
+              <NavigationContainer>{navigator}</NavigationContainer>
+            )}
           </View>
         </View>
       </ErrorBoundary>
