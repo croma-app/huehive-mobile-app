@@ -15,10 +15,15 @@ export default class SingleColorCard extends React.Component {
       <Card {...this.props} animationType={this.state.animationType}>
         <View>
           <View
-            style={{ backgroundColor: this.props.color, height: 100 }}
+            style={{ backgroundColor: this.props.color.color, height: 100 }}
           ></View>
           <View style={styles.bottom}>
-            <Text style={styles.label}>{this.props.color}</Text>
+            <Text style={styles.label}>
+              {this.props.color.color +
+                (this.props.color.name
+                  ? " (" + this.props.color.name + ")"
+                  : "")}
+            </Text>
             <View style={styles.actionButtonsView}>
               <Touchable
                 {...{

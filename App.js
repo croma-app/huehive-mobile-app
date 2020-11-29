@@ -69,7 +69,12 @@ export default function App() {
             style={[{ flex: 1, backgroundColor: "transparent" }]}
             className={"navigation-workplace"}
           >
-            <NavigationContainer>{navigator}</NavigationContainer>
+            {// Added AppNavigator in web to support URL based navigation
+            Platform.OS == "web" ? (
+              <AppNavigator />
+            ) : (
+              <NavigationContainer>{navigator}</NavigationContainer>
+            )}
           </View>
         </View>
       </ErrorBoundary>

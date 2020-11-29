@@ -15,15 +15,18 @@ export class SingleColorView extends React.Component {
         onPress={() => {
           if (Platform?.OS === "android") {
             ToastAndroid.show(
-              this.props.color + " copied to clipboard!",
+              this.props.color.color + " copied to clipboard!",
               ToastAndroid.LONG
             );
           }
-          Clipboard.setString(this.props.color);
+          Clipboard.setString(this.props.color.color);
         }}
-        style={[styles.container, { backgroundColor: this.props.color }]}
+        style={[styles.container, { backgroundColor: this.props.color.color }]}
       >
-        <Text style={styles.colorText}>{this.props.color}</Text>
+        <Text style={styles.colorText}>
+          {this.props.color.color +
+            (this.props.color.name ? " (" + this.props.color.name + ")" : "")}
+        </Text>
       </Touchable>
     );
   }

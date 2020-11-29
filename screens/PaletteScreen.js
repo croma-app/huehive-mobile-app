@@ -71,7 +71,7 @@ export default function PaletteScreen({ navigation }) {
                     setDetailedColor(colorObj.color);
                     navigation.navigate("ColorDetails");
                   }}
-                  color={colorObj.color}
+                  color={colorObj}
                   colorDeleteFromPalette={() => {
                     deleteColor(index);
                   }}
