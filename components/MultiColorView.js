@@ -4,10 +4,10 @@ export default function MultiColorView(props) {
   return (
     <View style={styles.palette}>
       {props.colors &&
-        props.colors.map(item => (
+        props.colors.map((item, index) => (
           <View
             style={[styles.color, { backgroundColor: item.color }]}
-            key={item.color}
+            key={`${item.color}-${index}`}
           />
         ))}
     </View>

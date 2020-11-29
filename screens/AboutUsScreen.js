@@ -64,10 +64,6 @@ const AboutUsScreen = () => {
   );
 };
 
-AboutUsScreen.navigationOptions = {
-  title: "About Us"
-};
-
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 12,

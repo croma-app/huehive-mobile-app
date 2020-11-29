@@ -7,17 +7,24 @@ import CromaButton from "../components/CromaButton";
 import { CromaContext } from "../store/store";
 import { TextDialog } from "./CommonDialogs";
 
-export const SavePalette = props => {
-  const [paletteName, setPaletteName] = useState(
-    props.navigation.getParam("name") ? props.navigation.getParam("name") : ""
-  );
+export const SavePalette = ({ navigation, title, navigationPath }) => {
+  const {
+    addPalette,
+    allPalettes,
+    isPro,
+    colorList,
+    setColorList,
+    setCurrentPalette,
+    suggestedName,
+    setSuggestedName
+  } = React.useContext(CromaContext);
+
   const [finalColors, setFinalColors] = useState([]);
-  const [isUnlockProNotification, setIsUnlockProNotifiction] = useState(false);
   const [isPaletteNameExist, setIsPaletteNameExist] = React.useState(false);
-  const { addPalette, allPalettes, isPro } = React.useContext(CromaContext);
+  const [isUnlockProNotification, setIsUnlockProNotifiction] = useState(false);
 
   useEffect(() => {
-    let colorsFromParams = props.navigation.getParam("colors");
+    let colorsFromParams = colorList;
     if (typeof colorsFromParams === "string") {
       colorsFromParams = JSON.parse(colorsFromParams);
     }
@@ -27,9 +34,13 @@ export const SavePalette = props => {
     setTimeout(() => {
       setIsUnlockProNotifiction(false);
     }, 5000);
-  }, []);
+  }, [colorList]);
 
-  const { title, navigationPath } = props;
+  const [paletteName, setPaletteName] = useState(suggestedName ?? "");
+  useEffect(() => {
+    setPaletteName(suggestedName ?? "");
+  }, [suggestedName]);
+
   return (
     <ScrollView style={{ margin: 8 }} showsVerticalScrollIndicator={false}>
       <PalettePreviewCard
@@ -56,10 +67,17 @@ export const SavePalette = props => {
           }
           const palette = { name: paletteName, colors: finalColors };
           addPalette(palette);
+          setSuggestedName("");
+          setPaletteName(undefined);
+          setColorList([]);
+
           if (navigationPath === "Palette") {
-            props.navigation.replace(navigationPath, palette);
+            setCurrentPalette(palette);
+            if (Platform?.OS === "android") navigation.navigate(navigationPath);
+            else navigation.replace(navigationPath);
           } else {
-            props.navigation.navigate(navigationPath);
+            setCurrentPalette({});
+            navigation.navigate(navigationPath);
           }
         }}
       >

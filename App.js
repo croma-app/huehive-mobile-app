@@ -1,28 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
+  NativeModules,
   Platform,
   StatusBar,
   StyleSheet,
-  View,
-  NativeModules
+  View
 } from "react-native";
 import Colors from "./constants/Colors";
-import AppNavigator from "./navigation/AppNavigator";
-import { AppContainer } from "./navigation/MainTabNavigator";
-import { ActivityIndicator } from "react-native";
+import {
+  getDrawerNavigator,
+  getStackNavigator
+} from "./navigation/MainTabNavigator";
 import applicationHook, { CromaContext } from "./store/store";
 import ErrorBoundary from "./components/ErrorBoundary";
-import HamburgerMenu from "./components/HamburgerMenu";
-import SideMenu from "react-native-side-menu";
-import { logEvent } from "./libs/Helpers";
+import NavigationContainer from "@react-navigation/native/src/NavigationContainer";
 
-export default function App(props) {
+export default function App() {
   const [isPalettesLoaded, setIsPalettesLoaded] = useState(false);
   const applicationState = applicationHook();
-  const navigationObject = {
-    navigation: null
-  };
-  const { isMenuOpen, setMenu } = applicationState;
 
   useEffect(() => {
     (async () => {
@@ -48,6 +44,12 @@ export default function App(props) {
     }
   }, []);
 
+  const spinner = (
+    <View style={{ flex: 1, marginTop: "20%" }}>
+      <ActivityIndicator size="large" color="#ef635f" animating={true} />
+    </View>
+  );
+
   const MainContent = (
     <CromaContext.Provider value={applicationState}>
       <ErrorBoundary>
@@ -64,48 +66,25 @@ export default function App(props) {
             networkActivityIndicatorVisible={true}
           />
           <View
-            style={[{ flex: 1, backgroundColor: "transparent", maxWidth: 600 }]}
+            style={[{ flex: 1, backgroundColor: "transparent" }]}
             className={"navigation-workplace"}
           >
-            <AppContainer
-              ref={nav => {
-                // https://reactnavigation.org/docs/3.x/app-containers
-                if (nav) {
-                  navigationObject.navigation = nav._navigation;
-                }
-              }}
-            />
+            <NavigationContainer>{navigator}</NavigationContainer>
           </View>
         </View>
       </ErrorBoundary>
     </CromaContext.Provider>
   );
 
-  const WithSideMenu = MainContent => {
-    return Platform.OS == "android" ? (
-      <SideMenu
-        menu={<HamburgerMenu navigater={navigationObject} setMenu={setMenu} />}
-        isOpen={isMenuOpen}
-        onChange={isOpen => {
-          logEvent("app_hamburger_menu_open");
-          setMenu(isOpen);
-        }}
-      >
-        {MainContent}
-      </SideMenu>
-    ) : (
-      MainContent
-    );
-  };
-
-  return !isPalettesLoaded ? (
-    <View style={{ flex: 1, marginTop: "20%" }}>
-      <ActivityIndicator size="large" color="#ef635f" animating={true} />
-    </View>
-  ) : (
-    WithSideMenu(MainContent)
-  );
+  return !isPalettesLoaded ? spinner : MainContent;
 }
+
+const getNavigator = () => {
+  return Platform.OS === "android" ? getDrawerNavigator() : getStackNavigator();
+};
+
+const navigator = getNavigator();
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

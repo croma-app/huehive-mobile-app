@@ -347,11 +347,6 @@ const palettesToJsonString = allPalettes => {
   });
   return JSON.stringify(jsonToExport, null, 2);
 };
-SyncPalettesScreen.navigationOptions = ({ navigation }) => {
-  return {
-    title: "Import/Export your palettes"
-  };
-};
 const palettesFromJsonString = exportedPalettesStr => {
   exportedPalettes = JSON.parse(exportedPalettesStr);
   const palettes = [];

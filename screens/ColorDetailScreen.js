@@ -1,31 +1,32 @@
-import React from "react";
-import { ScrollView, StyleSheet, Button } from "react-native";
+import React, { useLayoutEffect } from "react";
+import { ScrollView, StyleSheet } from "react-native";
 import { ColorDetail } from "../components/ColorDetails";
 import CromaButton from "../components/CromaButton";
 import { logEvent } from "../libs/Helpers";
+import { CromaContext } from "../store/store";
 
-export default function ColorDetailScreen(props) {
-  const color = props.navigation.getParam("color");
+export default function ColorDetailScreen({ navigation }) {
+  const { detailedColor, setDetailedColor } = React.useContext(CromaContext);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({ title: detailedColor });
+  }, [detailedColor]);
+
   logEvent("color_details_screen");
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <ColorDetail navigation={props.navigation} color={color}>
-        {color}
-      </ColorDetail>
+      <ColorDetail color={detailedColor}>{detailedColor}</ColorDetail>
       <CromaButton
-        onPress={() => props.navigation.navigate("Palettes", { color: color })}
+        onPress={() => {
+          setDetailedColor(detailedColor);
+          navigation.navigate("Palettes");
+        }}
       >
         See color palettes
       </CromaButton>
     </ScrollView>
   );
 }
-
-ColorDetailScreen.navigationOptions = ({ navigation }) => {
-  return {
-    title: navigation.getParam("color")
-  };
-};
 
 const styles = StyleSheet.create({
   container: {

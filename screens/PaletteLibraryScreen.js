@@ -1,22 +1,28 @@
-import * as React from "react";
+import React, { useContext } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { logEvent } from "../libs/Helpers";
 import Touchable from "react-native-platform-touchable";
 import { material } from "react-native-typography";
 import Colors from "../constants/Colors";
+import { CromaContext } from "../store/store";
 const allPalettes = require("../constants/palettes/palettes").default;
 
-export default function PaletteLibraryScreen(props) {
+export default function PaletteLibraryScreen({ navigation }) {
   logEvent("palette_library_screen");
+
+  const { setCommonPalettes } = useContext(CromaContext);
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {allPalettes.map(palettes => {
+      {allPalettes.map((palettes, index) => {
         return (
           <Touchable
+            key={palettes?.name ?? index}
             style={styles.row}
             onPress={() => {
               logEvent("hm_matrial_palettes");
-              props.navigation.navigate("CommonPalettes", { input: palettes });
+              setCommonPalettes(palettes);
+              navigation.navigate("CommonPalettes");
             }}
           >
             <View>
@@ -33,11 +39,7 @@ export default function PaletteLibraryScreen(props) {
     </ScrollView>
   );
 }
-PaletteLibraryScreen.navigationOptions = ({ navigation }) => {
-  return {
-    title: "Palette library"
-  };
-};
+
 const styles = StyleSheet.create({
   container: {
     paddingLeft: 12,

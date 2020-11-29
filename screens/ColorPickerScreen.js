@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { ScrollView, View, StyleSheet } from "react-native";
 import CromaButton from "../components/CromaButton";
 import { CromaColorPicker as ColorPicker } from "croma-color-picker";
 import { logEvent } from "../libs/Helpers";
-export default function ColorPickerScreen(props) {
+import { CromaContext } from "../store/store";
+export default function ColorPickerScreen({ navigation }) {
   const [color, setColor] = useState("#db0a5b");
+  const { colorPickerCallback } = useContext(CromaContext);
+
   logEvent("color_picker_screen");
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -17,8 +20,8 @@ export default function ColorPickerScreen(props) {
         />
         <CromaButton
           onPress={() => {
-            props.navigation.goBack();
-            props.navigation.getParam("onDone")({ color: color });
+            navigation.goBack();
+            colorPickerCallback({ color });
           }}
         >
           Done

@@ -9,10 +9,15 @@ import { FontAwesome } from "@expo/vector-icons";
 import Touchable from "react-native-platform-touchable";
 import { CromaContext } from "../store/store";
 import { logEvent } from "../libs/Helpers";
+
 export const PaletteCard = props => {
   const [shared, setShared] = React.useState(false);
-  const { deletePaletteByName } = React.useContext(CromaContext);
   const [animationType, setAnimationType] = React.useState("fadeInLeftBig");
+
+  const { deletePaletteByName, setCurrentPalette } = React.useContext(
+    CromaContext
+  );
+
   const onShare = async () => {
     try {
       logEvent("home_screen_palette_card_share", props.colors.length + "");
@@ -61,7 +66,8 @@ export const PaletteCard = props => {
     <Card
       {...props}
       onPress={() => {
-        props.navigation.navigate("Palette", props);
+        setCurrentPalette({ name: props.name });
+        props.navigation.navigate("Palette");
       }}
       animationType={animationType}
     >

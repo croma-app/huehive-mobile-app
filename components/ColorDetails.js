@@ -13,11 +13,11 @@ import Touchable from "react-native-platform-touchable";
 
 import Color from "pigment/full";
 
-export function ColorDetail(props) {
+export const ColorDetail = ({ color }) => {
   const [copyiedIndex, setCopyiedIntex] = useState(-1);
   const styles = StyleSheet.create({
     backgroundColor: {
-      backgroundColor: props.color,
+      backgroundColor: color,
       height: 112,
       alignSelf: "stretch"
     },
@@ -31,17 +31,17 @@ export function ColorDetail(props) {
       fontWeight: "500"
     }
   });
-  const color = new Color(props.color);
+  const fullColor = new Color(color);
   let items = [
-    { key: "HEX", value: color.tohex() },
-    { key: "RGB", value: color.torgb() },
-    { key: "HSL", value: color.tohsl() },
-    { key: "HSV", value: color.tohsv() },
-    { key: "HWB", value: color.tohwb() },
-    { key: "CMYK", value: color.tocmyk() },
-    { key: "CIELAB", value: color.tolab() },
-    { key: "Luminance", value: (color.luminance() * 100).toFixed(2) + "%" },
-    { key: "Darkness", value: (color.darkness() * 100).toFixed(2) + "%" }
+    { key: "HEX", value: fullColor.tohex() },
+    { key: "RGB", value: fullColor.torgb() },
+    { key: "HSL", value: fullColor.tohsl() },
+    { key: "HSV", value: fullColor.tohsv() },
+    { key: "HWB", value: fullColor.tohwb() },
+    { key: "CMYK", value: fullColor.tocmyk() },
+    { key: "CIELAB", value: fullColor.tolab() },
+    { key: "Luminance", value: (fullColor.luminance() * 100).toFixed(2) + "%" },
+    { key: "Darkness", value: (fullColor.darkness() * 100).toFixed(2) + "%" }
   ];
 
   const debounce = (func, delay) => {
@@ -107,4 +107,4 @@ export function ColorDetail(props) {
       </View>
     </View>
   );
-}
+};
