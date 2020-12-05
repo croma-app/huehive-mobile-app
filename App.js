@@ -9,9 +9,10 @@ import {
 } from "react-native";
 import Colors from "./constants/Colors";
 import {
+  linking,
   getDrawerNavigator,
   getStackNavigator
-} from "./navigation/MainTabNavigator";
+} from "./navigation/NavigatorHelper";
 import applicationHook, { CromaContext } from "./store/store";
 import ErrorBoundary from "./components/ErrorBoundary";
 import NavigationContainer from "@react-navigation/native/src/NavigationContainer";
@@ -86,28 +87,6 @@ const getNavigator = () => {
 };
 
 const navigator = getNavigator();
-
-const linking = ({ setColorList, setSuggestedName }) => ({
-  enabled: Platform.OS === "web",
-  prefixes: ["https://croma.app/"],
-  config: {
-    screens: {
-      SavePalette: {
-        path: "Main/SavePalette",
-        parse: {
-          name: name => {
-            setSuggestedName(name);
-            return name;
-          },
-          colors: colors => {
-            setColorList(colors);
-            return colors;
-          }
-        }
-      }
-    }
-  }
-});
 
 const styles = StyleSheet.create({
   container: {

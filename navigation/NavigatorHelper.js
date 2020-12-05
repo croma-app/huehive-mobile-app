@@ -182,6 +182,28 @@ const screenOptions = {
   headerTintColor: "#fff"
 };
 
+export const linking = ({ setColorList, setSuggestedName }) => ({
+  enabled: Platform.OS === "web",
+  prefixes: ["https://croma.app/"],
+  config: {
+    screens: {
+      SavePalette: {
+        path: "Main/SavePalette",
+        parse: {
+          name: name => {
+            setSuggestedName(name);
+            return name;
+          },
+          colors: colors => {
+            setColorList(colors);
+            return colors;
+          }
+        }
+      }
+    }
+  }
+});
+
 const styles = StyleSheet.create({
   icon: { fontSize: 25, height: 25, color: "white" },
   contentWrapper: {
