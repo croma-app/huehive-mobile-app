@@ -71,14 +71,12 @@ export const SavePalette = ({ navigation, title, navigationPath }) => {
           setPaletteName(undefined);
           setColorList([]);
 
-          if (navigationPath === "Palette") {
-            setCurrentPalette(palette);
-            if (Platform?.OS === "android") navigation.navigate(navigationPath);
-            else navigation.replace(navigationPath);
-          } else {
-            setCurrentPalette({});
-            navigation.navigate(navigationPath);
-          }
+          navigationPath === "Palette"
+            ? setCurrentPalette(palette)
+            : setCurrentPalette({});
+          Platform?.OS === "android"
+            ? navigation.navigate(navigationPath)
+            : navigation.replace(navigationPath);
         }}
       >
         Save palette
