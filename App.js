@@ -12,7 +12,6 @@ import {
   getDrawerNavigator,
   getStackNavigator
 } from "./navigation/MainTabNavigator";
-import AppNavigator from "./navigation/AppNavigator";
 import applicationHook, { CromaContext } from "./store/store";
 import ErrorBoundary from "./components/ErrorBoundary";
 import NavigationContainer from "@react-navigation/native/src/NavigationContainer";
@@ -70,12 +69,9 @@ export default function App() {
             style={[{ flex: 1, backgroundColor: "transparent" }]}
             className={"navigation-workplace"}
           >
-            {// Added AppNavigator in web to support URL based navigation
-            Platform.OS == "web" ? (
-              <AppNavigator />
-            ) : (
-              <NavigationContainer>{navigator}</NavigationContainer>
-            )}
+            <NavigationContainer linking={linking(applicationState)}>
+              {navigator}
+            </NavigationContainer>
           </View>
         </View>
       </ErrorBoundary>
@@ -90,6 +86,28 @@ const getNavigator = () => {
 };
 
 const navigator = getNavigator();
+
+const linking = ({ setColorList, setSuggestedName }) => ({
+  enabled: Platform.OS === "web",
+  prefixes: ["https://croma.app/"],
+  config: {
+    screens: {
+      SavePalette: {
+        path: "Main/SavePalette",
+        parse: {
+          name: name => {
+            setSuggestedName(name);
+            return name;
+          },
+          colors: colors => {
+            setColorList(colors);
+            return colors;
+          }
+        }
+      }
+    }
+  }
+});
 
 const styles = StyleSheet.create({
   container: {

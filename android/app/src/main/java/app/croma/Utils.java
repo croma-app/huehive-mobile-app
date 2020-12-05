@@ -59,6 +59,6 @@ public class Utils {
   }
 
   public static String makePaletteUrl(String query) {
-    return "#/palette/show?palette=" + query;
+    return "palette/show?palette=" + query;
   }
 }

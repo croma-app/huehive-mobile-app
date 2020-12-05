@@ -37,7 +37,7 @@ const HomeScreen = function({ navigation, route }) {
     setPurchase,
     setColorList,
     setColorPickerCallback,
-    setCurrentPalette,
+    setSuggestedName,
     setDetailedColor,
     clearPalette
   } = React.useContext(CromaContext);
@@ -87,7 +87,7 @@ const HomeScreen = function({ navigation, route }) {
             });
           clearPalette();
           setColorList([...new Set(JSON.parse(result["colors"]) || [])]);
-          setCurrentPalette({ name: result["name"] });
+          setSuggestedName(result["name"]);
           navigation.navigate("SavePalette");
         }
       });
