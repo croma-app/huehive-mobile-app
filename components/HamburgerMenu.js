@@ -133,7 +133,7 @@ export default props => {
             <View style={styles.menuItemView}>
               <View style={styles.menuIcon}>
                 <MaterialCommunityIcons
-                  name="credit-card-scan"
+                  name="credit-card-scan-outline"
                   style={styles.icon}
                 />
               </View>
