@@ -55,5 +55,7 @@ Fix java files
 
 ### [Browse react native vector icons](https://oblador.github.io/react-native-vector-icons/)
 
+### [Troubleshooting](https://github.com/croma-app/croma-react/wiki/Troubleshooting)
+
 
 
