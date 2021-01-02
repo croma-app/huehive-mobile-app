@@ -57,5 +57,6 @@ Fix java files
 
 ### [Troubleshooting](https://github.com/croma-app/croma-react/wiki/Troubleshooting)
 
+### [Support us](https://www.buymeacoffee.com/kamalkishor1991) 
 
 
