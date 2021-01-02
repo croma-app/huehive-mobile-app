@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useContext, useLayoutEffect } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import Color from "pigment/full";
 import { PalettePreviewCard } from "../components/PalettePreviewCard";
 import { logEvent } from "../libs/Helpers";
-export default function PalettesScreen(props) {
+import { CromaContext } from "../store/store";
+export default function PalettesScreen({ navigation }) {
+  const { detailedColor, setColorList } = useContext(CromaContext);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({ title: detailedColor });
+  }, [detailedColor]);
+
   // Convert camelCase to sentence
   const parseCamelCase = text => {
     if (typeof text !== "string") {
@@ -14,22 +21,23 @@ export default function PalettesScreen(props) {
       .replace(/\b([A-Z]+)([A-Z])([a-z])/, "$1 $2$3")
       .replace(/^./, str => str.toUpperCase());
   };
-  const color = new Color(props.navigation.getParam("color"));
+  const fullColor = new Color(detailedColor);
   let items = [];
-  for (const i in color) {
-    if (/.*scheme$/i.test(i) && typeof color[i] === "function") {
+  for (const i in fullColor) {
+    if (/.*scheme$/i.test(i) && typeof fullColor[i] === "function") {
       let colors = [];
-      const paletteColors = color[i]();
+      const paletteColors = fullColor[i]();
       paletteColors.forEach(c => colors.push({ color: c.tohex() }));
       items.push(
         <PalettePreviewCard
-          onPress={() =>
-            props.navigation.navigate("ColorList", { colors: colors })
-          }
+          onPress={() => {
+            setColorList(colors);
+            navigation.navigate("ColorList");
+          }}
           key={i.toString()}
           colors={colors}
           name={parseCamelCase(i.toString())}
-        ></PalettePreviewCard>
+        />
       );
     }
   }
@@ -40,12 +48,6 @@ export default function PalettesScreen(props) {
     </ScrollView>
   );
 }
-
-PalettesScreen.navigationOptions = ({ navigation }) => {
-  return {
-    title: navigation.getParam("color")
-  };
-};
 
 const styles = StyleSheet.create({
   container: {

@@ -1,25 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { Header } from "react-navigation";
+import React, { useEffect, useState } from "react";
 import {
-  Text,
-  View,
-  StyleSheet,
   Image,
   Linking,
-  NativeModules
+  NativeModules,
+  StyleSheet,
+  Text,
+  View
 } from "react-native";
 import Colors from "../constants/Colors";
 import {
-  MaterialIcons,
-  MaterialCommunityIcons,
   FontAwesome5,
-  Ionicons
+  Ionicons,
+  MaterialCommunityIcons,
+  MaterialIcons
 } from "@expo/vector-icons";
 import Touchable from "react-native-platform-touchable";
 import { logEvent } from "../libs/Helpers";
 import { ScrollView } from "react-native-gesture-handler";
 import * as ImagePicker from "expo-image-picker";
-export default function HamburgerMenu(props) {
+import { HEADER_HEIGHT } from "../constants/Layout";
+import { CromaContext } from "../store/store";
+
+export default props => {
   const pickImageResult = async base64 => {
     return await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -27,32 +29,42 @@ export default function HamburgerMenu(props) {
       base64: base64
     });
   };
-  const { setMenu } = props;
   const [appInstallTime, setAppInstallTime] = useState(null);
+
+  const { setColorList, clearPalette } = React.useContext(CromaContext);
+
   useEffect(() => {
     (async () => {
       const appInstallTime = await NativeModules.CromaModule.getAppInstallTime();
       setAppInstallTime(parseInt(appInstallTime, 10));
     })();
   });
+
   return (
     <View style={[styles.container]}>
-      <View style={[styles.titleArea]}>
-        <Image
-          style={styles.logo}
-          source={require("../assets/images/dots.png")}
-        />
-        <Text style={styles.title}>Croma - Save you colors</Text>
-      </View>
+      <Touchable
+        onPress={() => {
+          logEvent("hm_home_screen");
+          props.navigation.navigate("Home");
+        }}
+      >
+        <View style={[styles.titleArea]}>
+          <Image
+            style={styles.logo}
+            source={require("../assets/images/dots.png")}
+          />
+          <Text style={styles.title}>Croma - Save you colors</Text>
+        </View>
+      </Touchable>
       <ScrollView>
         <View style={styles.menu}>
           <Touchable
             style={styles.menuItem}
             onPress={() => {
               logEvent("hm_create_new_palette");
-              setMenu(false);
               //console.error(props, 'check it man ')
-              props.navigater.navigation.navigate("AddPaletteManually");
+              clearPalette();
+              props.navigation.navigate("AddPaletteManually");
             }}
           >
             <View style={styles.menuItemView}>
@@ -65,9 +77,9 @@ export default function HamburgerMenu(props) {
           <Touchable
             style={styles.menuItem}
             onPress={async () => {
-              setMenu(false);
               logEvent("hm_palette_library");
-              props.navigater.navigation.navigate("PaletteLibrary");
+              clearPalette();
+              props.navigation.navigate("PaletteLibrary");
             }}
           >
             <View style={styles.menuItemView}>
@@ -88,14 +100,12 @@ export default function HamburgerMenu(props) {
                 const pickedColors = await NativeModules.CromaModule.navigateToImageColorPicker(
                   imageResult.uri
                 );
-                setMenu(false);
                 logEvent("hm_pick_colors_from_img", {
                   length: pickedColors.length
                 });
-                props.navigater.navigation.navigate(
-                  "ColorList",
-                  JSON.parse(pickedColors)
-                );
+                clearPalette();
+                setColorList(JSON.parse(pickedColors)?.colors);
+                props.navigation.navigate("ColorList");
               }
             }}
           >
@@ -115,17 +125,15 @@ export default function HamburgerMenu(props) {
               logEvent("hm_pick_text_colors_from_camera", {
                 length: pickedColors.length
               });
-              setMenu(false);
-              props.navigater.navigation.navigate(
-                "ColorList",
-                JSON.parse(pickedColors)
-              );
+              clearPalette();
+              setColorList(JSON.parse(pickedColors)?.colors);
+              props.navigation.navigate("ColorList");
             }}
           >
             <View style={styles.menuItemView}>
               <View style={styles.menuIcon}>
                 <MaterialCommunityIcons
-                  name="credit-card-scan"
+                  name="credit-card-scan-outline"
                   style={styles.icon}
                 />
               </View>
@@ -145,8 +153,7 @@ export default function HamburgerMenu(props) {
             style={styles.menuItem}
             onPress={() => {
               logEvent("hm_pro_benefits");
-              setMenu(false);
-              props.navigater.navigation.navigate("ProVersion");
+              props.navigation.navigate("ProVersion");
             }}
           >
             <View style={styles.menuItemView}>
@@ -159,9 +166,8 @@ export default function HamburgerMenu(props) {
           <Touchable
             style={styles.menuItem}
             onPress={async () => {
-              setMenu(false);
               logEvent("hm_sync_palettes");
-              props.navigater.navigation.navigate("SyncPalettes");
+              props.navigation.navigate("SyncPalettes");
             }}
           >
             <View style={styles.menuItemView}>
@@ -176,9 +182,8 @@ export default function HamburgerMenu(props) {
           <Touchable
             style={styles.menuItem}
             onPress={async () => {
-              setMenu(false);
               logEvent("hm_about_us");
-              props.navigater.navigation.navigate("AboutUs");
+              props.navigation.navigate("AboutUs");
             }}
           >
             <View style={styles.menuItemView}>
@@ -203,7 +208,7 @@ export default function HamburgerMenu(props) {
   function fiveDaysDurationMillis() {
     return 5 * 24 * 60 * 60 * 1000;
   }
-}
+};
 
 function MenuLink(props) {
   return (
@@ -226,14 +231,15 @@ const padding = 10;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column"
+    flexDirection: "column",
+    marginTop: -4
   },
   titleArea: {
     backgroundColor: Colors.primary,
     flexDirection: "row",
     alignItems: "center",
     padding: padding,
-    height: Header.HEIGHT
+    height: HEADER_HEIGHT
   },
   logo: {
     width: 48,

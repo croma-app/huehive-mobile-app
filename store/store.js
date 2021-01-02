@@ -5,11 +5,9 @@ import { Platform, ToastAndroid } from "react-native";
 const UNDO_TIMEOUT = 3000;
 
 const syncStateToStore = function(state) {
-  // TODO: We need to find a better way to do storage management. isMenuOpen should not be saved.
+  // TODO: We need to find a better way to do storage management.
   // Fix this in a generic way with better storage management.
   const stateCopy = JSON.parse(JSON.stringify(state));
-  const isMenuOpen = stateCopy.isMenuOpen;
-  delete stateCopy.isMenuOpen;
   delete stateCopy.isStoreLoaded;
   Storage.setApplicationState(stateCopy);
 };
@@ -136,11 +134,7 @@ export default function applicationHook() {
       return { ...state, isPro: true, purchaseDetails: details };
     });
   };
-  const setMenu = isMenuOpen => {
-    setState(state => {
-      return { ...state, isMenuOpen: isMenuOpen };
-    });
-  };
+
   const setUser = user => {
     setState(state => {
       return { ...state, user: user };
@@ -232,15 +226,60 @@ export default function applicationHook() {
     });
   };
 
+  const setCurrentPalette = currentPalette => {
+    setState(state => {
+      return { ...state, currentPalette };
+    });
+  };
+
+  const setColorList = colorList => {
+    setState(state => {
+      return { ...state, colorList };
+    });
+  };
+
+  const setDetailedColor = detailedColor => {
+    setState(state => {
+      return { ...state, detailedColor };
+    });
+  };
+
+  const setColorPickerCallback = colorPickerCallback => {
+    setState(state => {
+      return { ...state, colorPickerCallback };
+    });
+  };
+
+  const setCommonPalettes = commonPalettes => {
+    setState(state => {
+      return { ...state, commonPalettes };
+    });
+  };
+
+  const setSuggestedName = suggestedName => {
+    setState(state => {
+      return { ...state, suggestedName };
+    });
+  };
+
+  const clearPalette = () => {
+    setSuggestedName("");
+    setCurrentPalette({});
+    setColorList([]);
+  };
+
   const [state, setState] = useState({
     ...{
       allPalettes: {},
+      currentPalette: {},
+      colorList: [],
       deletedPalettes: {},
+      suggestedName: "",
       isLoading: false,
       isPro: false,
-      isMenuOpen: false,
       user: {},
-      isStoreLoaded: false
+      isStoreLoaded: false,
+      colorPickerCallback: () => {}
     },
     loadInitPaletteFromStore,
     undoDeletionByName,
@@ -251,9 +290,15 @@ export default function applicationHook() {
     undoColorDeletion,
     addColorToPalette,
     setPurchase,
-    setMenu,
     setUser,
-    setStoreLoaded
+    setStoreLoaded,
+    setCurrentPalette,
+    setDetailedColor,
+    setColorList,
+    setColorPickerCallback,
+    setCommonPalettes,
+    setSuggestedName,
+    clearPalette
   });
   // Sync state to local storage
   if (state.isStoreLoaded === true) {

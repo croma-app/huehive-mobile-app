@@ -1,14 +1,25 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { SingleColorView } from "../components/SingleColorView";
 import { ScrollView, StyleSheet, View, Text, Platform } from "react-native";
 import CromaButton from "../components/CromaButton";
 import { logEvent } from "../libs/Helpers";
 import Touchable from "react-native-platform-touchable";
 import { MaterialIcons } from "@expo/vector-icons";
+import { CromaContext } from "../store/store";
 
-export default function ColorListScreen(props) {
-  const colors = uniqueColors(props.navigation.getParam("colors"));
-  const suggestedName = props.navigation.getParam("suggestedName");
+export default function ColorListScreen({ navigation }) {
+  const { colorList } = React.useContext(CromaContext);
+  const colors = uniqueColors(colorList);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle:
+        Platform.OS === "android"
+          ? () => <CustomHeader navigation={navigation} />
+          : "Colors"
+    });
+  }, []);
+
   logEvent("color_list_screen");
   return (
     <ScrollView style={styles.listview} showsVerticalScrollIndicator={false}>
@@ -17,12 +28,9 @@ export default function ColorListScreen(props) {
       ))}
       {Platform.OS == "web" && (
         <CromaButton
-          onPress={() =>
-            props.navigation.navigate("SavePalette", {
-              colors: colors,
-              name: suggestedName
-            })
-          }
+          onPress={() => {
+            navigation.navigate("SavePalette");
+          }}
         >
           SAVE AS NEW PALETTE
         </CromaButton>
@@ -42,9 +50,7 @@ function uniqueColors(colors) {
   return uniqueColors;
 }
 
-const CustomHeader = props => {
-  const colors = uniqueColors(props.navigation.getParam("colors"));
-  const suggestedName = props.navigation.getParam("suggestedName");
+const CustomHeader = ({ navigation }) => {
   return (
     <View
       style={{
@@ -63,30 +69,14 @@ const CustomHeader = props => {
         Colors
       </Text>
       <>
-        <Touchable
-          onPress={() =>
-            props.navigation.navigate("SavePalette", {
-              colors: colors,
-              name: suggestedName
-            })
-          }
-        >
+        <Touchable onPress={() => navigation.navigate("SavePalette")}>
           <MaterialIcons name="done" size={24} color="white" />
         </Touchable>
       </>
     </View>
   );
 };
-ColorListScreen.navigationOptions = ({ navigation }) => {
-  return {
-    headerTitle:
-      Platform.OS == "android" ? (
-        <CustomHeader navigation={navigation}></CustomHeader>
-      ) : (
-        "Colors"
-      )
-  };
-};
+
 const styles = StyleSheet.create({
   listview: {
     margin: 8

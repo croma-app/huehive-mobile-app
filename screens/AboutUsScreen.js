@@ -13,7 +13,7 @@ import { logEvent } from "../libs/Helpers";
 
 const GITHUB_URL = "https://github.com/croma-app/croma-react";
 const GITHUB_ISSUES_URL = "https://github.com/croma-app/croma-react/issues/new";
-const CROMA_APP_URL = "https://croma.app/#/";
+const CROMA_APP_URL = "https://croma.app/";
 
 const AboutUsScreen = () => {
   logEvent("about_us_screen");
@@ -62,10 +62,6 @@ const AboutUsScreen = () => {
       </View>
     </ScrollView>
   );
-};
-
-AboutUsScreen.navigationOptions = {
-  title: "About Us"
 };
 
 const styles = StyleSheet.create({

@@ -1,35 +1,39 @@
-import * as React from "react";
+import React, { useLayoutEffect, useContext } from "react";
 import { ScrollView, StyleSheet, Text } from "react-native";
 
 import { logEvent } from "../libs/Helpers";
 import { PalettePreviewCard } from "../components/PalettePreviewCard";
+import { CromaContext } from "../store/store";
 
-export default function CommonPalettesScreen(props) {
+export default function CommonPalettesScreen({ navigation }) {
   logEvent("common_palettes_screen");
-  const palettes = props.navigation.getParam("input").palettes;
-  const paletteName = props.navigation.getParam("input").name;
+  const { commonPalettes, setColorList, setSuggestedName } = useContext(
+    CromaContext
+  );
+  const { palettes, name } = commonPalettes;
+
+  useLayoutEffect(() => {
+    navigation.setOptions({ title: name });
+  }, [navigation]);
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {palettes.map(palette => (
+      {palettes.map((palette, index) => (
         <PalettePreviewCard
-          onPress={() =>
-            props.navigation.navigate("ColorList", {
-              colors: palette.colors,
-              suggestedName: paletteName + " - " + palette.name
-            })
-          }
+          key={palette?.name ?? index}
+          onPress={() => {
+            setColorList(palette.colors);
+            setSuggestedName(name + " - " + palette.name);
+            navigation.navigate("ColorList");
+          }}
           colors={palette.colors}
           name={palette.name}
-        ></PalettePreviewCard>
+        />
       ))}
     </ScrollView>
   );
 }
-CommonPalettesScreen.navigationOptions = ({ navigation }) => {
-  return {
-    title: navigation.getParam("input").name
-  };
-};
+
 const styles = StyleSheet.create({
   container: {
     paddingLeft: 12,

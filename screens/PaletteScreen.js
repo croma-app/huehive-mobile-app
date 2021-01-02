@@ -1,70 +1,83 @@
-import React, { useState, useContext } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 
 import SingleColorCard from "../components/SingleColorCard";
 import {
-  ScrollView,
-  StyleSheet,
-  View,
-  Text,
   Dimensions,
   Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
   ToastAndroid,
-  TextInput
+  View
 } from "react-native";
-import { UndoDialog, DialogContainer } from "../components/CommonDialogs";
+import Touchable from "react-native-platform-touchable";
 import { CromaContext } from "../store/store";
-import { Feather, MaterialIcons } from "@expo/vector-icons";
 import ActionButton from "react-native-action-button";
 import Colors from "../constants/Colors";
-import { Header } from "react-navigation";
+import { useHeaderHeight } from "@react-navigation/stack";
 import EmptyView from "../components/EmptyView";
 import { logEvent } from "../libs/Helpers";
-import Touchable from "react-native-platform-touchable";
-export default function PaletteScreen(props) {
-  const { height } = Dimensions.get("window");
-  const paletteName = props.navigation.getParam("name");
+import { DialogContainer, UndoDialog } from "../components/CommonDialogs";
+import { Feather, MaterialIcons } from "@expo/vector-icons";
+
+export default function PaletteScreen({ navigation }) {
   const {
     isPro,
     allPalettes,
     colorDeleteFromPalette,
     undoColorDeletion,
-    addColorToPalette
-  } = React.useContext(CromaContext);
-  const colors = allPalettes[paletteName].colors;
-  const deletedColors = allPalettes[paletteName].deletedColors
-    ? allPalettes[paletteName].deletedColors
+    addColorToPalette,
+    setDetailedColor,
+    currentPalette,
+    setColorPickerCallback
+  } = useContext(CromaContext);
+
+  const paletteName = currentPalette?.name ?? "";
+
+  const { height } = Dimensions.get("window");
+  const colors = allPalettes[paletteName]?.colors;
+  const deletedColors = allPalettes[paletteName]?.deletedColors
+    ? allPalettes[paletteName]?.deletedColors
     : [];
 
   const deleteColor = index => {
-    colorDeleteFromPalette(props.navigation.getParam("name"), index);
+    colorDeleteFromPalette(paletteName, index);
   };
   logEvent("palette_screen");
+
+  useLayoutEffect(() => {
+    setNavigationOptions({ navigation, paletteName });
+  }, [navigation, paletteName]);
 
   return (
     <>
       <View
-        style={(styles.container, { minHeight: height - Header.HEIGHT - 16 })}
+        style={
+          (styles.container, { minHeight: height - useHeaderHeight() - 16 })
+        }
       >
         <ScrollView
           style={styles.listview}
           showsVerticalScrollIndicator={false}
         >
-          {colors.slice(0, isPro ? colors.length : 4).map((colorObj, index) => {
-            return (
-              <SingleColorCard
-                key={colorObj.color}
-                onPress={() =>
-                  props.navigation.navigate("ColorDetails", {
-                    color: colorObj.color
-                  })
-                }
-                color={colorObj}
-                colorDeleteFromPalette={() => {
-                  deleteColor(index);
-                }}
-              ></SingleColorCard>
-            );
-          })}
+          {colors
+            ?.slice(0, isPro ? colors.length : 4)
+            .map((colorObj, index) => {
+              return (
+                <SingleColorCard
+                  key={`${colorObj.color}-${index}`}
+                  onPress={() => {
+                    setDetailedColor(colorObj.color);
+                    navigation.navigate("ColorDetails");
+                  }}
+                  color={colorObj}
+                  colorDeleteFromPalette={() => {
+                    deleteColor(index);
+                  }}
+                />
+              );
+            })}
           <EmptyView />
         </ScrollView>
         <ActionButton
@@ -84,21 +97,21 @@ export default function PaletteScreen(props) {
                 "Unlock pro to add more than 4 colors!",
                 ToastAndroid.LONG
               );
-              props.navigation.navigate("ProVersion");
+              navigation.navigate("ProVersion");
             } else {
-              props.navigation.navigate("ColorPicker", {
-                onDone: color => {
-                  addColorToPalette(paletteName, color);
-                }
+              setColorPickerCallback(color => {
+                addColorToPalette(paletteName, color);
               });
+              navigation.navigate("ColorPicker");
             }
           }}
           style={styles.actionButton}
         />
       </View>
       <DialogContainer>
-        {deletedColors.map(colorObj => (
+        {deletedColors.map((colorObj, index) => (
           <UndoDialog
+            key={`UndoDialog-${colorObj.color}-${index}`}
             name={colorObj.color}
             undoDeletionByName={colorName => {
               undoColorDeletion(paletteName, colorName);
@@ -110,18 +123,24 @@ export default function PaletteScreen(props) {
   );
 }
 
-const CustomHeader = props => {
-  const { renamePalette } = useContext(CromaContext);
-  const [isEditingPaletteName, setIsEditingPaletteName] = useState(false);
-  const [paletteName, setPaletteName] = useState(
-    props.navigation.getParam("name")
+const CustomHeader = ({ currentPaletteName }) => {
+  const [paletteName, setPaletteName] = useState(currentPaletteName);
+  const { renamePalette, currentPalette, setCurrentPalette } = useContext(
+    CromaContext
   );
+  const [isEditingPaletteName, setIsEditingPaletteName] = useState(false);
+
+  useEffect(() => {
+    setPaletteName(currentPaletteName);
+  }, [currentPaletteName]);
+
   const onDone = () => {
-    renamePalette(props.navigation.getParam("name"), paletteName);
+    renamePalette(currentPaletteName, paletteName);
     //setting new name in query params
-    props.navigation.setParams({ name: paletteName });
+    setCurrentPalette({ ...currentPalette, name: paletteName });
     setIsEditingPaletteName(false);
   };
+
   const onEdit = () => {
     logEvent("edit_palette_name");
     setIsEditingPaletteName(true);
@@ -157,7 +176,7 @@ const CustomHeader = props => {
               fontSize: 18
             }}
           >
-            {props.navigation.getParam("name")}
+            {paletteName}
           </Text>
           <Touchable onPress={onEdit}>
             <Feather name="edit" size={24} color="white" />
@@ -167,10 +186,11 @@ const CustomHeader = props => {
     </View>
   );
 };
-PaletteScreen.navigationOptions = ({ navigation }) => {
-  return {
-    headerTitle: <CustomHeader navigation={navigation}></CustomHeader>
-  };
+
+const setNavigationOptions = ({ navigation, paletteName }) => {
+  navigation.setOptions({
+    headerTitle: () => <CustomHeader currentPaletteName={paletteName} />
+  });
 };
 
 const styles = StyleSheet.create({

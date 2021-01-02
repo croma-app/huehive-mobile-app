@@ -1,34 +1,32 @@
 import React, { useEffect, useState } from "react";
 import Color from "pigment/full";
 import {
+  ActivityIndicator,
+  Dimensions,
+  Linking,
+  NativeModules,
+  Platform,
   ScrollView,
   StyleSheet,
-  ActivityIndicator,
-  View,
-  Dimensions,
-  Platform,
-  Linking,
   ToastAndroid,
-  NativeModules
+  View
 } from "react-native";
 import { PaletteCard } from "../components/PaletteCard";
-import { UndoDialog, DialogContainer } from "../components/CommonDialogs";
+import { DialogContainer, UndoDialog } from "../components/CommonDialogs";
 import { CromaContext } from "../store/store";
 import Colors from "../constants/Colors";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import ColorPicker from "../libs/ColorPicker";
-import Touchable from "react-native-platform-touchable";
 import Jimp from "jimp";
-import { Header } from "react-navigation";
+import { useHeaderHeight } from "@react-navigation/stack";
 import EmptyView from "../components/EmptyView";
 import ActionButton from "react-native-action-button";
-import { Ionicons, Entypo } from "@expo/vector-icons";
+import { Entypo, Ionicons } from "@expo/vector-icons";
 import ShareMenu from "../libs/ShareMenu";
-import { logEvent } from "../libs/Helpers";
-import { purchase } from "../libs/Helpers";
+import { logEvent, purchase } from "../libs/Helpers";
 
-const HomeScreen = function(props) {
+const HomeScreen = function({ navigation, route }) {
   const { height } = Dimensions.get("window");
   const {
     isLoading,
@@ -36,9 +34,12 @@ const HomeScreen = function(props) {
     deletedPalettes,
     undoDeletionByName,
     isPro,
-    isMenuOpen,
-    setMenu,
-    setPurchase
+    setPurchase,
+    setColorList,
+    setColorPickerCallback,
+    setSuggestedName,
+    setDetailedColor,
+    clearPalette
   } = React.useContext(CromaContext);
   const [pickImgloading, setPickImgLoading] = useState(false);
   const pickImageResult = async base64 => {
@@ -57,7 +58,7 @@ const HomeScreen = function(props) {
     }
   };
   const getPermissionAsync = async () => {
-    if (Platform.OS == "ios") {
+    if (Platform?.OS === "ios") {
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
       if (status !== "granted") {
         alert("Sorry, we need camera roll permissions to make this work!");
@@ -69,13 +70,8 @@ const HomeScreen = function(props) {
   };
 
   useEffect(() => {
-    props.navigation.setParams({
-      isMenuOpen: isMenuOpen,
-      setMenu: setMenu
-    });
-
     getPermissionAsync();
-    if (Platform.OS === "android") {
+    if (Platform?.OS === "android") {
       // Deep linking code
       // https://medium.com/react-native-training/deep-linking-your-react-native-app-d87c39a1ad5e
       Linking.getInitialURL().then(url => {
@@ -89,10 +85,10 @@ const HomeScreen = function(props) {
               var item = part.split("=");
               result[item[0]] = decodeURIComponent(item[1]);
             });
-          props.navigation.navigate("SavePalette", {
-            colors: [...new Set(JSON.parse(result["colors"]) || [])],
-            name: result["name"]
-          });
+          clearPalette();
+          setColorList([...new Set(JSON.parse(result["colors"]) || [])]);
+          setSuggestedName(result["name"]);
+          navigation.navigate("SavePalette");
         }
       });
 
@@ -103,7 +99,9 @@ const HomeScreen = function(props) {
           for (var i = 0, l = colors.length; i < l; i++) {
             colors[i] = { color: colors[i].tohex().toLowerCase() };
           }
-          props.navigation.navigate("SavePalette", { colors });
+          clearPalette();
+          setColorList(colors);
+          navigation.navigate("SavePalette");
         }
       });
     }
@@ -118,7 +116,10 @@ const HomeScreen = function(props) {
     return (
       <>
         <View
-          style={[styles.container, { minHeight: height - Header.HEIGHT - 16 }]}
+          style={[
+            styles.container,
+            { minHeight: height - useHeaderHeight() - 16 }
+          ]}
         >
           {pickImgloading ? <ActivityIndicator /> : <View />}
           <ScrollView showsVerticalScrollIndicator={false}>
@@ -131,7 +132,8 @@ const HomeScreen = function(props) {
                     isPro ? allPalettes[name].colors.length : 4
                   )}
                   name={name}
-                  navigation={props.navigation}
+                  navigation={navigation}
+                  route={route}
                 />
               );
             })}
@@ -170,10 +172,9 @@ const HomeScreen = function(props) {
                   const pickedColors = await NativeModules.CromaModule.navigateToColorPicker();
                   logEvent("pick_colors_from_camera", pickedColors.length);
                   console.log("Picked colors: ", pickedColors);
-                  props.navigation.navigate(
-                    "ColorList",
-                    JSON.parse(pickedColors)
-                  );
+                  clearPalette();
+                  setColorList(JSON.parse(pickedColors)?.colors);
+                  navigation.navigate("ColorList");
                 } catch (error) {
                   ToastAndroid.show(
                     "Error while picking color from camera - " + error
@@ -198,16 +199,16 @@ const HomeScreen = function(props) {
                       result.uri
                     );
                     logEvent("get_palette_from_image");
-                    props.navigation.navigate(
-                      "ColorList",
-                      JSON.parse(pickedColors)
-                    );
+                    clearPalette();
+                    setColorList(JSON.parse(pickedColors)?.colors);
+                    navigation.navigate("ColorList");
                   }
                 } else {
                   const image = await pickImage();
-                  props.navigation.navigate("ColorList", {
-                    colors: ColorPicker.getProminentColors(image)
-                  });
+
+                  clearPalette();
+                  setColorList(ColorPicker.getProminentColors(image));
+                  navigation.navigate("ColorList");
                 }
               } catch (error) {
                 if (Platform.OS === "android") {
@@ -228,13 +229,13 @@ const HomeScreen = function(props) {
             title="Get palette from color"
             onPress={() => {
               logEvent("get_palette_from_color");
-              props.navigation.navigate("ColorPicker", {
-                onDone: color => {
-                  props.navigation.navigate("Palettes", {
-                    color: color.color
-                  });
-                }
+              clearPalette();
+              setColorPickerCallback(({ color }) => {
+                clearPalette();
+                setDetailedColor(color);
+                navigation.navigate("Palettes");
               });
+              navigation.navigate("ColorPicker");
             }}
           >
             <Ionicons name="md-color-palette" style={styles.actionButtonIcon} />
@@ -244,7 +245,8 @@ const HomeScreen = function(props) {
               buttonColor="#1abc9c"
               title="Create new palette"
               onPress={() => {
-                props.navigation.navigate("AddPaletteManually");
+                clearPalette();
+                navigation.navigate("AddPaletteManually");
               }}
             >
               <Ionicons
@@ -282,28 +284,6 @@ const HomeScreen = function(props) {
 };
 
 export default HomeScreen;
-
-HomeScreen.navigationOptions = ({ navigation }) => {
-  const result = {
-    title: "Croma"
-  };
-  if (Platform.OS == "android") {
-    result.headerLeft = (
-      <Touchable
-        style={{ marginLeft: 8 }}
-        onPress={() => {
-          const isMenuOpen = navigation.getParam("isMenuOpen");
-          const setMenu = navigation.getParam("setMenu");
-          setMenu(!isMenuOpen);
-        }}
-      >
-        <Entypo name="menu" style={styles.icon} />
-      </Touchable>
-    );
-    result.headerTitleContainerStyle = { left: 32 };
-  }
-  return result;
-};
 
 const styles = StyleSheet.create({
   container: {

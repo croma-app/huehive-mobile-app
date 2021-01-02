@@ -6,7 +6,7 @@ import { CromaContext } from "../store/store";
 import { purchase, logEvent } from "../libs/Helpers";
 import { material } from "react-native-typography";
 
-export default function ProScreen(props) {
+export default function ProScreen() {
   const { isPro, setPurchase } = React.useContext(CromaContext);
   const purchaseDevelopment = () => {
     purchase(setPurchase, "support_development");
