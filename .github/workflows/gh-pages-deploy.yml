@@ -31,6 +31,8 @@ jobs:
       uses: webfactory/ssh-agent@v0.2.0
       with:
         ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:
