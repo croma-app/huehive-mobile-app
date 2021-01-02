@@ -14,7 +14,7 @@ import SyncPalettesScreen from "../screens/SyncPalettesScreen";
 import CommonPalettesScreen from "../screens/CommonPalettesScreen";
 import PaletteLibraryScreen from "../screens/PaletteLibraryScreen";
 import Colors from "../constants/Colors";
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, FontAwesome } from "@expo/vector-icons";
 import Touchable from "react-native-platform-touchable";
 import AboutUsScreen from "../screens/AboutUsScreen";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -157,6 +157,14 @@ const screenOptions = {
   headerRight: () =>
     Platform.OS === "web" ? (
       <View style={{ flexDirection: "row" }}>
+        <Touchable
+          style={{ padding: "5px" }}
+          onPress={() => {
+            Linking.openURL("https://www.buymeacoffee.com/kamalkishor1991");
+          }}
+        >
+          <FontAwesome name="coffee" style={styles.icon} />
+        </Touchable>
         <Touchable
           style={{ padding: "5px" }}
           onPress={() => {
