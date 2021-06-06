@@ -146,7 +146,7 @@ function addExportedPalettes(palettesFromFile, allPalettes, addPalette) {
       added++;
     }
   });
-  longToast(added + " palettes added sucessfully.");
+  longToast(added + " palettes added successfully.");
 }
 
 function GithubView(props) {

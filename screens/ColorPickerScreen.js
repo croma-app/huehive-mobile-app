@@ -16,7 +16,7 @@ export default function ColorPickerScreen({ navigation }) {
           onChangeColor={color => {
             setColor(color);
           }}
-          style={[{ height: 350, flex: 1 }]}
+          style={[{ height: 350 }]}
         />
         <CromaButton
           onPress={() => {
