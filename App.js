@@ -1,112 +1,98 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React from 'react';
-import type {Node} from 'react';
+import React, { useEffect, useState } from "react";
 import {
-  SafeAreaView,
-  ScrollView,
+  ActivityIndicator,
+  NativeModules,
+  Platform,
   StatusBar,
   StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
+  View
+} from "react-native";
+import Colors from "./constants/Colors";
 import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  linking,
+  getDrawerNavigator,
+  getStackNavigator
+} from "./navigation/NavigatorHelper";
+import applicationHook, { CromaContext } from "./store/store";
+import ErrorBoundary from "./components/ErrorBoundary";
+import NavigationContainer from "@react-navigation/native/src/NavigationContainer";
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
+export default function App() {
+  const [isPalettesLoaded, setIsPalettesLoaded] = useState(false);
+  const applicationState = applicationHook();
+
+  useEffect(() => {
+    (async () => {
+      await applicationState.loadInitPaletteFromStore();
+      setIsPalettesLoaded(true);
+      if (Platform.OS === "android") {
+        const isFree =
+            (await NativeModules.CromaModule.getConfigString("isProFree")) ===
+            "true";
+        if (isFree) {
+          applicationState.setPurchase({
+            platfrom: "android",
+            isProFree: true
+          });
+        }
+      }
+    })();
+
+    if (Platform.OS === "web") {
+      applicationState.setPurchase({
+        platfrom: "web"
+      });
+    }
+  }, []);
+
+  const spinner = (
+      <View style={{ flex: 1, marginTop: "20%" }}>
+        <ActivityIndicator size="large" color="#ef635f" animating={true} />
+      </View>
   );
+
+  const MainContent = (
+      <CromaContext.Provider value={applicationState}>
+        <ErrorBoundary>
+          <View style={[styles.container]}>
+            <StatusBar
+                barStyle="light-content"
+                // dark-content, light-content and default
+                hidden={false}
+                //To hide statusBar
+                backgroundColor={Colors.primaryDark}
+                //Background color of statusBar only works for Android
+                translucent={false}
+                //allowing light, but not detailed shapes
+                networkActivityIndicatorVisible={true}
+            />
+            <View
+                style={[{ flex: 1, backgroundColor: "transparent" }]}
+                className={"navigation-workplace"}
+            >
+              <NavigationContainer linking={linking(applicationState)}>
+                {navigator}
+              </NavigationContainer>
+            </View>
+          </View>
+        </ErrorBoundary>
+      </CromaContext.Provider>
+  );
+
+  return !isPalettesLoaded ? spinner : MainContent;
+}
+
+const getNavigator = () => {
+  return Platform.OS === "android" ? getDrawerNavigator() : getStackNavigator();
 };
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits. This is after the edit
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
+const navigator = getNavigator();
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    backgroundColor: Colors.backgroundColor,
+    flexDirection: "row"
+  }
 });
-
-export default App;
