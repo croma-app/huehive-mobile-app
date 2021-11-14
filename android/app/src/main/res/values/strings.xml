@@ -1,19 +1,3 @@
 <resources>
-    <string name="app_name">Croma</string>
-    <string name="RNB_GOOGLE_PLAY_LICENSE_KEY">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhMNoRMMmhFIsgG1D6rZcIkOSqGEAuXLqqm3Wczuq8+qVF6qbIEBucAAoMqsClt8bQmFtynDuXsktguiWcIwgLbm9uGSAYqVp2qAjwLzoeMmVbkP99GnwQvl6yCF63tWt7MtJRmaUfI/8nSr6cJnLJrHx30UQR/MwlK5o5PUPdM7YCuAmiCfZdxFMhoDCY5UwZR7w0PYZ2mS5TBWg77Ef6r6Mg37gJ+X/WM9D4t3w61r6J/wEDSXZOXBxUxpPpYiNrGCBazSV41G+vOf069MHsZZNjEk7kqd7zVTV6bsopw5BTKF9E5roPbXr5YtlG13jKNCDb1gwItM950bGDW+soQIDAQAB
-
-</string>
-    <string name="title_activity_color_picker">ColorPickerActivity</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="title_activity_camera_color_picker">CameraColorPickerActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="take_picture">Take picture</string>
-    <string name="picker_label">Pick colors</string>
-    <string name="color_picker_help_msg">1. Tap on the screen to pick colors \n OR \n 2. Extract colors from text by pointing camera to text</string>
-    <string name="image_color_picker_help_msg">Tap on the screen to pick colors</string>
-    <string name="tooltip_pick_color_btn">Touch on screen to pick colors</string>
-    <string name="share_label">Extract colors</string>
-
-    <string name="title_activity_image_color_picker">ImageColorPickerActivity</string>
+    <string name="app_name">croma</string>
 </resources>

@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Croma</string>
+	<string>croma</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -24,6 +24,17 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+		</dict>
+	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>UILaunchStoryboardName</key>
@@ -40,43 +51,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
-	<key>NSAppTransportSecurity</key>
-	<!--See http://ste.vn/2015/06/10/configuring-app-transport-security-ios-9-osx-10-11/ -->
-	<dict>
-    <key>NSAllowsArbitraryLoads</key>
-    <true/>
-		<key>NSExceptionDomains</key>
-		<dict>
-			<key>localhost</key>
-			<dict>
-				<key>NSExceptionAllowsInsecureHTTPLoads</key>
-				<true/>
-			</dict>
-		</dict>
-	</dict>
-	<key>NSCalendarsUsageDescription</key>
-	<string>Allow Croma to access your calendar</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Allow Croma to use the camera</string>
-	<key>NSContactsUsageDescription</key>
-	<string>Allow Croma experiences to access your contacts</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Allow Croma to use your location</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Allow Croma to use your location</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Allow Croma to use your location</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>Allow Croma to access your microphone</string>
-	<key>NSMotionUsageDescription</key>
-	<string>Allow Croma to access your device's accelerometer</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Give Croma periences permission to save photos</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Give Croma periences permission to access your photos</string>
-	<key>NSRemindersUsageDescription</key>
-	<string>Allow Croma to access your reminders</string>
 </dict>
 </plist>

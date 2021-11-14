@@ -1,0 +1,6 @@
+module Pods_croma_cromaTests {
+  umbrella header "Pods-croma-cromaTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
