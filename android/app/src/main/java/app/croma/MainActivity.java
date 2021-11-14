@@ -1,4 +1,4 @@
-package com.croma;
+package app.croma;
 
 import com.facebook.react.ReactActivity;
 

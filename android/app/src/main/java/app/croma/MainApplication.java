@@ -1,4 +1,4 @@
-package com.croma;
+package app.croma;
 
 import android.app.Application;
 import android.content.Context;
