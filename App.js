@@ -2,47 +2,36 @@ import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   NativeModules,
-  Platform,
   StatusBar,
-  StyleSheet,
+  StyleSheet, Text,
   View
 } from "react-native";
+import AboutUsScreen from "./screens/AboutUsScreen";
 import Colors from "./constants/Colors";
-import {
-  linking,
-  getDrawerNavigator,
-  getStackNavigator
-} from "./navigation/NavigatorHelper";
 import applicationHook, { CromaContext } from "./store/store";
 import ErrorBoundary from "./components/ErrorBoundary";
-import NavigationContainer from "@react-navigation/native/src/NavigationContainer";
+import {NavigationContainer, useNavigationContainerRef} from "@react-navigation/native";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [isPalettesLoaded, setIsPalettesLoaded] = useState(false);
   const applicationState = applicationHook();
-
+  const navigationRef = useNavigationContainerRef();
   useEffect(() => {
     (async () => {
       await applicationState.loadInitPaletteFromStore();
       setIsPalettesLoaded(true);
-      if (Platform.OS === "android") {
-        const isFree =
-            (await NativeModules.CromaModule.getConfigString("isProFree")) ===
-            "true";
-        if (isFree) {
-          applicationState.setPurchase({
-            platfrom: "android",
-            isProFree: true
-          });
-        }
+      const isFree =
+          (await NativeModules.CromaModule.getConfigString("isProFree")) ===
+          "true";
+      if (isFree) {
+        applicationState.setPurchase({
+          platfrom: "android",
+          isProFree: true
+        });
       }
     })();
-
-    if (Platform.OS === "web") {
-      applicationState.setPurchase({
-        platfrom: "web"
-      });
-    }
   }, []);
 
   const spinner = (
@@ -53,7 +42,7 @@ export default function App() {
 
   const MainContent = (
       <CromaContext.Provider value={applicationState}>
-        <ErrorBoundary>
+
           <View style={[styles.container]}>
             <StatusBar
                 barStyle="light-content"
@@ -70,23 +59,18 @@ export default function App() {
                 style={[{ flex: 1, backgroundColor: "transparent" }]}
                 className={"navigation-workplace"}
             >
-              <NavigationContainer linking={linking(applicationState)}>
-                {navigator}
+              <NavigationContainer>
+                <Stack.Navigator>
+                  <Stack.Screen name="AboutUs" component={AboutUsScreen} />
+                </Stack.Navigator>
               </NavigationContainer>
             </View>
           </View>
-        </ErrorBoundary>
       </CromaContext.Provider>
   );
 
-  return !isPalettesLoaded ? spinner : MainContent;
+  return MainContent;
 }
-
-const getNavigator = () => {
-  return Platform.OS === "android" ? getDrawerNavigator() : getStackNavigator();
-};
-
-const navigator = getNavigator();
 
 const styles = StyleSheet.create({
   container: {

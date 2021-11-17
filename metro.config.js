@@ -12,6 +12,9 @@ module.exports = {
         experimentalImportSupport: false,
         inlineRequires: true,
       },
+      resolver: {
+        extraNodeModules: require('node-libs-react-native'),
+      },
     }),
   },
 };

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import InAppBilling from "react-native-billing";
 import Storage from "./../libs/Storage";
 import { Platform, ToastAndroid } from "react-native";
 const UNDO_TIMEOUT = 3000;
