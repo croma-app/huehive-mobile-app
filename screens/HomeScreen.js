@@ -18,8 +18,6 @@ import Colors from "../constants/Colors";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import ColorPicker from "../libs/ColorPicker";
-import Jimp from "jimp";
-import { useHeaderHeight } from "@react-navigation/stack";
 import EmptyView from "../components/EmptyView";
 import ActionButton from "react-native-action-button";
 import { Entypo, Ionicons } from "@expo/vector-icons";
@@ -51,11 +49,11 @@ const HomeScreen = function({ navigation, route }) {
   };
   const pickImage = async () => {
     let result = await pickImageResult(true);
-    if (result.base64 !== undefined) {
+    /*if (result.base64 !== undefined) {
       return await Jimp.read(new Buffer(result.base64, "base64"));
     } else {
       return await Jimp.read(result.uri);
-    }
+    }*/
   };
   const getPermissionAsync = async () => {
     if (Platform?.OS === "ios") {
@@ -118,7 +116,7 @@ const HomeScreen = function({ navigation, route }) {
         <View
           style={[
             styles.container,
-            { minHeight: height - useHeaderHeight() - 16 }
+            { minHeight: height - 10 - 16 }
           ]}
         >
           {pickImgloading ? <ActivityIndicator /> : <View />}

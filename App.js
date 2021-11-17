@@ -9,9 +9,9 @@ import {
 import AboutUsScreen from "./screens/AboutUsScreen";
 import Colors from "./constants/Colors";
 import applicationHook, { CromaContext } from "./store/store";
-import ErrorBoundary from "./components/ErrorBoundary";
 import {NavigationContainer, useNavigationContainerRef} from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import HomeScreen from "./screens/HomeScreen";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -61,7 +61,7 @@ export default function App() {
             >
               <NavigationContainer>
                 <Stack.Navigator>
-                  <Stack.Screen name="AboutUs" component={AboutUsScreen} />
+                  <Stack.Screen name="Home" component={HomeScreen} />
                 </Stack.Navigator>
               </NavigationContainer>
             </View>
