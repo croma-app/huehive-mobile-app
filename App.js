@@ -7,6 +7,7 @@ import {
   View
 } from "react-native";
 import AboutUsScreen from "./screens/AboutUsScreen";
+import ColorPickerScreen from "./screens/ColorPickerScreen";
 import Colors from "./constants/Colors";
 import applicationHook, { CromaContext } from "./store/store";
 import {NavigationContainer, useNavigationContainerRef} from "@react-navigation/native";
@@ -62,6 +63,7 @@ export default function App() {
               <NavigationContainer>
                 <Stack.Navigator>
                   <Stack.Screen name="Home" component={HomeScreen} />
+                  <Stack.Screen name="ColorPicker" component={ColorPickerScreen} />
                 </Stack.Navigator>
               </NavigationContainer>
             </View>

@@ -253,19 +253,6 @@ const HomeScreen = function({ navigation, route }) {
               />
             </ActionButton.Item>
           )}
-          {Platform.OS === "web" && (
-            <ActionButton.Item
-              buttonColor={Colors.primary}
-              title="Get croma on playstore"
-              onPress={() =>
-                Linking.openURL(
-                  "https://play.google.com/store/apps/details?id=app.croma"
-                )
-              }
-            >
-              <Entypo name="google-play" style={styles.actionButtonIcon} />
-            </ActionButton.Item>
-          )}
           {Platform.OS === "android" && !isPro && (
             <ActionButton.Item
               buttonColor={Colors.primary}
@@ -293,14 +280,5 @@ const styles = StyleSheet.create({
     height: 22,
     color: "white"
   },
-  actionButton:
-    Platform.OS === "web"
-      ? {
-          position: "fixed",
-          transform: "scale(1) rotate(0deg) !important",
-          right: Math.max((Dimensions.get("window").width - 600) / 2, 0),
-          left: Math.max((Dimensions.get("window").width - 600) / 2, 0)
-        }
-      : {},
   icon: { fontSize: 24, height: 24, color: "white" }
 });
