@@ -8,12 +8,10 @@ import {
   View
 } from "react-native";
 import Colors from "../constants/Colors";
-import {
-  FontAwesome5,
-  Ionicons,
-  MaterialCommunityIcons,
-  MaterialIcons
-} from "@expo/vector-icons";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Touchable from "react-native-platform-touchable";
 import { logEvent } from "../libs/Helpers";
 import { ScrollView } from "react-native-gesture-handler";

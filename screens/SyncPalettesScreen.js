@@ -10,7 +10,7 @@ import { View } from "react-native-animatable";
 import CromaButton from "../components/CromaButton";
 import { CromaContext } from "../store/store";
 import Touchable from "react-native-platform-touchable";
-import { AntDesign } from "@expo/vector-icons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import { logEvent } from "../libs/Helpers";
 import { Octokit } from "@octokit/rest";
 import { authorize } from "react-native-app-auth";

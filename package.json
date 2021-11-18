@@ -10,7 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@expo/vector-icons": "^12.0.5",
+    "react-native-vector-icons": "^9.0.0",
     "@octokit/rest": "^18.12.0",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.5",

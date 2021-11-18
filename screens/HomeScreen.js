@@ -20,7 +20,8 @@ import * as Permissions from "expo-permissions";
 import ColorPicker from "../libs/ColorPicker";
 import EmptyView from "../components/EmptyView";
 import ActionButton from "react-native-action-button";
-import { Entypo, Ionicons } from "@expo/vector-icons";
+import Entypo from "react-native-vector-icons/Entypo";
+import Ionicons from  "react-native-vector-icons/Ionicons";
 import ShareMenu from "../libs/ShareMenu";
 import { logEvent, purchase } from "../libs/Helpers";
 

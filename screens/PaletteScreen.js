@@ -19,7 +19,8 @@ import { useHeaderHeight } from "@react-navigation/stack";
 import EmptyView from "../components/EmptyView";
 import { logEvent } from "../libs/Helpers";
 import { DialogContainer, UndoDialog } from "../components/CommonDialogs";
-import { Feather, MaterialIcons } from "@expo/vector-icons";
+import Feather  from "react-native-vector-icons/Feather";
+import MaterialIcons  from "react-native-vector-icons/MaterialIcons";
 
 export default function PaletteScreen({ navigation }) {
   const {

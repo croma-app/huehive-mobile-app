@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet, View, Text, Platform } from "react-native";
 import CromaButton from "../components/CromaButton";
 import { logEvent } from "../libs/Helpers";
 import Touchable from "react-native-platform-touchable";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "react-native-vector-icons/";
 import { CromaContext } from "../store/store";
 
 export default function ColorListScreen({ navigation }) {

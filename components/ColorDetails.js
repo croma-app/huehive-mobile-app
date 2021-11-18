@@ -7,7 +7,7 @@ import {
   Platform,
   ToastAndroid
 } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import FontAwesome  from "react-native-vector-icons/FontAwesome";
 
 import Touchable from "react-native-platform-touchable";
 

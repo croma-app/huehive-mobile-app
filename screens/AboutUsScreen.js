@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React from "react";
 import { material } from "react-native-typography";
-import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons } from "react-native-vector-icons/";
 import { logEvent } from "../libs/Helpers";
 
 const GITHUB_URL = "https://github.com/croma-app/croma-react";
