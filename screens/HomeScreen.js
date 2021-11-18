@@ -154,7 +154,6 @@ const HomeScreen = function({ navigation, route }) {
         {/*Setting box shadow to false because of Issue on the web: https://github.com/mastermoo/react-native-action-button/issues/337 */}
         <ActionButton
           bgColor="rgba(68, 68, 68, 0.6)"
-          hideShadow={Platform.OS === "web" ? true : false}
           buttonColor={Colors.fabPrimary}
           offsetY={60}
           spacing={15}
