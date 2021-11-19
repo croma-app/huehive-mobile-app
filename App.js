@@ -13,8 +13,19 @@ import Colors from "./constants/Colors";
 import applicationHook, { CromaContext } from "./store/store";
 import {NavigationContainer, useNavigationContainerRef} from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import ColorDetailsScreen from "./screens/ColorDetailScreen";
+import PalettesScreen from "./screens/PalettesScreen";
+import SavePaletteScreen from "./screens/SavePaletteScreen";
+import AddPaletteManuallyScreen from "./screens/AddPaletteManuallyScreen";
+import ColorListScreen from "./screens/ColorListScreen";
+import PaletteScreen from "./screens/PaletteScreen";
+import ProVersionScreen from "./screens/ProVersionScreen";
+import SyncPalettesScreen from "./screens/SyncPalettesScreen";
+import CommonPalettesScreen from "./screens/CommonPalettesScreen";
+import PaletteLibraryScreen from "./screens/PaletteLibraryScreen";
 import HamburgerMenu from "./components/HamburgerMenu";
 import SideMenu from "react-native-side-menu";
+import {HEADER_HEIGHT} from "./constants/Layout";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -69,10 +80,26 @@ export default function App() {
               className={"navigation-workplace"}
           >
             <NavigationContainer ref={navigationRef}>
-              <Stack.Navigator>
+              <Stack.Navigator screenOptions={{
+                ...screenOptions,
+                headerStyle: {
+                  ...screenOptions.headerStyle,
+                  height: HEADER_HEIGHT
+                }
+              }}>
                 <Stack.Screen name="Home" component={HomeScreen} />
                 <Stack.Screen name="ColorPicker" component={ColorPickerScreen} />
-                <Stack.Screen name={"AboutUs"} component={AboutUsScreen}/>
+                <Stack.Screen name={"AboutUs"} options={{title: "About us"}} component={AboutUsScreen}/>
+                <Stack.Screen name="ColorDetails" component={ColorDetailsScreen} />
+                <Stack.Screen name="Palettes" component={PalettesScreen} />
+                <Stack.Screen name="SavePalette" component={SavePaletteScreen} />
+                <Stack.Screen name="AddPaletteManually" component={AddPaletteManuallyScreen} />
+                <Stack.Screen name="Palette" component={PaletteScreen} />
+                <Stack.Screen name="ProVersion" component={ProVersionScreen} />
+                <Stack.Screen name="SyncPalettes" options={{ title: "Import/Export your palettes" }} component={SyncPalettesScreen} />
+                <Stack.Screen name="CommonPalettes" component={CommonPalettesScreen} />
+                <Stack.Screen name="PaletteLibrary"  options={{ title: "Palette library" }} component={PaletteLibraryScreen} />
+                <Stack.Screen name="ColorList" component={ColorListScreen} />
               </Stack.Navigator>
             </NavigationContainer>
           </View>
@@ -92,3 +119,17 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   }
 });
+const screenOptions = {
+  headerStyle: {
+    backgroundColor: Colors.primary,
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    shadowColor: "black",
+    shadowOffset: { height: 3, width: 0 },
+    borderBottomWidth: 0
+  },
+  cardStyle: {
+    backgroundColor: "rgb(242, 242, 242)"
+  },
+  headerTintColor: "#fff"
+};
