@@ -3,7 +3,7 @@ import {
   ActivityIndicator,
   NativeModules,
   StatusBar,
-  StyleSheet, Text,
+  StyleSheet,
   View
 } from "react-native";
 import AboutUsScreen from "./screens/AboutUsScreen";
@@ -26,16 +26,16 @@ export default function App() {
   useEffect(() => {
     (async () => {
       await applicationState.loadInitPaletteFromStore();
-      setIsPalettesLoaded(true);
-      const isFree =
+     setIsPalettesLoaded(true);
+     /* const isFree =
           (await NativeModules.CromaModule.getConfigString("isProFree")) ===
-          "true";
-      if (isFree) {
-        applicationState.setPurchase({
-          platfrom: "android",
-          isProFree: true
-        });
-      }
+          "true";*/
+
+      applicationState.setPurchase({
+        platform: "android",
+        isProFree: true
+      });
+
     })();
   }, []);
 
@@ -81,7 +81,7 @@ export default function App() {
     </CromaContext.Provider>
   );
 
-  return MainContent;
+  return !isPalettesLoaded ? spinner : MainContent;
 }
 
 const styles = StyleSheet.create({

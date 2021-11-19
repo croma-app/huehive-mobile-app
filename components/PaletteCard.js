@@ -5,7 +5,7 @@ import Colors from "../constants/Colors";
 import { Share } from "react-native";
 
 import MultiColorView from "./MultiColorView";
-import { FontAwesome } from "react-native-vector-icons/";
+import FontAwesome  from "react-native-vector-icons/FontAwesome";
 import Touchable from "react-native-platform-touchable";
 import { CromaContext } from "../store/store";
 import { logEvent } from "../libs/Helpers";

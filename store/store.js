@@ -76,16 +76,16 @@ export default function applicationHook() {
 
     // Setting default palette when user comming first time
     let defaultPalettes = {};
-    const isUserAleadyExits = await Storage.checkUserAlreadyExists();
+    const isUserAlreadyExits = await Storage.checkUserAlreadyExists();
 
-    if (isUserAleadyExits != "true") {
+    if (isUserAlreadyExits != "true") {
       if (Platform.OS !== "web") {
         try {
-          await InAppBilling.open();
+          //await InAppBilling.open();
           // If subscriptions/products are updated server-side you
           // will have to update cache with loadOwnedPurchasesFromGoogle()
-          await InAppBilling.loadOwnedPurchasesFromGoogle();
-          isPurchased = await InAppBilling.isPurchased("croma_pro");
+          //await InAppBilling.loadOwnedPurchasesFromGoogle();
+          let isPurchased =  true;//await InAppBilling.isPurchased("croma_pro");
           if (isPurchased) {
             ToastAndroid.show(
               "Your purchase restored successfully..",
@@ -101,7 +101,7 @@ export default function applicationHook() {
             ToastAndroid.LONG
           );
         } finally {
-          await InAppBilling.close();
+          //await InAppBilling.close();
         }
       }
       Storage.setUserAlreadyExists();
@@ -114,7 +114,7 @@ export default function applicationHook() {
           { color: "#c9ef5b" }
         ]
       };
-      addPalette(defaultPalettes);
+      await addPalette(defaultPalettes);
     }
     setStoreLoaded(true);
   };
