@@ -30,7 +30,10 @@ export default props => {
   const [appInstallTime, setAppInstallTime] = useState(null);
 
   const { setColorList, clearPalette } = React.useContext(CromaContext);
-
+  const navigate = function (screen) {
+    props.toggleSideMenu();
+    props.navigation.navigate(screen);
+  }
   useEffect(() => {
     (async () => {
       const appInstallTime = await NativeModules.CromaModule.getAppInstallTime();
@@ -43,7 +46,7 @@ export default props => {
       <Touchable
         onPress={() => {
           logEvent("hm_home_screen");
-          props.navigation.navigate("Home");
+          navigate("Home");
         }}
       >
         <View style={[styles.titleArea, {height: props.navigation.headerHeight}]}>
@@ -60,9 +63,8 @@ export default props => {
             style={styles.menuItem}
             onPress={() => {
               logEvent("hm_create_new_palette");
-              //console.error(props, 'check it man ')
               clearPalette();
-              props.navigation.navigate("AddPaletteManually");
+             navigate("AddPaletteManually");
             }}
           >
             <View style={styles.menuItemView}>
@@ -77,7 +79,7 @@ export default props => {
             onPress={async () => {
               logEvent("hm_palette_library");
               clearPalette();
-              props.navigation.navigate("PaletteLibrary");
+              navigate("PaletteLibrary");
             }}
           >
             <View style={styles.menuItemView}>
@@ -103,7 +105,7 @@ export default props => {
                 });
                 clearPalette();
                 setColorList(JSON.parse(pickedColors)?.colors);
-                props.navigation.navigate("ColorList");
+                navigate("ColorList");
               }
             }}
           >
@@ -125,7 +127,7 @@ export default props => {
               });
               clearPalette();
               setColorList(JSON.parse(pickedColors)?.colors);
-              props.navigation.navigate("ColorList");
+              navigate("ColorList");
             }}
           >
             <View style={styles.menuItemView}>
@@ -151,7 +153,7 @@ export default props => {
             style={styles.menuItem}
             onPress={() => {
               logEvent("hm_pro_benefits");
-              props.navigation.navigate("ProVersion");
+              navigate("ProVersion");
             }}
           >
             <View style={styles.menuItemView}>
@@ -165,7 +167,7 @@ export default props => {
             style={styles.menuItem}
             onPress={async () => {
               logEvent("hm_sync_palettes");
-              props.navigation.navigate("SyncPalettes");
+              navigate("SyncPalettes");
             }}
           >
             <View style={styles.menuItemView}>
@@ -181,7 +183,7 @@ export default props => {
             style={styles.menuItem}
             onPress={async () => {
               logEvent("hm_about_us");
-              props.navigation.navigate("AboutUs");
+              navigate("AboutUs");
             }}
           >
             <View style={styles.menuItemView}>

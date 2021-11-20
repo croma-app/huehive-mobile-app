@@ -26,6 +26,8 @@ import PaletteLibraryScreen from "./screens/PaletteLibraryScreen";
 import HamburgerMenu from "./components/HamburgerMenu";
 import SideMenu from "react-native-side-menu";
 import {HEADER_HEIGHT} from "./constants/Layout";
+import Touchable from "react-native-platform-touchable";
+import Entypo from "react-native-vector-icons/Entypo";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -54,11 +56,19 @@ export default function App() {
         <ActivityIndicator size="large" color="#ef635f" animating={true} />
       </View>
   );
+  const hamburgerMenuIcon = () => (
+      <Touchable
+          style={{ marginLeft: 8 }}
+          onPress={() => setMenu(!isMenuOpen)}
+      >
+        <Entypo name="menu" style={styles.sideMenuIcon} />
+      </Touchable>
+  );
 
   const MainContent = (
     <CromaContext.Provider value={applicationState}>
       <SideMenu
-          menu={<HamburgerMenu navigation={navigationRef} />}
+          menu={<HamburgerMenu navigation={navigationRef} toggleSideMenu={() => setMenu(!isMenuOpen)} />}
           isOpen={isMenuOpen}
           onChange={isOpen => setMenu(isOpen)}
       >
@@ -86,7 +96,13 @@ export default function App() {
                   height: HEADER_HEIGHT
                 }
               }}>
-                <Stack.Screen name="Home" component={HomeScreen} />
+                <Stack.Screen name="Home" options={() => {
+                  return {
+                    title: "Croma",
+                    headerLeft: () => hamburgerMenuIcon(),
+                    headerTitleContainerStyle: { left: 40 }
+                  };
+                }} component={HomeScreen} />
                 <Stack.Screen name="ColorPicker" options={{title: "Color picker"}} component={ColorPickerScreen} />
                 <Stack.Screen name={"AboutUs"} options={{title: "About us"}} component={AboutUsScreen}/>
                 <Stack.Screen name="ColorDetails" options={{title: "Color details"}}  component={ColorDetailsScreen} />
@@ -116,6 +132,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: Colors.backgroundColor,
     flexDirection: "row"
+  },
+  sideMenuIcon: {
+    fontSize: 25, height: 25, color: "white", paddingRight: 4
   }
 });
 const screenOptions = {
