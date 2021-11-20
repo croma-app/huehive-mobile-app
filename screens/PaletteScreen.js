@@ -15,7 +15,7 @@ import Touchable from "react-native-platform-touchable";
 import { CromaContext } from "../store/store";
 import ActionButton from "react-native-action-button";
 import Colors from "../constants/Colors";
-import { useHeaderHeight } from "@react-navigation/stack";
+import { useHeaderHeight } from '@react-navigation/elements';
 import EmptyView from "../components/EmptyView";
 import { logEvent } from "../libs/Helpers";
 import { DialogContainer, UndoDialog } from "../components/CommonDialogs";

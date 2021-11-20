@@ -12,6 +12,7 @@
   "dependencies": {
     "@octokit/rest": "^18.12.0",
     "@react-native-async-storage/async-storage": "^1.15.11",
+    "@react-navigation/elements": "^1.2.1",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.5",
     "@react-navigation/stack": "^6.0.11",

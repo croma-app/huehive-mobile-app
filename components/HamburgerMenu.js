@@ -5,7 +5,8 @@ import {
   NativeModules,
   StyleSheet,
   Text,
-  View
+  View,
+  SafeAreaView
 } from "react-native";
 import Colors from "../constants/Colors";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
@@ -16,7 +17,6 @@ import Touchable from "react-native-platform-touchable";
 import { logEvent } from "../libs/Helpers";
 import { ScrollView } from "react-native-gesture-handler";
 import * as ImagePicker from "expo-image-picker";
-import { HEADER_HEIGHT } from "../constants/Layout";
 import { CromaContext } from "../store/store";
 
 export default props => {
@@ -39,17 +39,17 @@ export default props => {
   });
 
   return (
-    <View style={[styles.container]}>
+    <SafeAreaView style={[styles.container]}>
       <Touchable
         onPress={() => {
           logEvent("hm_home_screen");
           props.navigation.navigate("Home");
         }}
       >
-        <View style={[styles.titleArea]}>
+        <View style={[styles.titleArea, {height: props.navigation.headerHeight}]}>
           <Image
             style={styles.logo}
-            source={require("../assets/images/dots.png")}
+            source={require("../assets/images/icon.png")}
           />
           <Text style={styles.title}>Croma - Save you colors</Text>
         </View>
@@ -196,7 +196,7 @@ export default props => {
           </Touchable>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 
   function hasRateUsPeriodExpired(appInstallTime) {
@@ -233,11 +233,9 @@ const styles = StyleSheet.create({
     marginTop: -4
   },
   titleArea: {
-    backgroundColor: Colors.primary,
     flexDirection: "row",
     alignItems: "center",
-    padding: padding,
-    height: HEADER_HEIGHT
+    padding: padding
   },
   logo: {
     width: 48,
@@ -248,7 +246,7 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     textAlignVertical: "center",
     padding: padding,
-    color: "white"
+    color: Colors.primary
   },
   menu: {
     flex: 1,
