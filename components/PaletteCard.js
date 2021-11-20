@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   bottom: {
     flexDirection: "row",
     alignItems: "center",
-    padding: 16,
+    padding: 4,
     height: 54
   },
   actionButtonsView: {

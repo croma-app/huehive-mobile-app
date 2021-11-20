@@ -1,10 +1,10 @@
 import React, { useLayoutEffect } from "react";
 import { SingleColorView } from "../components/SingleColorView";
-import { ScrollView, StyleSheet, View, Text, Platform } from "react-native";
+import {ScrollView, StyleSheet, View, Text, Platform, Button} from "react-native";
 import CromaButton from "../components/CromaButton";
 import { logEvent } from "../libs/Helpers";
 import Touchable from "react-native-platform-touchable";
-import { MaterialIcons } from "react-native-vector-icons/";
+import MaterialIcons  from "react-native-vector-icons/MaterialIcons";
 import { CromaContext } from "../store/store";
 
 export default function ColorListScreen({ navigation }) {
@@ -14,7 +14,7 @@ export default function ColorListScreen({ navigation }) {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle:
-        Platform.OS === "android"
+        Platform.OS === "android" || Platform.OS === 'ios'
           ? () => <CustomHeader navigation={navigation} />
           : "Colors"
     });
@@ -57,7 +57,7 @@ const CustomHeader = ({ navigation }) => {
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
-        width: "95%"
+        width: "100%"
       }}
     >
       <Text
@@ -66,10 +66,10 @@ const CustomHeader = ({ navigation }) => {
           fontSize: 18
         }}
       >
-        Colors
+        New palette
       </Text>
       <>
-        <Touchable onPress={() => navigation.navigate("SavePalette")}>
+        <Touchable style={[styles.doneButton]} onPress={() => navigation.navigate("SavePalette")}>
           <MaterialIcons name="done" size={24} color="white" />
         </Touchable>
       </>
@@ -80,5 +80,8 @@ const CustomHeader = ({ navigation }) => {
 const styles = StyleSheet.create({
   listview: {
     margin: 8
+  },
+  doneButton: {
+    marginRight: "20%"
   }
 });

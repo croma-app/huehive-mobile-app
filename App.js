@@ -32,7 +32,6 @@ export default function App() {
   const [isPalettesLoaded, setIsPalettesLoaded] = useState(false);
   const applicationState = applicationHook();
   const [isMenuOpen, setMenu] = useState(false);
-
   const navigationRef = useNavigationContainerRef();
   useEffect(() => {
     (async () => {
@@ -88,18 +87,18 @@ export default function App() {
                 }
               }}>
                 <Stack.Screen name="Home" component={HomeScreen} />
-                <Stack.Screen name="ColorPicker" component={ColorPickerScreen} />
+                <Stack.Screen name="ColorPicker" options={{title: "Color picker"}} component={ColorPickerScreen} />
                 <Stack.Screen name={"AboutUs"} options={{title: "About us"}} component={AboutUsScreen}/>
-                <Stack.Screen name="ColorDetails" component={ColorDetailsScreen} />
+                <Stack.Screen name="ColorDetails" options={{title: "Color details"}}  component={ColorDetailsScreen} />
                 <Stack.Screen name="Palettes" component={PalettesScreen} />
-                <Stack.Screen name="SavePalette" component={SavePaletteScreen} />
+                <Stack.Screen name="SavePalette" options={{title: "Save palette"}}  component={SavePaletteScreen} />
                 <Stack.Screen name="AddPaletteManually" component={AddPaletteManuallyScreen} />
                 <Stack.Screen name="Palette" component={PaletteScreen} />
                 <Stack.Screen name="ProVersion" component={ProVersionScreen} />
                 <Stack.Screen name="SyncPalettes" options={{ title: "Import/Export your palettes" }} component={SyncPalettesScreen} />
                 <Stack.Screen name="CommonPalettes" component={CommonPalettesScreen} />
                 <Stack.Screen name="PaletteLibrary"  options={{ title: "Palette library" }} component={PaletteLibraryScreen} />
-                <Stack.Screen name="ColorList" component={ColorListScreen} />
+                <Stack.Screen name="ColorList" options={{ title: "New palette" }} component={ColorListScreen} />
               </Stack.Navigator>
             </NavigationContainer>
           </View>

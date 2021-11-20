@@ -6,6 +6,7 @@ import Colors from "../constants/Colors";
 import CromaButton from "../components/CromaButton";
 import { CromaContext } from "../store/store";
 import { TextDialog } from "./CommonDialogs";
+import { StackActions } from '@react-navigation/native';
 
 export const SavePalette = ({ navigation, title, navigationPath }) => {
   const {
@@ -21,7 +22,7 @@ export const SavePalette = ({ navigation, title, navigationPath }) => {
 
   const [finalColors, setFinalColors] = useState([]);
   const [isPaletteNameExist, setIsPaletteNameExist] = React.useState(false);
-  const [isUnlockProNotification, setIsUnlockProNotifiction] = useState(false);
+  const [isUnlockProNotification, setIsUnlockProNotification] = useState(false);
 
   useEffect(() => {
     let colorsFromParams = colorList;
@@ -29,10 +30,10 @@ export const SavePalette = ({ navigation, title, navigationPath }) => {
       colorsFromParams = JSON.parse(colorsFromParams);
     }
     const colors = [...new Set(colorsFromParams || [])];
-    setIsUnlockProNotifiction(!isPro && colors.length > 4);
+    setIsUnlockProNotification(!isPro && colors.length > 4);
     setFinalColors(colors);
     setTimeout(() => {
-      setIsUnlockProNotifiction(false);
+      setIsUnlockProNotification(false);
     }, 5000);
   }, [colorList]);
 
@@ -74,8 +75,8 @@ export const SavePalette = ({ navigation, title, navigationPath }) => {
           navigationPath === "Palette"
             ? setCurrentPalette(palette)
             : setCurrentPalette({});
-          Platform?.OS === "android"
-            ? navigation.navigate(navigationPath)
+          (Platform.OS === "android" || Platform.OS === 'ios')
+            ? navigation.dispatch(StackActions.popToTop())
             : navigation.replace(navigationPath);
         }}
       >
