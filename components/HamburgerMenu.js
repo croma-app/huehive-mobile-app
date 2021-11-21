@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   textAreaMenuItem: {
-    fontWeight: "800",
+    fontWeight: "500",
     textAlignVertical: "center",
     padding: padding,
     alignItems: "flex-start"
@@ -274,6 +274,6 @@ const styles = StyleSheet.create({
   icon: {
     fontSize: menuHeight - 2 * padding,
     padding: padding,
-    color: "black"
+    color: "black",
   }
 });

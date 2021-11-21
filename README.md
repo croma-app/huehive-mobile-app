@@ -6,27 +6,17 @@
 ![](Croma_web.gif)
 
 ### Installation guide 
-- Installation: `npm install`
-- Runing on web: `npm run web` 
-- Runing on android: `./bundle-and-run-android.sh`
+- Installation: `yarn`
+- Running on android: `yarn android`
+- Running on ios: `yarn ios`
+- Release - // TODO
 
-# referances
+# references
 
 - https://github.com/numixproject/croma
 - https://github.com/satya164/croma
 - https://github.com/satya164/pigment
 
-
-# Expo commands
-
-`expo start -w` for starting the web version.
-`expo start -w --no-dev` for production version.
-
-### Android
-
-Run locally:
-
-`npm run android`
 
 Build signed apk:
 `cd android`

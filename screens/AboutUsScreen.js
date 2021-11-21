@@ -8,7 +8,9 @@ import {
 } from "react-native";
 import React from "react";
 import { material } from "react-native-typography";
-import { MaterialCommunityIcons, MaterialIcons } from "react-native-vector-icons/";
+import Entypo from "react-native-vector-icons/Entypo";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import { logEvent } from "../libs/Helpers";
 
 const GITHUB_URL = "https://github.com/croma-app/croma-react";
@@ -16,7 +18,7 @@ const GITHUB_ISSUES_URL = "https://github.com/croma-app/croma-react/issues/new";
 const CROMA_APP_URL = "https://croma.app/";
 
 const AboutUsScreen = () => {
-  //logEvent("about_us_screen");
+  logEvent("about_us_screen");
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View>
@@ -29,7 +31,7 @@ const AboutUsScreen = () => {
       <View style={styles.linksMainView}>
         <TouchableOpacity onPress={() => Linking.openURL(`${GITHUB_URL}`)}>
           <View style={styles.linkView}>
-            <MaterialCommunityIcons name="github-circle" style={styles.icon} />
+            <Entypo name="github-with-circle" style={styles.icon} />
             <Text style={[styles.line, styles.subtitle]}>
               Find us on Github !
             </Text>
