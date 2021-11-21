@@ -1,0 +1,15 @@
+<resources>
+
+    <color name="black_overlay">#66000000</color>
+    <integer-array name="androidcolors">
+        <item>@color/accent</item>
+        <item>@color/success</item>
+        <item>@color/primarydark</item>
+        <item>@color/navigation</item>
+    </integer-array>
+    <item name="success" type="color">#ff60f0af</item>
+    <item name="primarydark" type="color">#ffc0534D</item>
+    <item name="navigation" type="color">#ff222222</item>
+
+    <item name="accent" type="color">#fff06860</item>
+</resources>

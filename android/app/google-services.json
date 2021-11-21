@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "795536482433",
+    "firebase_url": "https://croma-a6256.firebaseio.com",
+    "project_id": "croma-a6256",
+    "storage_bucket": "croma-a6256.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:795536482433:android:ddd8d9e89513f28486ad80",
+        "android_client_info": {
+          "package_name": "app.croma"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "795536482433-ale40a3qr1ueqf4ugnbnlrvdqlik2f8h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD__AjGl2-zzufiHdzbDVEp6u9t_QrV0p8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "795536482433-ale40a3qr1ueqf4ugnbnlrvdqlik2f8h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

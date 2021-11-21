@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_height="96dp"
+    android:gravity="center"
+    android:id="@+id/button_view"
+    android:background="@color/navigation"
+    tools:showIn="@layout/activity_image_color_picker">
+
+    <ImageButton
+        android:id="@+id/done_button"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:background="@drawable/done_button"
+      android:tooltipText="@string/tooltip_pick_color_btn"
+        android:src="@mipmap/done" />
+
+</RelativeLayout>
