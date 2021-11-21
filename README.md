@@ -10,7 +10,7 @@
 - Runing on web: `npm run web` 
 - Runing on android: `./bundle-and-run-android.sh`
 
-# referances
+# references
 
 - https://github.com/numixproject/croma
 - https://github.com/satya164/croma
