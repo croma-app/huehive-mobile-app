@@ -39,5 +39,34 @@
               <data android:mimeType="image/*" />
           </intent-filter>
       </activity>
+        <activity
+                android:name=".ImageColorPickerActivity"
+                android:configChanges="orientation|keyboardHidden|screenSize"
+                android:label="@string/title_activity_image_color_picker"
+                android:theme="@style/FullscreenTheme"></activity>
+        <activity
+                android:name=".ColorPickerActivity"
+                android:configChanges="orientation|screenSize"
+                android:icon="@mipmap/ic_camera"
+                android:label="@string/picker_label"
+                android:theme="@style/FullscreenTheme"></activity>
+        <activity
+                android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+                android:theme="@style/Base.Theme.AppCompat">
+        </activity>
+      <meta-data
+        android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+        android:value="ocr" />
+
     </application>
+    <meta-data
+            android:name="firebase_analytics_collection_deactivated"
+            android:value="@bool/FIREBASE_ANALYTICS_DEACTIVATED" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature
+            android:name="android.hardware.camera"
+            android:required="true" />
+    <uses-feature
+            android:name="android.hardware.camera.autofocus"
+            android:required="false" />
 </manifest>

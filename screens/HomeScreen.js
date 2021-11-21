@@ -20,10 +20,10 @@ import * as Permissions from "expo-permissions";
 import ColorPicker from "../libs/ColorPicker";
 import EmptyView from "../components/EmptyView";
 import ActionButton from "react-native-action-button";
-import Entypo from "react-native-vector-icons/Entypo";
 import Ionicons from  "react-native-vector-icons/Ionicons";
 import ShareMenu from "../libs/ShareMenu";
 import { logEvent, purchase } from "../libs/Helpers";
+import {launchImageLibrary} from "react-native-image-picker";
 
 const HomeScreen = function({ navigation, route }) {
   const { height } = Dimensions.get("window");
@@ -42,11 +42,12 @@ const HomeScreen = function({ navigation, route }) {
   } = React.useContext(CromaContext);
   const [pickImgloading, setPickImgLoading] = useState(false);
   const pickImageResult = async base64 => {
-    return await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+    const result = await launchImageLibrary({
+      mediaType: 'photo',
       quality: 1,
       base64: base64
     });
+    return result;
   };
   const pickImage = async () => {
     let result = await pickImageResult(true);
@@ -192,9 +193,9 @@ const HomeScreen = function({ navigation, route }) {
                 if (Platform.OS === "android") {
                   const result = await pickImageResult();
                   console.log("Result: ", result);
-                  if (!result.cancelled) {
+                  if (!result.didCancel) {
                     const pickedColors = await NativeModules.CromaModule.pickTopColorsFromImage(
-                      result.uri
+                      result.assets[0].uri
                     );
                     logEvent("get_palette_from_image");
                     clearPalette();

@@ -16,16 +16,17 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Touchable from "react-native-platform-touchable";
 import { logEvent } from "../libs/Helpers";
 import { ScrollView } from "react-native-gesture-handler";
-import * as ImagePicker from "expo-image-picker";
+import {launchImageLibrary} from 'react-native-image-picker';
 import { CromaContext } from "../store/store";
 
 export default props => {
   const pickImageResult = async base64 => {
-    return await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+    const result = await launchImageLibrary({
+      mediaType: 'photo',
       quality: 1,
       base64: base64
     });
+   return result;
   };
   const [appInstallTime, setAppInstallTime] = useState(null);
 
@@ -96,9 +97,9 @@ export default props => {
             style={styles.menuItem}
             onPress={async () => {
               const imageResult = await pickImageResult();
-              if (!imageResult.cancelled) {
+              if (!imageResult.didCancel) {
                 const pickedColors = await NativeModules.CromaModule.navigateToImageColorPicker(
-                  imageResult.uri
+                  imageResult.assets[0].uri
                 );
                 logEvent("hm_pick_colors_from_img", {
                   length: pickedColors.length

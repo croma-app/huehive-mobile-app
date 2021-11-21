@@ -6,10 +6,10 @@ const logEvent = (eventName, value) => {
   }
   if (Platform.OS === "android") {
     console.log("event: ", eventName, JSON.stringify(value));
-    /*NativeModules.CromaModule.logEvent(
+    NativeModules.CromaModule.logEvent(
       eventName,
       isObject(value) ? JSON.stringify(value) : `${value}`
-    );*/
+    );
   }
 };
 
