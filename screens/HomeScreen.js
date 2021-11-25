@@ -15,7 +15,6 @@ import { PaletteCard } from "../components/PaletteCard";
 import { DialogContainer, UndoDialog } from "../components/CommonDialogs";
 import { CromaContext } from "../store/store";
 import Colors from "../constants/Colors";
-import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import ColorPicker from "../libs/ColorPicker";
 import EmptyView from "../components/EmptyView";
@@ -41,21 +40,12 @@ const HomeScreen = function({ navigation, route }) {
     clearPalette
   } = React.useContext(CromaContext);
   const [pickImgloading, setPickImgLoading] = useState(false);
-  const pickImageResult = async base64 => {
+  const pickImageResult = async() => {
     const result = await launchImageLibrary({
       mediaType: 'photo',
       quality: 1,
-      base64: base64
     });
     return result;
-  };
-  const pickImage = async () => {
-    let result = await pickImageResult(true);
-    /*if (result.base64 !== undefined) {
-      return await Jimp.read(new Buffer(result.base64, "base64"));
-    } else {
-      return await Jimp.read(result.uri);
-    }*/
   };
   const getPermissionAsync = async () => {
     if (Platform?.OS === "ios") {
@@ -203,7 +193,7 @@ const HomeScreen = function({ navigation, route }) {
                     navigation.navigate("ColorList");
                   }
                 } else {
-                  const image = await pickImage();
+                  const image = await pickImageResult();
 
                   clearPalette();
                   setColorList(ColorPicker.getProminentColors(image));

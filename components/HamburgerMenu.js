@@ -20,11 +20,10 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import { CromaContext } from "../store/store";
 
 export default props => {
-  const pickImageResult = async base64 => {
+  const pickImageResult = async() => {
     const result = await launchImageLibrary({
       mediaType: 'photo',
       quality: 1,
-      base64: base64
     });
    return result;
   };

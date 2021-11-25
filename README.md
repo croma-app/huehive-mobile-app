@@ -51,3 +51,10 @@ Fix java files
 ### [Support us](https://www.buymeacoffee.com/kamalkishor1991) 
 
 
+### Debugging:
+
+To see console log
+From the simulator, press (⌘+D) and press Remote JS Debugging. 
+This will open a resource, http://localhost:8081/debugger-ui on localhost. 
+From there, use the Chrome Developer tools JavaScript console to view console.log
+[Stackoverflow](https://stackoverflow.com/questions/30115372/how-to-do-logging-in-react-native)
