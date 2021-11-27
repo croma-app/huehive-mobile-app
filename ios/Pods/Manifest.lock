@@ -280,6 +280,8 @@ PODS:
   - react-native-app-auth (6.4.0):
     - AppAuth (= 1.4.0)
     - React-Core
+  - react-native-color-thief (0.3.3):
+    - React
   - react-native-document-picker (7.1.1):
     - React-Core
   - react-native-image-picker (4.3.0):
@@ -439,6 +441,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-app-auth (from `../node_modules/react-native-app-auth`)
+  - react-native-color-thief (from `../node_modules/react-native-color-thief`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -518,6 +521,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-app-auth:
     :path: "../node_modules/react-native-app-auth"
+  react-native-color-thief:
+    :path: "../node_modules/react-native-color-thief"
   react-native-document-picker:
     :path: "../node_modules/react-native-document-picker"
   react-native-image-picker:
@@ -598,6 +603,7 @@ SPEC CHECKSUMS:
   React-jsinspector: d9c8eb0b53f0da206fed56612b289fec84991157
   React-logger: e522e76fa3e9ec3e7d7115b49485cc065cf4ae06
   react-native-app-auth: 0970add7ceaadc90d2ccd1d9e21916d33d203701
+  react-native-color-thief: 2d9a1d15f070c6a73cfae2611dd41b51615a3364
   react-native-document-picker: f4cc4df2eff8c9015d862a59bdaef11a153f1292
   react-native-image-picker: 869530859570f2af86ae57bc48886a5e2367a825
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
@@ -623,6 +629,6 @@ SPEC CHECKSUMS:
   Yoga: 32a18c0e845e185f4a2a66ec76e1fd1f958f22fa
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 66db83b658e95cd027342de940b43ea4267333ea
+PODFILE CHECKSUM: e3c4c8c8f211cfedbdbcb8703f30f6d36a9ee157
 
 COCOAPODS: 1.11.2

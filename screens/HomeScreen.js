@@ -23,6 +23,7 @@ import Ionicons from  "react-native-vector-icons/Ionicons";
 import ShareMenu from "../libs/ShareMenu";
 import { logEvent, purchase } from "../libs/Helpers";
 import {launchImageLibrary} from "react-native-image-picker";
+import RNColorThief from "react-native-color-thief";
 
 const HomeScreen = function({ navigation, route }) {
   const { height } = Dimensions.get("window");
@@ -39,7 +40,7 @@ const HomeScreen = function({ navigation, route }) {
     setDetailedColor,
     clearPalette
   } = React.useContext(CromaContext);
-  const [pickImgloading, setPickImgLoading] = useState(false);
+  const [pickImgloading, setPickImgloading] = useState(false);
   const pickImageResult = async() => {
     const result = await launchImageLibrary({
       mediaType: 'photo',
@@ -179,26 +180,20 @@ const HomeScreen = function({ navigation, route }) {
             title="Get palette from image"
             onPress={async () => {
               try {
-                setPickImgLoading(true);
-                if (Platform.OS === "android") {
-                  const result = await pickImageResult();
-                  console.log("Result: ", result);
-                  if (!result.didCancel) {
-                    const pickedColors = await NativeModules.CromaModule.pickTopColorsFromImage(
-                      result.assets[0].uri
-                    );
-                    logEvent("get_palette_from_image");
-                    clearPalette();
-                    setColorList(JSON.parse(pickedColors)?.colors);
-                    navigation.navigate("ColorList");
-                  }
-                } else {
-                  const image = await pickImageResult();
-
-                  clearPalette();
-                  setColorList(ColorPicker.getProminentColors(image));
-                  navigation.navigate("ColorList");
-                }
+                setPickImgloading(true);
+                const image = await pickImageResult();
+                logEvent("get_palette_from_image");
+                // get dominant color object { r, g, b }
+                const pickedColors =  await RNColorThief.getPalette(image.assets[0].uri,6, 10, false);
+                console.log("Picked colors: ", pickedColors);
+                clearPalette();
+                setColorList(pickedColors.map(colorThiefColor => {
+                  //console.log("colorThiefColor: ", colorThiefColor);
+                  const hex = new Color("rgb(" + colorThiefColor.r + ", " + colorThiefColor.g + ", " + colorThiefColor.b + ")").tohex();
+                  //console.log("Hex: ", hex, colorThiefColor);
+                  return {color: hex};
+                }));
+                navigation.navigate("ColorList");
               } catch (error) {
                 if (Platform.OS === "android") {
                   ToastAndroid.show(
@@ -207,7 +202,7 @@ const HomeScreen = function({ navigation, route }) {
                   );
                 }
               } finally {
-                setPickImgLoading(false);
+                setPickImgloading(false);
               }
             }}
           >

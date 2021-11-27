@@ -1,0 +1,6 @@
+module react_native_color_thief {
+  umbrella header "react-native-color-thief-umbrella.h"
+
+  export *
+  module * { export * }
+}

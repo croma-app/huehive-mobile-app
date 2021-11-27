@@ -2,7 +2,6 @@ require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 platform :ios, '11.0'
-
 target 'croma' do
   config = use_native_modules!
 
@@ -28,5 +27,12 @@ target 'croma' do
   post_install do |installer|
     react_native_post_install(installer)
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
+    installer.pods_project.targets.each do |target|
+        if ['react-native-track-player'].include? target.name
+          target.build_configurations.each do |config|
+            config.build_settings['SWIFT_VERSION'] = '5'
+          end
+        end
+    end
   end
 end
