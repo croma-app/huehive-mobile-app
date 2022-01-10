@@ -1,0 +1,25 @@
+{
+  "name": "react-native-color-thief",
+  "swift_versions": "5.0",
+  "version": "0.3.3",
+  "summary": "color thief for react-native (ios & android)",
+  "license": "MIT",
+  "authors": {
+    "name": "Likewise, Inc."
+  },
+  "homepage": "git+https://github.com/6DegreeLabs/react-native-color-thief.git",
+  "platforms": {
+    "ios": "9.0"
+  },
+  "source": {
+    "git": "https://github.com/6DegreeLabs/react-native-color-thief",
+    "tag": "v0.3.3"
+  },
+  "source_files": "ios/*.{h,m,swift}",
+  "dependencies": {
+    "React": [
+
+    ]
+  },
+  "swift_version": "5.0"
+}

@@ -1,4 +1,4 @@
-import { AsyncStorage } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const APPLICATION_STATE_KEY = "APLICATION_STATE";
 const IS_USER_ALREADY_EXIST_KEY = "IS_USER_ALREADY_EXIST";
 export default class Storage {

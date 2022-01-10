@@ -1,0 +1,6 @@
+module Pods_croma {
+  umbrella header "Pods-croma-umbrella.h"
+
+  export *
+  module * { export * }
+}

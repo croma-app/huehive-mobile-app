@@ -2,7 +2,7 @@ import * as React from "react";
 import { StyleSheet, View, Text, Platform } from "react-native";
 import Card from "./Card";
 import Colors from "../constants/Colors";
-import { FontAwesome } from "@expo/vector-icons";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Touchable from "react-native-platform-touchable";
 
 export default class SingleColorCard extends React.Component {

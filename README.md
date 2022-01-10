@@ -6,9 +6,10 @@
 ![](Croma_web.gif)
 
 ### Installation guide 
-- Installation: `npm install`
-- Runing on web: `npm run web` 
-- Runing on android: `./bundle-and-run-android.sh`
+- Installation: `yarn`
+- Running on android: `yarn android`
+- Running on ios: `yarn ios`
+- Release - // TODO
 
 # references
 
@@ -16,17 +17,6 @@
 - https://github.com/satya164/croma
 - https://github.com/satya164/pigment
 
-
-# Expo commands
-
-`expo start -w` for starting the web version.
-`expo start -w --no-dev` for production version.
-
-### Android
-
-Run locally:
-
-`npm run android`
 
 Build signed apk:
 `cd android`
@@ -61,3 +51,10 @@ Fix java files
 ### [Support us](https://www.buymeacoffee.com/kamalkishor1991) 
 
 
+### Debugging:
+
+To see console log
+From the simulator, press (⌘+D) and press Remote JS Debugging. 
+This will open a resource, http://localhost:8081/debugger-ui on localhost. 
+From there, use the Chrome Developer tools JavaScript console to view console.log
+[Stackoverflow](https://stackoverflow.com/questions/30115372/how-to-do-logging-in-react-native)

@@ -5,34 +5,35 @@ import {
   NativeModules,
   StyleSheet,
   Text,
-  View
+  View,
+  SafeAreaView
 } from "react-native";
 import Colors from "../constants/Colors";
-import {
-  FontAwesome5,
-  Ionicons,
-  MaterialCommunityIcons,
-  MaterialIcons
-} from "@expo/vector-icons";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Touchable from "react-native-platform-touchable";
 import { logEvent } from "../libs/Helpers";
 import { ScrollView } from "react-native-gesture-handler";
-import * as ImagePicker from "expo-image-picker";
-import { HEADER_HEIGHT } from "../constants/Layout";
+import {launchImageLibrary} from 'react-native-image-picker';
 import { CromaContext } from "../store/store";
 
 export default props => {
-  const pickImageResult = async base64 => {
-    return await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+  const pickImageResult = async() => {
+    const result = await launchImageLibrary({
+      mediaType: 'photo',
       quality: 1,
-      base64: base64
     });
+   return result;
   };
   const [appInstallTime, setAppInstallTime] = useState(null);
 
   const { setColorList, clearPalette } = React.useContext(CromaContext);
-
+  const navigate = function (screen) {
+    props.toggleSideMenu();
+    props.navigation.navigate(screen);
+  }
   useEffect(() => {
     (async () => {
       const appInstallTime = await NativeModules.CromaModule.getAppInstallTime();
@@ -41,17 +42,17 @@ export default props => {
   });
 
   return (
-    <View style={[styles.container]}>
+    <SafeAreaView style={[styles.container]}>
       <Touchable
         onPress={() => {
           logEvent("hm_home_screen");
-          props.navigation.navigate("Home");
+          navigate("Home");
         }}
       >
-        <View style={[styles.titleArea]}>
+        <View style={[styles.titleArea, {height: props.navigation.headerHeight}]}>
           <Image
             style={styles.logo}
-            source={require("../assets/images/dots.png")}
+            source={require("../assets/images/icon.png")}
           />
           <Text style={styles.title}>Croma - Save you colors</Text>
         </View>
@@ -62,9 +63,8 @@ export default props => {
             style={styles.menuItem}
             onPress={() => {
               logEvent("hm_create_new_palette");
-              //console.error(props, 'check it man ')
               clearPalette();
-              props.navigation.navigate("AddPaletteManually");
+             navigate("AddPaletteManually");
             }}
           >
             <View style={styles.menuItemView}>
@@ -79,7 +79,7 @@ export default props => {
             onPress={async () => {
               logEvent("hm_palette_library");
               clearPalette();
-              props.navigation.navigate("PaletteLibrary");
+              navigate("PaletteLibrary");
             }}
           >
             <View style={styles.menuItemView}>
@@ -96,16 +96,16 @@ export default props => {
             style={styles.menuItem}
             onPress={async () => {
               const imageResult = await pickImageResult();
-              if (!imageResult.cancelled) {
+              if (!imageResult.didCancel) {
                 const pickedColors = await NativeModules.CromaModule.navigateToImageColorPicker(
-                  imageResult.uri
+                  imageResult.assets[0].uri
                 );
                 logEvent("hm_pick_colors_from_img", {
                   length: pickedColors.length
                 });
                 clearPalette();
                 setColorList(JSON.parse(pickedColors)?.colors);
-                props.navigation.navigate("ColorList");
+                navigate("ColorList");
               }
             }}
           >
@@ -127,7 +127,7 @@ export default props => {
               });
               clearPalette();
               setColorList(JSON.parse(pickedColors)?.colors);
-              props.navigation.navigate("ColorList");
+              navigate("ColorList");
             }}
           >
             <View style={styles.menuItemView}>
@@ -153,7 +153,7 @@ export default props => {
             style={styles.menuItem}
             onPress={() => {
               logEvent("hm_pro_benefits");
-              props.navigation.navigate("ProVersion");
+              navigate("ProVersion");
             }}
           >
             <View style={styles.menuItemView}>
@@ -167,7 +167,7 @@ export default props => {
             style={styles.menuItem}
             onPress={async () => {
               logEvent("hm_sync_palettes");
-              props.navigation.navigate("SyncPalettes");
+              navigate("SyncPalettes");
             }}
           >
             <View style={styles.menuItemView}>
@@ -183,7 +183,7 @@ export default props => {
             style={styles.menuItem}
             onPress={async () => {
               logEvent("hm_about_us");
-              props.navigation.navigate("AboutUs");
+              navigate("AboutUs");
             }}
           >
             <View style={styles.menuItemView}>
@@ -198,7 +198,7 @@ export default props => {
           </Touchable>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 
   function hasRateUsPeriodExpired(appInstallTime) {
@@ -235,11 +235,9 @@ const styles = StyleSheet.create({
     marginTop: -4
   },
   titleArea: {
-    backgroundColor: Colors.primary,
     flexDirection: "row",
     alignItems: "center",
-    padding: padding,
-    height: HEADER_HEIGHT
+    padding: padding
   },
   logo: {
     width: 48,
@@ -250,7 +248,7 @@ const styles = StyleSheet.create({
     fontWeight: "800",
     textAlignVertical: "center",
     padding: padding,
-    color: "white"
+    color: Colors.primary
   },
   menu: {
     flex: 1,
@@ -267,7 +265,7 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   textAreaMenuItem: {
-    fontWeight: "800",
+    fontWeight: "500",
     textAlignVertical: "center",
     padding: padding,
     alignItems: "flex-start"
@@ -276,6 +274,6 @@ const styles = StyleSheet.create({
   icon: {
     fontSize: menuHeight - 2 * padding,
     padding: padding,
-    color: "black"
+    color: "black",
   }
 });

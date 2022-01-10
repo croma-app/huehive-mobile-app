@@ -1,0 +1,30 @@
+{
+  "name": "RNShareMenu",
+  "version": "5.0.5",
+  "summary": "Add your app as a target for sharing from other apps and write iOS Share Extensions in React Native.",
+  "homepage": "https://github.com/meedan/react-native-share-menu",
+  "license": "MIT",
+  "authors": {
+    "name": "Meedan",
+    "email": "hello@meedan.com"
+  },
+  "platforms": {
+    "ios": "9.0"
+  },
+  "source": {
+    "git": "https://github.com/meedan/react-native-share-menu.git",
+    "tag": "5.0.5"
+  },
+  "swift_versions": "5.2",
+  "source_files": "ios/**/*.{h,m,mm,swift}",
+  "exclude_files": [
+    "ios/ShareViewController.swift",
+    "ios/ReactShareViewController.swift"
+  ],
+  "dependencies": {
+    "React": [
+
+    ]
+  },
+  "swift_version": "5.2"
+}

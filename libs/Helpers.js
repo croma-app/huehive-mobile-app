@@ -1,11 +1,11 @@
 import { NativeModules, Platform, ToastAndroid } from "react-native";
-import InAppBilling from "react-native-billing";
 
 const logEvent = (eventName, value) => {
   if (eventName.length > 40) {
     throw "eventName length should be smaller then equal to 40";
   }
   if (Platform.OS === "android") {
+    console.log("event: ", eventName, JSON.stringify(value));
     NativeModules.CromaModule.logEvent(
       eventName,
       isObject(value) ? JSON.stringify(value) : `${value}`
@@ -19,8 +19,8 @@ function isObject(value) {
 
 const purchase = async function(setPurchase, purchaseType = "croma_pro") {
   try {
-    await InAppBilling.open();
-    const details = await InAppBilling.purchase(purchaseType);
+   // await InAppBilling.open();
+    //const details = await InAppBilling.purchase(purchaseType);
     ToastAndroid.show("Congrats, You are now a pro user!", ToastAndroid.LONG);
     setPurchase(details);
     logEvent("purchase_successful");
@@ -30,7 +30,7 @@ const purchase = async function(setPurchase, purchaseType = "croma_pro") {
     logEvent("purchase_failed");
     return false;
   } finally {
-    await InAppBilling.close();
+   // await InAppBilling.close();
   }
 };
 

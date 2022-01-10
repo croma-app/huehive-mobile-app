@@ -15,16 +15,15 @@ import { PaletteCard } from "../components/PaletteCard";
 import { DialogContainer, UndoDialog } from "../components/CommonDialogs";
 import { CromaContext } from "../store/store";
 import Colors from "../constants/Colors";
-import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import ColorPicker from "../libs/ColorPicker";
-import Jimp from "jimp";
-import { useHeaderHeight } from "@react-navigation/stack";
 import EmptyView from "../components/EmptyView";
 import ActionButton from "react-native-action-button";
-import { Entypo, Ionicons } from "@expo/vector-icons";
+import Ionicons from  "react-native-vector-icons/Ionicons";
 import ShareMenu from "../libs/ShareMenu";
 import { logEvent, purchase } from "../libs/Helpers";
+import {launchImageLibrary} from "react-native-image-picker";
+import RNColorThief from "react-native-color-thief";
 
 const HomeScreen = function({ navigation, route }) {
   const { height } = Dimensions.get("window");
@@ -41,21 +40,13 @@ const HomeScreen = function({ navigation, route }) {
     setDetailedColor,
     clearPalette
   } = React.useContext(CromaContext);
-  const [pickImgloading, setPickImgLoading] = useState(false);
-  const pickImageResult = async base64 => {
-    return await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+  const [pickImgloading, setPickImgloading] = useState(false);
+  const pickImageResult = async() => {
+    const result = await launchImageLibrary({
+      mediaType: 'photo',
       quality: 1,
-      base64: base64
     });
-  };
-  const pickImage = async () => {
-    let result = await pickImageResult(true);
-    if (result.base64 !== undefined) {
-      return await Jimp.read(new Buffer(result.base64, "base64"));
-    } else {
-      return await Jimp.read(result.uri);
-    }
+    return result;
   };
   const getPermissionAsync = async () => {
     if (Platform?.OS === "ios") {
@@ -118,7 +109,7 @@ const HomeScreen = function({ navigation, route }) {
         <View
           style={[
             styles.container,
-            { minHeight: height - useHeaderHeight() - 16 }
+            { minHeight: height - 10 - 16 }
           ]}
         >
           {pickImgloading ? <ActivityIndicator /> : <View />}
@@ -155,7 +146,6 @@ const HomeScreen = function({ navigation, route }) {
         {/*Setting box shadow to false because of Issue on the web: https://github.com/mastermoo/react-native-action-button/issues/337 */}
         <ActionButton
           bgColor="rgba(68, 68, 68, 0.6)"
-          hideShadow={Platform.OS === "web" ? true : false}
           buttonColor={Colors.fabPrimary}
           offsetY={60}
           spacing={15}
@@ -190,26 +180,20 @@ const HomeScreen = function({ navigation, route }) {
             title="Get palette from image"
             onPress={async () => {
               try {
-                setPickImgLoading(true);
-                if (Platform.OS === "android") {
-                  const result = await pickImageResult();
-                  console.log("Result: ", result);
-                  if (!result.cancelled) {
-                    const pickedColors = await NativeModules.CromaModule.pickTopColorsFromImage(
-                      result.uri
-                    );
-                    logEvent("get_palette_from_image");
-                    clearPalette();
-                    setColorList(JSON.parse(pickedColors)?.colors);
-                    navigation.navigate("ColorList");
-                  }
-                } else {
-                  const image = await pickImage();
-
-                  clearPalette();
-                  setColorList(ColorPicker.getProminentColors(image));
-                  navigation.navigate("ColorList");
-                }
+                setPickImgloading(true);
+                const image = await pickImageResult();
+                logEvent("get_palette_from_image");
+                // get dominant color object { r, g, b }
+                const pickedColors =  await RNColorThief.getPalette(image.assets[0].uri,6, 10, false);
+                console.log("Picked colors: ", pickedColors);
+                clearPalette();
+                setColorList(pickedColors.map(colorThiefColor => {
+                  //console.log("colorThiefColor: ", colorThiefColor);
+                  const hex = new Color("rgb(" + colorThiefColor.r + ", " + colorThiefColor.g + ", " + colorThiefColor.b + ")").tohex();
+                  //console.log("Hex: ", hex, colorThiefColor);
+                  return {color: hex};
+                }));
+                navigation.navigate("ColorList");
               } catch (error) {
                 if (Platform.OS === "android") {
                   ToastAndroid.show(
@@ -218,7 +202,7 @@ const HomeScreen = function({ navigation, route }) {
                   );
                 }
               } finally {
-                setPickImgLoading(false);
+                setPickImgloading(false);
               }
             }}
           >
@@ -255,19 +239,6 @@ const HomeScreen = function({ navigation, route }) {
               />
             </ActionButton.Item>
           )}
-          {Platform.OS === "web" && (
-            <ActionButton.Item
-              buttonColor={Colors.primary}
-              title="Get croma on playstore"
-              onPress={() =>
-                Linking.openURL(
-                  "https://play.google.com/store/apps/details?id=app.croma"
-                )
-              }
-            >
-              <Entypo name="google-play" style={styles.actionButtonIcon} />
-            </ActionButton.Item>
-          )}
           {Platform.OS === "android" && !isPro && (
             <ActionButton.Item
               buttonColor={Colors.primary}
@@ -295,14 +266,5 @@ const styles = StyleSheet.create({
     height: 22,
     color: "white"
   },
-  actionButton:
-    Platform.OS === "web"
-      ? {
-          position: "fixed",
-          transform: "scale(1) rotate(0deg) !important",
-          right: Math.max((Dimensions.get("window").width - 600) / 2, 0),
-          left: Math.max((Dimensions.get("window").width - 600) / 2, 0)
-        }
-      : {},
   icon: { fontSize: 24, height: 24, color: "white" }
 });

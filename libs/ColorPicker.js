@@ -1,5 +1,5 @@
 import kmeans from "ml-kmeans";
-import Jimp from "jimp";
+//import Jimp from "jimp";
 import Color from "pigment/full";
 export default class ColorPicker {
   static getProminentColors(image) {
@@ -11,7 +11,7 @@ export default class ColorPicker {
     Jimp.RESIZE_BEZIER;
     These does not work with first params.
     */
-    image.resize(Jimp.AUTO, 100);
+    //image.resize(Jimp.AUTO, 100);
     let data = ColorPicker._prepareDataForKmeans(image);
     let time = Date.now();
     let ans = kmeans(data, 24, { initialization: "random", maxIterations: 20 });
@@ -83,7 +83,7 @@ export default class ColorPicker {
   }
 
   static _toHexColor(intColor) {
-    let rgba = Jimp.intToRGBA(intColor); // TODO: Need to optimize this once everything else starts working.
+    let rgba = undefined;//Jimp.intToRGBA(intColor); // TODO: Need to optimize this once everything else starts working.
     let color = new Color(
       "rgb(" + rgba.r + ", " + rgba.g + ", " + rgba.b + ")"
     );

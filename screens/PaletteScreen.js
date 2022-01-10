@@ -15,11 +15,12 @@ import Touchable from "react-native-platform-touchable";
 import { CromaContext } from "../store/store";
 import ActionButton from "react-native-action-button";
 import Colors from "../constants/Colors";
-import { useHeaderHeight } from "@react-navigation/stack";
+import { useHeaderHeight } from '@react-navigation/elements';
 import EmptyView from "../components/EmptyView";
 import { logEvent } from "../libs/Helpers";
 import { DialogContainer, UndoDialog } from "../components/CommonDialogs";
-import { Feather, MaterialIcons } from "@expo/vector-icons";
+import Feather  from "react-native-vector-icons/Feather";
+import MaterialIcons  from "react-native-vector-icons/MaterialIcons";
 
 export default function PaletteScreen({ navigation }) {
   const {
