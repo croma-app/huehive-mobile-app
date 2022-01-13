@@ -24,6 +24,16 @@ import ShareMenu from "../libs/ShareMenu";
 import { logEvent, purchase } from "../libs/Helpers";
 import {launchImageLibrary} from "react-native-image-picker";
 import RNColorThief from "react-native-color-thief";
+import * as RNIap from 'react-native-iap';
+
+const productIds = Platform.select({
+  ios: [
+    'app_croma'
+  ],
+  android: [
+    'croma_pro'
+  ]
+});
 
 const HomeScreen = function({ navigation, route }) {
   const { height } = Dimensions.get("window");
@@ -97,6 +107,21 @@ const HomeScreen = function({ navigation, route }) {
       });
     }
   }, []);
+  useEffect(() => {
+    (async()=>{
+      const connection =  RNIap.initConnection();
+      console.log({connection})
+      if(connection){
+        try {
+          const products = await RNIap.getProducts(productIds);
+          console.log({ products });
+        } catch(err) {
+          console.log({err}); // standardized err.code and err.message available
+        }
+      }
+    })()
+    return ()=> { RNIap.endConnection(); }
+  })
 
   if (isLoading) {
     return <ActivityIndicator />;
