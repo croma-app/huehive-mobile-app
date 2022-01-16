@@ -25,6 +25,7 @@ jobs:
         ref: web
     - name: Build
       run: |
+        npm cache verify
         npm install
         expo build:web
     - name: Install SSH Client
