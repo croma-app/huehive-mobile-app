@@ -22,7 +22,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2.0.0
       with:
-        ref: master
+        ref: web
     - name: Build
       run: |
         npm install
