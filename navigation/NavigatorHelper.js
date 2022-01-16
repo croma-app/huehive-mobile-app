@@ -14,7 +14,11 @@ import SyncPalettesScreen from "../screens/SyncPalettesScreen";
 import CommonPalettesScreen from "../screens/CommonPalettesScreen";
 import PaletteLibraryScreen from "../screens/PaletteLibraryScreen";
 import Colors from "../constants/Colors";
-import { Entypo, FontAwesome } from "@expo/vector-icons";
+import {
+  Entypo,
+  FontAwesome,
+  MaterialCommunityIcons
+} from "@expo/vector-icons";
 import Touchable from "react-native-platform-touchable";
 import AboutUsScreen from "../screens/AboutUsScreen";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -158,12 +162,12 @@ const screenOptions = {
     Platform.OS === "web" ? (
       <View style={{ flexDirection: "row" }}>
         <Touchable
-          style={{ padding: "5px" }}
+          style={{ padding: "5px", marginRight: "10px" }}
           onPress={() => {
-            Linking.openURL("https://www.buymeacoffee.com/kamalkishor1991");
+            Linking.openURL("https://discord.gg/ZSBVsBqDtg");
           }}
         >
-          <FontAwesome name="coffee" style={styles.icon} />
+          <MaterialCommunityIcons name="discord" style={styles.icon} />
         </Touchable>
         <Touchable
           style={{ padding: "5px" }}
