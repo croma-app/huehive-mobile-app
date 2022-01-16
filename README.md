@@ -11,6 +11,10 @@
 - Running on ios: `yarn ios`
 - Release - // TODO
 
+### Web
+Currentally this is getting upgraded and web version is available in the web branch with the old react.
+https://github.com/croma-app/croma-react/tree/web
+
 # references
 
 - https://github.com/numixproject/croma
