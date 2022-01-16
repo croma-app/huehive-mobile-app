@@ -16,26 +16,26 @@ import { DialogContainer, UndoDialog } from "../components/CommonDialogs";
 import { CromaContext } from "../store/store";
 import Colors from "../constants/Colors";
 import * as Permissions from "expo-permissions";
-import ColorPicker from "../libs/ColorPicker";
 import EmptyView from "../components/EmptyView";
 import ActionButton from "react-native-action-button";
-import Ionicons from  "react-native-vector-icons/Ionicons";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import ShareMenu from "../libs/ShareMenu";
 import { logEvent, purchase } from "../libs/Helpers";
-import {launchImageLibrary} from "react-native-image-picker";
+import { launchImageLibrary } from "react-native-image-picker";
 import RNColorThief from "react-native-color-thief";
-import * as RNIap from 'react-native-iap';
+import RNIap from 'react-native-iap';
 
 const productIds = Platform.select({
   ios: [
     'app_croma'
   ],
   android: [
-    'croma_pro'
+    'croma_pro',
+    'croma_test'
   ]
 });
 
-const HomeScreen = function({ navigation, route }) {
+const HomeScreen = function ({ navigation, route }) {
   const { height } = Dimensions.get("window");
   const {
     isLoading,
@@ -51,7 +51,7 @@ const HomeScreen = function({ navigation, route }) {
     clearPalette
   } = React.useContext(CromaContext);
   const [pickImgloading, setPickImgloading] = useState(false);
-  const pickImageResult = async() => {
+  const pickImageResult = async () => {
     const result = await launchImageLibrary({
       mediaType: 'photo',
       quality: 1,
@@ -66,9 +66,6 @@ const HomeScreen = function({ navigation, route }) {
       }
     }
   };
-  const purchasePro = () => {
-    purchase(setPurchase);
-  };
 
   useEffect(() => {
     getPermissionAsync();
@@ -82,7 +79,7 @@ const HomeScreen = function({ navigation, route }) {
           url
             .split("?")[1]
             .split("&")
-            .forEach(function(part) {
+            .forEach(function (part) {
               var item = part.split("=");
               result[item[0]] = decodeURIComponent(item[1]);
             });
@@ -107,21 +104,52 @@ const HomeScreen = function({ navigation, route }) {
       });
     }
   }, []);
-  useEffect(() => {
+
+  useEffect(()=>{
     (async()=>{
-      const connection =  RNIap.initConnection();
-      console.log({connection})
-      if(connection){
-        try {
+      try {
+        const connection = await RNIap.initConnection();
+        if(connection){
           const products = await RNIap.getProducts(productIds);
-          console.log({ products });
-        } catch(err) {
-          console.log({err}); // standardized err.code and err.message available
+          console.log({products});
         }
+      } catch(err) {
+        console.warn(err); // standardized err.code and err.message available
       }
     })()
-    return ()=> { RNIap.endConnection(); }
-  })
+    
+    return ()=>{ RNIap.endConnection(); }
+  }, []);
+  
+  const getAvailablePurchases = async () => {
+    try {
+      console.log(
+        'Get available purchases (non-consumable or unconsumed consumable)',
+      );
+
+      const purchases = await RNIap.getAvailablePurchases();
+      console.info('Available purchases :: ', purchases);
+      if (purchases && purchases.length > 0) {
+        console.log({
+          availableItemsMessage: `Got ${purchases.length} items.`,
+          receipt: purchases[0].transactionReceipt,
+        });
+      }
+    } catch (err) {
+      console.warn(err.code, err.message);
+      Alert.alert(err.message);
+    }
+  };
+
+
+  const requestPurchase = async () => {
+    const productSKU = Platform.OS === "android" ? 'croma_test' : 'app_croma';
+    try {
+      await RNIap.requestPurchase(productSKU, false);
+    } catch (err) {
+      console.warn(err.code, err.message);
+    }
+  }
 
   if (isLoading) {
     return <ActivityIndicator />;
@@ -209,14 +237,14 @@ const HomeScreen = function({ navigation, route }) {
                 const image = await pickImageResult();
                 logEvent("get_palette_from_image");
                 // get dominant color object { r, g, b }
-                const pickedColors =  await RNColorThief.getPalette(image.assets[0].uri,6, 10, false);
+                const pickedColors = await RNColorThief.getPalette(image.assets[0].uri, 6, 10, false);
                 console.log("Picked colors: ", pickedColors);
                 clearPalette();
                 setColorList(pickedColors.map(colorThiefColor => {
                   //console.log("colorThiefColor: ", colorThiefColor);
                   const hex = new Color("rgb(" + colorThiefColor.r + ", " + colorThiefColor.g + ", " + colorThiefColor.b + ")").tohex();
                   //console.log("Hex: ", hex, colorThiefColor);
-                  return {color: hex};
+                  return { color: hex };
                 }));
                 navigation.navigate("ColorList");
               } catch (error) {
@@ -264,11 +292,11 @@ const HomeScreen = function({ navigation, route }) {
               />
             </ActionButton.Item>
           )}
-          {Platform.OS === "android" && !isPro && (
+          {Platform.OS !== "web" && (
             <ActionButton.Item
               buttonColor={Colors.primary}
               title="Unlock pro"
-              onPress={purchasePro}
+              onPress={requestPurchase}
             >
               <Ionicons name="md-unlock" style={styles.actionButtonIcon} />
             </ActionButton.Item>
