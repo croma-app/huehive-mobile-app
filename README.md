@@ -12,7 +12,7 @@
 - Release - // TODO
 
 ### Web
-Currentally this is getting upgraded and web version is available in the web branch with the old react.
+Currently, We are upgrading react-native and web version is available in the `web` branch with the old react-native.
 https://github.com/croma-app/croma-react/tree/web
 
 # references
