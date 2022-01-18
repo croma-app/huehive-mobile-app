@@ -120,34 +120,17 @@ const HomeScreen = function ({ navigation, route }) {
     
     return ()=>{ RNIap.endConnection(); }
   }, []);
-  
-  const getAvailablePurchases = async () => {
-    try {
-      console.log(
-        'Get available purchases (non-consumable or unconsumed consumable)',
-      );
-
-      const purchases = await RNIap.getAvailablePurchases();
-      console.info('Available purchases :: ', purchases);
-      if (purchases && purchases.length > 0) {
-        console.log({
-          availableItemsMessage: `Got ${purchases.length} items.`,
-          receipt: purchases[0].transactionReceipt,
-        });
-      }
-    } catch (err) {
-      console.warn(err.code, err.message);
-      Alert.alert(err.message);
-    }
-  };
-
 
   const requestPurchase = async () => {
     const productSKU = Platform.OS === "android" ? 'croma_test' : 'app_croma';
     try {
-      await RNIap.requestPurchase(productSKU, false);
+      const details = await RNIap.requestPurchase(productSKU, false);
+      setPurchase(details);
+      logEvent("purchase_successful");
     } catch (err) {
       console.warn(err.code, err.message);
+      ToastAndroid.show(`Purchase unsucceessful ${err}`, ToastAndroid.LONG);
+      logEvent("purchase_failed");
     }
   }
 

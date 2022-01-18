@@ -34,4 +34,24 @@ const purchase = async function(setPurchase, purchaseType = "croma_pro") {
   }
 };
 
-export { logEvent, purchase };
+const getAvailablePurchases = async () => {
+  try {
+    console.log(
+      'Get available purchases (non-consumable or unconsumed consumable)',
+    );
+    const purchases = await RNIap.getAvailablePurchases();
+    console.info('Available purchases :: ', purchases);
+    if (purchases && purchases.length > 0) {
+      console.log({
+        availableItemsMessage: `Got ${purchases.length} items.`,
+        receipt: purchases[0].transactionReceipt,
+      });
+    }
+    return purchases;
+  } catch (err) {
+    console.warn(err.code, err.message);
+    Alert.alert(err.message);
+  }
+};
+
+export { logEvent, purchase, getAvailablePurchases };

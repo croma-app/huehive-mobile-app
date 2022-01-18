@@ -85,7 +85,8 @@ export default function applicationHook() {
           // If subscriptions/products are updated server-side you
           // will have to update cache with loadOwnedPurchasesFromGoogle()
           //await InAppBilling.loadOwnedPurchasesFromGoogle();
-          let isPurchased =  true;//await InAppBilling.isPurchased("croma_pro");
+          // let isPurchased =  
+          let isPurchased = await getAvailablePurchases(); 
           if (isPurchased) {
             ToastAndroid.show(
               "Your purchase restored successfully..",
