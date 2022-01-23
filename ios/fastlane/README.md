@@ -11,6 +11,8 @@ xcode-select --install
 
 For _fastlane_ installation instructions, see [Installing _fastlane_](https://docs.fastlane.tools/#installing-fastlane)
 
+Run `fastlane match appstore --readonly ` to install certificates
+
 # Available Actions
 
 ## iOS
