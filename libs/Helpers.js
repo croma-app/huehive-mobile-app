@@ -1,4 +1,4 @@
-import { NativeModules, Platform, ToastAndroid } from "react-native";
+import { NativeModules, Platform, AlertIOS, Alert, ToastAndroid } from "react-native";
 
 const logEvent = (eventName, value) => {
   if (eventName.length > 40) {
@@ -17,20 +17,20 @@ function isObject(value) {
   return value && typeof value === "object" && value.constructor === Object;
 }
 
-const purchase = async function(setPurchase, purchaseType = "croma_pro") {
+const purchase = async function (setPurchase, purchaseType = "croma_pro") {
   try {
-   // await InAppBilling.open();
+    // await InAppBilling.open();
     //const details = await InAppBilling.purchase(purchaseType);
-    ToastAndroid.show("Congrats, You are now a pro user!", ToastAndroid.LONG);
+    notifyMessage("Congrats, You are now a pro user!");
     setPurchase(details);
     logEvent("purchase_successful");
     return true;
   } catch (err) {
-    ToastAndroid.show(`Purchase unsucceessful ${err}`, ToastAndroid.LONG);
+    notifyMessage(`Purchase unsucceessful ${err}`);
     logEvent("purchase_failed");
     return false;
   } finally {
-   // await InAppBilling.close();
+    // await InAppBilling.close();
   }
 };
 
@@ -54,4 +54,14 @@ const getAvailablePurchases = async () => {
   }
 };
 
-export { logEvent, purchase, getAvailablePurchases };
+
+
+function notifyMessage(msg, duration = ToastAndroid.LONG) {
+  if (Platform.OS === 'android') {
+    ToastAndroid.show(msg, duration)
+  } else {
+    Alert.alert(msg);
+  }
+}
+
+export { logEvent, purchase, getAvailablePurchases, notifyMessage };

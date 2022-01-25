@@ -4,10 +4,10 @@ import {
   Text,
   View,
   Clipboard,
-  Platform,
-  ToastAndroid
+  Platform
 } from "react-native";
 import FontAwesome  from "react-native-vector-icons/FontAwesome";
+import { notifyMessage } from '../libs/Helpers';
 
 import Touchable from "react-native-platform-touchable";
 
@@ -56,8 +56,8 @@ export const ColorDetail = ({ color }) => {
   const debouncedSetCopiedIndex = debounce(() => setCopyiedIntex(-1), 2000);
 
   let writeToClipboard = function(value, index) {
-    if (Platform.OS === "android") {
-      ToastAndroid.show("Text copied to clipboard!", ToastAndroid.LONG);
+    if (Platform.OS === "android" || Platform.OS === "ios") {
+      notifyMessage("Text copied to clipboard!");
     }
     Clipboard.setString(value);
     setCopyiedIntex(index);

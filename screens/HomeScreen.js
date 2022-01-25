@@ -8,7 +8,6 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  ToastAndroid,
   View
 } from "react-native";
 import { PaletteCard } from "../components/PaletteCard";
@@ -24,6 +23,7 @@ import { logEvent, purchase } from "../libs/Helpers";
 import { launchImageLibrary } from "react-native-image-picker";
 import RNColorThief from "react-native-color-thief";
 import RNIap from 'react-native-iap';
+import { notifyMessage } from '../libs/Helpers';
 
 const productIds = Platform.select({
   ios: [
@@ -125,11 +125,12 @@ const HomeScreen = function ({ navigation, route }) {
     const productSKU = Platform.OS === "android" ? 'croma_test' : 'app_croma';
     try {
       const details = await RNIap.requestPurchase(productSKU, false);
-      setPurchase(details);
+      const response = await setPurchase(details);
+      console.log({response}, 'kuch toh dash de')
       logEvent("purchase_successful");
     } catch (err) {
       console.warn(err.code, err.message);
-      ToastAndroid.show(`Purchase unsucceessful ${err}`, ToastAndroid.LONG);
+      notifyMessage(`Purchase unsucceessful ${err}`);
       logEvent("purchase_failed");
     }
   }
@@ -202,7 +203,7 @@ const HomeScreen = function ({ navigation, route }) {
                   setColorList(JSON.parse(pickedColors)?.colors);
                   navigation.navigate("ColorList");
                 } catch (error) {
-                  ToastAndroid.show(
+                  notifyMessage(
                     "Error while picking color from camera - " + error
                   );
                 }
@@ -232,9 +233,8 @@ const HomeScreen = function ({ navigation, route }) {
                 navigation.navigate("ColorList");
               } catch (error) {
                 if (Platform.OS === "android") {
-                  ToastAndroid.show(
-                    "Error while extracting colors - " + error,
-                    ToastAndroid.LONG
+                  notifyMessage(
+                    "Error while extracting colors - " + error
                   );
                 }
               } finally {

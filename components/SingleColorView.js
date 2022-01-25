@@ -3,20 +3,20 @@ import {
   Platform,
   StyleSheet,
   Text,
-  ToastAndroid,
   Clipboard
 } from "react-native";
 import Touchable from "react-native-platform-touchable";
+import { notifyMessage } from '../libs/Helpers';
+
 
 export class SingleColorView extends React.Component {
   render() {
     return (
       <Touchable
         onPress={() => {
-          if (Platform?.OS === "android") {
-            ToastAndroid.show(
+          if (Platform?.OS === "android" || Platform.OS === "ios") {
+            notifyMessage(
               this.props.color.color + " copied to clipboard!",
-              ToastAndroid.LONG
             );
           }
           Clipboard.setString(this.props.color.color);
