@@ -15,7 +15,7 @@
 Currently, We are upgrading react-native and web version is available in the `web` branch with the old react-native.
 https://github.com/croma-app/croma-react/tree/web
 
-# references
+# References
 
 - https://github.com/numixproject/croma
 - https://github.com/satya164/croma
@@ -47,6 +47,8 @@ Fix java files
 ./gradlew goJF
 
 ```
+### Contribution
+Feel free to send us pull request from the open issues. If you are not sure about something please join the [discord](https://discord.com/invite/ZSBVsBqDtg) server and ask us anything.
 
 ### [Browse react native vector icons](https://oblador.github.io/react-native-vector-icons/)
 
