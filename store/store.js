@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import Storage from "./../libs/Storage";
 import { Platform } from "react-native";
 import { notifyMessage } from '../libs/Helpers';
+import {
+  getAvailablePurchases
+} from 'react-native-iap';
 
 const UNDO_TIMEOUT = 3000;
 
