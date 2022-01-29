@@ -117,7 +117,7 @@ const HomeScreen = function ({ navigation, route }) {
         console.warn(err); // standardized err.code and err.message available
       }
     })()
-    
+
     return ()=>{ RNIap.endConnection(); }
   }, []);
 
@@ -275,7 +275,7 @@ const HomeScreen = function ({ navigation, route }) {
               />
             </ActionButton.Item>
           )}
-          {Platform.OS !== "web" && isPro === false (
+          { !isPro && (
             <ActionButton.Item
               buttonColor={Colors.primary}
               title="Unlock pro"
