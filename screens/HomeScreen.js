@@ -275,7 +275,7 @@ const HomeScreen = function ({ navigation, route }) {
               />
             </ActionButton.Item>
           )}
-          {Platform.OS !== "web" && (
+          {Platform.OS !== "web" && isPro === false (
             <ActionButton.Item
               buttonColor={Colors.primary}
               title="Unlock pro"
