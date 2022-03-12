@@ -30,7 +30,7 @@ const productIds = Platform.select({
     'app_croma'
   ],
   android: [
-    'croma_pro',
+    'croma_pro', // android.test.purchased
     'croma_test'
   ]
 });
@@ -50,7 +50,7 @@ const HomeScreen = function ({ navigation, route }) {
     setDetailedColor,
     clearPalette
   } = React.useContext(CromaContext);
-  const [pickImgloading, setPickImgloading] = useState(false);
+  const [pickImageLoading, setPickImageLoading] = useState(false);
   const pickImageResult = async () => {
     const result = await launchImageLibrary({
       mediaType: 'photo',
@@ -109,7 +109,7 @@ const HomeScreen = function ({ navigation, route }) {
     (async()=>{
       try {
         const connection = await RNIap.initConnection();
-        if(connection){
+        if (connection){
           const products = await RNIap.getProducts(productIds);
           console.log({products});
         }
@@ -121,19 +121,6 @@ const HomeScreen = function ({ navigation, route }) {
     return ()=>{ RNIap.endConnection(); }
   }, []);
 
-  const requestPurchase = async () => {
-    const productSKU = Platform.OS === "android" ? 'croma_test' : 'app_croma';
-    try {
-      const details = await RNIap.requestPurchase(productSKU, false);
-      const response = await setPurchase(details);
-      console.log({response}, 'kuch toh dash de')
-      logEvent("purchase_successful");
-    } catch (err) {
-      console.warn(err.code, err.message);
-      notifyMessage(`Purchase unsucceessful ${err}`);
-      logEvent("purchase_failed");
-    }
-  }
 
   if (isLoading) {
     return <ActivityIndicator />;
@@ -149,7 +136,7 @@ const HomeScreen = function ({ navigation, route }) {
             { minHeight: height - 10 - 16 }
           ]}
         >
-          {pickImgloading ? <ActivityIndicator /> : <View />}
+          {pickImageLoading ? <ActivityIndicator /> : <View />}
           <ScrollView showsVerticalScrollIndicator={false}>
             {Object.keys(allPalettes).map(name => {
               return (
@@ -217,7 +204,7 @@ const HomeScreen = function ({ navigation, route }) {
             title="Get palette from image"
             onPress={async () => {
               try {
-                setPickImgloading(true);
+                setPickImageLoading(true);
                 const image = await pickImageResult();
                 logEvent("get_palette_from_image");
                 // get dominant color object { r, g, b }
@@ -238,7 +225,7 @@ const HomeScreen = function ({ navigation, route }) {
                   );
                 }
               } finally {
-                setPickImgloading(false);
+                setPickImageLoading(false);
               }
             }}
           >
@@ -260,26 +247,11 @@ const HomeScreen = function ({ navigation, route }) {
           >
             <Ionicons name="md-color-palette" style={styles.actionButtonIcon} />
           </ActionButton.Item>
-          {Platform.OS === "web" && (
-            <ActionButton.Item
-              buttonColor="#1abc9c"
-              title="Create new palette"
-              onPress={() => {
-                clearPalette();
-                navigation.navigate("AddPaletteManually");
-              }}
-            >
-              <Ionicons
-                name="md-color-filter"
-                style={styles.actionButtonIcon}
-              />
-            </ActionButton.Item>
-          )}
           { !isPro && (
             <ActionButton.Item
               buttonColor={Colors.primary}
               title="Unlock pro"
-              onPress={requestPurchase}
+              onPress={() => purchase(setPurchase)}
             >
               <Ionicons name="md-unlock" style={styles.actionButtonIcon} />
             </ActionButton.Item>

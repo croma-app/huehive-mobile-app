@@ -1,4 +1,5 @@
-import { NativeModules, Platform, AlertIOS, Alert, ToastAndroid } from "react-native";
+import { NativeModules, Platform, Alert, ToastAndroid } from "react-native";
+import RNIap from "react-native-iap";
 
 const logEvent = (eventName, value) => {
   if (eventName.length > 40) {
@@ -17,20 +18,20 @@ function isObject(value) {
   return value && typeof value === "object" && value.constructor === Object;
 }
 
-const purchase = async function (setPurchase, purchaseType = "croma_pro") {
+const purchase = async function (setPurchase, productSKU) {
+  if (!productSKU) {
+    productSKU = Platform.OS === "android" ? 'croma_pro' : 'app_croma'; // use android.test.purchased for successful android response.
+  }
   try {
-    // await InAppBilling.open();
-    //const details = await InAppBilling.purchase(purchaseType);
-    notifyMessage("Congrats, You are now a pro user!");
-    setPurchase(details);
+    const details = await RNIap.requestPurchase(productSKU, false);
+    const response = await setPurchase(details);
+    console.log({response}, 'kuch toh dash de')
     logEvent("purchase_successful");
-    return true;
+    notifyMessage("Congrats, You are now a pro user!");
   } catch (err) {
-    notifyMessage(`Purchase unsucceessful ${err}`);
+    console.warn(err.code, err.message);
+    notifyMessage(`Purchase unsuccessful ${err}`);
     logEvent("purchase_failed");
-    return false;
-  } finally {
-    // await InAppBilling.close();
   }
 };
 

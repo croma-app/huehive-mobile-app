@@ -39,16 +39,17 @@ export default function App() {
     (async () => {
       await applicationState.loadInitPaletteFromStore();
      setIsPalettesLoaded(true);
-     /* const isFree =
+     /*const isFree =
           (await NativeModules.CromaModule.getConfigString("isProFree")) ===
           "true";*/
 
-      applicationState.setPurchase({
+     /* applicationState.setPurchase({
         platform: "android",
         isProFree: true
-      });
+      });*/
 
     })();
+
   }, []);
 
   const spinner = (
