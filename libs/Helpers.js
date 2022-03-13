@@ -23,10 +23,15 @@ const purchase = async function (setPurchase, productSKU) {
     productSKU = Platform.OS === "android" ? 'croma_pro' : 'app_croma'; // use android.test.purchased for successful android response.
   }
   try {
-    const details = await RNIap.requestPurchase(productSKU, false);
-    const response = await setPurchase(details);
-    console.log({response}, 'kuch toh dash de')
-    logEvent("purchase_successful");
+    let products = await RNIap.getProducts([productSKU]);
+    console.log("products", products);
+    if (products.find(product => product.productId === productSKU)) {
+      await setPurchase(products.find(product => product.productId === productSKU));
+    } else {
+      const details = await RNIap.requestPurchase(productSKU, false);
+      await setPurchase(details);
+      logEvent("purchase_successful");
+    }
     notifyMessage("Congrats, You are now a pro user!");
   } catch (err) {
     console.warn(err.code, err.message);

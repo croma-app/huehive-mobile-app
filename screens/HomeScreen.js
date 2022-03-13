@@ -109,10 +109,6 @@ const HomeScreen = function ({ navigation, route }) {
     (async()=>{
       try {
         const connection = await RNIap.initConnection();
-        if (connection){
-          const products = await RNIap.getProducts(productIds);
-          console.log({products});
-        }
       } catch(err) {
         console.warn(err); // standardized err.code and err.message available
       }
