@@ -1,6 +1,8 @@
 import { NativeModules, Platform, Alert, ToastAndroid } from "react-native";
 import RNIap from "react-native-iap";
-
+const  productSku = function () {
+  return Platform.OS === "android" ? 'croma_pro' : 'app_croma';
+}
 const logEvent = (eventName, value) => {
   if (eventName.length > 40) {
     throw "eventName length should be smaller then equal to 40";
@@ -20,18 +22,13 @@ function isObject(value) {
 
 const purchase = async function (setPurchase, productSKU) {
   if (!productSKU) {
-    productSKU = Platform.OS === "android" ? 'croma_pro' : 'app_croma'; // use android.test.purchased for successful android response.
+    productSKU = productSku();
   }
+  await RNIap.getProducts([productSKU]);
   try {
-    let products = await RNIap.getProducts([productSKU]);
-    console.log("products", products);
-    if (products.find(product => product.productId === productSKU)) {
-      await setPurchase(products.find(product => product.productId === productSKU));
-    } else {
-      const details = await RNIap.requestPurchase(productSKU, false);
-      await setPurchase(details);
-      logEvent("purchase_successful");
-    }
+    const details = await RNIap.requestPurchase(productSKU, false);
+    await setPurchase(details);
+    logEvent("purchase_successful");
     notifyMessage("Congrats, You are now a pro user!");
   } catch (err) {
     console.warn(err.code, err.message);
@@ -39,6 +36,15 @@ const purchase = async function (setPurchase, productSKU) {
     logEvent("purchase_failed");
   }
 };
+const initPurchase = async function (setPurchase) {
+  const productSKU = productSku();
+  let products = await getAvailablePurchases();
+  console.log("products", products);
+  if (products.find(product => product.productId === productSKU)) {
+    await setPurchase(products.find(product => product.productId === productSKU));
+    notifyMessage("Congrats, You are already a pro user!");
+  }
+}
 
 const getAvailablePurchases = async () => {
   try {
@@ -56,7 +62,7 @@ const getAvailablePurchases = async () => {
     return purchases;
   } catch (err) {
     console.warn(err.code, err.message);
-    Alert.alert(err.message);
+    notifyMessage(err.message);
   }
 };
 
@@ -70,4 +76,4 @@ function notifyMessage(msg, duration = ToastAndroid.LONG) {
   }
 }
 
-export { logEvent, purchase, getAvailablePurchases, notifyMessage };
+export { logEvent, purchase, getAvailablePurchases, notifyMessage, initPurchase };

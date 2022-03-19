@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  NativeModules,
   StatusBar,
   StyleSheet,
   View
@@ -28,6 +27,8 @@ import SideMenu from "react-native-side-menu";
 import {HEADER_HEIGHT} from "./constants/Layout";
 import Touchable from "react-native-platform-touchable";
 import Entypo from "react-native-vector-icons/Entypo";
+import { initPurchase } from "./libs/Helpers";
+import RNIap from "react-native-iap";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -39,17 +40,12 @@ export default function App() {
     (async () => {
       await applicationState.loadInitPaletteFromStore();
      setIsPalettesLoaded(true);
-     /*const isFree =
-          (await NativeModules.CromaModule.getConfigString("isProFree")) ===
-          "true";*/
-
-     /* applicationState.setPurchase({
-        platform: "android",
-        isProFree: true
-      });*/
-
+     const connection = await RNIap.initConnection();
+     if (!applicationState.isPro) {
+       await initPurchase(applicationState.setPurchase);
+     }
     })();
-
+    return ()=>{ RNIap.endConnection(); }
   }, []);
 
   const spinner = (

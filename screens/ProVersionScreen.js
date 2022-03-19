@@ -37,7 +37,7 @@ export default function ProScreen() {
           {isPro ? "You are a pro user! Enjoy the app" : "Unlock pro"}
         </CromaButton>
         <Text style={styles.line}>
-          3. Support the development efferts to keep the app awesome and simple
+          3. Support the development efforts to keep the app awesome and simple
           without any ads and annoying notifications 😊
         </Text>
         <CromaButton onPress={purchaseDevelopment}>
