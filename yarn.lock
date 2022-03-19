@@ -6789,9 +6789,9 @@ react-native-codegen@^0.0.7:
     jscodeshift "^0.11.0"
     nullthrows "^1.1.1"
 
-"react-native-color-thief@git://github.com/6DegreeLabs/react-native-color-thief.git":
+"react-native-color-thief@https://github.com/6DegreeLabs/react-native-color-thief.git":
   version "0.3.3"
-  resolved "git://github.com/6DegreeLabs/react-native-color-thief.git#2fc656f2449d9f3248c082f7386f95cb0f648866"
+  resolved "https://github.com/6DegreeLabs/react-native-color-thief.git#2fc656f2449d9f3248c082f7386f95cb0f648866"
 
 react-native-crypto@^2.0.1:
   version "2.2.0"
