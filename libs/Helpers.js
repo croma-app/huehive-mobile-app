@@ -1,5 +1,8 @@
-import { NativeModules, Platform, ToastAndroid } from "react-native";
-
+import { NativeModules, Platform, Alert, ToastAndroid } from "react-native";
+import RNIap from "react-native-iap";
+const  productSku = function () {
+  return Platform.OS === "android" ? 'croma_pro' : 'app_croma';
+}
 const logEvent = (eventName, value) => {
   if (eventName.length > 40) {
     throw "eventName length should be smaller then equal to 40";
@@ -17,21 +20,60 @@ function isObject(value) {
   return value && typeof value === "object" && value.constructor === Object;
 }
 
-const purchase = async function(setPurchase, purchaseType = "croma_pro") {
+const purchase = async function (setPurchase, productSKU) {
+  if (!productSKU) {
+    productSKU = productSku();
+  }
+  await RNIap.getProducts([productSKU]);
   try {
-   // await InAppBilling.open();
-    //const details = await InAppBilling.purchase(purchaseType);
-    ToastAndroid.show("Congrats, You are now a pro user!", ToastAndroid.LONG);
-    setPurchase(details);
+    const details = await RNIap.requestPurchase(productSKU, false);
+    await setPurchase(details);
     logEvent("purchase_successful");
-    return true;
+    notifyMessage("Congrats, You are now a pro user!");
   } catch (err) {
-    ToastAndroid.show(`Purchase unsucceessful ${err}`, ToastAndroid.LONG);
+    console.warn(err.code, err.message);
+    notifyMessage(`Purchase unsuccessful ${err}`);
     logEvent("purchase_failed");
-    return false;
-  } finally {
-   // await InAppBilling.close();
+  }
+};
+const initPurchase = async function (setPurchase) {
+  const productSKU = productSku();
+  let products = await getAvailablePurchases();
+  console.log("products", products);
+  if (products.find(product => product.productId === productSKU)) {
+    await setPurchase(products.find(product => product.productId === productSKU));
+    notifyMessage("Congrats, You are already a pro user!");
+  }
+}
+
+const getAvailablePurchases = async () => {
+  try {
+    console.log(
+      'Get available purchases (non-consumable or unconsumed consumable)',
+    );
+    const purchases = await RNIap.getAvailablePurchases();
+    console.info('Available purchases :: ', purchases);
+    if (purchases && purchases.length > 0) {
+      console.log({
+        availableItemsMessage: `Got ${purchases.length} items.`,
+        receipt: purchases[0].transactionReceipt,
+      });
+    }
+    return purchases;
+  } catch (err) {
+    console.warn(err.code, err.message);
+    notifyMessage(err.message);
   }
 };
 
-export { logEvent, purchase };
+
+
+function notifyMessage(msg, duration = ToastAndroid.LONG) {
+  if (Platform.OS === 'android') {
+    ToastAndroid.show(msg, duration)
+  } else {
+    Alert.alert(msg);
+  }
+}
+
+export { logEvent, purchase, getAvailablePurchases, notifyMessage, initPurchase };

@@ -3,7 +3,6 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  ToastAndroid,
   PermissionsAndroid
 } from "react-native";
 import { View } from "react-native-animatable";
@@ -17,6 +16,8 @@ import { authorize } from "react-native-app-auth";
 import DocumentPicker from "react-native-document-picker";
 import { material } from "react-native-typography";
 const RNFS = require("react-native-fs");
+import { notifyMessage } from '../libs/Helpers';
+
 
 export default function SyncPalettesScreen(props) {
   const { user, setUser, allPalettes, addPalette } = React.useContext(
@@ -187,14 +188,12 @@ function GithubView(props) {
                 palettesToJsonString(allPalettes),
                 isPro
               );
-              ToastAndroid.show(
-                "Palettes are synced to github repo croma-color-palettes",
-                ToastAndroid.LONG
+              notifyMessage(
+                "Palettes are synced to github repo croma-color-palettes"
               );
             } catch (e) {
-              ToastAndroid.show(
-                "Error while calling github APIs " + e.toString(),
-                ToastAndroid.LONG
+              notifyMessage(
+                "Error while calling github APIs " + e.toString()
               );
             }
           }}
@@ -297,7 +296,7 @@ async function readFromGithubRepo(accessToken, username, repoName) {
 }
 
 const longToast = function(msg) {
-  ToastAndroid.show(msg, ToastAndroid.LONG);
+  notifyMessage(msg);
 };
 
 const importPalettes = async () => {

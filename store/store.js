@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import Storage from "./../libs/Storage";
-import { Platform, ToastAndroid } from "react-native";
+import { Platform } from "react-native";
+import { notifyMessage } from '../libs/Helpers';
+import {
+  getAvailablePurchases
+} from 'react-native-iap';
+
 const UNDO_TIMEOUT = 3000;
 
 const syncStateToStore = function(state) {
@@ -85,20 +90,19 @@ export default function applicationHook() {
           // If subscriptions/products are updated server-side you
           // will have to update cache with loadOwnedPurchasesFromGoogle()
           //await InAppBilling.loadOwnedPurchasesFromGoogle();
-          let isPurchased =  true;//await InAppBilling.isPurchased("croma_pro");
+          // let isPurchased =  
+          let isPurchased = await getAvailablePurchases(); 
           if (isPurchased) {
-            ToastAndroid.show(
-              "Your purchase restored successfully..",
-              ToastAndroid.LONG
+            notifyMessage(
+              "Your purchase restored successfully.."
             );
           }
           setState(state => {
             return { ...state, isPro: isPurchased };
           });
         } catch (err) {
-          ToastAndroid.show(
-            "Loading purchase detail failed. " + err,
-            ToastAndroid.LONG
+          notifyMessage(
+            "Loading purchase detail failed. " + err
           );
         } finally {
           //await InAppBilling.close();

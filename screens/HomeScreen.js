@@ -8,7 +8,6 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
-  ToastAndroid,
   View
 } from "react-native";
 import { PaletteCard } from "../components/PaletteCard";
@@ -16,16 +15,16 @@ import { DialogContainer, UndoDialog } from "../components/CommonDialogs";
 import { CromaContext } from "../store/store";
 import Colors from "../constants/Colors";
 import * as Permissions from "expo-permissions";
-import ColorPicker from "../libs/ColorPicker";
 import EmptyView from "../components/EmptyView";
 import ActionButton from "react-native-action-button";
-import Ionicons from  "react-native-vector-icons/Ionicons";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import ShareMenu from "../libs/ShareMenu";
 import { logEvent, purchase } from "../libs/Helpers";
-import {launchImageLibrary} from "react-native-image-picker";
+import { launchImageLibrary } from "react-native-image-picker";
 import RNColorThief from "react-native-color-thief";
+import { notifyMessage } from '../libs/Helpers';
 
-const HomeScreen = function({ navigation, route }) {
+const HomeScreen = function ({ navigation, route }) {
   const { height } = Dimensions.get("window");
   const {
     isLoading,
@@ -40,8 +39,8 @@ const HomeScreen = function({ navigation, route }) {
     setDetailedColor,
     clearPalette
   } = React.useContext(CromaContext);
-  const [pickImgloading, setPickImgloading] = useState(false);
-  const pickImageResult = async() => {
+  const [pickImageLoading, setPickImageLoading] = useState(false);
+  const pickImageResult = async () => {
     const result = await launchImageLibrary({
       mediaType: 'photo',
       quality: 1,
@@ -56,9 +55,6 @@ const HomeScreen = function({ navigation, route }) {
       }
     }
   };
-  const purchasePro = () => {
-    purchase(setPurchase);
-  };
 
   useEffect(() => {
     getPermissionAsync();
@@ -72,7 +68,7 @@ const HomeScreen = function({ navigation, route }) {
           url
             .split("?")[1]
             .split("&")
-            .forEach(function(part) {
+            .forEach(function (part) {
               var item = part.split("=");
               result[item[0]] = decodeURIComponent(item[1]);
             });
@@ -112,7 +108,7 @@ const HomeScreen = function({ navigation, route }) {
             { minHeight: height - 10 - 16 }
           ]}
         >
-          {pickImgloading ? <ActivityIndicator /> : <View />}
+          {pickImageLoading ? <ActivityIndicator /> : <View />}
           <ScrollView showsVerticalScrollIndicator={false}>
             {Object.keys(allPalettes).map(name => {
               return (
@@ -166,7 +162,7 @@ const HomeScreen = function({ navigation, route }) {
                   setColorList(JSON.parse(pickedColors)?.colors);
                   navigation.navigate("ColorList");
                 } catch (error) {
-                  ToastAndroid.show(
+                  notifyMessage(
                     "Error while picking color from camera - " + error
                   );
                 }
@@ -180,29 +176,28 @@ const HomeScreen = function({ navigation, route }) {
             title="Get palette from image"
             onPress={async () => {
               try {
-                setPickImgloading(true);
+                setPickImageLoading(true);
                 const image = await pickImageResult();
                 logEvent("get_palette_from_image");
                 // get dominant color object { r, g, b }
-                const pickedColors =  await RNColorThief.getPalette(image.assets[0].uri,6, 10, false);
+                const pickedColors = await RNColorThief.getPalette(image.assets[0].uri, 6, 10, false);
                 console.log("Picked colors: ", pickedColors);
                 clearPalette();
                 setColorList(pickedColors.map(colorThiefColor => {
                   //console.log("colorThiefColor: ", colorThiefColor);
                   const hex = new Color("rgb(" + colorThiefColor.r + ", " + colorThiefColor.g + ", " + colorThiefColor.b + ")").tohex();
                   //console.log("Hex: ", hex, colorThiefColor);
-                  return {color: hex};
+                  return { color: hex };
                 }));
                 navigation.navigate("ColorList");
               } catch (error) {
                 if (Platform.OS === "android") {
-                  ToastAndroid.show(
-                    "Error while extracting colors - " + error,
-                    ToastAndroid.LONG
+                  notifyMessage(
+                    "Error while extracting colors - " + error
                   );
                 }
               } finally {
-                setPickImgloading(false);
+                setPickImageLoading(false);
               }
             }}
           >
@@ -224,26 +219,11 @@ const HomeScreen = function({ navigation, route }) {
           >
             <Ionicons name="md-color-palette" style={styles.actionButtonIcon} />
           </ActionButton.Item>
-          {Platform.OS === "web" && (
-            <ActionButton.Item
-              buttonColor="#1abc9c"
-              title="Create new palette"
-              onPress={() => {
-                clearPalette();
-                navigation.navigate("AddPaletteManually");
-              }}
-            >
-              <Ionicons
-                name="md-color-filter"
-                style={styles.actionButtonIcon}
-              />
-            </ActionButton.Item>
-          )}
-          {Platform.OS === "android" && !isPro && (
+          { !isPro && (
             <ActionButton.Item
               buttonColor={Colors.primary}
               title="Unlock pro"
-              onPress={purchasePro}
+              onPress={() => purchase(setPurchase)}
             >
               <Ionicons name="md-unlock" style={styles.actionButtonIcon} />
             </ActionButton.Item>

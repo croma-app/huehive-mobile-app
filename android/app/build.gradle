@@ -143,6 +143,7 @@ android {
         versionName "2.8"
         // Deprecated. Used by net.openid:appauth
         manifestPlaceholders = [appAuthRedirectScheme: 'app.croma']
+        missingDimensionStrategy 'store', 'play'
     }
     splits {
         abi {

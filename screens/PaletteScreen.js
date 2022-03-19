@@ -8,7 +8,6 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  ToastAndroid,
   View
 } from "react-native";
 import Touchable from "react-native-platform-touchable";
@@ -21,6 +20,8 @@ import { logEvent } from "../libs/Helpers";
 import { DialogContainer, UndoDialog } from "../components/CommonDialogs";
 import Feather  from "react-native-vector-icons/Feather";
 import MaterialIcons  from "react-native-vector-icons/MaterialIcons";
+import { notifyMessage } from '../libs/Helpers';
+
 
 export default function PaletteScreen({ navigation }) {
   const {
@@ -90,13 +91,12 @@ export default function PaletteScreen({ navigation }) {
           onPress={() => {
             logEvent("palette_screen_add_color");
             if (
-              Platform.OS === "android" &&
+              ( Platform.OS === "android" || Platform.OS === "ios") &&
               colors.length >= 4 &&
               isPro === false
             ) {
-              ToastAndroid.show(
-                "Unlock pro to add more than 4 colors!",
-                ToastAndroid.LONG
+              notifyMessage(
+                "Unlock pro to add more than 4 colors!"
               );
               navigation.navigate("ProVersion");
             } else {

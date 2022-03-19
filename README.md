@@ -64,3 +64,7 @@ From the simulator, press (⌘+D) and press Remote JS Debugging.
 This will open a resource, http://localhost:8081/debugger-ui on localhost. 
 From there, use the Chrome Developer tools JavaScript console to view console.log
 [Stackoverflow](https://stackoverflow.com/questions/30115372/how-to-do-logging-in-react-native)
+
+### Troubleshooting 
+If you don't see console logs, please check if adb is in the path
+https://stackoverflow.com/questions/17901692/set-up-adb-on-mac-os-x
