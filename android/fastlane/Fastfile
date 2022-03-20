@@ -14,7 +14,21 @@
 # update_fastlane
 
 default_platform(:android)
+def getVersionCode
+  # Instead of managing the version code manually it is based on a timestamp in seconds
+  # Any build done more recently is considered to be a higher version
+  # versionCode increase every minute (so max 1 build per minute)
+  # versionCode cannot be smaller than legacyVersionCode
+  thirtySeptemberTwentyTwenty = 1601480940 / 60
+  legacyVersionCode = 10902
+  versionCode = legacyVersionCode + (Time.now.to_i / 60) - thirtySeptemberTwentyTwenty
 
+  if versionCode > 2100000000
+    raise "versionCode cannot be higher than 2100000000"
+  end
+
+  versionCode.floor()
+end
 platform :android do
   desc "Runs all the tests"
   lane :test do
@@ -23,16 +37,57 @@ platform :android do
 
   desc "Submit a new Beta Build to Crashlytics Beta"
   lane :beta do
-    gradle(task: "clean assembleRelease")
+    gradle(task: "clean app:assembleRelease")
     crashlytics
-  
+
     # sh "your_script.sh"
     # You can also use other beta testing services here
   end
 
   desc "Deploy a new version to the Google Play"
   lane :deploy do
-    gradle(task: "clean assembleRelease")
+    gradle(task: "clean app:assembleRelease")
     upload_to_play_store
+  end
+  desc "Increments internal build number tracking (different than version)"
+      lane :bump_build_number do
+        android_set_version_code(
+          version_code: getVersionCode()
+        )
+  end
+
+  desc "Build and uploads the app to playstore for a internal testing release"
+  lane :playstoreInternal do |options|
+    # Retrieve version of my app in package.json (React Native case)
+    package = load_json(json_path: "../package.json")
+
+    # Clean build folder
+    gradle(
+      task: "clean"
+    )
+
+    # Bump android.defaultConfig.versionCode
+    bump_build_number
+
+    # Do the bundle of the application
+    gradle(
+      task: 'bundle',
+      build_type: 'Release',
+      properties: {
+        "android.injected.signing.store.file" => Dir.pwd + "/../../../croma-secrets/croma.jks",
+        "android.injected.signing.store.password" => options[:RELEASE_KEYSTORE_PASSWORD], # keystore password
+        "android.injected.signing.key.alias" => options[:RELEASE_KEYSTORE_ALIAS], # alias
+        "android.injected.signing.key.password" => options[:RELEASE_KEYSTORE_KEY_PASSWORD], # key password
+        "vname" => package["version"]
+      }
+    )
+
+    # Upload Android App Bundle to PlayStore like Internal testing Release
+    upload_to_play_store(
+      track: 'internal',
+      release_status: 'draft',
+      skip_upload_apk: true,
+      version_name: package["version"]
+    )
   end
 end
