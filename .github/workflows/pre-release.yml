@@ -1,0 +1,41 @@
+name: Pre Release
+
+on:
+  release:
+    types: [prereleased]
+
+  workflow_dispatch:
+
+jobs:
+  Build-and-Deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Decrypt Android keys
+        run: sh ./.github/scripts/decrypt_android_keys.sh
+        env:
+          RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
+          RELEASE_KEYSTORE_PASSPHRASE: ${{ secrets.RELEASE_KEYSTORE_PASSPHRASE }}
+          SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
+          SERVICE_ACCOUNT_PASSPHRASE: ${{ secrets.SERVICE_ACCOUNT_PASSPHRASE }}
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: '2.x'
+
+      - name: Install packages
+        run: |
+          yarn
+
+      - name: Install Fastlane
+        run: gem install fastlane
+
+      - name: Upload to PlayStore
+        run: |
+          cd android
+          fastlane playstoreInternal RELEASE_KEYSTORE_PASSWORD:${{secrets.RELEASE_KEYSTORE_PASSWORD}} RELEASE_KEYSTORE_KEY_PASSWORD:${{secrets.RELEASE_KEYSTORE_KEY_PASSWORD}} RELEASE_KEYSTORE_ALIAS:${{secrets.RELEASE_KEYSTORE_ALIAS}}

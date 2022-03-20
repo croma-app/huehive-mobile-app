@@ -74,7 +74,8 @@ platform :android do
       task: 'bundle',
       build_type: 'Release',
       properties: {
-        "android.injected.signing.store.file" => Dir.pwd + "/../../../croma-secrets/croma.jks",
+        # "android.injected.signing.store.file" => Dir.pwd + "/../../../croma-secrets/croma.jks", # local
+        "android.injected.signing.store.file" => Dir.pwd + "/croma.jks", # ci
         "android.injected.signing.store.password" => options[:RELEASE_KEYSTORE_PASSWORD], # keystore password
         "android.injected.signing.key.alias" => options[:RELEASE_KEYSTORE_ALIAS], # alias
         "android.injected.signing.key.password" => options[:RELEASE_KEYSTORE_KEY_PASSWORD], # key password
