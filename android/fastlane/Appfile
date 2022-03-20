@@ -1,0 +1,2 @@
+json_key_file("../../croma-secrets/croma-service-account-fastlane-api-9193528171866174554-460600-1db3acf65823.json") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
+package_name("app.croma") # e.g. com.krausefx.app
