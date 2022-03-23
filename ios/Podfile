@@ -11,7 +11,6 @@ target 'croma' do
     :hermes_enabled => false
   )
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   target 'cromaTests' do
     inherit! :complete
