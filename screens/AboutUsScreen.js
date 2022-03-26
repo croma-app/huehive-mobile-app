@@ -16,6 +16,7 @@ import { logEvent } from "../libs/Helpers";
 const GITHUB_URL = "https://github.com/croma-app/croma-react";
 const GITHUB_ISSUES_URL = "https://github.com/croma-app/croma-react/issues/new";
 const CROMA_APP_URL = "https://croma.app/";
+const DISCORD_URL = "https://discord.com/invite/ZSBVsBqDtg";
 
 const AboutUsScreen = () => {
   logEvent("about_us_screen");
@@ -29,6 +30,15 @@ const AboutUsScreen = () => {
         </Text>
       </View>
       <View style={styles.linksMainView}>
+        <TouchableOpacity onPress={() => Linking.openURL(`${DISCORD_URL}`)}>
+          <View style={styles.linkView}>
+            <MaterialCommunityIcons name="discord" style={styles.icon} />
+            <Text style={[styles.line, styles.subtitle]}>
+              Join discord
+            </Text>
+            <Text style={[styles.line, styles.link]}>{DISCORD_URL}</Text>
+          </View>
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => Linking.openURL(`${GITHUB_URL}`)}>
           <View style={styles.linkView}>
             <Entypo name="github-with-circle" style={styles.icon} />

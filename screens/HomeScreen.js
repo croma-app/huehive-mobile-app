@@ -23,6 +23,7 @@ import { logEvent, purchase } from "../libs/Helpers";
 import { launchImageLibrary } from "react-native-image-picker";
 import RNColorThief from "react-native-color-thief";
 import { notifyMessage } from '../libs/Helpers';
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 const HomeScreen = function ({ navigation, route }) {
   const { height } = Dimensions.get("window");
@@ -225,7 +226,7 @@ const HomeScreen = function ({ navigation, route }) {
               title="Unlock pro"
               onPress={() => purchase(setPurchase)}
             >
-              <Ionicons name="md-unlock" style={styles.actionButtonIcon} />
+            <FontAwesome5 name="unlock" style={styles.actionButtonIcon} />
             </ActionButton.Item>
           )}
         </ActionButton>
