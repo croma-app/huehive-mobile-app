@@ -2,7 +2,7 @@ name: Pre Release
 
 on:
   release:
-    types: [prereleased]
+    types: [released]
 
   workflow_dispatch:
 
@@ -38,4 +38,4 @@ jobs:
       - name: Upload to PlayStore
         run: |
           cd android
-          fastlane playstoreInternal RELEASE_KEYSTORE_PASSWORD:${{secrets.RELEASE_KEYSTORE_PASSWORD}} RELEASE_KEYSTORE_KEY_PASSWORD:${{secrets.RELEASE_KEYSTORE_KEY_PASSWORD}} RELEASE_KEYSTORE_ALIAS:${{secrets.RELEASE_KEYSTORE_ALIAS}}
+          fastlane playstoreBeta RELEASE_KEYSTORE_PASSWORD:${{secrets.RELEASE_KEYSTORE_PASSWORD}} RELEASE_KEYSTORE_KEY_PASSWORD:${{secrets.RELEASE_KEYSTORE_KEY_PASSWORD}} RELEASE_KEYSTORE_ALIAS:${{secrets.RELEASE_KEYSTORE_ALIAS}}
