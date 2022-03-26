@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import Storage from "./../libs/Storage";
 import { Platform } from "react-native";
 import { notifyMessage } from '../libs/Helpers';
+import { initPurchase } from "../libs/Helpers";
+
 import {
   getAvailablePurchases
 } from 'react-native-iap';
 
 const UNDO_TIMEOUT = 3000;
 
-const syncStateToStore = function(state) {
+const syncStateToStore = function (state) {
   // TODO: We need to find a better way to do storage management.
   // Fix this in a generic way with better storage management.
   const stateCopy = JSON.parse(JSON.stringify(state));
@@ -35,7 +37,7 @@ const sortPalettes = allPalettes => {
     return new Date(b.createdAt) - new Date(a.createdAt);
   });
   const ordered = {};
-  allPalettesArray.forEach(function(_palette) {
+  allPalettesArray.forEach(function (_palette) {
     ordered[_palette.name] = _palette;
   });
   return ordered;
@@ -84,43 +86,25 @@ export default function applicationHook() {
     const isUserAlreadyExits = await Storage.checkUserAlreadyExists();
 
     if (isUserAlreadyExits != "true") {
-      if (Platform.OS !== "web") {
-        try {
-          //await InAppBilling.open();
-          // If subscriptions/products are updated server-side you
-          // will have to update cache with loadOwnedPurchasesFromGoogle()
-          //await InAppBilling.loadOwnedPurchasesFromGoogle();
-          // let isPurchased =  
-          let isPurchased = await getAvailablePurchases(); 
-          if (isPurchased) {
-            notifyMessage(
-              "Your purchase restored successfully.."
-            );
-          }
-          setState(state => {
-            return { ...state, isPro: isPurchased };
-          });
-        } catch (err) {
-          notifyMessage(
-            "Loading purchase detail failed. " + err
-          );
-        } finally {
-          //await InAppBilling.close();
-        }
-      }
-      Storage.setUserAlreadyExists();
-      defaultPalettes = {
-        name: "Croma example palette",
-        colors: [
-          { color: "#f0675f" },
-          { color: "#2f95dc" },
-          { color: "#ebef5c" },
-          { color: "#c9ef5b" }
-        ]
-      };
-      await addPalette(defaultPalettes);
+      const purchaseDetails = await initPurchase(setPurchase);
+      setPurchase(purchaseDetails)
     }
+
+    Storage.setUserAlreadyExists();
+    defaultPalettes = {
+      name: "Croma example palette",
+      colors: [
+        { color: "#f0675f" },
+        { color: "#2f95dc" },
+        { color: "#ebef5c" },
+        { color: "#c9ef5b" }
+      ]
+    };
+    await addPalette(defaultPalettes);
+    await addPalette(defaultPalettes);
+
     setStoreLoaded(true);
+    return 
   };
 
   const removePaletteFromStateByName = name => {
@@ -282,7 +266,7 @@ export default function applicationHook() {
       isPro: false,
       user: {},
       isStoreLoaded: false,
-      colorPickerCallback: () => {}
+      colorPickerCallback: () => { }
     },
     loadInitPaletteFromStore,
     undoDeletionByName,
