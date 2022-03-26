@@ -12,6 +12,8 @@ target 'croma' do
   )
 
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'cromaTests' do
     inherit! :complete
     # Pods for testing
