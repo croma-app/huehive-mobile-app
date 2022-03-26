@@ -24,8 +24,8 @@ const purchase = async function (setPurchase, productSKU) {
   if (!productSKU) {
     productSKU = productSku();
   }
-  await RNIap.getProducts([productSKU]);
   try {
+    await RNIap.getProducts([productSKU]);
     const details = await RNIap.requestPurchase(productSKU, false);
     await setPurchase(details);
     logEvent("purchase_successful");
@@ -64,8 +64,6 @@ const getAvailablePurchases = async () => {
     notifyMessage(err.message);
   }
 };
-
-
 
 function notifyMessage(msg, duration = ToastAndroid.LONG) {
   if (Platform.OS === 'android') {
