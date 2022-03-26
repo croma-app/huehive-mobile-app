@@ -38,7 +38,7 @@ export default function App() {
   const navigationRef = useNavigationContainerRef();
   useEffect(() => {
     (async () => {
-      RNIap.initConnection();
+      await RNIap.initConnection();
       await applicationState.loadInitPaletteFromStore();
       setIsPalettesLoaded(true);
       console.log(applicationState.isPro);
