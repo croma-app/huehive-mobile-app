@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Text,
   View,
-  SafeAreaView
+  SafeAreaView, Platform
 } from "react-native";
 import Colors from "../constants/Colors";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
@@ -92,7 +92,7 @@ export default props => {
               <Text style={styles.textAreaMenuItem}>Palette library</Text>
             </View>
           </Touchable>
-          <Touchable
+          {Platform.OS === 'android' && <Touchable
             style={styles.menuItem}
             onPress={async () => {
               const imageResult = await pickImageResult();
@@ -118,28 +118,30 @@ export default props => {
               </Text>
             </View>
           </Touchable>
-          <Touchable
-            style={styles.menuItem}
-            onPress={async () => {
-              const pickedColors = await NativeModules.CromaModule.navigateToColorPicker();
-              logEvent("hm_pick_text_colors_from_camera", {
-                length: pickedColors.length
-              });
-              clearPalette();
-              setColorList(JSON.parse(pickedColors)?.colors);
-              navigate("ColorList");
-            }}
+          }
+          {Platform.OS == 'android' && <Touchable
+              style={styles.menuItem}
+              onPress={async () => {
+                const pickedColors = await NativeModules.CromaModule.navigateToColorPicker();
+                logEvent("hm_pick_text_colors_from_camera", {
+                  length: pickedColors.length
+                });
+                clearPalette();
+                setColorList(JSON.parse(pickedColors)?.colors);
+                navigate("ColorList");
+              }}
           >
             <View style={styles.menuItemView}>
               <View style={styles.menuIcon}>
                 <MaterialCommunityIcons
-                  name="credit-card-scan-outline"
-                  style={styles.icon}
+                    name="credit-card-scan-outline"
+                    style={styles.icon}
                 />
               </View>
               <Text style={styles.textAreaMenuItem}>Scan color codes</Text>
             </View>
           </Touchable>
+          }
           {hasRateUsPeriodExpired(appInstallTime) && (
             <MenuLink
               id={"rate-us"}

@@ -81,16 +81,14 @@ export default function applicationHook() {
       isLoading: false
     }));
 
-    // Setting default palette when user comming first time
+    // Setting default palette when user coming first time
     let defaultPalettes = {};
     const isUserAlreadyExits = await Storage.checkUserAlreadyExists();
 
     if (isUserAlreadyExits != "true") {
-      const purchaseDetails = await initPurchase(setPurchase);
-      setPurchase(purchaseDetails)
+      await initPurchase(setPurchase);
     }
-
-    Storage.setUserAlreadyExists();
+    await Storage.setUserAlreadyExists();
     defaultPalettes = {
       name: "Croma example palette",
       colors: [
@@ -104,7 +102,7 @@ export default function applicationHook() {
     await addPalette(defaultPalettes);
 
     setStoreLoaded(true);
-    return 
+    return
   };
 
   const removePaletteFromStateByName = name => {

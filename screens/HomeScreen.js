@@ -24,6 +24,7 @@ import { launchImageLibrary } from "react-native-image-picker";
 import RNColorThief from "react-native-color-thief";
 import { notifyMessage } from '../libs/Helpers';
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const HomeScreen = function ({ navigation, route }) {
   const { height } = Dimensions.get("window");
@@ -192,11 +193,9 @@ const HomeScreen = function ({ navigation, route }) {
                 }));
                 navigation.navigate("ColorList");
               } catch (error) {
-                if (Platform.OS === "android") {
-                  notifyMessage(
-                    "Error while extracting colors - " + error
-                  );
-                }
+                notifyMessage(
+                  "Error while extracting colors - " + error
+                );
               } finally {
                 setPickImageLoading(false);
               }
@@ -220,6 +219,20 @@ const HomeScreen = function ({ navigation, route }) {
           >
             <Ionicons name="md-color-palette" style={styles.actionButtonIcon} />
           </ActionButton.Item>
+          {Platform.OS == 'ios' && <ActionButton.Item
+              buttonColor="#ff1744"
+              title="Palette library"
+              onPress={() => {
+                logEvent("palette_library");
+                navigation.navigate("PaletteLibrary");
+              }}
+          >
+            <MaterialCommunityIcons
+                name="palette-swatch"
+                style={styles.actionButtonIcon}
+            />
+          </ActionButton.Item>
+          }
           { !isPro && (
             <ActionButton.Item
               buttonColor={Colors.primary}
