@@ -3,7 +3,7 @@ Croma is a simple color palette manager and color picker made for designers, aim
 
 KEY FEATURES
 
-• Automatically extract prominent colors from an image from your gallery or camera with our unique homemade algorithm.
+• Automatically extract prominent colors from an image from your gallery or camera.
 • Manually pick any number of colors in an object with your camera.
 • Manually pick any number of colors from images.
 • Recognize and save hex color codes in the text using your camera.
@@ -12,14 +12,14 @@ KEY FEATURES
 • View various information about a color and convert to other color codes.
 • Copy color codes to your clipboard with a tap.
 • Add colors using various color code formats including CSS named colors.
-• Material design palettes 
+• A color palette library including Material design palettes, CSS named colors etc.
 
 
 
 PRO BENEFITS
 
 • Add more than 4 colors in a palette.
-• Export/sync palettes to the private GitHub repository 
+• Export/sync palettes to the private GitHub repository
 
 
 DESCRIPTION
@@ -42,10 +42,14 @@ See all sorts of details about a color. Convert any color code to various color 
 We made Croma to help designers manage colors easily, because colors matter. While it's very easy to have lots of features and be bloated, we like to keep things simple, helping you with the things you need the most and allow you to work seamlessly without getting in your way.
 
 
-Croma can be helpful in various tasks, such as web and graphic design, anywhere colors are needed. It's a must have productivity tool for designers.
+Croma can be helpful in various tasks, such as web and graphic design, anywhere colors are needed. It's a must-have productivity tool for designers.
 
 
 OPEN SOURCE
 
-We believe in open source. The source code for Croma is hosted at: 
+We believe in open source. The source code for Croma is hosted at:
 https://github.com/croma-app/croma-react
+
+Support:
+Have any question or suggestion? Please join our discord channel:
+https://discord.com/invite/ZSBVsBqDtg
