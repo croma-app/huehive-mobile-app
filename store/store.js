@@ -90,7 +90,7 @@ export default function applicationHook() {
       setPurchase(purchaseDetails)
     }
 
-    Storage.setUserAlreadyExists();
+    await Storage.setUserAlreadyExists();
     defaultPalettes = {
       name: "Croma example palette",
       colors: [
@@ -104,7 +104,7 @@ export default function applicationHook() {
     await addPalette(defaultPalettes);
 
     setStoreLoaded(true);
-    return 
+    return
   };
 
   const removePaletteFromStateByName = name => {

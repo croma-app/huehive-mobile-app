@@ -38,10 +38,14 @@ const purchase = async function (setPurchase, productSKU) {
 };
 const initPurchase = async function (setPurchase) {
   const productSKU = productSku();
-  let products = await getAvailablePurchases();
-  if (products.find(product => product.productId === productSKU)) {
-    await setPurchase(products.find(product => product.productId === productSKU));
-    notifyMessage("Congrats, You are already a pro user!");
+  try {
+    let products = await getAvailablePurchases();
+    if (products.find(product => product.productId === productSKU)) {
+      await setPurchase(products.find(product => product.productId === productSKU));
+      notifyMessage("Congrats, You are already a pro user!");
+    }
+  } catch (e) {
+    notifyMessage("Failed during initialization of purchase: " + e)
   }
 }
 

@@ -27,7 +27,7 @@ import SideMenu from "react-native-side-menu";
 import { HEADER_HEIGHT } from "./constants/Layout";
 import Touchable from "react-native-platform-touchable";
 import Entypo from "react-native-vector-icons/Entypo";
-import { initPurchase } from "./libs/Helpers";
+import {notifyMessage} from "./libs/Helpers";
 import RNIap from "react-native-iap";
 const Stack = createNativeStackNavigator();
 
@@ -38,7 +38,11 @@ export default function App() {
   const navigationRef = useNavigationContainerRef();
   useEffect(() => {
     (async () => {
-      RNIap.initConnection();
+      try {
+        await RNIap.initConnection();
+      } catch (e) {
+        notifyMessage("Error initializing purchase: " +  e);
+      }
       await applicationState.loadInitPaletteFromStore();
       setIsPalettesLoaded(true);
       console.log(applicationState.isPro);
