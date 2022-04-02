@@ -13,3 +13,5 @@ fastlane/test_output
 # fastlane builds
 builds/*
 *.xcarchive
+*.cer
+*.zip
