@@ -45,16 +45,19 @@ export default function ProScreen() {
         <CromaButton onPress={purchaseDevelopment}>
           Buy me a coffee ☕
         </CromaButton>
-        <Text style={[styles.title]}>
-          Restore purchase 
-        </Text>
+
         {
-          !isPro && 
-          <CromaButton onPress={async ()=>{
-            await initPurchase(setPurchase);
-          }}>
-            Restore Pro 
-          </CromaButton>
+          !isPro &&
+          <View>
+            <Text style={[styles.title]}>
+              Restore purchase
+            </Text>
+            <CromaButton onPress={async () => {
+              await initPurchase(setPurchase);
+            }}>
+              Restore Pro
+            </CromaButton>
+          </View>
         }
       </View>
     </ScrollView>
