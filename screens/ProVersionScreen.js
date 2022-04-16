@@ -5,6 +5,8 @@ import CromaButton from "../components/CromaButton";
 import { CromaContext } from "../store/store";
 import { purchase, logEvent } from "../libs/Helpers";
 import { material } from "react-native-typography";
+import { initPurchase } from "../libs/Helpers";
+
 
 export default function ProScreen() {
   const { isPro, setPurchase } = React.useContext(CromaContext);
@@ -22,7 +24,7 @@ export default function ProScreen() {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View>
-        <Text style={styles.title}>PRO BENEFITS</Text>
+        <Text style={styles.title}>Pro benefits</Text>
         <Text style={[styles.line]}>
           1. Add more than 4 colors in a palette 🎨
         </Text>
@@ -43,6 +45,17 @@ export default function ProScreen() {
         <CromaButton onPress={purchaseDevelopment}>
           Buy me a coffee ☕
         </CromaButton>
+        <Text style={[styles.title]}>
+          Restore purchase 
+        </Text>
+        {
+          !isPro && 
+          <CromaButton onPress={async ()=>{
+            await initPurchase(setPurchase);
+          }}>
+            Restore Pro 
+          </CromaButton>
+        }
       </View>
     </ScrollView>
   );

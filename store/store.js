@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import Storage from "./../libs/Storage";
-import { Platform } from "react-native";
-import { notifyMessage } from '../libs/Helpers';
 import { initPurchase } from "../libs/Helpers";
+import {Platform} from 'react-native'
 
 import {
   getAvailablePurchases
@@ -86,7 +85,7 @@ export default function applicationHook() {
     const isUserAlreadyExits = await Storage.checkUserAlreadyExists();
 
     if (isUserAlreadyExits != "true") {
-      await initPurchase(setPurchase);
+      Platform.OS === 'android' && await initPurchase(setPurchase);
     }
     await Storage.setUserAlreadyExists();
     defaultPalettes = {
