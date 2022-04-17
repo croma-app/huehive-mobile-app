@@ -1,4 +1,8 @@
 ## Croma (https://croma.app)
+
+Croma is now avaialble on iOS:
+https://apps.apple.com/app/croma-palette-manager/id1596763657
+
 <a href="https://bestmobileappawards.com/app-submission/croma?utm_source=badge&utm_medium=badge&utm_campaign=nominee_badge" rel="nofollow"><img src="https://bestmobileappawards.com/pub/badges/badge-platinum-award-nominee-2021.png" border="0" /></a>
 
 [![Croma DEMO](https://img.youtube.com/vi/KqrsdAuvW40/0.jpg)](https://www.youtube.com/watch?v=KqrsdAuvW40)
