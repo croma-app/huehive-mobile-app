@@ -1,9 +1,9 @@
-## Croma (https://croma.app)
+## Croma
 
-Croma is now avaialble on iOS:
-https://apps.apple.com/app/croma-palette-manager/id1596763657
+<a href="https://apps.apple.com/app/croma-palette-manager/id1596763657"><img src='./assets/appstore-download.png' alt="Download croma on AppStore" width="150"/></a>
+<a href='https://play.google.com/store/apps/details?id=app.croma&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img width="150" alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
 
-<a href="https://bestmobileappawards.com/app-submission/croma?utm_source=badge&utm_medium=badge&utm_campaign=nominee_badge" rel="nofollow"><img src="https://bestmobileappawards.com/pub/badges/badge-platinum-award-nominee-2021.png" border="0" /></a>
+<a href='https://croma.app'>Try on Web</a>
 
 [![Croma DEMO](https://img.youtube.com/vi/KqrsdAuvW40/0.jpg)](https://www.youtube.com/watch?v=KqrsdAuvW40)
 
