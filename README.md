@@ -73,3 +73,6 @@ From there, use the Chrome Developer tools JavaScript console to view console.lo
 ### Troubleshooting 
 If you don't see console logs, please check if adb is in the path
 https://stackoverflow.com/questions/17901692/set-up-adb-on-mac-os-x
+
+Keystore file '/Users/bhuwanjoshi/Desktop/work/croma-react/android/app/debug.keystore' not found for signing config 'debug'. 
+https://stackoverflow.com/questions/57016236/keystore-file-project-folder-android-app-debug-keystore-not-found-for-signing
