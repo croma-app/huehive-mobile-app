@@ -16,8 +16,9 @@ import { CromaContext } from "../store/store";
 import Colors from "../constants/Colors";
 import * as Permissions from "expo-permissions";
 import EmptyView from "../components/EmptyView";
-import ActionButton from "react-native-action-button";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import ActionButton from "../components/ActionButton";
+// import ActionButton from "react-native-action-button";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import ShareMenu from "../libs/ShareMenu";
 import { logEvent, purchase } from "../libs/Helpers";
 import { launchImageLibrary } from "react-native-image-picker";
@@ -105,10 +106,9 @@ const HomeScreen = function ({ navigation, route }) {
     return (
       <>
         <View
-          style={[
-            styles.container,
-            { minHeight: height - 10 - 16 }
-          ]}
+          style={
+            styles.container
+          }
         >
           {pickImageLoading ? <ActivityIndicator /> : <View />}
           <ScrollView showsVerticalScrollIndicator={false}>
@@ -127,7 +127,9 @@ const HomeScreen = function ({ navigation, route }) {
               );
             })}
             <EmptyView />
+           
           </ScrollView>
+          <ActionButton></ActionButton>
         </View>
 
         <DialogContainer>
@@ -142,7 +144,7 @@ const HomeScreen = function ({ navigation, route }) {
           })}
         </DialogContainer>
         {/*Setting box shadow to false because of Issue on the web: https://github.com/mastermoo/react-native-action-button/issues/337 */}
-        <ActionButton
+        {/* <ActionButton
           bgColor="rgba(68, 68, 68, 0.6)"
           buttonColor={Colors.fabPrimary}
           offsetY={60}
@@ -242,7 +244,8 @@ const HomeScreen = function ({ navigation, route }) {
             <FontAwesome5 name="unlock" style={styles.actionButtonIcon} />
             </ActionButton.Item>
           )}
-        </ActionButton>
+        </ActionButton> */}
+        
       </>
     );
   }
@@ -252,8 +255,12 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    margin: 8,
-    justifyContent: "center"
+    display: 'flex',
+    flexGrow: 1,
+    height: 200,
+    padding: 8,
+    justifyContent: "center",
+    position: 'relative'
   },
   actionButtonIcon: {
     fontSize: 20,
