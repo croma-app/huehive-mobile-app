@@ -4,7 +4,7 @@
 
 <a href='https://play.google.com/store/apps/details?id=app.croma&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img width="140" height="60" alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
 
-<a href='https://croma.app'>Try it on Web</a>
+<a href='https://web.croma.app'>Try it on Web</a>
 
 [![Croma DEMO](https://img.youtube.com/vi/KqrsdAuvW40/0.jpg)](https://www.youtube.com/watch?v=KqrsdAuvW40)
 

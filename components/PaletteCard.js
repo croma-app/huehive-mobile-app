@@ -26,7 +26,7 @@ export const PaletteCard = props => {
           .map(colorObj => colorObj.color)
           .join("\n")}
 
-          https://croma.app/Main/SavePalette?name=${encodeURIComponent(
+          https://web.croma.app/Main/SavePalette?name=${encodeURIComponent(
             props.name
           )}&colors=${encodeURIComponent(JSON.stringify(props.colors))}`
       });
@@ -53,7 +53,7 @@ export const PaletteCard = props => {
         .map(colorObj => colorObj.color)
         .join("\n")}
 
-      https://croma.app/Main/SavePalette?name=${encodeURIComponent(
+      https://web.croma.app/Main/SavePalette?name=${encodeURIComponent(
         props.name
       )}&colors=${encodeURIComponent(JSON.stringify(props.colors))}`
     );
