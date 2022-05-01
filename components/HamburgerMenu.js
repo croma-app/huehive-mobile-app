@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Image,
   Linking,
@@ -27,20 +27,12 @@ export default props => {
     });
    return result;
   };
-  const [appInstallTime, setAppInstallTime] = useState(null);
 
   const { setColorList, clearPalette } = React.useContext(CromaContext);
   const navigate = function (screen) {
     props.toggleSideMenu();
     props.navigation.navigate(screen);
   }
-  useEffect(() => {
-    (async () => {
-      const appInstallTime = await NativeModules.CromaModule.getAppInstallTime();
-      setAppInstallTime(parseInt(appInstallTime, 10));
-    })();
-  });
-
   return (
     <SafeAreaView style={[styles.container]}>
       <Touchable
@@ -142,15 +134,15 @@ export default props => {
             </View>
           </Touchable>
           }
-          {hasRateUsPeriodExpired(appInstallTime) && (
+          {
             <MenuLink
               id={"rate-us"}
-              link={"market://details?id=app.croma"}
+              link={Platform.OS == 'android' ? "market://details?id=app.croma": "https://apps.apple.com/app/id1596763657?action=write-review"}
               icon={<MaterialIcons name="rate-review" style={styles.icon} />}
             >
-              Like the App? Rate us
+              Like the App? Please rate us
             </MenuLink>
-          )}
+          }
           <Touchable
             style={styles.menuItem}
             onPress={() => {
@@ -203,13 +195,6 @@ export default props => {
     </SafeAreaView>
   );
 
-  function hasRateUsPeriodExpired(appInstallTime) {
-    if (appInstallTime == null) return false;
-    return appInstallTime + fiveDaysDurationMillis() < new Date().getTime();
-  }
-  function fiveDaysDurationMillis() {
-    return 5 * 24 * 60 * 60 * 1000;
-  }
 };
 
 function MenuLink(props) {

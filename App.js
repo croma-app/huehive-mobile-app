@@ -30,7 +30,8 @@ import Entypo from "react-native-vector-icons/Entypo";
 import {notifyMessage} from "./libs/Helpers";
 import RNIap from "react-native-iap";
 const Stack = createNativeStackNavigator();
-
+/*import { LogBox } from 'react-native'; // enabled for recording demos
+LogBox.ignoreAllLogs();//Ignore all log notifications*/
 export default function App() {
   const [isPalettesLoaded, setIsPalettesLoaded] = useState(false);
   const applicationState = applicationHook();

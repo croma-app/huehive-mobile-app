@@ -76,3 +76,6 @@ https://stackoverflow.com/questions/17901692/set-up-adb-on-mac-os-x
 
 Keystore file '/Users/bhuwanjoshi/Desktop/work/croma-react/android/app/debug.keystore' not found for signing config 'debug'. 
 https://stackoverflow.com/questions/57016236/keystore-file-project-folder-android-app-debug-keystore-not-found-for-signing
+
+IOS build issues
+1. Clean Build Folder (⇧ + ⌘ + K), clean DerivedData directory, CocoaPods caches, and restart macOS

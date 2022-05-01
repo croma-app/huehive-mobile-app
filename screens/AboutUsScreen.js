@@ -1,5 +1,5 @@
 import {
-  Linking,
+  Linking, Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -10,12 +10,13 @@ import React from "react";
 import { material } from "react-native-typography";
 import Entypo from "react-native-vector-icons/Entypo";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons"
 import { logEvent } from "../libs/Helpers";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 
 const GITHUB_URL = "https://github.com/croma-app/croma-react";
-const GITHUB_ISSUES_URL = "https://github.com/croma-app/croma-react/issues/new";
 const CROMA_APP_URL = "https://croma.app/";
+const CROMA_IOS_URL = "https://apps.apple.com/app/croma-palette-manager/id1596763657";
+const CROMA_PLAYSTORE_URL = "https://play.google.com/store/apps/details?id=app.croma";
 const DISCORD_URL = "https://discord.com/invite/ZSBVsBqDtg";
 
 const AboutUsScreen = () => {
@@ -48,17 +49,6 @@ const AboutUsScreen = () => {
             <Text style={[styles.line, styles.link]}>{GITHUB_URL}</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => Linking.openURL(`${GITHUB_ISSUES_URL}`)}
-        >
-          <View style={styles.linkView}>
-            <MaterialIcons name="feedback" style={styles.icon} />
-            <Text style={[styles.line, styles.subtitle]}>
-              Do you have a suggestion ?
-            </Text>
-            <Text style={[styles.line, styles.link]}>{GITHUB_ISSUES_URL}</Text>
-          </View>
-        </TouchableOpacity>
         <TouchableOpacity onPress={() => Linking.openURL(`${CROMA_APP_URL}`)}>
           <View style={styles.linkView}>
             <MaterialCommunityIcons name="web" style={styles.icon} />
@@ -71,6 +61,26 @@ const AboutUsScreen = () => {
             <Text style={[styles.line, styles.link]}>{CROMA_APP_URL}</Text>
           </View>
         </TouchableOpacity>
+        {Platform.OS == 'android' && <TouchableOpacity onPress={() => Linking.openURL(`${CROMA_IOS_URL}`)}>
+          <View style={styles.linkView}>
+            <FontAwesome5 name="app-store-ios" style={styles.icon}/>
+            <Text style={[styles.line, styles.subtitle]}>
+              Croma on App store
+            </Text>
+            <Text style={[styles.line, styles.link]}>{CROMA_IOS_URL}</Text>
+          </View>
+        </TouchableOpacity>
+        }
+        {Platform.OS == 'ios' && <TouchableOpacity onPress={() => Linking.openURL(`${CROMA_PLAYSTORE_URL}`)}>
+          <View style={styles.linkView}>
+            <FontAwesome5 name="google-play" style={styles.icon}/>
+            <Text style={[styles.line, styles.subtitle]}>
+              Croma on Playstore
+            </Text>
+            <Text style={[styles.line, styles.link]}>{CROMA_PLAYSTORE_URL}</Text>
+          </View>
+        </TouchableOpacity>
+        }
       </View>
     </ScrollView>
   );

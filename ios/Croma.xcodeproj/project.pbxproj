@@ -542,6 +542,7 @@
 				CURRENT_PROJECT_VERSION = 37;
 				DEVELOPMENT_TEAM = FH9K879287;
 				ENABLE_BITCODE = NO;
+				EXCLUDED_ARCHS = "";
 				INFOPLIST_FILE = croma/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -573,6 +574,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 37;
 				DEVELOPMENT_TEAM = FH9K879287;
+				EXCLUDED_ARCHS = "";
 				INFOPLIST_FILE = croma/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
