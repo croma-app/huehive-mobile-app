@@ -16,14 +16,16 @@ import { CromaContext } from "../store/store";
 import Colors from "../constants/Colors";
 import * as Permissions from "expo-permissions";
 import EmptyView from "../components/EmptyView";
-import ActionButton from "../components/ActionButton";
+import ActionButtonContainer from "../components/ActionButton";
 // import ActionButton from "react-native-action-button";
-import AntDesign from "react-native-vector-icons/AntDesign";
 import ShareMenu from "../libs/ShareMenu";
 import { logEvent, purchase } from "../libs/Helpers";
 import { launchImageLibrary } from "react-native-image-picker";
+import AntDesign from "react-native-vector-icons/AntDesign";
 import RNColorThief from "react-native-color-thief";
 import { notifyMessage } from '../libs/Helpers';
+
+import Ionicons from "react-native-vector-icons/Ionicons";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
@@ -127,9 +129,56 @@ const HomeScreen = function ({ navigation, route }) {
               );
             })}
             <EmptyView />
-           
+
           </ScrollView>
-          <ActionButton></ActionButton>
+          <ActionButtonContainer config={[[
+            {
+              icon: <Ionicons name="md-camera" color="#f0675f" size={20} />,
+              text1: 'Pick colors',
+              text2: 'form cemera',
+              onPress: () => { console.log('click worked - form cemera') }
+            },
+            {
+              icon: <Ionicons name="md-image" color="#f0675f" size={20} />,
+              text1: 'Get pelette',
+              text2: 'form image',
+              onPress: () => { console.log('click worked - form cemera') }
+            },
+            {
+              icon: <MaterialCommunityIcons
+                name="palette-swatch"
+                color="#f0675f"
+                size={20}
+              />,
+              text1: 'Get pelette',
+              text2: 'form color',
+              onPress: () => { console.log("clickd 3 ") }
+            },
+          ],
+          [
+
+            {
+              icon: <FontAwesome5 size={20} color="#f0675f" name="unlock" />,
+              text1: 'Unlock',
+              text2: 'pro',
+              onPress: () => { console.log('click worked - 4') }
+            },
+            {
+              icon: <Ionicons size={20} color="#f0675f" name="md-color-filter" />,
+              text1: 'Palette',
+              text2: 'library',
+              onPress: () => { console.log('click worked - 5') }
+            },
+            {
+              icon: <FontAwesome5 size={20} color="#f0675f" name="file-import" />,
+              text1: 'Import Export ',
+              text2: 'palettes',
+              onPress: () => { console.log('click worked - 6') }
+            }
+          ]
+
+          ]
+          }></ActionButtonContainer>
         </View>
 
         <DialogContainer>
@@ -172,7 +221,7 @@ const HomeScreen = function ({ navigation, route }) {
                 }
               }}
             >
-              <Ionicons name="md-camera" style={styles.actionButtonIcon} />
+              a
             </ActionButton.Item>
           )}
           <ActionButton.Item
@@ -245,7 +294,7 @@ const HomeScreen = function ({ navigation, route }) {
             </ActionButton.Item>
           )}
         </ActionButton> */}
-        
+
       </>
     );
   }
@@ -261,11 +310,5 @@ const styles = StyleSheet.create({
     padding: 8,
     justifyContent: "center",
     position: 'relative'
-  },
-  actionButtonIcon: {
-    fontSize: 20,
-    height: 22,
-    color: "white"
-  },
-  icon: { fontSize: 24, height: 24, color: "white" }
+  }
 });
