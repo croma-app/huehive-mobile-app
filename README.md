@@ -1,10 +1,4 @@
-## Croma
-
-<a href="https://apps.apple.com/app/croma-palette-manager/id1596763657"><img src='./assets/appstore-download.svg' alt="Download croma on AppStore" width="150" height="40"/></a>
-
-<a href='https://play.google.com/store/apps/details?id=app.croma&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img width="140" height="60" alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png'/></a>
-
-<a href='https://web.croma.app'>Try it on Web</a>
+## [Croma](https://croma.app)
 
 [![Croma DEMO](https://img.youtube.com/vi/KqrsdAuvW40/0.jpg)](https://www.youtube.com/watch?v=KqrsdAuvW40)
 
@@ -14,7 +8,19 @@
 - Installation: `yarn`
 - Running on android: `yarn android`
 - Running on ios: `yarn ios`
-- Release - // TODO
+
+### Release
+Releases are maintained using fastlane.
+#### Play store(Android):
+1. Create a new release in github with a new tag
+2. Publish the release. This will trigger the workflow that will release it to playstore as a beta testing track.
+3. Once beta testing is done promote the release to production from play store console.
+#### App store(iOS):
+iOS is not fully automated yet. From your local 
+```
+cd ios
+fastlane beta
+```
 
 ### Web
 Currently, We are upgrading react-native and web version is available in the `web` branch with the old react-native.
@@ -26,16 +32,6 @@ https://github.com/croma-app/croma-react/tree/web
 - https://github.com/satya164/croma
 - https://github.com/satya164/pigment
 
-
-Build signed apk:
-`cd android`
-`./release.sh`
-
-Ref: https://reactnative.dev/docs/signed-apk-android
-
-Bundle
-
-`./bundle-and-run-android.sh`
 
 ### Code styling
 
