@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Touchable from "react-native-platform-touchable";
 import { StyleSheet, Text, Dimensions, View } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useHeaderHeight } from '@react-navigation/elements';
+import Colors from '../constants/Colors';
+import * as Animatable from 'react-native-animatable';
 
 const VerticalLine = function () {
   return <View style={{ width: 1, backgroundColor: '#cacbcc' }}></View>
@@ -20,6 +22,16 @@ const ActionButtonContainer = function (props) {
   const { config } = props;
   const [active, setActive] = useState(false);
   const headerHeight = useHeaderHeight();
+  const handleViewRef = useRef(null);
+
+  const rotate = {
+    from: {
+      transform: [{rotateZ: '0deg'}]
+    },
+    to: {
+      transform: [{rotateZ: '45deg'}]
+    },
+  };
 
   const rows = config;
   return (
@@ -31,24 +43,25 @@ const ActionButtonContainer = function (props) {
         alignItems: 'center',
         borderRadius: 40,
         backgroundColor: '#5f6366',
-        width: 40,
-        height: 40,
+        width: 56,
+        height: 56,
         alignSelf: 'flex-end',
-        marginBottom: 30,
-        marginRight: 30,
+        marginBottom: 20,
+        marginRight: 30
       }}>
-        <AntDesign name="close" color={'#fff'} size={24} />
+        <Animatable.View duration={300} animation={rotate}>
+          <AntDesign name="plus" color={'#fff'} size={24} />
+        </Animatable.View >
       </Touchable>
-      <View style={{ backgroundColor: '#fff', padding: 10 }}>
+      <Animatable.View duration={300} animation="slideInUp" style={{ backgroundColor: '#fff', padding: 10 }}>
         {rows.map((cols, index) => {
           return <>
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
               {
                 cols.map((item, index) => {
                   const { icon, text1, text2, onPress } = item;
-                  console.log(icon)
                   return <>
-                    <Touchable onPress={() => { setActive(false); onPress() }} style={{flexBasis: 90}}>
+                    <Touchable onPress={() => { setActive(false); onPress() }} style={{ flexBasis: 90 }}>
                       <ActionButton icon={icon} t1={text1} t2={text2} />
                     </Touchable>
                     {index < cols.length - 1 && <VerticalLine />}
@@ -59,7 +72,7 @@ const ActionButtonContainer = function (props) {
             {index < rows.length - 1 && <View style={{ height: 1, backgroundColor: '#cacbcc' }}></View>}
           </>
         })}
-      </View>
+      </Animatable.View>
     </View >
 
       :
@@ -72,10 +85,16 @@ const ActionButtonContainer = function (props) {
           borderRadius: 40,
           bottom: 40,
           right: 30,
-          backgroundColor: '#f0675f',
+          backgroundColor: Colors.fabPrimary,
           zIndex: 2,
-          width: 40,
-          height: 40
+          elevation: 5,
+          width: 56,
+          height: 56,
+          // ios shadow 
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 1 },
+          shadowOpacity: 0.8,
+          shadowRadius: 1,
         }}>
         <AntDesign name="plus" color={'#fff'} size={24} />
       </Touchable>
