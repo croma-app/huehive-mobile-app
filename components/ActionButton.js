@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import Touchable from "react-native-platform-touchable";
 import { StyleSheet, Text, Dimensions, View } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
@@ -17,39 +17,24 @@ const ActionButton = function ({ t1, t2, icon } = props) {
     <Text style={[styles.itemText]}> {t2}</Text>
   </View>
 }
+const rotateAnimation = {
+  from: {
+    transform: [{ rotateZ: '0deg' }]
+  },
+  to: {
+    transform: [{ rotateZ: '45deg' }]
+  },
+};
 
 const ActionButtonContainer = function (props) {
   const { config } = props;
   const [active, setActive] = useState(false);
   const headerHeight = useHeaderHeight();
-  const handleViewRef = useRef(null);
-
-  const rotate = {
-    from: {
-      transform: [{rotateZ: '0deg'}]
-    },
-    to: {
-      transform: [{rotateZ: '45deg'}]
-    },
-  };
-
   const rows = config;
   return (
-
-    active ? <View style={{ position: 'absolute', justifyContent: 'flex-end', zIndex: 10, backgroundColor: 'rgba(0, 0, 0, 0.4)', height: Dimensions.get('window').height - headerHeight, width: Dimensions.get('window').width }}>
-      <Touchable onPress={() => { setActive(false) }} style={{
-        display: "flex",
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 40,
-        backgroundColor: '#5f6366',
-        width: 56,
-        height: 56,
-        alignSelf: 'flex-end',
-        marginBottom: 20,
-        marginRight: 30
-      }}>
-        <Animatable.View duration={300} animation={rotate}>
+    active ? <View style={[styles.actionButtonContainer, { height: Dimensions.get('window').height - headerHeight }]}>
+      <Touchable onPress={() => { setActive(false) }} style={[styles.actionButton, styles.actionButtonClose]}>
+        <Animatable.View duration={300} animation={rotateAnimation}>
           <AntDesign name="plus" color={'#fff'} size={24} />
         </Animatable.View >
       </Touchable>
@@ -76,26 +61,7 @@ const ActionButtonContainer = function (props) {
     </View >
 
       :
-      <Touchable onPress={() => { setActive(true) }} style={
-        {
-          position: 'absolute',
-          display: "flex",
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderRadius: 40,
-          bottom: 40,
-          right: 30,
-          backgroundColor: Colors.fabPrimary,
-          zIndex: 2,
-          elevation: 5,
-          width: 56,
-          height: 56,
-          // ios shadow 
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 1 },
-          shadowOpacity: 0.8,
-          shadowRadius: 1,
-        }}>
+      <Touchable onPress={() => { setActive(true) }} style={[styles.actionButton, styles.actionButtonOpen]}>
         <AntDesign name="plus" color={'#fff'} size={24} />
       </Touchable>
   );
@@ -110,6 +76,41 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 13,
     fontWeight: '600'
+  },
+  actionButtonContainer: {
+    position: 'absolute',
+    justifyContent: 'flex-end',
+    zIndex: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    width: Dimensions.get('window').width
+  },
+  actionButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 40,
+    width: 56,
+    height: 56,
+  },
+  actionButtonOpen: {
+    position: 'absolute',
+    display: "flex",
+    bottom: 40,
+    right: 30,
+    backgroundColor: Colors.fabPrimary,
+    zIndex: 2,
+    elevation: 5,
+    // ios shadow 
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.8,
+    shadowRadius: 1,
+  },
+  actionButtonClose: {
+    display: "flex",
+    alignSelf: 'flex-end',
+    marginBottom: 20,
+    marginRight: 30,
+    backgroundColor: '#5f6366',
   }
 });
 
