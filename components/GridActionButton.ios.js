@@ -12,7 +12,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { launchImageLibrary } from "react-native-image-picker";
 import { CromaContext } from "../store/store";
 
-const ActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
+const GridActionButton = ({ navigation, setPickImageLoading }) => {
   const {
     isPro,
     setPurchase,
@@ -30,25 +30,6 @@ const ActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
     return result;
   };
   return <ActionButtonContainer config={[[
-    {
-      icon: <Ionicons name="md-camera" color={Colors.fabPrimary} size={20} />,
-      text1: 'Pick colors',
-      text2: 'form cemera',
-      onPress: async () => {
-        try {
-          const pickedColors = await NativeModules.CromaModule.navigateToColorPicker();
-          logEvent("pick_colors_from_camera", pickedColors.length);
-          console.log("Picked colors: ", pickedColors);
-          clearPalette();
-          setColorList(JSON.parse(pickedColors)?.colors);
-          navigation.navigate("ColorList");
-        } catch (error) {
-          notifyMessage(
-            "Error while picking color from camera - " + error
-          );
-        }
-      }
-    },
     {
       icon: <Ionicons name="md-image" color={Colors.fabPrimary} size={20} />,
       text1: 'Get palette',
@@ -100,60 +81,36 @@ const ActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   ],
   [
     {
-      icon: <MaterialCommunityIcons name="image" size={20} color={Colors.fabPrimary}  />,
-      text1: 'Pick color',
-      text2: 'from image',
-      onPress: async () => {
-        const imageResult = await pickImageResult();
-        if (!imageResult.didCancel) {
-          const pickedColors = await NativeModules.CromaModule.navigateToImageColorPicker(
-            imageResult.assets[0].uri
-          );
-          logEvent("hm_pick_colors_from_img", {
-            length: pickedColors.length
-          });
-          clearPalette();
-          setColorList(JSON.parse(pickedColors)?.colors);
-          navigation.navigate("ColorList");
-        }
-      }
-    },
-    {
       icon: <Ionicons size={20} color={Colors.fabPrimary} name="md-color-filter" />,
       text1: 'Palette',
       text2: 'library',
       onPress: async () => {
-        logEvent("hm_palette_library");
+        logEvent("ab_palette_library");
         clearPalette();
         navigation.navigate("PaletteLibrary");
       }
     },
     isPro ? {
-      icon: <MaterialCommunityIcons
-        name="credit-card-scan-outline"
-        size={20} color={Colors.fabPrimary} />,
-      text1: 'Scan color',
-      text2: 'codes',
-      onPress: async () => {
-        const pickedColors = await NativeModules.CromaModule.navigateToColorPicker();
-        logEvent("hm_pick_text_colors_from_camera", {
-          length: pickedColors.length
-        });
-        clearPalette();
-        setColorList(JSON.parse(pickedColors)?.colors);
-        navigation.navigate("ColorList");
-      }
-    } :
-      {
-        icon: <FontAwesome5 size={20} color={Colors.fabPrimary} name="unlock" />,
-        text1: 'Unlock',
-        text2: 'pro',
-        onPress: () => purchase(setPurchase)
-      }
-  ]
+          icon: <Ionicons name="md-color-filter"
+              size={20} color={Colors.fabPrimary} />,
+          text1: 'Create',
+          text2: 'new palette',
+          onPress: async () => {
+            logEvent("ab_create_new_palette");
+            clearPalette();
+            navigation.navigate("AddPaletteManually");
+          }
+        } :
+        {
+          icon: <FontAwesome5 size={20} color={Colors.fabPrimary} name="unlock" />,
+          text1: 'Unlock',
+          text2: 'pro',
+          onPress: () => purchase(setPurchase)
+        }
+    ]
 
   ]
   }></ActionButtonContainer>
 }
 
-export default ActionButtonAndroid;
+export default GridActionButton;

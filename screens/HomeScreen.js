@@ -9,12 +9,11 @@ import {
   View
 } from "react-native";
 import { PaletteCard } from "../components/PaletteCard";
-import ActionButtonAndroid  from "../components/ActionButtonAndroid";
+import GridActionButton  from "../components/GridActionButton";
 import { DialogContainer, UndoDialog } from "../components/CommonDialogs";
 import { CromaContext } from "../store/store";
 import * as Permissions from "expo-permissions";
 import EmptyView from "../components/EmptyView";
-// import ActionButton from "react-native-action-button";
 import ShareMenu from "../libs/ShareMenu";
 import { logEvent } from "../libs/Helpers";
 
@@ -30,7 +29,7 @@ const HomeScreen = function ({ navigation, route }) {
     clearPalette
   } = React.useContext(CromaContext);
   const [pickImageLoading, setPickImageLoading] = useState(false);
-  
+
   const getPermissionAsync = async () => {
     if (Platform?.OS === "ios") {
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -109,7 +108,7 @@ const HomeScreen = function ({ navigation, route }) {
             })}
             <EmptyView />
           </ScrollView>
-          <ActionButtonAndroid navigation={navigation} setPickImageLoading={setPickImageLoading} />  
+          <GridActionButton navigation={navigation} setPickImageLoading={setPickImageLoading} />
         </View>
 
         <DialogContainer>
