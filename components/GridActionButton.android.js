@@ -31,20 +31,21 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   };
   return <ActionButtonContainer config={[[
     {
-      icon: <Ionicons name="md-camera" color={Colors.fabPrimary} size={20} />,
-      text1: 'Pick colors',
-      text2: 'form camera',
-      onPress: async () => {
+      icon:  <Ionicons
+        name="md-color-filter"
+        color={Colors.fabPrimary}
+        size={20}
+      />,
+      text1: 'Create New',
+      text2: 'Palette',
+      onPress: () =>  {
         try {
-          const pickedColors = await NativeModules.CromaModule.navigateToColorPicker();
-          logEvent("pick_colors_from_camera", pickedColors.length);
-          console.log("Picked colors: ", pickedColors);
+          logEvent("create_new_palette");
           clearPalette();
-          setColorList(JSON.parse(pickedColors)?.colors);
-          navigation.navigate("ColorList");
+          navigation.navigate("AddPaletteManually");
         } catch (error) {
           notifyMessage(
-            "Error while picking color from camera - " + error
+            "Error  - " + error
           );
         }
       }

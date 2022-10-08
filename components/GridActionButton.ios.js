@@ -78,6 +78,26 @@ const GridActionButton = ({ navigation, setPickImageLoading }) => {
         navigation.navigate("ColorPicker");
       }
     },
+    {
+      icon: <Ionicons
+        name="md-color-filter"
+        color={Colors.fabPrimary}
+        size={20}
+      />,
+      text1: 'Create new',
+      text2: 'Palette',
+      onPress: () =>  {
+        try {
+          logEvent("create_new_palette");
+          clearPalette();
+          navigation.navigate("AddPaletteManually");
+        } catch (error) {
+          notifyMessage(
+            "Error  - " + error
+          );
+        }
+      }
+    },
   ],
   [
     {
