@@ -40,7 +40,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
       text2: 'Palette',
       onPress: () =>  {
         try {
-          logEvent("hm_create_new_palette");
+          logEvent("create_new_palette");
           clearPalette();
           navigation.navigate("AddPaletteManually");
         } catch (error) {
