@@ -8,20 +8,19 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  View
+  View,
 } from "react-native";
 import Touchable from "react-native-platform-touchable";
 import { CromaContext } from "../store/store";
 import ActionButton from "react-native-action-button";
 import Colors from "../constants/Colors";
-import { useHeaderHeight } from '@react-navigation/elements';
+import { useHeaderHeight } from "@react-navigation/elements";
 import EmptyView from "../components/EmptyView";
 import { logEvent } from "../libs/Helpers";
 import { DialogContainer, UndoDialog } from "../components/CommonDialogs";
-import Feather  from "react-native-vector-icons/Feather";
-import MaterialIcons  from "react-native-vector-icons/MaterialIcons";
-import { notifyMessage } from '../libs/Helpers';
-
+import Feather from "react-native-vector-icons/Feather";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import { notifyMessage } from "../libs/Helpers";
 
 export default function PaletteScreen({ navigation }) {
   const {
@@ -31,21 +30,27 @@ export default function PaletteScreen({ navigation }) {
     undoColorDeletion,
     addColorToPalette,
     setDetailedColor,
+    colorReorderPalette,
     currentPalette,
-    setColorPickerCallback
+    setColorPickerCallback,
   } = useContext(CromaContext);
 
   const paletteName = currentPalette?.name ?? "";
-
+  const [colourLeng, setColourLeng] = useState(4);
   const { height } = Dimensions.get("window");
   const colors = allPalettes[paletteName]?.colors;
   const deletedColors = allPalettes[paletteName]?.deletedColors
     ? allPalettes[paletteName]?.deletedColors
     : [];
 
-  const deleteColor = index => {
+  const deleteColor = (index) => {
     colorDeleteFromPalette(paletteName, index);
   };
+
+  const reorderColor = (a, b) => {
+    colorReorderPalette(paletteName, a, b);
+  };
+
   logEvent("palette_screen");
 
   useLayoutEffect(() => {
@@ -63,23 +68,32 @@ export default function PaletteScreen({ navigation }) {
           style={styles.listview}
           showsVerticalScrollIndicator={false}
         >
-          {colors
-            ?.slice(0, isPro ? colors.length : 4)
+           {colors
+            ?.slice(0, isPro ? colors.length : colourLeng)
             .map((colorObj, index) => {
-              return (
-                <SingleColorCard
-                  key={`${colorObj.color}-${index}`}
-                  onPress={() => {
-                    setDetailedColor(colorObj.color);
-                    navigation.navigate("ColorDetails");
-                  }}
-                  color={colorObj}
-                  colorDeleteFromPalette={() => {
-                    deleteColor(index);
-                  }}
-                />
-              );
-            })}
+            return (
+              <SingleColorCard
+                key={`${colorObj.color}-${index}`}
+                onPress={() => {
+                  setDetailedColor(colorObj.color);
+                  navigation.navigate("ColorDetails");
+                }}
+                color={colorObj}
+                colorReorderPalette={() => {
+                  if(index == colourLeng-1) {
+                    reorderColor(index, 0);
+                  }else {
+                    reorderColor(index, index + 1);
+                  }
+                  
+                }}
+                colorDeleteFromPalette={() => {
+                  deleteColor(index);
+                  setColourLeng(colourLeng - 1);
+                }}
+              />
+            );
+          })}
           <EmptyView />
         </ScrollView>
         <ActionButton
@@ -91,16 +105,14 @@ export default function PaletteScreen({ navigation }) {
           onPress={() => {
             logEvent("palette_screen_add_color");
             if (
-              ( Platform.OS === "android" || Platform.OS === "ios") &&
+              (Platform.OS === "android" || Platform.OS === "ios") &&
               colors.length >= 4 &&
               isPro === false
             ) {
-              notifyMessage(
-                "Unlock pro to add more than 4 colors!"
-              );
+              notifyMessage("Unlock pro to add more than 4 colors!");
               navigation.navigate("ProVersion");
             } else {
-              setColorPickerCallback(color => {
+              setColorPickerCallback((color) => {
                 addColorToPalette(paletteName, color);
               });
               navigation.navigate("ColorPicker");
@@ -114,7 +126,7 @@ export default function PaletteScreen({ navigation }) {
           <UndoDialog
             key={`UndoDialog-${colorObj.color}-${index}`}
             name={colorObj.color}
-            undoDeletionByName={colorName => {
+            undoDeletionByName={(colorName) => {
               undoColorDeletion(paletteName, colorName);
             }}
           />
@@ -126,9 +138,8 @@ export default function PaletteScreen({ navigation }) {
 
 const CustomHeader = ({ currentPaletteName }) => {
   const [paletteName, setPaletteName] = useState(currentPaletteName);
-  const { renamePalette, currentPalette, setCurrentPalette } = useContext(
-    CromaContext
-  );
+  const { renamePalette, currentPalette, setCurrentPalette } =
+    useContext(CromaContext);
   const [isEditingPaletteName, setIsEditingPaletteName] = useState(false);
 
   useEffect(() => {
@@ -152,7 +163,7 @@ const CustomHeader = ({ currentPaletteName }) => {
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
-        width: "95%"
+        width: "95%",
       }}
     >
       {isEditingPaletteName ? (
@@ -161,7 +172,7 @@ const CustomHeader = ({ currentPaletteName }) => {
             style={styles.input}
             value={paletteName}
             autoFocus={true}
-            onChangeText={name => {
+            onChangeText={(name) => {
               setPaletteName(name);
             }}
           />
@@ -174,7 +185,7 @@ const CustomHeader = ({ currentPaletteName }) => {
           <Text
             style={{
               color: "#ffffff",
-              fontSize: 18
+              fontSize: 18,
             }}
           >
             {paletteName}
@@ -190,16 +201,16 @@ const CustomHeader = ({ currentPaletteName }) => {
 
 const setNavigationOptions = ({ navigation, paletteName }) => {
   navigation.setOptions({
-    headerTitle: () => <CustomHeader currentPaletteName={paletteName} />
+    headerTitle: () => <CustomHeader currentPaletteName={paletteName} />,
   });
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   listview: {
-    margin: 8
+    margin: 8,
   },
   actionButton:
     Platform.OS === "web"
@@ -207,11 +218,11 @@ const styles = StyleSheet.create({
           position: "fixed",
           transform: "scale(1) rotate(0deg) !important",
           right: Math.max((Dimensions.get("window").width - 600) / 2, 0),
-          left: Math.max((Dimensions.get("window").width - 600) / 2, 0)
+          left: Math.max((Dimensions.get("window").width - 600) / 2, 0),
         }
       : {},
   input: {
     color: "#ffffff",
-    fontSize: 18
-  }
+    fontSize: 18,
+  },
 });

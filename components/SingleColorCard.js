@@ -18,6 +18,21 @@ export default class SingleColorCard extends React.Component {
             style={{ backgroundColor: this.props.color.color, height: 100 }}
           ></View>
           <View style={styles.bottom}>
+          <Touchable
+                {...{
+                  [Platform.OS === "web" ? "onClick" : "onPress"]: event => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    this.setState({ animationType: "fadeOut" });
+                    setTimeout(() => {
+                      this.props.colorReorderPalette();
+                    }, 400);
+                  }
+                }}
+                style={styles.actionButton}
+              >
+                <FontAwesome size={20} name="angle-down" />
+              </Touchable>
             <Text style={styles.label}>
               {this.props.color.color +
                 (this.props.color.name

@@ -176,6 +176,16 @@ export default function applicationHook() {
     });
   };
 
+  const colorReorderPalette = (name, colorIndex,swap) => {
+    setState(state => {
+      const { allPalettes } = state;
+      [allPalettes[name].colors[colorIndex], allPalettes[name].colors[swap]] = [allPalettes[name].colors[swap], allPalettes[name].colors[colorIndex]]
+      
+      return { ...state, allPalettes };
+    });
+  };
+
+
   const undoColorDeletion = (name, colorName) => {
     setState(state => {
       const { allPalettes } = state;
@@ -274,6 +284,7 @@ export default function applicationHook() {
     undoColorDeletion,
     addColorToPalette,
     setPurchase,
+    colorReorderPalette,
     setUser,
     setStoreLoaded,
     setCurrentPalette,
