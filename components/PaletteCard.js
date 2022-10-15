@@ -62,6 +62,31 @@ export const PaletteCard = props => {
       setShared(false);
     }, 3000);
   };
+
+  const onExportWeb = event => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    //create canvas
+    var canvas = document.createElement("canvas");
+    canvas.width = props.colors.length * 100;
+    canvas.height = 100;
+
+    //fill canvas with colors
+    var context = canvas.getContext("2d");
+    for (let i = 0; i < props.colors.length; i++) {
+      context.fillStyle = props.colors[i].color;
+      context.fillRect(i * 100, 0, 100, 100);
+    }
+
+    //export to png
+    const link = document.createElement("a");
+    link.download = props.name + ".png";
+    link.href = canvas.toDataURL();
+    link.click();
+    link.delete;
+  };
+
   return (
     <Card
       {...props}
@@ -72,7 +97,6 @@ export const PaletteCard = props => {
       animationType={animationType}
     >
       <MultiColorView {...props}></MultiColorView>
-
       <View style={styles.bottom}>
         <Text style={styles.label}>{props.name}</Text>
         <View style={styles.actionButtonsView}>
@@ -93,6 +117,12 @@ export const PaletteCard = props => {
               Copied to Clipboard!
             </Text>
           )}
+
+          <Touchable onClick={onExportWeb} style={styles.actionButton}>
+            <FontAwesome size={20} name="download" />
+          </Touchable>
+
+          {/*SHARE*/}
           {Platform.OS === "web" ? (
             <Touchable onClick={onShareWeb} style={styles.actionButton}>
               <FontAwesome size={20} name="share" />
