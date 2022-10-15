@@ -1,10 +1,10 @@
 {
-  "app.js": "/static/js/app.1a93004e.chunk.js",
-  "app.63393458ab4964d61db7.map": "/63393458ab4964d61db7.map",
-  "runtime~app.js": "/static/js/runtime~app.5978fd30.js",
-  "runtime~app.4bfae512d2b8ddefbe84.map": "/4bfae512d2b8ddefbe84.map",
-  "static/js/2.6bf72204.chunk.js": "/static/js/2.6bf72204.chunk.js",
-  "b0e6e187f4b82d574475.map": "/b0e6e187f4b82d574475.map",
+  "app.js": "/static/js/app.69a62273.chunk.js",
+  "app.2830a2a98c1f7de27a27.map": "/2830a2a98c1f7de27a27.map",
+  "runtime~app.js": "/static/js/runtime~app.ccc4de76.js",
+  "runtime~app.e505848510b094b11caf.map": "/e505848510b094b11caf.map",
+  "static/js/2.d8342364.chunk.js": "/static/js/2.d8342364.chunk.js",
+  "2b7f8289c1df3b53b3e9.map": "/2b7f8289c1df3b53b3e9.map",
   "fonts/AntDesign.ttf": "/./fonts/AntDesign.ttf",
   "fonts/Entypo.ttf": "/./fonts/Entypo.ttf",
   "fonts/Feather.ttf": "/./fonts/Feather.ttf",
@@ -37,11 +37,11 @@
   "favicon.ico": "/favicon.ico",
   "index.html": "/index.html",
   "manifest.json": "/manifest.json",
-  "precache-manifest.7fcd156dcb1b9d5b0cfc35b2ad2796f7.js": "/precache-manifest.7fcd156dcb1b9d5b0cfc35b2ad2796f7.js",
+  "precache-manifest.8143fa3b9644c6ceeb98e0be590a1012.js": "/precache-manifest.8143fa3b9644c6ceeb98e0be590a1012.js",
   "privacy_policy.html": "/privacy_policy.html",
   "serve.json": "/serve.json",
   "service-worker.js": "/service-worker.js",
-  "static/js/2.6bf72204.chunk.js.gz": "/static/js/2.6bf72204.chunk.js.gz",
-  "static/js/app.1a93004e.chunk.js.gz": "/static/js/app.1a93004e.chunk.js.gz",
-  "static/js/runtime~app.5978fd30.js.gz": "/static/js/runtime~app.5978fd30.js.gz"
+  "static/js/2.d8342364.chunk.js.gz": "/static/js/2.d8342364.chunk.js.gz",
+  "static/js/app.69a62273.chunk.js.gz": "/static/js/app.69a62273.chunk.js.gz",
+  "static/js/runtime~app.ccc4de76.js.gz": "/static/js/runtime~app.ccc4de76.js.gz"
 }
