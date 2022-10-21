@@ -35,7 +35,7 @@
     "react-native-iap": "^7.5.5",
     "react-native-image-picker": "^4.3.0",
     "react-native-platform-touchable": "^1.1.1",
-    "react-native-reanimated": "^2.2.4",
+    "react-native-reanimated": "^2.10.0",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.9.0",
     "react-native-share-menu": "^5.0.5",
