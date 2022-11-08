@@ -17,9 +17,12 @@ import DocumentPicker from "react-native-document-picker";
 import { material } from "react-native-typography";
 const RNFS = require("react-native-fs");
 import { notifyMessage } from '../libs/Helpers';
-
+import { useTranslation } from 'react-i18next';
+import { t } from "i18next";
 
 export default function SyncPalettesScreen(props) {
+  const { t } = useTranslation();
+
   const { user, setUser, allPalettes, addPalette } = React.useContext(
     CromaContext
   );
@@ -32,10 +35,10 @@ export default function SyncPalettesScreen(props) {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View>
         <View style={styles.fileContainer}>
-          <Text style={material.headline}>Export to file</Text>
+          <Text style={material.headline}>{t('Export to file')}</Text>
           <View style={{ padding: 10 }}>
             <Text style={material.body1}>
-              Export all palettes to your downloads directory
+            {t('Export all palettes to your downloads directory')}
             </Text>
             <CromaButton
               onPressWithLoader={async () => {
@@ -43,10 +46,10 @@ export default function SyncPalettesScreen(props) {
                 await saveFile(allPalettes);
               }}
             >
-              Export palettes to a file
+              {t('Export palettes to a file')}
             </CromaButton>
             <Text style={material.body1}>
-              Import palettes from previously saved file.
+            {t('Import palettes from previously saved file.')}
             </Text>
             <CromaButton
               onPressWithLoader={() => {
@@ -54,12 +57,12 @@ export default function SyncPalettesScreen(props) {
                 importFromFile();
               }}
             >
-              Import palettes from file
+              {t('Import palettes from file.')}
             </CromaButton>
           </View>
         </View>
         <View style={styles.githubContainer}>
-          <Text style={material.headline}>Github sync</Text>
+          <Text style={material.headline}>{t('Github sync')}</Text>
           <View style={{ padding: 10 }}>
             {user && user.github && <GithubView user={user} />}
             {user && user.github && (
@@ -74,15 +77,14 @@ export default function SyncPalettesScreen(props) {
                   <View style={styles.githubIcon}>
                     <AntDesign name="github" style={styles.icon} />
                   </View>
-                  <Text style={styles.githubText}>logout from github</Text>
+                  <Text style={styles.githubText}>{t('logout from github')}</Text>
                 </View>
               </Touchable>
             )}
             {!(user && user.github) && (
               <View>
                 <Text style={material.body1}>
-                  Login using github to sync your palettes to a github
-                  repository
+                {t('Login using github to sync your palettes to a github repository')}
                 </Text>
                 <Touchable
                   style={[styles.githubButton]}
@@ -96,7 +98,7 @@ export default function SyncPalettesScreen(props) {
                       <AntDesign name="github" style={styles.icon} />
                     </View>
                     <Text style={styles.githubText}>
-                      Github login to sync palettes
+                    {t('Github login to sync palettes')}
                     </Text>
                   </View>
                 </Touchable>
@@ -147,7 +149,7 @@ function addExportedPalettes(palettesFromFile, allPalettes, addPalette) {
       added++;
     }
   });
-  longToast(added + " palettes added successfully.");
+  longToast(added + " " + t("palettes added successfully."));
 }
 
 function GithubView(props) {
@@ -164,18 +166,16 @@ function GithubView(props) {
       </View>
       <View style={[styles.syncToGithub]}>
         <Text style={[material.body1]}>
-          This will create a repo named croma-color-palettes in your github
-          account.{" "}
+        {t('This will create a repo named croma-color-palettes in your github account.')}{" "}
         </Text>
         {isPro ? (
           <Text style={[material.body1]}>
             {" "}
-            Since you are a pro user. It will create a private repo
+            {t('Since you are a pro user. It will create a private repo')}
           </Text>
         ) : (
           <Text style={[material.body2]}>
-            By default the repository will be public. Unlock pro to create a
-            private repository.
+            {t('By default the repository will be public. Unlock pro to create a private repository.')}
           </Text>
         )}
         <CromaButton
@@ -189,21 +189,21 @@ function GithubView(props) {
                 isPro
               );
               notifyMessage(
-                "Palettes are synced to github repo croma-color-palettes"
+                t("Palettes are synced to github repo croma-color-palettes")
               );
             } catch (e) {
               notifyMessage(
-                "Error while calling github APIs " + e.toString()
+                t("Error while calling github APIs ") + e.toString()
               );
             }
           }}
         >
-          Sync palettes to your github repo
+          {t("Sync palettes to your github repo")}
         </CromaButton>
       </View>
       <View>
         <Text style={[material.body1]}>
-          Update all your palettes from color-palettes repo
+        {t("Update all your palettes from color-palettes repo")}
         </Text>
         <CromaButton
           onPressWithLoader={async () => {
@@ -215,7 +215,7 @@ function GithubView(props) {
             addExportedPalettes(fileContentFromGithub, allPalettes, addPalette);
           }}
         >
-          Sync palettes from your github repo
+          {t("Sync palettes from your github repo")}
         </CromaButton>
       </View>
     </View>
@@ -239,7 +239,7 @@ async function writeToGithubRepo(
     owner: username,
     repo: repoName,
     path: "croma.json",
-    message: "update color palettes - from croma android app.",
+    message: t("update color palettes - from croma android app."),
     content: Buffer.from(contentStr).toString("base64"),
     branch: "master",
     sha: sha
@@ -267,7 +267,7 @@ async function createRepoIfDoesNotExist(octokit, repoName, privateRepo) {
     await octokit.repos.createForAuthenticatedUser({
       name: repoName,
       description:
-        "Created by - Croma - https://play.google.com/store/apps/details?id=app.croma",
+        t("Created by - Croma - ") + "https://play.google.com/store/apps/details?id=app.croma",
       private: privateRepo
     });
   } catch (e) {
@@ -275,7 +275,7 @@ async function createRepoIfDoesNotExist(octokit, repoName, privateRepo) {
       !(
         e.errors &&
         e.errors[0] &&
-        e.errors[0].message === "name already exists on this account"
+        e.errors[0].message === t("name already exists on this account")
       )
     ) {
       throw e;
@@ -326,9 +326,9 @@ const saveFile = async allPalettes => {
       }
       // write a new file
       await RNFS.writeFile(path, palettesToJsonString(allPalettes), "utf8");
-      longToast("Saved in Downloads!");
+      longToast(t("Saved in Downloads!"));
     } else {
-      longToast("Permission denied!");
+      longToast(t("Permission denied!"));
     }
   } catch (err) {
     longToast(err);

@@ -6,8 +6,11 @@ import { logEvent } from "../libs/Helpers";
 import Touchable from "react-native-platform-touchable";
 import MaterialIcons  from "react-native-vector-icons/MaterialIcons";
 import { CromaContext } from "../store/store";
+import { useTranslation } from 'react-i18next';
 
 export default function ColorListScreen({ navigation }) {
+  const { t } = useTranslation();
+
   const { colorList } = React.useContext(CromaContext);
   const colors = uniqueColors(colorList);
 
@@ -16,7 +19,7 @@ export default function ColorListScreen({ navigation }) {
       headerTitle:
         Platform.OS === "android" || Platform.OS === 'ios'
           ? () => <CustomHeader navigation={navigation} />
-          : "Colors"
+          : t("Colors")
     });
   }, []);
 
@@ -32,7 +35,7 @@ export default function ColorListScreen({ navigation }) {
             navigation.navigate("SavePalette");
           }}
         >
-          SAVE AS NEW PALETTE
+          {t('SAVE AS NEW PALETTE')}
         </CromaButton>
       )}
     </ScrollView>
@@ -51,6 +54,8 @@ function uniqueColors(colors) {
 }
 
 const CustomHeader = ({ navigation }) => {
+  const { t } = useTranslation();
+  
   return (
     <View
       style={{
@@ -66,7 +71,7 @@ const CustomHeader = ({ navigation }) => {
           fontSize: 18
         }}
       >
-        New palette
+        {t('New palette')}
       </Text>
       <>
         <Touchable style={[styles.doneButton]} onPress={() => navigation.navigate("SavePalette")}>

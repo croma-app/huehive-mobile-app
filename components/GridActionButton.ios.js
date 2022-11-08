@@ -11,8 +11,11 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { launchImageLibrary } from "react-native-image-picker";
 import { CromaContext } from "../store/store";
+import { useTranslation } from 'react-i18next';
 
 const GridActionButton = ({ navigation, setPickImageLoading }) => {
+  const { t } = useTranslation();
+
   const {
     isPro,
     setPurchase,
@@ -32,8 +35,8 @@ const GridActionButton = ({ navigation, setPickImageLoading }) => {
   return <ActionButtonContainer config={[[
     {
       icon: <Ionicons name="md-image" color={Colors.fabPrimary} size={20} />,
-      text1: 'Get palette',
-      text2: 'form image',
+      text1: t('Get palette'),
+      text2: t('form image'),
       onPress: async () => {
         try {
           setPickImageLoading(true);
@@ -52,7 +55,7 @@ const GridActionButton = ({ navigation, setPickImageLoading }) => {
           navigation.navigate("ColorList");
         } catch (error) {
           notifyMessage(
-            "Error while extracting colors - " + error
+            t("Error while extracting colors - ") + error
           );
         } finally {
           setPickImageLoading(false);
@@ -65,8 +68,8 @@ const GridActionButton = ({ navigation, setPickImageLoading }) => {
         color={Colors.fabPrimary}
         size={20}
       />,
-      text1: 'Get palette',
-      text2: 'form color',
+      text1: t('Get palette'),
+      text2: t('form color'),
       onPress: () => {
         logEvent("get_palette_from_color");
         clearPalette();
@@ -84,8 +87,8 @@ const GridActionButton = ({ navigation, setPickImageLoading }) => {
         color={Colors.fabPrimary}
         size={20}
       />,
-      text1: 'Create new',
-      text2: 'Palette',
+      text1: t('Create new'),
+      text2: t('Palette'),
       onPress: () =>  {
         try {
           logEvent("create_new_palette");
@@ -93,7 +96,7 @@ const GridActionButton = ({ navigation, setPickImageLoading }) => {
           navigation.navigate("AddPaletteManually");
         } catch (error) {
           notifyMessage(
-            "Error  - " + error
+            t("Error  - ") + error
           );
         }
       }
@@ -113,8 +116,8 @@ const GridActionButton = ({ navigation, setPickImageLoading }) => {
     isPro ? {
           icon: <Ionicons name="md-color-filter"
               size={20} color={Colors.fabPrimary} />,
-          text1: 'Create',
-          text2: 'new palette',
+          text1: t('Create'),
+          text2: t('new palette'),
           onPress: async () => {
             logEvent("ab_create_new_palette");
             clearPalette();
@@ -123,8 +126,8 @@ const GridActionButton = ({ navigation, setPickImageLoading }) => {
         } :
         {
           icon: <FontAwesome5 size={20} color={Colors.fabPrimary} name="unlock" />,
-          text1: 'Unlock',
-          text2: 'pro',
+          text1: t('Unlock'),
+          text2: t('pro'),
           onPress: () => purchase(setPurchase)
         }
     ]

@@ -11,8 +11,11 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { launchImageLibrary } from "react-native-image-picker";
 import { CromaContext } from "../store/store";
+import { useTranslation } from 'react-i18next';
 
 const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
+  const { t } = useTranslation();
+
   const {
     isPro,
     setPurchase,
@@ -31,13 +34,13 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   };
   return <ActionButtonContainer config={[[
     {
-      icon:  <Ionicons
+      icon: <Ionicons
         name="md-color-filter"
         color={Colors.fabPrimary}
         size={20}
       />,
-      text1: 'Create New',
-      text2: 'Palette',
+      text1: t('Create New'),
+      text2: t('Palette'),
       onPress: () =>  {
         try {
           logEvent("create_new_palette");
@@ -45,15 +48,15 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
           navigation.navigate("AddPaletteManually");
         } catch (error) {
           notifyMessage(
-            "Error  - " + error
+            t("Error  - ") + error
           );
         }
       }
     },
     {
       icon: <Ionicons name="md-image" color={Colors.fabPrimary} size={20} />,
-      text1: 'Get palette',
-      text2: 'form image',
+      text1: t('Get palette'),
+      text2: t('form image'),
       onPress: async () => {
         try {
           setPickImageLoading(true);
@@ -61,7 +64,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
           logEvent("get_palette_from_image");
           // get dominant color object { r, g, b }
           const pickedColors = await RNColorThief.getPalette(image.assets[0].uri, 6, 10, false);
-          console.log("Picked colors: ", pickedColors);
+          console.log(t('Picked colors: '), pickedColors);
           clearPalette();
           setColorList(pickedColors.map(colorThiefColor => {
             //console.log("colorThiefColor: ", colorThiefColor);
@@ -72,7 +75,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
           navigation.navigate("ColorList");
         } catch (error) {
           notifyMessage(
-            "Error while extracting colors - " + error
+            t("Error while extracting colors - ") + error
           );
         } finally {
           setPickImageLoading(false);
@@ -85,8 +88,8 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
         color={Colors.fabPrimary}
         size={20}
       />,
-      text1: 'Get palette',
-      text2: 'form color',
+      text1: t('Get palette'),
+      text2: t('form color'),
       onPress: () => {
         logEvent("get_palette_from_color");
         clearPalette();
@@ -102,8 +105,8 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   [
     {
       icon: <MaterialCommunityIcons name="image" size={20} color={Colors.fabPrimary}  />,
-      text1: 'Pick color',
-      text2: 'from image',
+      text1: t('Pick color'),
+      text2: t('from image'),
       onPress: async () => {
         const imageResult = await pickImageResult();
         if (!imageResult.didCancel) {
@@ -121,8 +124,8 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
     },
     {
       icon: <Ionicons size={20} color={Colors.fabPrimary} name="md-color-filter" />,
-      text1: 'Palette',
-      text2: 'library',
+      text1: t('Palette'),
+      text2: t('library'),
       onPress: async () => {
         logEvent("hm_palette_library");
         clearPalette();
@@ -147,8 +150,8 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
     } :
       {
         icon: <FontAwesome5 size={20} color={Colors.fabPrimary} name="unlock" />,
-        text1: 'Unlock',
-        text2: 'pro',
+        text1: t('Unlock'),
+        text2: t('pro'),
         onPress: () => purchase(setPurchase)
       }
   ]

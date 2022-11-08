@@ -12,6 +12,7 @@ import Entypo from "react-native-vector-icons/Entypo";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { logEvent } from "../libs/Helpers";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import { useTranslation } from 'react-i18next';
 
 const GITHUB_URL = "https://github.com/croma-app/croma-react";
 const CROMA_APP_URL = "https://web.croma.app/";
@@ -20,14 +21,15 @@ const CROMA_PLAYSTORE_URL = "https://play.google.com/store/apps/details?id=app.c
 const DISCORD_URL = "https://discord.com/invite/ZSBVsBqDtg";
 
 const AboutUsScreen = () => {
+  const { t } = useTranslation();
+
   logEvent("about_us_screen");
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View>
         <Text style={styles.line}>
-          Croma is a simple color palette manager and color picker made for
-          designers, aiming to make it quick and fun to create and share color
-          palettes on the go.
+          {t('Croma is a simple color palette manager and color picker made for designers, aiming to make it quick and fun to create and share color palettes on the go.')}
         </Text>
       </View>
       <View style={styles.linksMainView}>
@@ -35,7 +37,7 @@ const AboutUsScreen = () => {
           <View style={styles.linkView}>
             <MaterialCommunityIcons name="discord" style={styles.icon} />
             <Text style={[styles.line, styles.subtitle]}>
-              Join discord
+            {t('Join discord')}
             </Text>
             <Text style={[styles.line, styles.link]}>{DISCORD_URL}</Text>
           </View>
@@ -44,7 +46,7 @@ const AboutUsScreen = () => {
           <View style={styles.linkView}>
             <Entypo name="github-with-circle" style={styles.icon} />
             <Text style={[styles.line, styles.subtitle]}>
-              Find us on Github !
+            {t('Find us on Github !')}
             </Text>
             <Text style={[styles.line, styles.link]}>{GITHUB_URL}</Text>
           </View>
@@ -53,10 +55,10 @@ const AboutUsScreen = () => {
           <View style={styles.linkView}>
             <MaterialCommunityIcons name="web" style={styles.icon} />
             <Text style={[styles.line, styles.subtitle]}>
-              Lightweight web version
+            {t('Lightweight web version')}
             </Text>
             <Text style={[styles.line, styles.subtitle]}>
-              to preview and share palettes
+            {t('to preview and share palettes')}
             </Text>
             <Text style={[styles.line, styles.link]}>{CROMA_APP_URL}</Text>
           </View>
@@ -65,7 +67,7 @@ const AboutUsScreen = () => {
           <View style={styles.linkView}>
             <FontAwesome5 name="app-store-ios" style={styles.icon}/>
             <Text style={[styles.line, styles.subtitle]}>
-              Croma on App store
+            {t('Croma on App store')}
             </Text>
             <Text style={[styles.line, styles.link]}>{CROMA_IOS_URL}</Text>
           </View>
@@ -75,7 +77,7 @@ const AboutUsScreen = () => {
           <View style={styles.linkView}>
             <FontAwesome5 name="google-play" style={styles.icon}/>
             <Text style={[styles.line, styles.subtitle]}>
-              Croma on Playstore
+            {t('Croma on Playstore')}
             </Text>
             <Text style={[styles.line, styles.link]}>{CROMA_PLAYSTORE_URL}</Text>
           </View>

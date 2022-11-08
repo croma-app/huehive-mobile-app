@@ -8,12 +8,15 @@ import {
 } from "react-native";
 import FontAwesome  from "react-native-vector-icons/FontAwesome";
 import { notifyMessage } from '../libs/Helpers';
+import { useTranslation } from 'react-i18next';
 
 import Touchable from "react-native-platform-touchable";
 
 import Color from "pigment/full";
 
 export const ColorDetail = ({ color }) => {
+  const { t } = useTranslation();
+
   const [copyiedIndex, setCopyiedIntex] = useState(-1);
   const styles = StyleSheet.create({
     backgroundColor: {
@@ -57,7 +60,7 @@ export const ColorDetail = ({ color }) => {
 
   let writeToClipboard = function(value, index) {
     if (Platform.OS === "android" || Platform.OS === "ios") {
-      notifyMessage("Text copied to clipboard!");
+      notifyMessage(t("Text copied to clipboard!"));
     }
     Clipboard.setString(value);
     setCopyiedIntex(index);

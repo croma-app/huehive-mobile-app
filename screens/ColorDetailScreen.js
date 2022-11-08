@@ -4,9 +4,11 @@ import { ColorDetail } from "../components/ColorDetails";
 import CromaButton from "../components/CromaButton";
 import { logEvent } from "../libs/Helpers";
 import { CromaContext } from "../store/store";
+import { useTranslation } from 'react-i18next';
 
 export default function ColorDetailScreen({ navigation }) {
   const { detailedColor, setDetailedColor } = React.useContext(CromaContext);
+  const { t } = useTranslation();
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: detailedColor });
@@ -22,7 +24,7 @@ export default function ColorDetailScreen({ navigation }) {
           navigation.navigate("Palettes");
         }}
       >
-        See color palettes
+        {t('See color palettes')}
       </CromaButton>
     </ScrollView>
   );

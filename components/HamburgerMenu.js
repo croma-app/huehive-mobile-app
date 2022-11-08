@@ -18,8 +18,11 @@ import { logEvent } from "../libs/Helpers";
 import { ScrollView } from "react-native-gesture-handler";
 import {launchImageLibrary} from 'react-native-image-picker';
 import { CromaContext } from "../store/store";
+import { useTranslation } from 'react-i18next';
 
 export default props => {
+  const { t } = useTranslation();
+
   const pickImageResult = async() => {
     const result = await launchImageLibrary({
       mediaType: 'photo',
@@ -46,7 +49,7 @@ export default props => {
             style={styles.logo}
             source={require("../assets/images/icon.png")}
           />
-          <Text style={styles.title}>Croma - Save you colors</Text>
+          <Text style={styles.title}>{t('Croma - Save you colors')}</Text>
         </View>
       </Touchable>
       <ScrollView>
@@ -63,7 +66,7 @@ export default props => {
               <View style={[styles.menuIcon, { paddingLeft: 4 }]}>
                 <Ionicons name="md-color-filter" style={styles.icon} />
               </View>
-              <Text style={styles.textAreaMenuItem}>Create new palette</Text>
+              <Text style={styles.textAreaMenuItem}>{t('Create new palette')}</Text>
             </View>
           </Touchable>
           <Touchable
@@ -81,7 +84,7 @@ export default props => {
                   style={styles.icon}
                 />
               </View>
-              <Text style={styles.textAreaMenuItem}>Palette library</Text>
+              <Text style={styles.textAreaMenuItem}>{t('Palette library')}</Text>
             </View>
           </Touchable>
           {Platform.OS === 'android' && <Touchable
@@ -106,7 +109,7 @@ export default props => {
                 <MaterialCommunityIcons name="image" style={styles.icon} />
               </View>
               <Text style={styles.textAreaMenuItem}>
-                Pick colors from an image
+              {t('Pick colors from an image')}
               </Text>
             </View>
           </Touchable>
@@ -130,7 +133,7 @@ export default props => {
                     style={styles.icon}
                 />
               </View>
-              <Text style={styles.textAreaMenuItem}>Scan color codes</Text>
+              <Text style={styles.textAreaMenuItem}>{t('Scan color codes')}</Text>
             </View>
           </Touchable>
           }
@@ -140,7 +143,7 @@ export default props => {
               link={Platform.OS == 'android' ? "market://details?id=app.croma": "https://apps.apple.com/app/id1596763657?action=write-review"}
               icon={<MaterialIcons name="rate-review" style={styles.icon} />}
             >
-              Like the App? Please rate us
+            {t('Like the App? Please rate us')}
             </MenuLink>
           }
           <Touchable
@@ -154,7 +157,7 @@ export default props => {
               <View style={[styles.menuIcon, { paddingLeft: 4 }]}>
                 <FontAwesome5 name="unlock" style={styles.icon} />
               </View>
-              <Text style={styles.textAreaMenuItem}>Pro benefites</Text>
+              <Text style={styles.textAreaMenuItem}>{t('Pro benefits')}</Text>
             </View>
           </Touchable>
           <Touchable
@@ -169,7 +172,7 @@ export default props => {
                 <FontAwesome5 name="file-import" style={styles.icon} />
               </View>
               <Text style={styles.textAreaMenuItem}>
-                import/export palettes
+              {t('import/export palettes')}
               </Text>
             </View>
           </Touchable>
@@ -187,7 +190,7 @@ export default props => {
                   style={styles.icon}
                 />
               </View>
-              <Text style={styles.textAreaMenuItem}>About us</Text>
+              <Text style={styles.textAreaMenuItem}>{t('About us')}</Text>
             </View>
           </Touchable>
         </View>
