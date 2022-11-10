@@ -6,9 +6,11 @@ import { CromaContext } from "../store/store";
 import { purchase, logEvent } from "../libs/Helpers";
 import { material } from "react-native-typography";
 import { initPurchase } from "../libs/Helpers";
-
+import { useTranslation } from 'react-i18next';
 
 export default function ProScreen() {
+  const { t } = useTranslation();
+
   const { isPro, setPurchase } = React.useContext(CromaContext);
   const purchaseDevelopment = () => {
     purchase(setPurchase, "support_development");
@@ -24,38 +26,37 @@ export default function ProScreen() {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View>
-        <Text style={styles.title}>Pro benefits</Text>
+        <Text style={styles.title}>{t('Pro benefits')}</Text>
         <Text style={[styles.line]}>
-          1. Add more than 4 colors in a palette 🎨
+          {t('1. Add more than 4 colors in a palette 🎨')}
         </Text>
         <Text style={[styles.line]}>
-          2. Export/sync colors to private github repository
+          {t("2. Export/sync colors to private github repository")}
         </Text>
         <CromaButton
           style={{ backgroundColor: "#ff5c59" }}
           textStyle={{ color: "#fff" }}
           onPress={purchasePro}
         >
-          {isPro ? "You are a pro user! Enjoy the app" : "Unlock pro"}
+          {isPro ? t("You are a pro user! Enjoy the app") : t("Unlock pro")}
         </CromaButton>
         <Text style={styles.line}>
-          3. Support the development efforts to keep the app awesome and simple
-          without any ads and annoying notifications 😊
+          {t("3. Support the development efforts to keep the app awesome and simple without any ads and annoying notifications 😊'")}
         </Text>
         <CromaButton onPress={purchaseDevelopment}>
-          Buy me a coffee ☕
+        {t("Buy me a coffee ☕")}
         </CromaButton>
 
         {
           !isPro &&
           <View>
             <Text style={[styles.title]}>
-              Restore purchase
+            {t("Restore purchase")}
             </Text>
             <CromaButton onPress={async () => {
               await initPurchase(setPurchase);
             }}>
-              Restore Pro
+              {t("Restore Pro")}
             </CromaButton>
           </View>
         }

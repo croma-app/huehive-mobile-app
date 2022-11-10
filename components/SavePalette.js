@@ -7,8 +7,11 @@ import CromaButton from "../components/CromaButton";
 import { CromaContext } from "../store/store";
 import { TextDialog } from "./CommonDialogs";
 import { StackActions } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 export const SavePalette = ({ navigation, title, navigationPath }) => {
+  const { t } = useTranslation();
+
   const {
     addPalette,
     allPalettes,
@@ -53,7 +56,7 @@ export const SavePalette = ({ navigation, title, navigationPath }) => {
         <TextInput
           style={styles.input}
           value={paletteName}
-          placeholder="Enter a name for the palette"
+          placeholder={t('Enter a name for the palette')}
           onChangeText={name => setPaletteName(name)}
         />
       </View>
@@ -80,13 +83,13 @@ export const SavePalette = ({ navigation, title, navigationPath }) => {
             : navigation.replace(navigationPath);
         }}
       >
-        Save palette
+        {t("Save palette")}
       </CromaButton>
       {isPaletteNameExist && (
-        <TextDialog text={"A palette with same name already exists."} />
+        <TextDialog text={t('A palette with same name already exists.')} />
       )}
       {isUnlockProNotification && (
-        <TextDialog text={"Unlock pro to save more than 4 colors!"} />
+        <TextDialog text={t('Unlock pro to save more than 4 colors!')} />
       )}
     </ScrollView>
   );

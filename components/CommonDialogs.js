@@ -2,16 +2,19 @@ import React from "react";
 import * as Animatable from "react-native-animatable";
 import { View, Text, StyleSheet, Platform, Dimensions } from "react-native";
 import Touchable from "react-native-platform-touchable";
+import { useTranslation } from 'react-i18next';
 
 export const DialogContainer = props => (
   <View style={styles.DialogContainer}>{props.children}</View>
 );
 
-export const UndoDialog = props => {
+export const UndoDialog = (props) => {
   /*
     Todo - need to add deletion based on type
   */
   const { name, undoDeletionByName } = props;
+  const { t } = useTranslation();
+  
   return (
     <Animatable.View
       animation={"fadeInUpBig"}
@@ -20,20 +23,23 @@ export const UndoDialog = props => {
       useNativeDriver={true}
     >
       <View>
-        <Text style={styles.undoText}>Deleted {name}. </Text>
+        <Text style={styles.undoText}>
+          {t("Deleted")} {name}.
+        </Text>
       </View>
       <Touchable
-        onPress={event => {
+        onPress={(event) => {
           event.stopPropagation();
           event.preventDefault();
           undoDeletionByName(name);
         }}
       >
-        <Text style={styles.undoButton}> UNDO </Text>
+        <Text style={styles.undoButton}> {t("UNDO")} </Text>
       </Touchable>
     </Animatable.View>
   );
 };
+
 
 export const TextDialog = props => (
   <Animatable.View
