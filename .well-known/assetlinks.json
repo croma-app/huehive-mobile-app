@@ -1,0 +1,15 @@
+[
+    {
+      "relation": [
+        "delegate_permission/common.handle_all_urls"
+      ],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "app.croma",
+        "sha256_cert_fingerprints": [
+          "AD:48:65:C2:77:BD:F5:0E:F2:40:E1:F7:C5:FA:B6:2D:6F:38:3E:8F:BA:19:3F:6C:A9:33:4B:5D:0B:28:28:B8"
+        ]
+      }
+    }
+]
+  
