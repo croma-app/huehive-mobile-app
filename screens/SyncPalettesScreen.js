@@ -27,8 +27,12 @@ export default function SyncPalettesScreen(props) {
     CromaContext
   );
   const importFromFile = async () => {
-    const palettesFromFile = await importPalettes();
-    addExportedPalettes(palettesFromFile, allPalettes, addPalette);
+    try{
+      const palettesFromFile = await importPalettes();
+      addExportedPalettes(palettesFromFile, allPalettes, addPalette);
+    } catch(error) {
+      longToast("Error when importing colors: " + error.toString());
+    }
   };
   logEvent("sync_palettes_screen");
   return (
@@ -300,16 +304,12 @@ const longToast = function(msg) {
 };
 
 const importPalettes = async () => {
-  try {
-    const options = {
-      type: DocumentPicker.types.plainText
-    };
-    const file = await DocumentPicker.pick(options);
-    const contents = await RNFS.readFile(file.fileCopyUri, "utf8");
-    return contents;
-  } catch (error) {
-    console.error(error);
-  }
+  const options = {
+    type: DocumentPicker.types.plainText
+  };
+  const file = await DocumentPicker.pickSingle(options);
+  const contents = await RNFS.readFile(file.fileCopyUri || file.uri, "utf8");
+  return contents;
 };
 
 const saveFile = async allPalettes => {
@@ -347,11 +347,10 @@ const palettesToJsonString = allPalettes => {
   return JSON.stringify(jsonToExport, null, 2);
 };
 const palettesFromJsonString = exportedPalettesStr => {
-  exportedPalettes = JSON.parse(exportedPalettesStr);
+  const exportedPalettes = JSON.parse(exportedPalettesStr);
   const palettes = [];
   exportedPalettes.palettes.forEach(palette => {
     const p = {};
-    console.log("color:", palette);
     p.name = palette.name;
     p.colors = palette.colors;
     palettes.push(p);
