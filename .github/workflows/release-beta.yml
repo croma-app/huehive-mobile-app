@@ -26,7 +26,7 @@ jobs:
 
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '2.x' # Not needed with a .ruby-version file
+          ruby-version: '2.7.7' # Not needed with a .ruby-version file
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
           
       - name: Install packages
