@@ -24,10 +24,11 @@ jobs:
         with:
           node-version: '14.x'
 
-      - uses: actions/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '2.x'
-
+          ruby-version: '2.x' # Not needed with a .ruby-version file
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+          
       - name: Install packages
         run: |
           yarn
