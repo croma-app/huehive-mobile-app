@@ -1,1 +1,1 @@
-../../../../../node_modules/react-native-reanimated/Common/cpp/headers/Tools/RuntimeDecorator.h
+../../../../../node_modules/react-native-reanimated/Common/cpp/Tools/RuntimeDecorator.h

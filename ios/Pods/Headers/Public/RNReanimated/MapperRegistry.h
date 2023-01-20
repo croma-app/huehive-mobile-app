@@ -1,1 +1,1 @@
-../../../../../node_modules/react-native-reanimated/Common/cpp/headers/Registries/MapperRegistry.h
+../../../../../node_modules/react-native-reanimated/Common/cpp/Registries/MapperRegistry.h

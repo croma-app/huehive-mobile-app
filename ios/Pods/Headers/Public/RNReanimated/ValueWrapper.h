@@ -1,1 +1,1 @@
-../../../../../node_modules/react-native-reanimated/Common/cpp/headers/SharedItems/ValueWrapper.h
+../../../../../node_modules/react-native-reanimated/Common/cpp/SharedItems/ValueWrapper.h
