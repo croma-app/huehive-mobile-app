@@ -110,9 +110,10 @@ export const PaletteCard = props => {
               Copied to Clipboard!
             </Text>
           )}
-          <Touchable onPress={onDownload} style={styles.actionButton}>
+          {Platform.OS == 'android' && <Touchable onPress={onDownload} style={styles.actionButton}>
             <FontAwesome size={20} name="download" />
           </Touchable>
+          }
           <Touchable onPress={onShare} style={styles.actionButton}>
             <FontAwesome size={20} name="share" />
           </Touchable>
