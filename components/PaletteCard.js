@@ -1,12 +1,11 @@
 import * as React from "react";
-import { StyleSheet, View, Text, Platform, Clipboard } from "react-native";
+import { StyleSheet, View, Text, Platform, Clipboard, TouchableOpacity } from "react-native";
 import Card from "./Card";
 import Colors from "../constants/Colors";
 import { Share } from "react-native";
 
 import MultiColorView from "./MultiColorView";
 import FontAwesome  from "react-native-vector-icons/FontAwesome";
-import Touchable from "react-native-platform-touchable";
 import { CromaContext } from "../store/store";
 import { logEvent } from "../libs/Helpers";
 
@@ -94,15 +93,15 @@ export const PaletteCard = props => {
             </Text>
           )}
           {Platform.OS === "web" ? (
-            <Touchable onClick={onShareWeb} style={styles.actionButton}>
+            <TouchableOpacity onClick={onShareWeb} style={styles.actionButton}>
               <FontAwesome size={20} name="share" />
-            </Touchable>
+            </TouchableOpacity>
           ) : (
-            <Touchable onPress={onShare} style={styles.actionButton}>
+            <TouchableOpacity onPress={onShare} style={styles.actionButton}>
               <FontAwesome size={20} name="share" />
-            </Touchable>
+            </TouchableOpacity>
           )}
-          <Touchable
+          <TouchableOpacity
             {...{
               [Platform.OS === "web" ? "onClick" : "onPress"]: event => {
                 event.preventDefault();
@@ -116,7 +115,7 @@ export const PaletteCard = props => {
             style={styles.actionButton}
           >
             <FontAwesome size={20} name="trash" />
-          </Touchable>
+          </TouchableOpacity>
         </View>
       </View>
     </Card>

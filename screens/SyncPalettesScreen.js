@@ -8,7 +8,6 @@ import {
 import { View } from "react-native-animatable";
 import CromaButton from "../components/CromaButton";
 import { CromaContext } from "../store/store";
-import Touchable from "react-native-platform-touchable";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { logEvent } from "../libs/Helpers";
 import { Octokit } from "@octokit/rest";
@@ -70,7 +69,7 @@ export default function SyncPalettesScreen(props) {
           <View style={{ padding: 10 }}>
             {user && user.github && <GithubView user={user} />}
             {user && user.github && (
-              <Touchable
+              <TouchableOpacity
                 style={[styles.githubButton]}
                 onPress={() => {
                   logEvent("github_logout");
@@ -83,14 +82,14 @@ export default function SyncPalettesScreen(props) {
                   </View>
                   <Text style={styles.githubText}>{t('logout from github')}</Text>
                 </View>
-              </Touchable>
+              </TouchableOpacity>
             )}
             {!(user && user.github) && (
               <View>
                 <Text style={material.body1}>
                 {t('Login using github to sync your palettes to a github repository')}
                 </Text>
-                <Touchable
+                <TouchableOpacity
                   style={[styles.githubButton]}
                   onPress={() => {
                     logEvent("github_login");
@@ -105,7 +104,7 @@ export default function SyncPalettesScreen(props) {
                     {t('Github login to sync palettes')}
                     </Text>
                   </View>
-                </Touchable>
+                </TouchableOpacity>
               </View>
             )}
           </View>

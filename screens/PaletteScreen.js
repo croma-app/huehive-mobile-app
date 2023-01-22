@@ -8,9 +8,8 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  View
+  View,TouchableOpacity
 } from "react-native";
-import Touchable from "react-native-platform-touchable";
 import { CromaContext } from "../store/store";
 import ActionButton from "react-native-action-button";
 import Colors from "../constants/Colors";
@@ -21,6 +20,7 @@ import { DialogContainer, UndoDialog } from "../components/CommonDialogs";
 import Feather  from "react-native-vector-icons/Feather";
 import MaterialIcons  from "react-native-vector-icons/MaterialIcons";
 import { notifyMessage } from '../libs/Helpers';
+import { NestableScrollContainer, NestableDraggableFlatList, RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist"
 
 
 export default function PaletteScreen({ navigation }) {
@@ -51,9 +51,31 @@ export default function PaletteScreen({ navigation }) {
   useLayoutEffect(() => {
     setNavigationOptions({ navigation, paletteName });
   }, [navigation, paletteName]);
-
+  function renderItem(renderItemParams) {
+      notifyMessage("item: " + JSON.stringify(renderItemParams));
+      return (
+      <ScaleDecorator>
+        <SingleColorCard
+          key={`${renderItemParams.item.color}`}
+          onPress={() => {
+            setDetailedColor(renderItemParams.item.color);
+            navigation.navigate("ColorDetails");
+          }}
+          onLongPress={renderItemParams.drag}
+          color={renderItemParams.item}
+          colorDeleteFromPalette={() => {
+            deleteColor(index);
+          }}
+        />
+      </ScaleDecorator>
+      )
+  }
+  const keyExtractor = (item) => {
+    //notifyMessage("item: " + JSON.stringify(item));
+    return item.color;
+  }
   return (
-    <>
+     <NestableScrollContainer>
       <View
         style={
           (styles.container, { minHeight: height - useHeaderHeight() - 16 })
@@ -63,21 +85,17 @@ export default function PaletteScreen({ navigation }) {
           style={styles.listview}
           showsVerticalScrollIndicator={false}
         >
+          <NestableDraggableFlatList
+            data={colors}
+            renderItem={renderItem}
+            keyExtractor={keyExtractor}
+            onDragEnd={({ data }) => notifyMessage(JSON.stringify(data))}
+          />
           {colors
             ?.slice(0, isPro ? colors.length : 4)
             .map((colorObj, index) => {
               return (
-                <SingleColorCard
-                  key={`${colorObj.color}-${index}`}
-                  onPress={() => {
-                    setDetailedColor(colorObj.color);
-                    navigation.navigate("ColorDetails");
-                  }}
-                  color={colorObj}
-                  colorDeleteFromPalette={() => {
-                    deleteColor(index);
-                  }}
-                />
+                  <View></View>
               );
             })}
           <EmptyView />
@@ -120,7 +138,7 @@ export default function PaletteScreen({ navigation }) {
           />
         ))}
       </DialogContainer>
-    </>
+    </NestableScrollContainer>
   );
 }
 
@@ -165,9 +183,9 @@ const CustomHeader = ({ currentPaletteName }) => {
               setPaletteName(name);
             }}
           />
-          <Touchable onPress={onDone} style={{ marginTop: 12 }}>
+          <TouchableOpacity onPress={onDone} style={{ marginTop: 12 }}>
             <MaterialIcons name="done" size={24} color="white" />
-          </Touchable>
+          </TouchableOpacity>
         </>
       ) : (
         <>
@@ -179,9 +197,9 @@ const CustomHeader = ({ currentPaletteName }) => {
           >
             {paletteName}
           </Text>
-          <Touchable onPress={onEdit}>
+          <TouchableOpacity onPress={onEdit}>
             <Feather name="edit" size={24} color="white" />
-          </Touchable>
+          </TouchableOpacity>
         </>
       )}
     </View>
