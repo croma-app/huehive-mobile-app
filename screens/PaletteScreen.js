@@ -87,21 +87,14 @@ export default function PaletteScreen({ navigation }) {
           showsVerticalScrollIndicator={false}
         >
           <NestableDraggableFlatList
-            data={colors}
+            data={colors?.slice(0, isPro ? colors.length : 4)}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
-            onDragEnd={({ data: reOrderedColors }) => {
+            onDragEnd={({ data: reorderedColors }) => {
               //notifyMessage(JSON.stringify(reorderedColors));
-              updatePalette(paletteName, reOrderedColors);
+              updatePalette(paletteName, reorderedColors);
             }}
           />
-          {colors
-            ?.slice(0, isPro ? colors.length : 4)
-            .map((colorObj, index) => {
-              return (
-                  <View></View>
-              );
-            })}
           <EmptyView />
         </ScrollView>
         <ActionButton
