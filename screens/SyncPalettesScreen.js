@@ -3,7 +3,8 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  PermissionsAndroid
+  PermissionsAndroid,
+  TouchableOpacity
 } from "react-native";
 import { View } from "react-native-animatable";
 import CromaButton from "../components/CromaButton";
