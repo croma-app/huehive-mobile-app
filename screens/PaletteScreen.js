@@ -8,9 +8,8 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  View
+  View,TouchableOpacity
 } from "react-native";
-import Touchable from "react-native-platform-touchable";
 import { CromaContext } from "../store/store";
 import ActionButton from "react-native-action-button";
 import Colors from "../constants/Colors";
@@ -21,6 +20,7 @@ import { DialogContainer, UndoDialog } from "../components/CommonDialogs";
 import Feather  from "react-native-vector-icons/Feather";
 import MaterialIcons  from "react-native-vector-icons/MaterialIcons";
 import { notifyMessage } from '../libs/Helpers';
+import { NestableScrollContainer, NestableDraggableFlatList, RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist"
 
 
 export default function PaletteScreen({ navigation }) {
@@ -30,6 +30,7 @@ export default function PaletteScreen({ navigation }) {
     colorDeleteFromPalette,
     undoColorDeletion,
     addColorToPalette,
+    updatePalette,
     setDetailedColor,
     currentPalette,
     setColorPickerCallback
@@ -51,64 +52,80 @@ export default function PaletteScreen({ navigation }) {
   useLayoutEffect(() => {
     setNavigationOptions({ navigation, paletteName });
   }, [navigation, paletteName]);
-
+  function renderItem(renderItemParams) {
+      //notifyMessage("item: " + JSON.stringify(renderItemParams));
+      return (
+      <ScaleDecorator>
+        <SingleColorCard
+          key={`${renderItemParams.item.color}`}
+          onPress={() => {
+            setDetailedColor(renderItemParams.item.color);
+            navigation.navigate("ColorDetails");
+          }}
+          onLongPress={renderItemParams.drag}
+          color={renderItemParams.item}
+          colorDeleteFromPalette={() => {
+            deleteColor(colors.findIndex((color) => renderItemParams.item === color));
+          }}
+        />
+      </ScaleDecorator>
+      )
+  }
+  const keyExtractor = (item) => {
+    //notifyMessage("item: " + JSON.stringify(item));
+    return item.color;
+  }
   return (
     <>
-      <View
-        style={
+    <View
+     style={
           (styles.container, { minHeight: height - useHeaderHeight() - 16 })
         }
-      >
+    >
+      <NestableScrollContainer>
         <ScrollView
           style={styles.listview}
           showsVerticalScrollIndicator={false}
         >
-          {colors
-            ?.slice(0, isPro ? colors.length : 4)
-            .map((colorObj, index) => {
-              return (
-                <SingleColorCard
-                  key={`${colorObj.color}-${index}`}
-                  onPress={() => {
-                    setDetailedColor(colorObj.color);
-                    navigation.navigate("ColorDetails");
-                  }}
-                  color={colorObj}
-                  colorDeleteFromPalette={() => {
-                    deleteColor(index);
-                  }}
-                />
-              );
-            })}
+          <NestableDraggableFlatList
+            data={colors?.slice(0, isPro ? colors.length : 4)}
+            renderItem={renderItem}
+            keyExtractor={keyExtractor}
+            onDragEnd={({ data: reorderedColors }) => {
+              //notifyMessage(JSON.stringify(reorderedColors));
+              updatePalette(paletteName, reorderedColors);
+            }}
+          />
           <EmptyView />
+         
         </ScrollView>
+        </NestableScrollContainer>
         <ActionButton
-          offsetY={60}
-          bgColor="rgba(68, 68, 68, 0.6)"
-          hideShadow={Platform.OS === "web" ? true : false}
-          fixNativeFeedbackRadius={true}
-          buttonColor={Colors.fabPrimary}
-          onPress={() => {
-            logEvent("palette_screen_add_color");
-            if (
-              ( Platform.OS === "android" || Platform.OS === "ios") &&
-              colors.length >= 4 &&
-              isPro === false
-            ) {
-              notifyMessage(
-                "Unlock pro to add more than 4 colors!"
-              );
-              navigation.navigate("ProVersion");
-            } else {
-              setColorPickerCallback(color => {
-                addColorToPalette(paletteName, color);
-              });
-              navigation.navigate("ColorPicker");
-            }
-          }}
-          style={styles.actionButton}
-        />
-      </View>
+            offsetY={76}
+            bgColor="rgba(68, 68, 68, 0.6)"
+            hideShadow={Platform.OS === "web" ? true : false}
+            fixNativeFeedbackRadius={true}
+            buttonColor={Colors.fabPrimary}
+            onPress={() => {
+              logEvent("palette_screen_add_color");
+              if (
+                ( Platform.OS === "android" || Platform.OS === "ios") &&
+                colors.length >= 4 &&
+                isPro === false
+              ) {
+                notifyMessage(
+                  "Unlock pro to add more than 4 colors!"
+                );
+                navigation.navigate("ProVersion");
+              } else {
+                setColorPickerCallback(color => {
+                  addColorToPalette(paletteName, color);
+                });
+                navigation.navigate("ColorPicker");
+              }
+            }}
+            style={styles.actionButton}
+          />
       <DialogContainer>
         {deletedColors.map((colorObj, index) => (
           <UndoDialog
@@ -120,7 +137,9 @@ export default function PaletteScreen({ navigation }) {
           />
         ))}
       </DialogContainer>
-    </>
+      </View>
+      </>
+    
   );
 }
 
@@ -165,9 +184,9 @@ const CustomHeader = ({ currentPaletteName }) => {
               setPaletteName(name);
             }}
           />
-          <Touchable onPress={onDone} style={{ marginTop: 12 }}>
+          <TouchableOpacity onPress={onDone} style={{ marginTop: 12 }}>
             <MaterialIcons name="done" size={24} color="white" />
-          </Touchable>
+          </TouchableOpacity>
         </>
       ) : (
         <>
@@ -179,9 +198,9 @@ const CustomHeader = ({ currentPaletteName }) => {
           >
             {paletteName}
           </Text>
-          <Touchable onPress={onEdit}>
+          <TouchableOpacity onPress={onEdit}>
             <Feather name="edit" size={24} color="white" />
-          </Touchable>
+          </TouchableOpacity>
         </>
       )}
     </View>

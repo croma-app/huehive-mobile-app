@@ -1,1 +1,1 @@
-../../../../../node_modules/react-native-reanimated/Common/cpp/headers/Registries/EventHandlerRegistry.h
+../../../../../node_modules/react-native-reanimated/Common/cpp/Registries/EventHandlerRegistry.h

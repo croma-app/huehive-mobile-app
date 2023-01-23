@@ -1,1 +1,1 @@
-../../../../../node_modules/react-native-reanimated/Common/cpp/headers/Tools/WorkletEventHandler.h
+../../../../../node_modules/react-native-reanimated/Common/cpp/Tools/WorkletEventHandler.h

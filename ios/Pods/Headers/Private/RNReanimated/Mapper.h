@@ -1,1 +1,1 @@
-../../../../../node_modules/react-native-reanimated/Common/cpp/headers/Tools/Mapper.h
+../../../../../node_modules/react-native-reanimated/Common/cpp/Tools/Mapper.h

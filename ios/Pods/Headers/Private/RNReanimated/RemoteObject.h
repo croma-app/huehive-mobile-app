@@ -1,1 +1,1 @@
-../../../../../node_modules/react-native-reanimated/Common/cpp/headers/SharedItems/RemoteObject.h
+../../../../../node_modules/react-native-reanimated/Common/cpp/SharedItems/RemoteObject.h

@@ -1,1 +1,1 @@
-../../../../../node_modules/react-native-reanimated/Common/cpp/headers/Tools/JSIStoreValueUser.h
+../../../../../node_modules/react-native-reanimated/Common/cpp/Tools/JSIStoreValueUser.h

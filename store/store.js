@@ -129,7 +129,14 @@ export default function applicationHook() {
     setState(state => {
       const { allPalettes } = state;
       allPalettes[name].colors = allPalettes[name].colors.concat(color);
-      sortPaletteColors(allPalettes[name]);
+      return { ...state, allPalettes };
+    });
+  };
+
+  const updatePalette = (name, colors) => {
+    setState(state => {
+      const { allPalettes } = state;
+      allPalettes[name].colors = [...colors];
       return { ...state, allPalettes };
     });
   };
@@ -186,7 +193,6 @@ export default function applicationHook() {
           allPalettes[name].deletedColors.splice(index, 1);
         }
       });
-      sortPaletteColors(allPalettes[name]);
       return { ...state, allPalettes };
     });
   };
@@ -269,6 +275,7 @@ export default function applicationHook() {
     undoDeletionByName,
     deletePaletteByName,
     addPalette,
+    updatePalette,
     renamePalette,
     colorDeleteFromPalette,
     undoColorDeletion,

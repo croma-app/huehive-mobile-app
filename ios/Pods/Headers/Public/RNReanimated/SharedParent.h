@@ -1,1 +1,1 @@
-../../../../../node_modules/react-native-reanimated/Common/cpp/headers/SharedItems/SharedParent.h
+../../../../../node_modules/react-native-reanimated/Common/cpp/SharedItems/SharedParent.h

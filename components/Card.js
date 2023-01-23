@@ -1,8 +1,7 @@
 import * as React from "react";
 import * as Animatable from "react-native-animatable";
-import { StyleSheet, Platform, View } from "react-native";
+import { StyleSheet, Platform, View, TouchableOpacity } from "react-native";
 import Colors from "../constants/Colors";
-import Touchable from "react-native-platform-touchable";
 
 export default class Card extends React.Component {
   render() {
@@ -12,7 +11,8 @@ export default class Card extends React.Component {
         duration={500}
         useNativeDriver={true}
       >
-        <Touchable
+        <TouchableOpacity
+          onLongPress={this.props.onLongPress}
           {...(Platform.OS === "web"
             ? {
                 // When scrolling the document body, the touchables might be triggered
@@ -28,7 +28,7 @@ export default class Card extends React.Component {
           ]}
         >
           <View {...this.props}>{this.props.children}</View>
-        </Touchable>
+        </TouchableOpacity>
       </Animatable.View>
     );
   }

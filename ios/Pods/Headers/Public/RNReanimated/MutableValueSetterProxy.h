@@ -1,1 +1,1 @@
-../../../../../node_modules/react-native-reanimated/Common/cpp/headers/SharedItems/MutableValueSetterProxy.h
+../../../../../node_modules/react-native-reanimated/Common/cpp/SharedItems/MutableValueSetterProxy.h

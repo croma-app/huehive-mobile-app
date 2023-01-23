@@ -4,13 +4,13 @@ import {
   Text,
   View,
   Clipboard,
-  Platform
+  Platform,
+  TouchableOpacity
 } from "react-native";
 import FontAwesome  from "react-native-vector-icons/FontAwesome";
 import { notifyMessage } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
 
-import Touchable from "react-native-platform-touchable";
 
 import Color from "pigment/full";
 
@@ -79,7 +79,7 @@ export const ColorDetail = ({ color }) => {
       {/* <Text {...props} style={[props.style, { fontFamily: 'space-mono' }]} >{props.color}</Text> */}
       <View style={{ marginTop: 20 }}>
         {items.map((item, index) => (
-          <Touchable
+          <TouchableOpacity
             key={item.key}
             onPress={() => writeToClipboard(item.value, index)}
           >
@@ -105,7 +105,7 @@ export const ColorDetail = ({ color }) => {
               )}
               <FontAwesome name="copy" />
             </View>
-          </Touchable>
+          </TouchableOpacity>
         ))}
       </View>
     </View>
