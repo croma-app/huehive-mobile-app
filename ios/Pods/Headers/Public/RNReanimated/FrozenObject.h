@@ -1,1 +1,1 @@
-../../../../../node_modules/react-native-reanimated/Common/cpp/headers/SharedItems/FrozenObject.h
+../../../../../node_modules/react-native-reanimated/Common/cpp/SharedItems/FrozenObject.h

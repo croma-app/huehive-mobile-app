@@ -1,1 +1,1 @@
-../../../../../node_modules/react-native-reanimated/Common/cpp/headers/SharedItems/ShareableValue.h
+../../../../../node_modules/react-native-reanimated/Common/cpp/SharedItems/ShareableValue.h

@@ -1,1 +1,1 @@
-../../../../../node_modules/react-native-reanimated/Common/cpp/headers/Registries/WorkletsCache.h
+../../../../../node_modules/react-native-reanimated/Common/cpp/Registries/WorkletsCache.h

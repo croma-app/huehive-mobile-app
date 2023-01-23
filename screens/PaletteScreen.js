@@ -76,12 +76,13 @@ export default function PaletteScreen({ navigation }) {
     return item.color;
   }
   return (
-     <NestableScrollContainer>
+     <>
       <View
         style={
           (styles.container, { minHeight: height - useHeaderHeight() - 16 })
         }
       >
+      <NestableScrollContainer>
         <ScrollView
           style={styles.listview}
           showsVerticalScrollIndicator={false}
@@ -97,6 +98,7 @@ export default function PaletteScreen({ navigation }) {
           />
           <EmptyView />
         </ScrollView>
+        </NestableScrollContainer>
         <ActionButton
           offsetY={60}
           bgColor="rgba(68, 68, 68, 0.6)"
@@ -135,7 +137,8 @@ export default function PaletteScreen({ navigation }) {
           />
         ))}
       </DialogContainer>
-    </NestableScrollContainer>
+      </>
+    
   );
 }
 
