@@ -1,7 +1,7 @@
 import React from "react";
+import { TouchableOpacity } from 'react-native';
 import * as Animatable from "react-native-animatable";
 import { View, Text, StyleSheet, Platform, Dimensions } from "react-native";
-import Touchable from "react-native-platform-touchable";
 import { useTranslation } from 'react-i18next';
 
 export const DialogContainer = props => (
@@ -27,7 +27,7 @@ export const UndoDialog = (props) => {
           {t("Deleted")} {name}.
         </Text>
       </View>
-      <Touchable
+      <TouchableOpacity
         onPress={(event) => {
           event.stopPropagation();
           event.preventDefault();
@@ -35,7 +35,7 @@ export const UndoDialog = (props) => {
         }}
       >
         <Text style={styles.undoButton}> {t("UNDO")} </Text>
-      </Touchable>
+      </TouchableOpacity>
     </Animatable.View>
   );
 };

@@ -30,6 +30,7 @@ export default function PaletteScreen({ navigation }) {
     colorDeleteFromPalette,
     undoColorDeletion,
     addColorToPalette,
+    updatePalette,
     setDetailedColor,
     currentPalette,
     setColorPickerCallback
@@ -52,7 +53,7 @@ export default function PaletteScreen({ navigation }) {
     setNavigationOptions({ navigation, paletteName });
   }, [navigation, paletteName]);
   function renderItem(renderItemParams) {
-      notifyMessage("item: " + JSON.stringify(renderItemParams));
+      //notifyMessage("item: " + JSON.stringify(renderItemParams));
       return (
       <ScaleDecorator>
         <SingleColorCard
@@ -64,7 +65,7 @@ export default function PaletteScreen({ navigation }) {
           onLongPress={renderItemParams.drag}
           color={renderItemParams.item}
           colorDeleteFromPalette={() => {
-            deleteColor(index);
+            deleteColor(colors.findIndex((color) => renderItemParams.item === color));
           }}
         />
       </ScaleDecorator>
@@ -89,7 +90,10 @@ export default function PaletteScreen({ navigation }) {
             data={colors}
             renderItem={renderItem}
             keyExtractor={keyExtractor}
-            onDragEnd={({ data }) => notifyMessage(JSON.stringify(data))}
+            onDragEnd={({ data: reOrderedColors }) => {
+              //notifyMessage(JSON.stringify(reorderedColors));
+              updatePalette(paletteName, reOrderedColors);
+            }}
           />
           {colors
             ?.slice(0, isPro ? colors.length : 4)
