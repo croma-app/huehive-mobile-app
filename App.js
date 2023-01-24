@@ -3,7 +3,8 @@ import {
   ActivityIndicator,
   StatusBar,
   StyleSheet,
-  View
+  View,
+  TouchableOpacity,
 } from "react-native";
 import AboutUsScreen from "./screens/AboutUsScreen";
 import ColorPickerScreen from "./screens/ColorPickerScreen";
@@ -25,11 +26,13 @@ import PaletteLibraryScreen from "./screens/PaletteLibraryScreen";
 import HamburgerMenu from "./components/HamburgerMenu";
 import SideMenu from "react-native-side-menu";
 import { HEADER_HEIGHT } from "./constants/Layout";
-import Touchable from "react-native-platform-touchable";
 import Entypo from "react-native-vector-icons/Entypo";
 import {notifyMessage} from "./libs/Helpers";
 import RNIap from "react-native-iap";
 import { t } from "i18next";
+import {
+  GestureHandlerRootView,
+} from 'react-native-gesture-handler';
 const Stack = createNativeStackNavigator();
 /*import { LogBox } from 'react-native'; // enabled for recording demos
 LogBox.ignoreAllLogs();//Ignore all log notifications*/
@@ -58,16 +61,17 @@ export default function App() {
     </View>
   );
   const hamburgerMenuIcon = () => (
-    <Touchable
+    <TouchableOpacity
       style={{ marginLeft: 8 }}
       onPress={() => setMenu(!isMenuOpen)}
     >
       <Entypo name="menu" style={styles.sideMenuIcon} />
-    </Touchable>
+    </TouchableOpacity>
   );
 
   const MainContent = (
     <CromaContext.Provider value={applicationState}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <SideMenu
         menu={<HamburgerMenu navigation={navigationRef} toggleSideMenu={() => setMenu(!isMenuOpen)} />}
         isOpen={isMenuOpen}
@@ -121,8 +125,10 @@ export default function App() {
           </View>
         </View>
       </SideMenu>
+      </GestureHandlerRootView>
     </CromaContext.Provider>
   );
+
 
   return !isPalettesLoaded ? spinner : MainContent;
 }

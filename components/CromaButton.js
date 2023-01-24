@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Touchable from "react-native-platform-touchable";
-import { StyleSheet, Text, ActivityIndicator } from "react-native";
+
+import { StyleSheet, Text, ActivityIndicator, TouchableOpacity } from "react-native";
 import MaterialIcons  from "react-native-vector-icons/MaterialIcons";
 
 const LOADER_DEFAULT = 0;
@@ -25,7 +25,7 @@ const CromaButton = function(props) {
     }
   };
   return (
-    <Touchable style={[styles.button, style]} onPress={_onPress}>
+    <TouchableOpacity style={[styles.button, style]} onPress={_onPress}>
       {loaderState === LOADER_LOADING ? (
         <ActivityIndicator />
       ) : (
@@ -36,7 +36,7 @@ const CromaButton = function(props) {
           )}
         </>
       )}
-    </Touchable>
+    </TouchableOpacity>
   );
 };
 
