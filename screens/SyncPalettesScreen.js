@@ -19,6 +19,7 @@ const RNFS = require("react-native-fs");
 import { notifyMessage } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
 import { t } from "i18next";
+import RNFetchBlob from 'rn-fetch-blob';
 
 export default function SyncPalettesScreen(props) {
   const { t } = useTranslation();
@@ -326,7 +327,19 @@ const saveFile = async allPalettes => {
       }
       // write a new file
       await RNFS.writeFile(path, palettesToJsonString(allPalettes), "utf8");
-      longToast(t("Saved in Downloads!"));
+      if (Platform.OS == 'android') {
+        RNFetchBlob.android.addCompleteDownload({
+          title: 'croma.palettes.txt',
+          description: t('Croma palettes exported successfully'),
+          mime: 'text/json',
+          path: path,
+          showNotification: true,
+        });
+      } 
+      if (Platform.OS == 'ios') {
+        notifyMessage("Saved in documents");
+        // RNFetchBlob.ios.openDocument(path)
+      }
     } else {
       longToast(t("Permission denied!"));
     }

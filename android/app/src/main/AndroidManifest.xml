@@ -20,6 +20,7 @@
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
+            <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
         </intent-filter>
           <intent-filter android:label="View Palette">
               <action android:name="android.intent.action.VIEW" />

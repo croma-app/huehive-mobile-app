@@ -2,20 +2,54 @@ import * as React from "react";
 import { StyleSheet, View, Text, Platform, Clipboard, TouchableOpacity } from "react-native";
 import Card from "./Card";
 import Colors from "../constants/Colors";
-import { Share } from "react-native";
+import { Share, PermissionsAndroid } from "react-native";
 
 import MultiColorView from "./MultiColorView";
 import FontAwesome  from "react-native-vector-icons/FontAwesome";
 import { CromaContext } from "../store/store";
 import { logEvent } from "../libs/Helpers";
+import ViewShot from "react-native-view-shot";
+const RNFS = require("react-native-fs");
+import { t } from "i18next";
+import RNFetchBlob from 'rn-fetch-blob'
 
 export const PaletteCard = props => {
   const [shared, setShared] = React.useState(false);
   const [animationType, setAnimationType] = React.useState("fadeInLeftBig");
-
+  const viewShotRef = React.useRef();
   const { deletePaletteByName, setCurrentPalette } = React.useContext(
     CromaContext
   );
+ const onDownload = async () => {
+    logEvent("home_screen_palette_card_download", props.colors.length + "");
+    const uri = await viewShotRef.current.capture();
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      const path = RNFS.DownloadDirectoryPath + "/" + props.name + ".png";
+      const isFileExists = await RNFS.exists(path);
+      if (isFileExists) {
+        // remove old file
+        await RNFS.unlink(path);
+      }
+      // write a new file
+      await RNFS.copyFile(uri, path);
+      if (Platform.OS == 'android') {
+        RNFetchBlob.android.addCompleteDownload({
+          title: props.name,
+          description: t('Download complete'),
+          mime: 'image/png',
+          path: path,
+          showNotification: true,
+        });
+      } 
+      if (Platform.OS == 'ios') {
+        throw new Error("TODO");
+        // RNFetchBlob.ios.openDocument(path)
+      }
+    }
+  };
 
   const onShare = async () => {
     try {
@@ -43,24 +77,6 @@ export const PaletteCard = props => {
       alert(error.message);
     }
   };
-
-  const onShareWeb = event => {
-    event.preventDefault();
-    event.stopPropagation();
-    Clipboard.setString(
-      `Croma - Palette Manager\nColors:\n${props.colors
-        .map(colorObj => colorObj.color)
-        .join("\n")}
-
-      https://web.croma.app/Main/SavePalette?name=${encodeURIComponent(
-        props.name
-      )}&colors=${encodeURIComponent(JSON.stringify(props.colors))}`
-    );
-    setShared(true);
-    setTimeout(() => {
-      setShared(false);
-    }, 3000);
-  };
   return (
     <Card
       {...props}
@@ -70,8 +86,9 @@ export const PaletteCard = props => {
       }}
       animationType={animationType}
     >
-      <MultiColorView {...props}></MultiColorView>
-
+      <ViewShot ref={viewShotRef} options={{ fileName: props.name + ".png", format: "png", quality: 0.9 }}>
+        <MultiColorView {...props}></MultiColorView>
+      </ViewShot>
       <View style={styles.bottom}>
         <Text style={styles.label}>{props.name}</Text>
         <View style={styles.actionButtonsView}>
@@ -92,6 +109,11 @@ export const PaletteCard = props => {
               Copied to Clipboard!
             </Text>
           )}
+          {Platform.OS == 'android' && <TouchableOpacity onPress={onDownload} style={styles.actionButton}>
+            <FontAwesome size={20} name="download" />
+          </TouchableOpacity>
+          }
+
           {Platform.OS === "web" ? (
             <TouchableOpacity onClick={onShareWeb} style={styles.actionButton}>
               <FontAwesome size={20} name="share" />
@@ -119,6 +141,7 @@ export const PaletteCard = props => {
         </View>
       </View>
     </Card>
+    
   );
 };
 
