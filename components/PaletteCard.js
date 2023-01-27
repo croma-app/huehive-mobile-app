@@ -7,11 +7,11 @@ import { Share, PermissionsAndroid } from "react-native";
 import MultiColorView from "./MultiColorView";
 import FontAwesome  from "react-native-vector-icons/FontAwesome";
 import { CromaContext } from "../store/store";
-import { logEvent } from "../libs/Helpers";
+import { logEvent, notifyMessage } from "../libs/Helpers";
 import ViewShot from "react-native-view-shot";
 const RNFS = require("react-native-fs");
 import { t } from "i18next";
-import RNFetchBlob from 'rn-fetch-blob'
+import RNFetchBlob from 'rn-fetch-blob';
 
 export const PaletteCard = props => {
   const [shared, setShared] = React.useState(false);
@@ -22,32 +22,37 @@ export const PaletteCard = props => {
   );
  const onDownload = async () => {
     logEvent("home_screen_palette_card_download", props.colors.length + "");
-    const uri = await viewShotRef.current.capture();
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-    );
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      const path = RNFS.DownloadDirectoryPath + "/" + props.name + ".png";
-      const isFileExists = await RNFS.exists(path);
-      if (isFileExists) {
-        // remove old file
-        await RNFS.unlink(path);
+    try {
+      const uri = await viewShotRef.current.capture();
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        let path = RNFS.DownloadDirectoryPath + "/" + props.name + ".png";
+        const isFileExists = await RNFS.exists(path);
+        if (isFileExists) {
+          path = RNFS.DownloadDirectoryPath + "/" + props.name + Math.floor(Math.random() * 100000) + ".png";
+        }
+        // write a new file
+        await RNFS.copyFile(uri, path);
+        if (Platform.OS == 'android') {
+          RNFetchBlob.android.addCompleteDownload({
+            title: props.name,
+            description: t('Download complete'),
+            mime: 'image/png',
+            path: path,
+            showNotification: true,
+          });
+        } 
+        if (Platform.OS == 'ios') {
+          throw new Error("TODO");
+          // RNFetchBlob.ios.openDocument(path)
+        }
+      } else {
+        notifyMessage("Please give storage permission to download png.");
       }
-      // write a new file
-      await RNFS.copyFile(uri, path);
-      if (Platform.OS == 'android') {
-        RNFetchBlob.android.addCompleteDownload({
-          title: props.name,
-          description: t('Download complete'),
-          mime: 'image/png',
-          path: path,
-          showNotification: true,
-        });
-      } 
-      if (Platform.OS == 'ios') {
-        throw new Error("TODO");
-        // RNFetchBlob.ios.openDocument(path)
-      }
+    } catch (error) {
+      notifyMessage("Error: " + error.toString());
     }
   };
 

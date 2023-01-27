@@ -319,17 +319,17 @@ const saveFile = async allPalettes => {
       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
     );
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-      const path = RNFS.DownloadDirectoryPath + "/croma.palettes.txt";
+      let fileName = 'croma.palettes.txt';
+      let path = RNFS.DownloadDirectoryPath + "/" + fileName;
       const isFileExists = await RNFS.exists(path);
       if (isFileExists) {
-        // remove old file
-        await RNFS.unlink(path);
+        fileName = "croma.palettes." + Math.floor(Math.random() * 100000) + ".txt";
+        path = RNFS.DownloadDirectoryPath + "/" + fileName;
       }
-      // write a new file
       await RNFS.writeFile(path, palettesToJsonString(allPalettes), "utf8");
       if (Platform.OS == 'android') {
         RNFetchBlob.android.addCompleteDownload({
-          title: 'croma.palettes.txt',
+          title: fileName,
           description: t('Croma palettes exported successfully'),
           mime: 'text/json',
           path: path,
