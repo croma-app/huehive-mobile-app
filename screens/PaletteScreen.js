@@ -62,7 +62,7 @@ export default function PaletteScreen({ navigation }) {
             setDetailedColor(renderItemParams.item.color);
             navigation.navigate("ColorDetails");
           }}
-          onLongPress={renderItemParams.drag}
+          onPressDrag={renderItemParams.drag}
           color={renderItemParams.item}
           colorDeleteFromPalette={() => {
             deleteColor(colors.findIndex((color) => renderItemParams.item === color));

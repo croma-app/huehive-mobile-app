@@ -13,7 +13,8 @@ KEY FEATURES
 • Copy color codes to your clipboard with a tap.
 • Add colors using various color code formats including CSS named colors.
 • A color palette library including Material design palettes, CSS named colors etc.
-
+• Download PNG of the palette
+• Rearange colors in a palette
 
 
 PRO BENEFITS
