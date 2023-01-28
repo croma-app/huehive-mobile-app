@@ -6,14 +6,13 @@ import {
   StyleSheet,
   Text,
   View,
-  SafeAreaView, Platform
+  SafeAreaView, Platform, TouchableOpacity
 } from "react-native";
 import Colors from "../constants/Colors";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import Touchable from "react-native-platform-touchable";
 import { logEvent } from "../libs/Helpers";
 import { ScrollView } from "react-native-gesture-handler";
 import {launchImageLibrary} from 'react-native-image-picker';
@@ -38,7 +37,7 @@ export default props => {
   }
   return (
     <SafeAreaView style={[styles.container]}>
-      <Touchable
+      <TouchableOpacity
         onPress={() => {
           logEvent("hm_home_screen");
           navigate("Home");
@@ -51,10 +50,10 @@ export default props => {
           />
           <Text style={styles.title}>{t('Croma - Save you colors')}</Text>
         </View>
-      </Touchable>
+      </TouchableOpacity>
       <ScrollView>
         <View style={styles.menu}>
-          <Touchable
+          <TouchableOpacity
             style={styles.menuItem}
             onPress={() => {
               logEvent("hm_create_new_palette");
@@ -68,8 +67,8 @@ export default props => {
               </View>
               <Text style={styles.textAreaMenuItem}>{t('Create new palette')}</Text>
             </View>
-          </Touchable>
-          <Touchable
+          </TouchableOpacity>
+          <TouchableOpacity
             style={styles.menuItem}
             onPress={async () => {
               logEvent("hm_palette_library");
@@ -86,8 +85,8 @@ export default props => {
               </View>
               <Text style={styles.textAreaMenuItem}>{t('Palette library')}</Text>
             </View>
-          </Touchable>
-          {Platform.OS === 'android' && <Touchable
+          </TouchableOpacity>
+          {Platform.OS === 'android' && <TouchableOpacity
             style={styles.menuItem}
             onPress={async () => {
               const imageResult = await pickImageResult();
@@ -112,9 +111,9 @@ export default props => {
               {t('Pick colors from an image')}
               </Text>
             </View>
-          </Touchable>
+          </TouchableOpacity>
           }
-          {Platform.OS == 'android' && <Touchable
+          {Platform.OS == 'android' && <TouchableOpacity
               style={styles.menuItem}
               onPress={async () => {
                 const pickedColors = await NativeModules.CromaModule.navigateToColorPicker();
@@ -135,7 +134,7 @@ export default props => {
               </View>
               <Text style={styles.textAreaMenuItem}>{t('Scan color codes')}</Text>
             </View>
-          </Touchable>
+          </TouchableOpacity>
           }
           {
             <MenuLink
@@ -146,7 +145,7 @@ export default props => {
             {t('Like the App? Please rate us')}
             </MenuLink>
           }
-          <Touchable
+          <TouchableOpacity
             style={styles.menuItem}
             onPress={() => {
               logEvent("hm_pro_benefits");
@@ -159,8 +158,8 @@ export default props => {
               </View>
               <Text style={styles.textAreaMenuItem}>{t('Pro benefits')}</Text>
             </View>
-          </Touchable>
-          <Touchable
+          </TouchableOpacity>
+          <TouchableOpacity
             style={styles.menuItem}
             onPress={async () => {
               logEvent("hm_sync_palettes");
@@ -175,8 +174,8 @@ export default props => {
               {t('import/export palettes')}
               </Text>
             </View>
-          </Touchable>
-          <Touchable
+          </TouchableOpacity>
+          <TouchableOpacity
             style={styles.menuItem}
             onPress={async () => {
               logEvent("hm_about_us");
@@ -192,7 +191,7 @@ export default props => {
               </View>
               <Text style={styles.textAreaMenuItem}>{t('About us')}</Text>
             </View>
-          </Touchable>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -202,7 +201,7 @@ export default props => {
 
 function MenuLink(props) {
   return (
-    <Touchable
+    <TouchableOpacity
       style={[styles.menuItem]}
       onPress={() => {
         logEvent("hm_link_" + props.id);
@@ -213,7 +212,7 @@ function MenuLink(props) {
         <View style={styles.menuIcon}>{props.icon}</View>
         <Text style={styles.textAreaMenuItem}>{props.children}</Text>
       </View>
-    </Touchable>
+    </TouchableOpacity>
   );
 }
 const menuHeight = 50;

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import Touchable from "react-native-platform-touchable";
-import { StyleSheet, Text, Dimensions, View } from "react-native";
+import { StyleSheet, Text, Dimensions, View, TouchableOpacity } from "react-native";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { useHeaderHeight } from '@react-navigation/elements';
 import Colors from '../constants/Colors';
@@ -33,11 +32,11 @@ const ActionButtonContainer = function (props) {
   const rows = config;
   return (
     active ? <View style={[styles.actionButtonContainer, { height: Dimensions.get('window').height - headerHeight }]}>
-      <Touchable onPress={() => { setActive(false) }} style={[styles.actionButton, styles.actionButtonClose]}>
+      <TouchableOpacity onPress={() => { setActive(false) }} style={[styles.actionButton, styles.actionButtonClose]}>
         <Animatable.View duration={300} animation={rotateAnimation}>
           <AntDesign name="plus" color={'#fff'} size={24} />
         </Animatable.View >
-      </Touchable>
+      </TouchableOpacity>
       <Animatable.View duration={300} animation="slideInUp" style={{ backgroundColor: '#fff', padding: 10 }}>
         {rows.map((cols, index) => {
           return <>
@@ -46,9 +45,9 @@ const ActionButtonContainer = function (props) {
                 cols.map((item, index) => {
                   const { icon, text1, text2, onPress } = item;
                   return <>
-                    <Touchable onPress={() => { setActive(false); onPress() }} style={{ flexBasis: 90 }}>
+                    <TouchableOpacity onPress={() => { setActive(false); onPress() }} style={{ flexBasis: 90 }}>
                       <ActionButton icon={icon} t1={text1} t2={text2} />
-                    </Touchable>
+                    </TouchableOpacity>
                     {index < cols.length - 1 && <VerticalLine />}
                   </>
                 })
@@ -61,9 +60,9 @@ const ActionButtonContainer = function (props) {
     </View >
 
       :
-      <Touchable onPress={() => { setActive(true) }} style={[styles.actionButton, styles.actionButtonOpen]}>
+      <TouchableOpacity onPress={() => { setActive(true) }} style={[styles.actionButton, styles.actionButtonOpen]}>
         <AntDesign name="plus" color={'#fff'} size={24} />
-      </Touchable>
+      </TouchableOpacity>
   );
 };
 

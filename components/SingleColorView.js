@@ -3,16 +3,16 @@ import {
   Platform,
   StyleSheet,
   Text,
-  Clipboard
+  Clipboard,
+  TouchableOpacity
 } from "react-native";
-import Touchable from "react-native-platform-touchable";
 import { notifyMessage } from '../libs/Helpers';
 
 
 export class SingleColorView extends React.Component {
   render() {
     return (
-      <Touchable
+      <TouchableOpacity
         onPress={() => {
           if (Platform?.OS === "android" || Platform.OS === "ios") {
             notifyMessage(
@@ -27,7 +27,7 @@ export class SingleColorView extends React.Component {
           {this.props.color.color +
             (this.props.color.name ? " (" + this.props.color.name + ")" : "")}
         </Text>
-      </Touchable>
+      </TouchableOpacity>
     );
   }
 }
