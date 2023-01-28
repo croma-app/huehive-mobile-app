@@ -1,9 +1,10 @@
 import * as React from "react";
-import { StyleSheet, View, Text, Platform } from "react-native";
+import { StyleSheet, View, Text, Platform, TouchableOpacity } from "react-native";
 import Card from "./Card";
 import Colors from "../constants/Colors";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Touchable from "react-native-platform-touchable";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+
 
 export default class SingleColorCard extends React.Component {
   constructor(props) {
@@ -13,11 +14,12 @@ export default class SingleColorCard extends React.Component {
   render() {
     return (
       <Card {...this.props} animationType={this.state.animationType}>
-        <View>
+        <View >
           <View
             style={{ backgroundColor: this.props.color.color, height: 100 }}
-          ></View>
+          />
           <View style={styles.bottom}>
+            
             <Text style={styles.label}>
               {this.props.color.color +
                 (this.props.color.name
@@ -25,7 +27,7 @@ export default class SingleColorCard extends React.Component {
                   : "")}
             </Text>
             <View style={styles.actionButtonsView}>
-              <Touchable
+              <TouchableOpacity
                 {...{
                   [Platform.OS === "web" ? "onClick" : "onPress"]: event => {
                     event.preventDefault();
@@ -39,7 +41,15 @@ export default class SingleColorCard extends React.Component {
                 style={styles.actionButton}
               >
                 <FontAwesome size={20} name="trash" />
-              </Touchable>
+              </TouchableOpacity>
+            </View>
+
+             <View style={styles.actionButtonsView}>
+              <TouchableOpacity
+                onPressIn={this.props.onPressDrag}
+              >
+                <MaterialIcons style={{alignItems: "center"}} size={20} name="drag-indicator" />
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -64,7 +74,7 @@ const styles = StyleSheet.create({
   },
   label: {
     flex: 1,
-    marginHorizontal: 16,
+    marginHorizontal: 4,
     fontWeight: "500",
     color: Colors.darkGrey
   }

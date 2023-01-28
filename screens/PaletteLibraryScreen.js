@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { logEvent } from "../libs/Helpers";
-import Touchable from "react-native-platform-touchable";
 import { material } from "react-native-typography";
 import Colors from "../constants/Colors";
 import { CromaContext } from "../store/store";
@@ -16,7 +15,7 @@ export default function PaletteLibraryScreen({ navigation }) {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {allPalettes.map((palettes, index) => {
         return (
-          <Touchable
+          <TouchableOpacity
             key={palettes?.name ?? index}
             style={styles.row}
             onPress={() => {
@@ -33,7 +32,7 @@ export default function PaletteLibraryScreen({ navigation }) {
                 <Text style={styles.desc}>{palettes.desc}</Text>
               </View>
             </View>
-          </Touchable>
+          </TouchableOpacity>
         );
       })}
     </ScrollView>

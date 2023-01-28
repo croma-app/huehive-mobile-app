@@ -1,9 +1,8 @@
 import React, { useLayoutEffect } from "react";
 import { SingleColorView } from "../components/SingleColorView";
-import {ScrollView, StyleSheet, View, Text, Platform, Button} from "react-native";
+import {ScrollView, StyleSheet, View, Text, Platform, Button, TouchableOpacity } from "react-native";
 import CromaButton from "../components/CromaButton";
 import { logEvent } from "../libs/Helpers";
-import Touchable from "react-native-platform-touchable";
 import MaterialIcons  from "react-native-vector-icons/MaterialIcons";
 import { CromaContext } from "../store/store";
 import { useTranslation } from 'react-i18next';
@@ -74,9 +73,9 @@ const CustomHeader = ({ navigation }) => {
         {t('New palette')}
       </Text>
       <>
-        <Touchable style={[styles.doneButton]} onPress={() => navigation.navigate("SavePalette")}>
+        <TouchableOpacity style={[styles.doneButton]} onPress={() => navigation.navigate("SavePalette")}>
           <MaterialIcons name="done" size={24} color="white" />
-        </Touchable>
+        </TouchableOpacity>
       </>
     </View>
   );
