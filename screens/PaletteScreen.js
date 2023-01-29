@@ -82,11 +82,8 @@ export default function PaletteScreen({ navigation }) {
           (styles.container, { minHeight: height - useHeaderHeight() - 16 })
         }
     >
-      <NestableScrollContainer>
-        <ScrollView
-          style={styles.listview}
-          showsVerticalScrollIndicator={false}
-        >
+      <NestableScrollContainer style={styles.listview}
+          showsVerticalScrollIndicator={false}>
           <NestableDraggableFlatList
             data={colors?.slice(0, isPro ? colors.length : 4)}
             renderItem={renderItem}
@@ -97,8 +94,6 @@ export default function PaletteScreen({ navigation }) {
             }}
           />
           <EmptyView />
-         
-        </ScrollView>
         </NestableScrollContainer>
         <ActionButton
             offsetY={76}
