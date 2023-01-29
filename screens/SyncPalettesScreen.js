@@ -32,7 +32,7 @@ export default function SyncPalettesScreen(props) {
       const palettesFromFile = await importPalettes();
       addExportedPalettes(palettesFromFile, allPalettes, addPalette);
     } catch(error) {
-      longToast("Error when importing colors: " + error.toString());
+      notifyMessage("Error when importing colors: " + error.toString());
     }
   };
   logEvent("sync_palettes_screen");
@@ -154,7 +154,7 @@ function addExportedPalettes(palettesFromFile, allPalettes, addPalette) {
       added++;
     }
   });
-  longToast(added + " " + t("palettes added successfully."));
+  notifyMessage(added + " " + t("palettes added successfully."));
 }
 
 function GithubView(props) {
@@ -300,10 +300,6 @@ async function readFromGithubRepo(accessToken, username, repoName) {
   return Buffer.from(result.data.content, "base64").toString();
 }
 
-const longToast = function(msg) {
-  notifyMessage(msg);
-};
-
 const importPalettes = async () => {
   const options = {
     type: DocumentPicker.types.plainText
@@ -315,16 +311,20 @@ const importPalettes = async () => {
 
 const saveFile = async allPalettes => {
   try {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-    );
-    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+    let granted = Platform.OS == 'ios';
+    if (Platform.OS == 'android') {
+      granted = (await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+      )) === PermissionsAndroid.RESULTS.GRANTED;
+    }
+    const downloadPath = Platform.OS === 'ios' ? RNFS.DocumentDirectoryPath : RNFS.DownloadDirectoryPath;
+    if (granted) {
       let fileName = 'croma.palettes.txt';
-      let path = RNFS.DownloadDirectoryPath + "/" + fileName;
+      let path = downloadPath + "/" + fileName;
       const isFileExists = await RNFS.exists(path);
       if (isFileExists) {
         fileName = "croma.palettes." + Math.floor(Math.random() * 100000) + ".txt";
-        path = RNFS.DownloadDirectoryPath + "/" + fileName;
+        path = downloadPath + "/" + fileName;
       }
       await RNFS.writeFile(path, palettesToJsonString(allPalettes), "utf8");
       if (Platform.OS == 'android') {
@@ -337,14 +337,14 @@ const saveFile = async allPalettes => {
         });
       } 
       if (Platform.OS == 'ios') {
-        notifyMessage("Saved in documents");
-        // RNFetchBlob.ios.openDocument(path)
+        await RNFetchBlob.ios.previewDocument(path);
+        // notifyMessage("Saved in documents");
       }
     } else {
-      longToast(t("Permission denied!"));
+      notifyMessage(t("Permission denied!"));
     }
   } catch (err) {
-    longToast(err);
+    notifyMessage(err);
   }
 };
 const palettesToJsonString = allPalettes => {

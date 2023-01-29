@@ -23,15 +23,20 @@ export const PaletteCard = props => {
  const onDownload = async () => {
     logEvent("home_screen_palette_card_download", props.colors.length + "");
     try {
+      
       const uri = await viewShotRef.current.capture();
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        let path = RNFS.DownloadDirectoryPath + "/" + props.name + ".png";
+      let granted = Platform.OS == 'ios';
+      if (Platform.OS == 'android') {
+        granted = (await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+        )) === PermissionsAndroid.RESULTS.GRANTED;
+      }
+      const downloadPath = Platform.OS === 'ios' ? RNFS.DocumentDirectoryPath : RNFS.DownloadDirectoryPath;
+      if (granted) {
+        let path = downloadPath+ "/" + props.name + ".png";
         const isFileExists = await RNFS.exists(path);
         if (isFileExists) {
-          path = RNFS.DownloadDirectoryPath + "/" + props.name + Math.floor(Math.random() * 100000) + ".png";
+          path = downloadPath + "/" + props.name + Math.floor(Math.random() * 100000) + ".png";
         }
         // write a new file
         await RNFS.copyFile(uri, path);
@@ -45,8 +50,7 @@ export const PaletteCard = props => {
           });
         } 
         if (Platform.OS == 'ios') {
-          throw new Error("TODO");
-          // RNFetchBlob.ios.openDocument(path)
+          await RNFetchBlob.ios.previewDocument(path);
         }
       } else {
         notifyMessage("Please give storage permission to download png.");
@@ -114,10 +118,10 @@ export const PaletteCard = props => {
               Copied to Clipboard!
             </Text>
           )}
-          {Platform.OS == 'android' && <TouchableOpacity onPress={onDownload} style={styles.actionButton}>
+          <TouchableOpacity onPress={onDownload} style={styles.actionButton}>
             <FontAwesome size={20} name="download" />
           </TouchableOpacity>
-          }
+          
 
           {Platform.OS === "web" ? (
             <TouchableOpacity onClick={onShareWeb} style={styles.actionButton}>
