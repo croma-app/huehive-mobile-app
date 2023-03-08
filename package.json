@@ -12,6 +12,7 @@
   "dependencies": {
     "@octokit/rest": "^18.12.0",
     "@react-native-async-storage/async-storage": "^1.15.9",
+    "@react-native-google-signin/google-signin": "^9.0.2",
     "@react-navigation/elements": "^1.2.1",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/native-stack": "^6.2.5",
