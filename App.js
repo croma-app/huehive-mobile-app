@@ -23,6 +23,7 @@ import ProVersionScreen from "./screens/ProVersionScreen";
 import SyncPalettesScreen from "./screens/SyncPalettesScreen";
 import CommonPalettesScreen from "./screens/CommonPalettesScreen";
 import PaletteLibraryScreen from "./screens/PaletteLibraryScreen";
+import LoginScreen from "./screens/LoginScreen";
 import HamburgerMenu from "./components/HamburgerMenu";
 import SideMenu from "react-native-side-menu";
 import { HEADER_HEIGHT } from "./constants/Layout";
@@ -120,6 +121,7 @@ export default function App() {
                 <Stack.Screen name="CommonPalettes" component={CommonPalettesScreen} />
                 <Stack.Screen name="PaletteLibrary" options={{ title: t("Palette library") }} component={PaletteLibraryScreen} />
                 <Stack.Screen name="ColorList" options={{ title: t("New palette") }} component={ColorListScreen} />
+                <Stack.Screen name="Login" options={{ title: t("Login") }} component={LoginScreen} />
               </Stack.Navigator>
             </NavigationContainer>
           </View>

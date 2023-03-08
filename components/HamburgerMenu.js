@@ -19,7 +19,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import { CromaContext } from "../store/store";
 import { useTranslation } from 'react-i18next';
 
-export default props => {
+const HamburgerMenu = props => {
   const { t } = useTranslation();
 
   const pickImageResult = async() => {
@@ -192,6 +192,23 @@ export default props => {
               <Text style={styles.textAreaMenuItem}>{t('About us')}</Text>
             </View>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={async () => {
+              logEvent("hm_login");
+              navigate("Login");
+            }}
+          >
+            <View style={styles.menuItemView}>
+              <View style={{ ...styles.menuIcon, paddingLeft: 4 }}>
+                <MaterialCommunityIcons
+                  name="login"
+                  style={styles.icon}
+                />
+              </View>
+              <Text style={styles.textAreaMenuItem}>{t('Login')}</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -266,3 +283,5 @@ const styles = StyleSheet.create({
     color: "black",
   }
 });
+
+export default HamburgerMenu;
