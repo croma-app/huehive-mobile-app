@@ -13,8 +13,8 @@ export default function LoginScreen() {
   const { t } = useTranslation();
   useEffect(() => {
     GoogleSignin.configure({
-      webClientId:"865618605576-j2tb9toevqc7tonmbp01dim1ddvod7r0.apps.googleusercontent.com",
-      offlineAccess: true 
+      webClientId: '865618605576-j2tb9toevqc7tonmbp01dim1ddvod7r0.apps.googleusercontent.com',
+      // offlineAccess: false 
     });
   },[GoogleSignin])
   // const login = () => {};
