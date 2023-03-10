@@ -1,73 +1,162 @@
-import React, { useEffect } from "react";
-import { ScrollView, StyleSheet, Text } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { Image, ScrollView, StyleSheet, Text, TextInput } from "react-native";
 import { View } from "react-native-animatable";
 import CromaButton from "../components/CromaButton";
 import { CromaContext } from "../store/store";
 import { material } from "react-native-typography";
-import { useTranslation } from 'react-i18next';
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import { useTranslation } from "react-i18next";
+import { Dimensions } from "react-native";
 
-
+import {
+  GoogleSignin,
+  statusCodes,
+  GoogleSigninButton,
+} from "@react-native-google-signin/google-signin";
+// import googleLogo from '/assets/images/g-logo.png'
 
 export default function LoginScreen() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const { t } = useTranslation();
   useEffect(() => {
     GoogleSignin.configure({
-      webClientId: '865618605576-j2tb9toevqc7tonmbp01dim1ddvod7r0.apps.googleusercontent.com',
-      // offlineAccess: false 
+      webClientId:
+        "865618605576-j2tb9toevqc7tonmbp01dim1ddvod7r0.apps.googleusercontent.com",
+      // offlineAccess: false
     });
-  },[GoogleSignin])
+  }, [GoogleSignin]);
   // const login = () => {};
   // Somewhere in your code
   const signIn = async () => {
-  try {
-    await GoogleSignin.hasPlayServices();
-    const userInfo = await GoogleSignin.signIn();
-    // this.setState({ userInfo });
-    console.log({userInfo});
-  } catch (error) {
-    console.log({error})
-    if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-      // user cancelled the login flow
-    } else if (error.code === statusCodes.IN_PROGRESS) {
-      // operation (e.g. sign in) is in progress already
-    } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-      // play services not available or outdated
-    } else {
-      // some other error happened
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      // this.setState({ userInfo });
+      console.log({ userInfo });
+    } catch (error) {
+      console.log({ error });
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+      } else {
+        // some other error happened
+      }
     }
-  }
-};
+  };
+
+  const onChangeText = useCallback((text) => {
+    setEmail(text);
+  }, []);
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <View>
-        <Text style={styles.title}>{t('Welcome to croma')}</Text>
+    <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <View style={styles.container}>
+        <Text style={styles.title}>{t("Welcome,")}</Text>
+        <Text style={styles.intro}>{t("Glad to see you!,")}</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangeText}
+          placeholder={"Email address"}
+          value={email}
+        />
+        <TextInput
+          keyboardType="visible-password"
+          placeholder="Password"
+          style={styles.input}
+          onChangeText={setPassword}
+          value={password}
+        />
+        <Text style={styles.forgotPassword}>{t("Forgot password ?")}</Text>
         <CromaButton
           style={{ backgroundColor: "#ff5c59" }}
           textStyle={{ color: "#fff" }}
           onPress={signIn}
         >
-          {t('Click to login')}
+          {t("Login")}
         </CromaButton>
+        <View style={styles.orSignUpContainer}>
+          <Text style={styles.leftLine}> </Text>
+          <Text style={styles.orSignUp}>{t("Or Sign Up with ?")}</Text>
+          <Text style={styles.rightLine}> </Text>
+        </View>
+        <GoogleSigninButton
+          style={{
+            width: Dimensions.get("window").width * (95 / 100),
+            height: 60,
+          }}
+          size={GoogleSigninButton.Size.Wide}
+          color={GoogleSigninButton.Color.Dark}
+          onPress={signIn}
+          // disabled={this.state.isSigninInProgress}
+        />
       </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  scrollView: {
     paddingLeft: 12,
-    paddingRight: 12
+    paddingRight: 12,
+  },
+  container: {
+    display: "flex",
+    justifyContent: "space-between",
+    minHeight: 450,
+    flexDirection: "column",
   },
   title: {
     paddingTop: 12,
     paddingBottom: 12,
     fontSize: 20,
-    fontWeight: "bold"
+    fontWeight: "bold",
+  },
+  intro: {
+    paddingTop: 12,
+    paddingBottom: 12,
+    fontSize: 16,
   },
   line: {
     ...material.body1,
     paddingBottom: 4,
-    fontSize: 15
-  }
+    fontSize: 15,
+  },
+  forgotPassword: {
+    marginLeft: "auto",
+    fontSize: 13,
+  },
+  orSignUp: {
+    padding: 10,
+    fontSize: 13,
+  },
+  logo: {
+    width: 30,
+    height: 30,
+    margin: 5,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#000",
+    borderRadius: 5,
+    paddingTop: 10,
+    paddingBottom: 10,
+  },
+  orSignUpContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  leftLine: {
+    height: 1,
+    width: "25%",
+    backgroundColor: "#000",
+  },
+  rightLine: {
+    height: 1,
+    width: "25%",
+    backgroundColor: "#000",
+  },
 });
