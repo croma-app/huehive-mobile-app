@@ -13,6 +13,7 @@ import { CromaContext } from "../store/store";
 import { material } from "react-native-typography";
 import { useTranslation } from "react-i18next";
 import { Dimensions } from "react-native";
+import Config from "react-native-config";
 
 import {
   GoogleSignin,
@@ -56,8 +57,7 @@ export default function LoginScreen(props) {
 
   useEffect(() => {
     GoogleSignin.configure({
-      webClientId:
-        "865618605576-j2tb9toevqc7tonmbp01dim1ddvod7r0.apps.googleusercontent.com",
+      webClientId: Config.GOOGLE_AUTHOTICATION_WEB_CLIENT_ID,
       // offlineAccess: false
     });
   }, [GoogleSignin]);
