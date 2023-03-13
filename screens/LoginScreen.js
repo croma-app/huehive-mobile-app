@@ -14,6 +14,8 @@ import { material } from "react-native-typography";
 import { useTranslation } from "react-i18next";
 import { Dimensions } from "react-native";
 import Config from "react-native-config";
+import { login, signUp } from "../network/login-and-signup";
+import { notifyMessage } from "../libs/Helpers";
 
 import {
   GoogleSignin,
@@ -44,6 +46,7 @@ const LOGIN_AND_SIGNUP_TEXT = {
 
 export default function LoginScreen(props) {
   const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [screenType, setScreenType] = useState(SIGN_UP);
@@ -54,6 +57,29 @@ export default function LoginScreen(props) {
       title: t(LOGIN_AND_SIGNUP_TEXT[screenType].title),
     });
   }, [screenType]);
+
+  const onSubmit = useCallback(async () => {
+    if (screenType === LOGIN) {
+      // to handle login
+      try {
+        const res = await login(email, password);
+        console.log({ res });
+      } catch (error) {
+        console.log({ error });
+      }
+    } else {
+      // to handle sign up
+      if (password !== confirmPassword) {
+        notifyMessage(t("Confirm password did not match."));
+        return;
+      }
+      try {
+        await signUp(fullName, email, password);
+      } catch (error) {
+        console.log({ error });
+      }
+    }
+  }, []);
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -86,11 +112,25 @@ export default function LoginScreen(props) {
   const onChangeText = useCallback((text) => {
     setEmail(text);
   }, []);
+  console.log({ password, confirmPassword, b: password !== confirmPassword });
   return (
     <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          { minHeight: screenType === LOGIN ? 460 : 600 },
+        ]}
+      >
         <Text style={styles.title}>{t("Welcome,")}</Text>
         <Text style={styles.intro}>{t("Glad to see you!,")}</Text>
+        {screenType === SIGN_UP && (
+          <TextInput
+            style={styles.input}
+            onChangeText={setFullName}
+            placeholder={"Full name"}
+            value={fullName}
+          />
+        )}
         <TextInput
           style={styles.input}
           onChangeText={onChangeText}
@@ -108,7 +148,12 @@ export default function LoginScreen(props) {
         {screenType === SIGN_UP && (
           <TextInput
             placeholder="Confirm Password"
-            style={styles.input}
+            style={[
+              styles.input,
+              password !== confirmPassword
+                ? { color: "red" }
+                : { color: "black" },
+            ]}
             onChangeText={setConfirmPassword}
             value={confirmPassword}
             secureTextEntry={true}
@@ -121,7 +166,7 @@ export default function LoginScreen(props) {
         <CromaButton
           style={{ backgroundColor: "#ff5c59" }}
           textStyle={{ color: "#fff" }}
-          onPress={signIn}
+          onPress={onSubmit}
         >
           {t(LOGIN_AND_SIGNUP_TEXT[screenType].buttonText)}
         </CromaButton>
@@ -165,7 +210,6 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     justifyContent: "space-between",
-    minHeight: 460,
     flexDirection: "column",
   },
   title: {
