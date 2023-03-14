@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
-  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,13 +8,13 @@ import {
 } from "react-native";
 import { View } from "react-native-animatable";
 import CromaButton from "../components/CromaButton";
-import { CromaContext } from "../store/store";
 import { material } from "react-native-typography";
 import { useTranslation } from "react-i18next";
 import { Dimensions } from "react-native";
 import Config from "react-native-config";
 import { login, signUp } from "../network/login-and-signup";
 import { notifyMessage } from "../libs/Helpers";
+import PropTypes from "prop-types";
 
 import {
   GoogleSignin,
@@ -44,7 +43,7 @@ const LOGIN_AND_SIGNUP_TEXT = {
   },
 };
 
-export default function LoginScreen(props) {
+function LoginScreen(props) {
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
@@ -66,6 +65,7 @@ export default function LoginScreen(props) {
         console.log({ res });
       } catch (error) {
         console.log({ error });
+        notifyMessage(error.message);
       }
     } else {
       // to handle sign up
@@ -74,12 +74,14 @@ export default function LoginScreen(props) {
         return;
       }
       try {
-        await signUp(fullName, email, password);
+        const res = await signUp(fullName, email, password);
+        console.log({ res });
       } catch (error) {
         console.log({ error });
+        notifyMessage(error.message);
       }
     }
-  }, []);
+  }, [confirmPassword, email, fullName, password, screenType, t]);
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -202,6 +204,10 @@ export default function LoginScreen(props) {
   );
 }
 
+LoginScreen.propTypes = {
+  navigation: PropTypes.any,
+};
+
 const styles = StyleSheet.create({
   scrollView: {
     paddingLeft: 12,
@@ -276,3 +282,5 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+
+export default LoginScreen;
