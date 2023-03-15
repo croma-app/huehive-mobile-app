@@ -56,7 +56,7 @@ function LoginScreen(props) {
     props.navigation.setOptions({
       title: t(LOGIN_AND_SIGNUP_TEXT[screenType].title),
     });
-  }, [screenType]);
+  }, [props.navigation, screenType, t]);
 
   const onSubmit = useCallback(async () => {
     if (screenType === LOGIN) {
@@ -126,7 +126,7 @@ function LoginScreen(props) {
       >
         <Text style={styles.title}>{t("Welcome,")}</Text>
         <Text style={styles.intro}>{t("Glad to see you!,")}</Text>
-        <Notification></Notification>
+        <Notification message={"Failed to login "}></Notification>
         {screenType === SIGN_UP && (
           <TextInput
             style={styles.input}
