@@ -15,6 +15,7 @@ import Config from "react-native-config";
 import { login, signUp } from "../network/login-and-signup";
 import { notifyMessage } from "../libs/Helpers";
 import PropTypes from "prop-types";
+import Notification from "../components/Notification";
 
 import {
   GoogleSignin,
@@ -125,6 +126,7 @@ function LoginScreen(props) {
       >
         <Text style={styles.title}>{t("Welcome,")}</Text>
         <Text style={styles.intro}>{t("Glad to see you!,")}</Text>
+        <Notification></Notification>
         {screenType === SIGN_UP && (
           <TextInput
             style={styles.input}
