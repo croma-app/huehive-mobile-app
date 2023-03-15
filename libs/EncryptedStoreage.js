@@ -1,6 +1,6 @@
 import EncryptedStorage from "react-native-encrypted-storage";
 
-export async function storeUserSession(fullName, email, token) {
+export async function storeUserSession(fullName, email, token, avator) {
   try {
     await EncryptedStorage.setItem(
       "user_session",
@@ -8,6 +8,7 @@ export async function storeUserSession(fullName, email, token) {
         token,
         fullName,
         email,
+        avator,
       })
     );
 
@@ -23,7 +24,7 @@ export async function retrieveUserSession() {
 
     if (session !== undefined) {
       // Congrats! You've just retrieved your first value!
-      return session;
+      return JSON.parse(session);
     }
   } catch (error) {
     // There was an error on the native side

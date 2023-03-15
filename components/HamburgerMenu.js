@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   Linking,
@@ -21,9 +21,11 @@ import { launchImageLibrary } from "react-native-image-picker";
 import { CromaContext } from "../store/store";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
+import { retrieveUserSession } from "../libs/EncryptedStoreage";
 
 const HamburgerMenu = (props) => {
   const { t } = useTranslation();
+  const [userData, setUserData] = useState();
 
   const pickImageResult = async () => {
     const result = await launchImageLibrary({
@@ -32,6 +34,14 @@ const HamburgerMenu = (props) => {
     });
     return result;
   };
+
+  useEffect(() => {
+    // check if already logged in
+    (async () => {
+      const userData = await retrieveUserSession();
+      setUserData(userData);
+    })();
+  }, [props.navigation]);
 
   const { setColorList, clearPalette } = React.useContext(CromaContext);
   const navigate = function (screen) {
@@ -51,10 +61,16 @@ const HamburgerMenu = (props) => {
         >
           <Image
             style={styles.logo}
-            // eslint-disable-next-line no-undef
-            source={require("../assets/images/icon.png")}
+            source={
+              userData
+                ? { uri: userData.avatar }
+                : // eslint-disable-next-line no-undef
+                  require("../assets/images/icon.png")
+            }
           />
-          <Text style={styles.title}>{t("Croma - Save you colors")}</Text>
+          <Text style={styles.title}>
+            {userData ? userData.fullName : t("Croma - Save you colors")}
+          </Text>
         </View>
       </TouchableOpacity>
       <ScrollView>

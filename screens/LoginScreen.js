@@ -10,18 +10,21 @@ import { View } from "react-native-animatable";
 import CromaButton from "../components/CromaButton";
 import { material } from "react-native-typography";
 import { useTranslation } from "react-i18next";
-import { Dimensions } from "react-native";
-import Config from "react-native-config";
+// import { Dimensions } from "react-native";
 import { login, signUp } from "../network/login-and-signup";
-import { notifyMessage } from "../libs/Helpers";
+// import { notifyMessage } from "../libs/Helpers";
 import PropTypes from "prop-types";
+import {
+  retrieveUserSession,
+  storeUserSession,
+} from "../libs/EncryptedStoreage";
 import Notification from "../components/Notification";
 
-import {
-  GoogleSignin,
-  statusCodes,
-  GoogleSigninButton,
-} from "@react-native-google-signin/google-signin";
+// import {
+//   GoogleSignin,
+//   statusCodes,
+//   GoogleSigninButton,
+// } from "@react-native-google-signin/google-signin";
 // import googleLogo from '/assets/images/g-logo.png'
 
 const LOGIN = "LOGIN";
@@ -85,9 +88,20 @@ function LoginScreen(props) {
   const [fullName, setFullName] = useState();
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
+  const [error, setError] = useState();
   const [validationErrors, setValidationErrors] = useState(undefined);
   const [screenType, setScreenType] = useState(SIGN_UP);
   const { t } = useTranslation();
+
+  useEffect(() => {
+    // check if already logged in
+    (async () => {
+      const userData = await retrieveUserSession();
+      if (userData) {
+        props.navigation.goBack();
+      }
+    })();
+  }, [props.navigation]);
 
   useEffect(() => {
     props.navigation.setOptions({
@@ -100,10 +114,15 @@ function LoginScreen(props) {
       // to handle login
       try {
         const res = await login(email, password);
-        console.log({ res });
+        await storeUserSession(
+          res.data.user.full_name,
+          res.data.user.email,
+          res.data.user.avatar_url,
+          res.data.userToken
+        );
+        props.navigation.goBack();
       } catch (error) {
-        console.log({ error });
-        notifyMessage(error.message);
+        setError(error.message);
       }
     } else {
       // to handle sign up
@@ -114,48 +133,59 @@ function LoginScreen(props) {
         confirmPassword,
       });
       setValidationErrors(validationErrors);
-      console.log({ validationErrors });
       if (validationErrors) {
         return;
       }
 
       try {
         const res = await signUp(fullName, email, password);
-        console.log({ res });
+        await storeUserSession(
+          res.data.user.full_name,
+          res.data.user.email,
+          res.data.user.avatar_url,
+          res.data.userToken
+        );
+        props.navigation.goBack();
       } catch (error) {
-        console.log({ error });
-        notifyMessage(error.message);
+        setError(error.message);
       }
     }
-  }, [confirmPassword, email, fullName, password, screenType]);
+  }, [
+    confirmPassword,
+    email,
+    fullName,
+    password,
+    props.navigation,
+    screenType,
+  ]);
 
-  useEffect(() => {
-    GoogleSignin.configure({
-      webClientId: Config.GOOGLE_AUTHOTICATION_WEB_CLIENT_ID,
-      // offlineAccess: false
-    });
-  }, [GoogleSignin]);
+  // useEffect(() => {
+  //   GoogleSignin.configure({
+  //     webClientId: Config.GOOGLE_AUTHOTICATION_WEB_CLIENT_ID,
+  //     // offlineAccess: false
+  //   });
+  // }, [GoogleSignin]);
   // const login = () => {};
   // Somewhere in your code
-  const signIn = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-      // this.setState({ userInfo });
-      console.log({ userInfo });
-    } catch (error) {
-      console.log({ error });
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // user cancelled the login flow
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation (e.g. sign in) is in progress already
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // play services not available or outdated
-      } else {
-        // some other error happened
-      }
-    }
-  };
+  // const signIn = async () => {
+  //   try {
+  //     await GoogleSignin.hasPlayServices();
+  //     const userInfo = await GoogleSignin.signIn();
+  //     // this.setState({ userInfo });
+  //     console.log({ userInfo });
+  //   } catch (error) {
+  //     console.log({ error });
+  //     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+  //       // user cancelled the login flow
+  //     } else if (error.code === statusCodes.IN_PROGRESS) {
+  //       // operation (e.g. sign in) is in progress already
+  //     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+  //       // play services not available or outdated
+  //     } else {
+  //       // some other error happened
+  //     }
+  //   }
+  // };
 
   const onChangeText = useCallback((text) => {
     setEmail(text);
@@ -166,12 +196,17 @@ function LoginScreen(props) {
       <View
         style={[
           styles.container,
-          { minHeight: screenType === LOGIN ? 460 : 600 },
+          { minHeight: screenType === LOGIN ? 400 : 500 },
         ]}
       >
         <Text style={styles.title}>{t("Welcome,")}</Text>
         <Text style={styles.intro}>{t("Glad to see you!,")}</Text>
-        {/* <Notification message={"Failed to login "}></Notification> */}
+        {error && (
+          <Notification
+            message={error}
+            onPress={() => setError(undefined)}
+          ></Notification>
+        )}
         {screenType === SIGN_UP && (
           <>
             {validationErrors && validationErrors.fullName && (
@@ -230,14 +265,14 @@ function LoginScreen(props) {
         >
           {t(LOGIN_AND_SIGNUP_TEXT[screenType].buttonText)}
         </CromaButton>
-        <View style={styles.orSignUpContainer}>
+        {/* <View style={styles.orSignUpContainer}>
           <Text style={styles.leftLine}> </Text>
           <Text style={styles.orSignUp}>
             {t(LOGIN_AND_SIGNUP_TEXT[screenType].orText)}
           </Text>
           <Text style={styles.rightLine}> </Text>
-        </View>
-        <GoogleSigninButton
+        </View> */}
+        {/* <GoogleSigninButton
           style={{
             width: Dimensions.get("window").width * (95 / 100),
             height: 60,
@@ -246,7 +281,7 @@ function LoginScreen(props) {
           color={GoogleSigninButton.Color.Dark}
           onPress={signIn}
           // disabled={this.state.isSigninInProgress}
-        />
+        /> */}
       </View>
       <TouchableOpacity
         onPress={() => {
