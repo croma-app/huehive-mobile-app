@@ -44,11 +44,48 @@ const LOGIN_AND_SIGNUP_TEXT = {
   },
 };
 
+function checkValidEmail(email) {
+  return String(email)
+    .toLowerCase()
+    .match(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+}
+
+function signUpValidations({ fullName, email, password, confirmPassword }) {
+  let fullNameError, emailError, passwordError;
+
+  if (!fullName || fullName.length === 0) {
+    fullNameError = "Full name required.";
+  }
+
+  if (!email || !checkValidEmail(email)) {
+    emailError = "Please enter valid email.";
+  }
+
+  if (!password || password.length < 6) {
+    passwordError = "Minimum 6 characters required in password.";
+  }
+
+  if (password !== confirmPassword) {
+    passwordError = "Confirm password did not match.";
+  }
+  if (!fullNameError && !emailError && !passwordError) {
+    return undefined;
+  }
+  return {
+    fullName: fullNameError,
+    email: emailError,
+    password: passwordError,
+  };
+}
+
 function LoginScreen(props) {
-  const [email, setEmail] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [email, setEmail] = useState();
+  const [fullName, setFullName] = useState();
+  const [password, setPassword] = useState();
+  const [confirmPassword, setConfirmPassword] = useState();
+  const [validationErrors, setValidationErrors] = useState(undefined);
   const [screenType, setScreenType] = useState(SIGN_UP);
   const { t } = useTranslation();
 
@@ -70,10 +107,18 @@ function LoginScreen(props) {
       }
     } else {
       // to handle sign up
-      if (password !== confirmPassword) {
-        notifyMessage(t("Confirm password did not match."));
+      const validationErrors = signUpValidations({
+        fullName,
+        email,
+        password,
+        confirmPassword,
+      });
+      setValidationErrors(validationErrors);
+      console.log({ validationErrors });
+      if (validationErrors) {
         return;
       }
+
       try {
         const res = await signUp(fullName, email, password);
         console.log({ res });
@@ -82,7 +127,7 @@ function LoginScreen(props) {
         notifyMessage(error.message);
       }
     }
-  }, [confirmPassword, email, fullName, password, screenType, t]);
+  }, [confirmPassword, email, fullName, password, screenType]);
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -126,14 +171,22 @@ function LoginScreen(props) {
       >
         <Text style={styles.title}>{t("Welcome,")}</Text>
         <Text style={styles.intro}>{t("Glad to see you!,")}</Text>
-        <Notification message={"Failed to login "}></Notification>
+        {/* <Notification message={"Failed to login "}></Notification> */}
         {screenType === SIGN_UP && (
-          <TextInput
-            style={styles.input}
-            onChangeText={setFullName}
-            placeholder={"Full name"}
-            value={fullName}
-          />
+          <>
+            {validationErrors && validationErrors.fullName && (
+              <Text style={styles.fieldError}>{validationErrors.fullName}</Text>
+            )}
+            <TextInput
+              style={styles.input}
+              onChangeText={setFullName}
+              placeholder={"Full name"}
+              value={fullName}
+            />
+          </>
+        )}
+        {validationErrors && validationErrors.email && (
+          <Text style={styles.fieldError}>{validationErrors.email}</Text>
         )}
         <TextInput
           style={styles.input}
@@ -141,6 +194,9 @@ function LoginScreen(props) {
           placeholder={"Email address"}
           value={email}
         />
+        {validationErrors && validationErrors.password && (
+          <Text style={styles.fieldError}>{validationErrors.password}</Text>
+        )}
         <TextInput
           placeholder="Password"
           style={styles.input}
@@ -193,7 +249,10 @@ function LoginScreen(props) {
         />
       </View>
       <TouchableOpacity
-        onPress={() => setScreenType(screenType === LOGIN ? SIGN_UP : LOGIN)}
+        onPress={() => {
+          setScreenType(screenType === LOGIN ? SIGN_UP : LOGIN);
+          setValidationErrors(undefined);
+        }}
       >
         <View style={styles.changePage}>
           <Text>{t(LOGIN_AND_SIGNUP_TEXT[screenType].linkTitle)}</Text>
@@ -282,6 +341,10 @@ const styles = StyleSheet.create({
   },
   bold: {
     fontWeight: "bold",
+  },
+  fieldError: {
+    fontSize: 16,
+    color: "red",
   },
 });
 
