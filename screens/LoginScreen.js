@@ -5,6 +5,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import { View } from "react-native-animatable";
 import CromaButton from "../components/CromaButton";
@@ -17,6 +18,7 @@ import PropTypes from "prop-types";
 import {
   retrieveUserSession,
   storeUserSession,
+  removeUserSession,
 } from "../libs/EncryptedStoreage";
 import Notification from "../components/Notification";
 
@@ -89,25 +91,35 @@ function LoginScreen(props) {
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
   const [error, setError] = useState();
+  const [userData, setUserData] = useState();
   const [validationErrors, setValidationErrors] = useState(undefined);
   const [screenType, setScreenType] = useState(SIGN_UP);
   const { t } = useTranslation();
+  console.log({ userData });
 
   useEffect(() => {
     // check if already logged in
     (async () => {
       const userData = await retrieveUserSession();
       if (userData) {
-        props.navigation.goBack();
+        setUserData(userData);
+        // props.navigation.goBack();
       }
     })();
   }, [props.navigation]);
 
   useEffect(() => {
     props.navigation.setOptions({
-      title: t(LOGIN_AND_SIGNUP_TEXT[screenType].title),
+      title: userData
+        ? t("Profile")
+        : t(LOGIN_AND_SIGNUP_TEXT[screenType].title),
     });
-  }, [props.navigation, screenType, t]);
+  }, [props.navigation, screenType, t, userData]);
+
+  const onLogout = useCallback(() => {
+    removeUserSession();
+    setUserData(undefined);
+  }, []);
 
   const onSubmit = useCallback(async () => {
     if (screenType === LOGIN) {
@@ -117,8 +129,8 @@ function LoginScreen(props) {
         await storeUserSession(
           res.data.user.full_name,
           res.data.user.email,
-          res.data.user.avatar_url,
-          res.data.userToken
+          res.data.userToken,
+          res.data.user.avatar_url
         );
         props.navigation.goBack();
       } catch (error) {
@@ -142,12 +154,16 @@ function LoginScreen(props) {
         await storeUserSession(
           res.data.user.full_name,
           res.data.user.email,
-          res.data.user.avatar_url,
-          res.data.userToken
+          res.data.userToken,
+          res.data.user.avatar_url
         );
         props.navigation.goBack();
       } catch (error) {
-        setError(error.message);
+        if (error.response.data.error) {
+          setError(error.response.data.error);
+        } else {
+          setError(error.message);
+        }
       }
     }
   }, [
@@ -190,7 +206,34 @@ function LoginScreen(props) {
   const onChangeText = useCallback((text) => {
     setEmail(text);
   }, []);
-  console.log({ password, confirmPassword, b: password !== confirmPassword });
+
+  if (userData) {
+    return (
+      <ScrollView
+        style={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={[styles.logoutContainer]}>
+          <Image style={styles.logo} source={{ uri: userData.avator }} />
+          <Text style={styles.intro}>
+            {t("Name: ")}
+            {userData.fullName}
+          </Text>
+          <Text style={styles.intro}>
+            {t("Email: ")}
+            {userData.email}
+          </Text>
+          <CromaButton
+            style={{ backgroundColor: "#ff5c59", width: "100%" }}
+            textStyle={{ color: "#fff" }}
+            onPress={onLogout}
+          >
+            {t("Logout")}
+          </CromaButton>
+        </View>
+      </ScrollView>
+    );
+  }
   return (
     <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
       <View
@@ -338,11 +381,6 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 13,
   },
-  logo: {
-    width: 30,
-    height: 30,
-    margin: 5,
-  },
   input: {
     borderWidth: 1,
     borderColor: "#000",
@@ -380,6 +418,17 @@ const styles = StyleSheet.create({
   fieldError: {
     fontSize: 16,
     color: "red",
+  },
+  logoutContainer: {
+    display: "flex",
+    alignItems: "center",
+  },
+  logo: {
+    borderColor: "#000",
+    height: 50,
+    width: 50,
+    marginTop: 30,
+    padding: 3,
   },
 });
 

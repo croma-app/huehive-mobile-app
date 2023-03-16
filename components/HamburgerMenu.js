@@ -41,7 +41,7 @@ const HamburgerMenu = (props) => {
       const userData = await retrieveUserSession();
       setUserData(userData);
     })();
-  }, [props.navigation]);
+  }, [props]);
 
   const { setColorList, clearPalette } = React.useContext(CromaContext);
   const navigate = function (screen) {
@@ -53,7 +53,7 @@ const HamburgerMenu = (props) => {
       <TouchableOpacity
         onPress={() => {
           logEvent("hm_home_screen");
-          navigate("Home");
+          userData ? navigate("Login") : navigate("Home");
         }}
       >
         <View
@@ -63,7 +63,7 @@ const HamburgerMenu = (props) => {
             style={styles.logo}
             source={
               userData
-                ? { uri: userData.avatar }
+                ? { uri: userData.avator }
                 : // eslint-disable-next-line no-undef
                   require("../assets/images/icon.png")
             }

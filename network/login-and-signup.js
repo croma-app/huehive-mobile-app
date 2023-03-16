@@ -30,7 +30,7 @@ export const signUp = async (full_name, email, password) => {
     },
     {
       headers: {
-        // accept: "application/json",
+        accept: "application/json",
         "content-type": "application/json",
       },
     }

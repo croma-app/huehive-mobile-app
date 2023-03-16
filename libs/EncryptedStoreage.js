@@ -30,3 +30,12 @@ export async function retrieveUserSession() {
     // There was an error on the native side
   }
 }
+
+export async function removeUserSession() {
+  try {
+    await EncryptedStorage.removeItem("user_session");
+    // Congrats! You've just removed your first value!
+  } catch (error) {
+    // There was an error on the native side
+  }
+}
