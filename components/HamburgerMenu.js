@@ -228,11 +228,11 @@ const HamburgerMenu = (props) => {
               <Text style={styles.textAreaMenuItem}>{t("About us")}</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity
+          {!userData && <TouchableOpacity
             style={styles.menuItem}
             onPress={async () => {
               logEvent("hm_login");
-              navigate("Login");
+              navigate("Login/Signup");
             }}
           >
             <View style={styles.menuItemView}>
@@ -242,6 +242,7 @@ const HamburgerMenu = (props) => {
               <Text style={styles.textAreaMenuItem}>{t("Login")}</Text>
             </View>
           </TouchableOpacity>
+          }
         </View>
       </ScrollView>
     </SafeAreaView>

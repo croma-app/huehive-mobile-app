@@ -27,7 +27,7 @@ import Notification from "../components/Notification";
 //   statusCodes,
 //   GoogleSigninButton,
 // } from "@react-native-google-signin/google-signin";
-// import googleLogo from '/assets/images/g-logo.png'
+// import googleLogo from '/assets/images/g-logo.png';
 
 const LOGIN = "LOGIN";
 const SIGN_UP = "SIGN_UP";
