@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const login = async (email, password) => {
   return axios.post(
-    "https://api.croma.app/users/sign_in",
+    "https://huehive.co/users/sign_in",
     JSON.stringify({
       user: {
         email: email,
@@ -20,7 +20,7 @@ export const login = async (email, password) => {
 
 export const signUp = async (full_name, email, password) => {
   return axios.post(
-    "https://api.croma.app/users",
+    "https://huehive.co/users",
     {
       user: {
         full_name,
