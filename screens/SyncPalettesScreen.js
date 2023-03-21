@@ -37,15 +37,23 @@ export default function SyncPalettesScreen(props) {
   logEvent("sync_palettes_screen");
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <View><Text style={material.headline}> Login/signup to sync your palettes </Text></View>
-      <CromaButton
-       onPress={async () => {
-          logEvent("login");
-          navigation.navigate("Login");
-        }}
-      >
-        {t('Login/Signup')}
-      </CromaButton>
+      {user.loggedIn ? (<View>
+        <Text>Your palettes are safely stored in our servers</Text>
+      <View>) :
+        (
+        <View>
+          <View><Text style={material.headline}> Login/signup to sync your palettes </Text></View>
+          <CromaButton
+          onPress={async () => {
+              logEvent("login");
+              navigation.navigate("Login");
+            }}
+          >
+            {t('Login/Signup')}
+          </CromaButton>
+        </View>
+        )
+      }
       <View>
         <View style={styles.fileContainer}>
           <Text style={material.headline}>{t('Export to file')}</Text>

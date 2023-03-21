@@ -73,6 +73,7 @@ export default function applicationHook() {
   const loadInitPaletteFromStore = async () => {
     setState(state => ({ ...state, isLoading: true }));
     // Loading application state from localStorage
+    // TODO network call...
     const _state = await Storage.getApplicationState();
     setState(state => ({
       ...state,

@@ -11,6 +11,7 @@ import { View } from "react-native-animatable";
 import CromaButton from "../components/CromaButton";
 import { material } from "react-native-typography";
 import { useTranslation } from "react-i18next";
+import { CromaContext } from "../store/store";
 // import { Dimensions } from "react-native";
 import { login, signUp } from "../network/login-and-signup";
 // import { notifyMessage } from "../libs/Helpers";
@@ -95,6 +96,7 @@ function LoginScreen(props) {
   const [validationErrors, setValidationErrors] = useState(undefined);
   const [screenType, setScreenType] = useState(SIGN_UP);
   const { t } = useTranslation();
+  const { user, setUser }= React.useContext(CromaContext);
   console.log({ userData });
 
   useEffect(() => {
@@ -119,6 +121,8 @@ function LoginScreen(props) {
   const onLogout = useCallback(() => {
     removeUserSession();
     setUserData(undefined);
+    user.loggedIn = false;
+    setUser(user);
   }, []);
 
   const onSubmit = useCallback(async () => {
@@ -132,6 +136,8 @@ function LoginScreen(props) {
           res.data.userToken,
           res.data.user.avatar_url
         );
+        user.loggedIn = true;
+        setUser(user);
         props.navigation.goBack();
       } catch (error) {
         setError(error.message);
@@ -157,6 +163,8 @@ function LoginScreen(props) {
           res.data.userToken,
           res.data.user.avatar_url
         );
+        user.loggedIn = true;
+        setUser(user);
         props.navigation.goBack();
       } catch (error) {
         if (error.response.data.error) {
