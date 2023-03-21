@@ -232,14 +232,14 @@ const HamburgerMenu = (props) => {
             style={styles.menuItem}
             onPress={async () => {
               logEvent("hm_login");
-              navigate("Login/Signup");
+              navigate("Login");
             }}
           >
             <View style={styles.menuItemView}>
               <View style={{ ...styles.menuIcon, paddingLeft: 4 }}>
                 <MaterialCommunityIcons name="login" style={styles.icon} />
               </View>
-              <Text style={styles.textAreaMenuItem}>{t("Login")}</Text>
+              <Text style={styles.textAreaMenuItem}>{t("Login/Signup")}</Text>
             </View>
           </TouchableOpacity>
           }

@@ -37,9 +37,10 @@ export default function SyncPalettesScreen(props) {
   logEvent("sync_palettes_screen");
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {user.loggedIn ? (<View>
+      { /*TODO: update if required */}
+      {user.loggedIn ? (<View> 
         <Text>Your palettes are safely stored in our servers</Text>
-      <View>) :
+      </View>) :
         (
         <View>
           <View><Text style={material.headline}> Login/signup to sync your palettes </Text></View>
