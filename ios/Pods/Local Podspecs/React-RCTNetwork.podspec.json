@@ -14,11 +14,7 @@
     "tag": "v0.66.5"
   },
   "source_files": "*.{m,mm}",
-  "preserve_paths": [
-    "package.json",
-    "LICENSE",
-    "LICENSE-docs"
-  ],
+  "preserve_paths": ["package.json", "LICENSE", "LICENSE-docs"],
   "header_dir": "RCTNetwork",
   "pod_target_xcconfig": {
     "USE_HEADERMAP": "YES",
@@ -27,23 +23,11 @@
   },
   "frameworks": "MobileCoreServices",
   "dependencies": {
-    "RCT-Folly": [
-      "2021.06.28.00-v2"
-    ],
-    "FBReactNativeSpec": [
-      "0.66.5"
-    ],
-    "RCTTypeSafety": [
-      "0.66.5"
-    ],
-    "ReactCommon/turbomodule/core": [
-      "0.66.5"
-    ],
-    "React-jsi": [
-      "0.66.5"
-    ],
-    "React-Core/RCTNetworkHeaders": [
-      "0.66.5"
-    ]
+    "RCT-Folly": ["2021.06.28.00-v2"],
+    "FBReactNativeSpec": ["0.66.5"],
+    "RCTTypeSafety": ["0.66.5"],
+    "ReactCommon/turbomodule/core": ["0.66.5"],
+    "React-jsi": ["0.66.5"],
+    "React-Core/RCTNetworkHeaders": ["0.66.5"]
   }
 }

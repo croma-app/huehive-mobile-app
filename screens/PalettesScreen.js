@@ -1,9 +1,9 @@
-import React, { useContext, useLayoutEffect } from "react";
-import { ScrollView, StyleSheet } from "react-native";
-import Color from "pigment/full";
-import { PalettePreviewCard } from "../components/PalettePreviewCard";
-import { logEvent } from "../libs/Helpers";
-import { CromaContext } from "../store/store";
+import React, { useContext, useLayoutEffect } from 'react';
+import { ScrollView, StyleSheet } from 'react-native';
+import Color from 'pigment/full';
+import { PalettePreviewCard } from '../components/PalettePreviewCard';
+import { logEvent } from '../libs/Helpers';
+import { CromaContext } from '../store/store';
 export default function PalettesScreen({ navigation }) {
   const { detailedColor, setColorList } = useContext(CromaContext);
 
@@ -12,27 +12,27 @@ export default function PalettesScreen({ navigation }) {
   }, [detailedColor]);
 
   // Convert camelCase to sentence
-  const parseCamelCase = text => {
-    if (typeof text !== "string") {
-      return "";
+  const parseCamelCase = (text) => {
+    if (typeof text !== 'string') {
+      return '';
     }
     return text
-      .replace(/([a-z])([A-Z])/g, "$1 $2")
-      .replace(/\b([A-Z]+)([A-Z])([a-z])/, "$1 $2$3")
-      .replace(/^./, str => str.toUpperCase());
+      .replace(/([a-z])([A-Z])/g, '$1 $2')
+      .replace(/\b([A-Z]+)([A-Z])([a-z])/, '$1 $2$3')
+      .replace(/^./, (str) => str.toUpperCase());
   };
   const fullColor = new Color(detailedColor);
   let items = [];
   for (const i in fullColor) {
-    if (/.*scheme$/i.test(i) && typeof fullColor[i] === "function") {
+    if (/.*scheme$/i.test(i) && typeof fullColor[i] === 'function') {
       let colors = [];
       const paletteColors = fullColor[i]();
-      paletteColors.forEach(c => colors.push({ color: c.tohex() }));
+      paletteColors.forEach((c) => colors.push({ color: c.tohex() }));
       items.push(
         <PalettePreviewCard
           onPress={() => {
             setColorList(colors);
-            navigation.navigate("ColorList");
+            navigation.navigate('ColorList');
           }}
           key={i.toString()}
           colors={colors}
@@ -41,7 +41,7 @@ export default function PalettesScreen({ navigation }) {
       );
     }
   }
-  logEvent("palettes_screen");
+  logEvent('palettes_screen');
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {items}

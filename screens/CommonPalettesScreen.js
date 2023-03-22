@@ -1,15 +1,13 @@
-import React, { useLayoutEffect, useContext } from "react";
-import { ScrollView, StyleSheet, Text } from "react-native";
+import React, { useLayoutEffect, useContext } from 'react';
+import { ScrollView, StyleSheet, Text } from 'react-native';
 
-import { logEvent } from "../libs/Helpers";
-import { PalettePreviewCard } from "../components/PalettePreviewCard";
-import { CromaContext } from "../store/store";
+import { logEvent } from '../libs/Helpers';
+import { PalettePreviewCard } from '../components/PalettePreviewCard';
+import { CromaContext } from '../store/store';
 
 export default function CommonPalettesScreen({ navigation }) {
-  logEvent("common_palettes_screen");
-  const { commonPalettes, setColorList, setSuggestedName } = useContext(
-    CromaContext
-  );
+  logEvent('common_palettes_screen');
+  const { commonPalettes, setColorList, setSuggestedName } = useContext(CromaContext);
   const { palettes, name } = commonPalettes;
 
   useLayoutEffect(() => {
@@ -23,8 +21,8 @@ export default function CommonPalettesScreen({ navigation }) {
           key={palette?.name ?? index}
           onPress={() => {
             setColorList(palette.colors);
-            setSuggestedName(name + " - " + palette.name);
-            navigation.navigate("ColorList");
+            setSuggestedName(name + ' - ' + palette.name);
+            navigation.navigate('ColorList');
           }}
           colors={palette.colors}
           name={palette.name}

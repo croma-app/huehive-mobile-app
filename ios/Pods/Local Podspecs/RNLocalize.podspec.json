@@ -1,9 +1,7 @@
 {
   "name": "RNLocalize",
   "dependencies": {
-    "React-Core": [
-
-    ]
+    "React-Core": []
   },
   "version": "2.2.4",
   "license": "MIT",

@@ -1,13 +1,13 @@
-import React, { useContext } from "react";
-import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import { logEvent } from "../libs/Helpers";
-import { material } from "react-native-typography";
-import Colors from "../constants/Colors";
-import { CromaContext } from "../store/store";
-const allPalettes = require("../constants/palettes/palettes").default;
+import React, { useContext } from 'react';
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { logEvent } from '../libs/Helpers';
+import { material } from 'react-native-typography';
+import Colors from '../constants/Colors';
+import { CromaContext } from '../store/store';
+const allPalettes = require('../constants/palettes/palettes').default;
 
 export default function PaletteLibraryScreen({ navigation }) {
-  logEvent("palette_library_screen");
+  logEvent('palette_library_screen');
 
   const { setCommonPalettes } = useContext(CromaContext);
 
@@ -19,9 +19,9 @@ export default function PaletteLibraryScreen({ navigation }) {
             key={palettes?.name ?? index}
             style={styles.row}
             onPress={() => {
-              logEvent("hm_matrial_palettes");
+              logEvent('hm_matrial_palettes');
               setCommonPalettes(palettes);
-              navigation.navigate("CommonPalettes");
+              navigation.navigate('CommonPalettes');
             }}
           >
             <View>

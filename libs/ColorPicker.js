@@ -1,6 +1,6 @@
-import kmeans from "ml-kmeans";
+import kmeans from 'ml-kmeans';
 //import Jimp from "jimp";
-import Color from "pigment/full";
+import Color from 'pigment/full';
 export default class ColorPicker {
   static getProminentColors(image) {
     /*
@@ -14,29 +14,25 @@ export default class ColorPicker {
     //image.resize(Jimp.AUTO, 100);
     let data = ColorPicker._prepareDataForKmeans(image);
     let time = Date.now();
-    let ans = kmeans(data, 24, { initialization: "random", maxIterations: 20 });
+    let ans = kmeans(data, 24, { initialization: 'random', maxIterations: 20 });
     ans.centroids = ans.centroids.sort((c1, c2) => c2.size - c1.size);
-    let kmeansColors = ans.centroids.map(centroid => {
+    let kmeansColors = ans.centroids.map((centroid) => {
       return new Color(this._labToHex(centroid.centroid));
     });
-    return this._getFinalColors(kmeansColors).map(c => {
+    return this._getFinalColors(kmeansColors).map((c) => {
       return { color: c.tohex() };
     });
   }
   // original implementation in java: https://github.com/kamalkishor1991/croma/blob/master/src/main/java/org/numixproject/colorextractor/image/KMeansColorPicker.java
   static _getFinalColors(kmeansColors) {
-    kmeansColors.sort(
-      (c1, c2) => this._toArray(c1.tohsv())[0] < this._toArray(c2.tohsv())[0]
-    );
+    kmeansColors.sort((c1, c2) => this._toArray(c1.tohsv())[0] < this._toArray(c2.tohsv())[0]);
     let filteredColors = [];
     for (let i = 0; i < kmeansColors.length; i += 4) {
       let colorList = [];
       for (let j = 0; j < 4; j++) {
         colorList.push(kmeansColors[i + j]);
       }
-      colorList.sort(
-        (c1, c2) => this._toArray(c1.tohsv())[1] < this._toArray(c2.tohsv())[1]
-      );
+      colorList.sort((c1, c2) => this._toArray(c1.tohsv())[1] < this._toArray(c2.tohsv())[1]);
       filteredColors.push(colorList[colorList.length - 1]);
       filteredColors.push(colorList[colorList.length - 2]);
     }
@@ -55,9 +51,7 @@ export default class ColorPicker {
   }
 
   static _labToHex(lab) {
-    let color = new Color(
-      "lab(" + lab[0] + ", " + lab[1] + ", " + lab[2] + ")"
-    );
+    let color = new Color('lab(' + lab[0] + ', ' + lab[1] + ', ' + lab[2] + ')');
     return color.tohex();
   }
 
@@ -73,8 +67,8 @@ export default class ColorPicker {
         // format: "xyz(19.78527130484015, 8.600439447528947, 95.19796416837329)" to double array of xyz
         xyz = xyz
           .substr(4, xyz.length - 5)
-          .split(", ")
-          .map(v => parseFloat(v));
+          .split(', ')
+          .map((v) => parseFloat(v));
         data.push(xyz);
       }
     }
@@ -83,16 +77,14 @@ export default class ColorPicker {
   }
 
   static _toHexColor(intColor) {
-    let rgba = undefined;//Jimp.intToRGBA(intColor); // TODO: Need to optimize this once everything else starts working.
-    let color = new Color(
-      "rgb(" + rgba.r + ", " + rgba.g + ", " + rgba.b + ")"
-    );
+    let rgba = undefined; //Jimp.intToRGBA(intColor); // TODO: Need to optimize this once everything else starts working.
+    let color = new Color('rgb(' + rgba.r + ', ' + rgba.g + ', ' + rgba.b + ')');
     return color.tohex();
   }
 
   static _toArray(color) {
-    let index = color.indexOf("(");
+    let index = color.indexOf('(');
     color = color.substr(index + 1, color.length - index);
-    return color.split(", ").map(c => parseFloat(c));
+    return color.split(', ').map((c) => parseFloat(c));
   }
 }

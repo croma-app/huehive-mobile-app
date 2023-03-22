@@ -15,11 +15,7 @@
   "source_files": "ios/**/*.{h,m}",
   "requires_arc": true,
   "dependencies": {
-    "React-Core": [
-
-    ],
-    "AppAuth": [
-      "1.4.0"
-    ]
+    "React-Core": [],
+    "AppAuth": ["1.4.0"]
   }
 }

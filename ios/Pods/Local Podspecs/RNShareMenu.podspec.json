@@ -17,14 +17,9 @@
   },
   "swift_versions": "5.2",
   "source_files": "ios/**/*.{h,m,mm,swift}",
-  "exclude_files": [
-    "ios/ShareViewController.swift",
-    "ios/ReactShareViewController.swift"
-  ],
+  "exclude_files": ["ios/ShareViewController.swift", "ios/ReactShareViewController.swift"],
   "dependencies": {
-    "React": [
-
-    ]
+    "React": []
   },
   "swift_version": "5.2"
 }

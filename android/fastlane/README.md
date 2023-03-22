@@ -1,5 +1,4 @@
-fastlane documentation
-----
+## fastlane documentation
 
 # Installation
 
@@ -55,7 +54,7 @@ Increments internal build number tracking (different than version)
 
 Build and uploads the app to playstore for a internal testing release
 
-----
+---
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
 

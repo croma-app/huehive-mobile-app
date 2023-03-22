@@ -1,11 +1,9 @@
-import React, { useState } from "react";
-import Storage from "./../libs/Storage";
-import { initPurchase } from "../libs/Helpers";
-import {Platform} from 'react-native'
+import React, { useState } from 'react';
+import Storage from './../libs/Storage';
+import { initPurchase } from '../libs/Helpers';
+import { Platform } from 'react-native';
 
-import {
-  getAvailablePurchases
-} from 'react-native-iap';
+import { getAvailablePurchases } from 'react-native-iap';
 
 const UNDO_TIMEOUT = 3000;
 
@@ -17,14 +15,11 @@ const syncStateToStore = function (state) {
   Storage.setApplicationState(stateCopy);
 };
 
-const sortPaletteColors = palette =>
-  palette.colors.sort((a, b) => (a.color > b.color ? 1 : -1));
+const sortPaletteColors = (palette) => palette.colors.sort((a, b) => (a.color > b.color ? 1 : -1));
 
-const sortPalettes = allPalettes => {
+const sortPalettes = (allPalettes) => {
   // sorting palettes before save
-  const allPalettesArray = Object.keys(allPalettes).map(
-    key => allPalettes[key]
-  );
+  const allPalettesArray = Object.keys(allPalettes).map((key) => allPalettes[key]);
   allPalettesArray.sort((a, b) => {
     // Just a check for old user
     if (!a.createdAt) {
@@ -43,8 +38,8 @@ const sortPalettes = allPalettes => {
 };
 
 export default function applicationHook() {
-  const addPalette = async palette => {
-    setState(state => {
+  const addPalette = async (palette) => {
+    setState((state) => {
       const { allPalettes } = state;
       sortPaletteColors(palette);
       if (!palette.createdAt) {
@@ -60,10 +55,10 @@ export default function applicationHook() {
     if (oldName === name) {
       return;
     }
-    setState(state => {
+    setState((state) => {
       const { allPalettes } = state;
       allPalettes[name] = allPalettes[oldName];
-      allPalettes[name]["name"] = name;
+      allPalettes[name]['name'] = name;
       delete allPalettes[oldName];
       const ordered = sortPalettes(allPalettes);
       return { ...state, allPalettes: ordered };
@@ -71,11 +66,11 @@ export default function applicationHook() {
   };
 
   const loadInitPaletteFromStore = async () => {
-    setState(state => ({ ...state, isLoading: true }));
+    setState((state) => ({ ...state, isLoading: true }));
     // Loading application state from localStorage
     // TODO network call...
     const _state = await Storage.getApplicationState();
-    setState(state => ({
+    setState((state) => ({
       ...state,
       ..._state,
       isLoading: false
@@ -85,49 +80,49 @@ export default function applicationHook() {
     let defaultPalettes = {};
     const isUserAlreadyExits = await Storage.checkUserAlreadyExists();
 
-    if (isUserAlreadyExits != "true") {
-      Platform.OS === 'android' && await initPurchase(setPurchase);
+    if (isUserAlreadyExits != 'true') {
+      Platform.OS === 'android' && (await initPurchase(setPurchase));
     }
     await Storage.setUserAlreadyExists();
     defaultPalettes = {
-      name: "Croma example palette",
+      name: 'Croma example palette',
       colors: [
-        { color: "#f0675f" },
-        { color: "#2f95dc" },
-        { color: "#ebef5c" },
-        { color: "#c9ef5b" }
+        { color: '#f0675f' },
+        { color: '#2f95dc' },
+        { color: '#ebef5c' },
+        { color: '#c9ef5b' }
       ]
     };
     await addPalette(defaultPalettes);
     await addPalette(defaultPalettes);
 
     setStoreLoaded(true);
-    return
+    return;
   };
 
-  const removePaletteFromStateByName = name => {
-    setState(state => {
+  const removePaletteFromStateByName = (name) => {
+    setState((state) => {
       const { deletedPalettes } = state;
-      clearTimeout(deletedPalettes[name]["timeout"]);
+      clearTimeout(deletedPalettes[name]['timeout']);
       delete deletedPalettes[name];
       return { ...state, deletedPalettes };
     });
   };
 
-  const setPurchase = details => {
-    setState(state => {
+  const setPurchase = (details) => {
+    setState((state) => {
       return { ...state, isPro: true, purchaseDetails: details };
     });
   };
 
-  const setUser = user => {
-    setState(state => {
+  const setUser = (user) => {
+    setState((state) => {
       return { ...state, user: user };
     });
   };
 
   const addColorToPalette = (name, color) => {
-    setState(state => {
+    setState((state) => {
       const { allPalettes } = state;
       allPalettes[name].colors = allPalettes[name].colors.concat(color);
       return { ...state, allPalettes };
@@ -135,20 +130,20 @@ export default function applicationHook() {
   };
 
   const updatePalette = (name, colors) => {
-    setState(state => {
+    setState((state) => {
       const { allPalettes } = state;
       allPalettes[name].colors = [...colors];
       return { ...state, allPalettes };
     });
   };
 
-  const deletePaletteByName = async name => {
-    setState(state => {
+  const deletePaletteByName = async (name) => {
+    setState((state) => {
       const { allPalettes, deletedPalettes } = state;
       if (allPalettes[name]) {
         deletedPalettes[name] = { ...allPalettes[name] };
         delete allPalettes[name];
-        deletedPalettes[name]["timeout"] = setTimeout(() => {
+        deletedPalettes[name]['timeout'] = setTimeout(() => {
           removePaletteFromStateByName(name);
         }, UNDO_TIMEOUT);
         return { ...state, allPalettes, deletedPalettes };
@@ -157,8 +152,8 @@ export default function applicationHook() {
     });
   };
 
-  const undoDeletionByName = name => {
-    setState(state => {
+  const undoDeletionByName = (name) => {
+    setState((state) => {
       const { deletedPalettes } = state;
       if (deletedPalettes[name]) {
         addPalette({ ...deletedPalettes[name] });
@@ -169,10 +164,10 @@ export default function applicationHook() {
   };
 
   const colorDeleteFromPalette = (name, colorIndex) => {
-    setState(state => {
+    setState((state) => {
       const { allPalettes } = state;
       const deletedColor = allPalettes[name].colors.splice(colorIndex, 1);
-      deletedColor[0]["timeout"] = setTimeout(() => {
+      deletedColor[0]['timeout'] = setTimeout(() => {
         clearDeletedColor(name, deletedColor[0]);
       }, UNDO_TIMEOUT);
       if (allPalettes[name].deletedColors) {
@@ -185,7 +180,7 @@ export default function applicationHook() {
   };
 
   const undoColorDeletion = (name, colorName) => {
-    setState(state => {
+    setState((state) => {
       const { allPalettes } = state;
       allPalettes[name].colors.push({ color: colorName });
       allPalettes[name].deletedColors.forEach((color, index) => {
@@ -199,7 +194,7 @@ export default function applicationHook() {
   };
 
   const clearDeletedColor = (name, colorObj) => {
-    setState(state => {
+    setState((state) => {
       const { allPalettes } = state;
       allPalettes[name].deletedColors.forEach((color, index) => {
         if (color.color === colorObj.color) {
@@ -211,50 +206,50 @@ export default function applicationHook() {
     });
   };
 
-  const setStoreLoaded = isStoreLoaded => {
-    setState(state => {
+  const setStoreLoaded = (isStoreLoaded) => {
+    setState((state) => {
       return { ...state, isStoreLoaded };
     });
   };
 
-  const setCurrentPalette = currentPalette => {
-    setState(state => {
+  const setCurrentPalette = (currentPalette) => {
+    setState((state) => {
       return { ...state, currentPalette };
     });
   };
 
-  const setColorList = colorList => {
-    setState(state => {
+  const setColorList = (colorList) => {
+    setState((state) => {
       return { ...state, colorList };
     });
   };
 
-  const setDetailedColor = detailedColor => {
-    setState(state => {
+  const setDetailedColor = (detailedColor) => {
+    setState((state) => {
       return { ...state, detailedColor };
     });
   };
 
-  const setColorPickerCallback = colorPickerCallback => {
-    setState(state => {
+  const setColorPickerCallback = (colorPickerCallback) => {
+    setState((state) => {
       return { ...state, colorPickerCallback };
     });
   };
 
-  const setCommonPalettes = commonPalettes => {
-    setState(state => {
+  const setCommonPalettes = (commonPalettes) => {
+    setState((state) => {
       return { ...state, commonPalettes };
     });
   };
 
-  const setSuggestedName = suggestedName => {
-    setState(state => {
+  const setSuggestedName = (suggestedName) => {
+    setState((state) => {
       return { ...state, suggestedName };
     });
   };
 
   const clearPalette = () => {
-    setSuggestedName("");
+    setSuggestedName('');
     setCurrentPalette({});
     setColorList([]);
   };
@@ -265,12 +260,12 @@ export default function applicationHook() {
       currentPalette: {},
       colorList: [],
       deletedPalettes: {},
-      suggestedName: "",
+      suggestedName: '',
       isLoading: false,
       isPro: false,
       user: {},
       isStoreLoaded: false,
-      colorPickerCallback: () => { }
+      colorPickerCallback: () => {}
     },
     loadInitPaletteFromStore,
     undoDeletionByName,

@@ -1,3 +1,3 @@
 export const locales = {
-  en: require('./en.json'),
+  en: require('./en.json')
 };

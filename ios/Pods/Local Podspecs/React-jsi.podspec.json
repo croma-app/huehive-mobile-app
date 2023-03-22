@@ -22,18 +22,10 @@
   "header_dir": "jsi",
   "default_subspecs": "Default",
   "dependencies": {
-    "boost": [
-      "1.76.0"
-    ],
-    "DoubleConversion": [
-
-    ],
-    "RCT-Folly": [
-      "2021.06.28.00-v2"
-    ],
-    "glog": [
-
-    ]
+    "boost": ["1.76.0"],
+    "DoubleConversion": [],
+    "RCT-Folly": ["2021.06.28.00-v2"],
+    "glog": []
   },
   "subspecs": [
     {
