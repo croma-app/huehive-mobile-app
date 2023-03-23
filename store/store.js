@@ -3,9 +3,13 @@ import Storage from './../libs/Storage';
 import { initPurchase } from '../libs/Helpers';
 import { Platform } from 'react-native';
 
-import { getAvailablePurchases } from 'react-native-iap';
-
+//import { getAvailablePurchases } from 'react-native-iap';
 const UNDO_TIMEOUT = 3000;
+
+const DEFAULT_PALETTES = {
+  name: 'Croma example palette',
+  colors: [{ color: '#f0675f' }, { color: '#2f95dc' }, { color: '#ebef5c' }, { color: '#c9ef5b' }]
+};
 
 const syncStateToStore = function (state) {
   // TODO: We need to find a better way to do storage management.
@@ -37,7 +41,7 @@ const sortPalettes = (allPalettes) => {
   return ordered;
 };
 
-export default function applicationHook() {
+export default function useApplicationHook() {
   const addPalette = async (palette) => {
     setState((state) => {
       const { allPalettes } = state;
@@ -76,25 +80,15 @@ export default function applicationHook() {
       isLoading: false
     }));
 
-    // Setting default palette when user coming first time
-    let defaultPalettes = {};
-    const isUserAlreadyExits = await Storage.checkUserAlreadyExists();
+    const userDeviceId = await Storage.getUserDeviceId();
 
-    if (isUserAlreadyExits != 'true') {
+    if (userDeviceId && userDeviceId.length > 0) {
       Platform.OS === 'android' && (await initPurchase(setPurchase));
     }
-    await Storage.setUserAlreadyExists();
-    defaultPalettes = {
-      name: 'Croma example palette',
-      colors: [
-        { color: '#f0675f' },
-        { color: '#2f95dc' },
-        { color: '#ebef5c' },
-        { color: '#c9ef5b' }
-      ]
-    };
-    await addPalette(defaultPalettes);
-    await addPalette(defaultPalettes);
+    console.log({ userDeviceId }, 'check it once ');
+    // IF USER IS COMING FIRST TIME
+    await Storage.setUserDeviceId();
+    await addPalette(DEFAULT_PALETTES);
 
     setStoreLoaded(true);
     return;
