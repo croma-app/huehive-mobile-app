@@ -1,38 +1,32 @@
-import * as React from "react";
-import { StyleSheet, View, Text, Platform, TouchableOpacity } from "react-native";
-import Card from "./Card";
-import Colors from "../constants/Colors";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-
+import * as React from 'react';
+import { StyleSheet, View, Text, Platform, TouchableOpacity } from 'react-native';
+import Card from './Card';
+import Colors from '../constants/Colors';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 export default class SingleColorCard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { animationType: "fadeInLeftBig" };
+    this.state = { animationType: 'fadeInLeftBig' };
   }
   render() {
     return (
       <Card {...this.props} animationType={this.state.animationType}>
-        <View >
-          <View
-            style={{ backgroundColor: this.props.color.color, height: 100 }}
-          />
+        <View>
+          <View style={{ backgroundColor: this.props.color.color, height: 100 }} />
           <View style={styles.bottom}>
-            
             <Text style={styles.label}>
               {this.props.color.color +
-                (this.props.color.name
-                  ? " (" + this.props.color.name + ")"
-                  : "")}
+                (this.props.color.name ? ' (' + this.props.color.name + ')' : '')}
             </Text>
             <View style={styles.actionButtonsView}>
               <TouchableOpacity
                 {...{
-                  [Platform.OS === "web" ? "onClick" : "onPress"]: event => {
+                  [Platform.OS === 'web' ? 'onClick' : 'onPress']: (event) => {
                     event.preventDefault();
                     event.stopPropagation();
-                    this.setState({ animationType: "fadeOutRightBig" });
+                    this.setState({ animationType: 'fadeOutRightBig' });
                     setTimeout(() => {
                       this.props.colorDeleteFromPalette();
                     }, 400);
@@ -44,11 +38,9 @@ export default class SingleColorCard extends React.Component {
               </TouchableOpacity>
             </View>
 
-             <View style={styles.actionButtonsView}>
-              <TouchableOpacity
-                onPressIn={this.props.onPressDrag}
-              >
-                <MaterialIcons style={{alignItems: "center"}} size={20} name="drag-indicator" />
+            <View style={styles.actionButtonsView}>
+              <TouchableOpacity onPressIn={this.props.onPressDrag}>
+                <MaterialIcons style={{ alignItems: 'center' }} size={20} name="drag-indicator" />
               </TouchableOpacity>
             </View>
           </View>
@@ -60,14 +52,14 @@ export default class SingleColorCard extends React.Component {
 
 const styles = StyleSheet.create({
   bottom: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 16,
     height: 54
   },
   actionButtonsView: {
-    flexDirection: "row",
-    alignItems: "flex-end"
+    flexDirection: 'row',
+    alignItems: 'flex-end'
   },
   actionButton: {
     paddingRight: 16
@@ -75,7 +67,7 @@ const styles = StyleSheet.create({
   label: {
     flex: 1,
     marginHorizontal: 4,
-    fontWeight: "500",
+    fontWeight: '500',
     color: Colors.darkGrey
   }
 });

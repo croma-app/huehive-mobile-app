@@ -1,27 +1,20 @@
-import React, { useCallback, useEffect, useState } from "react";
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
-} from "react-native";
-import { View } from "react-native-animatable";
-import CromaButton from "../components/CromaButton";
-import { material } from "react-native-typography";
-import { useTranslation } from "react-i18next";
-import { CromaContext } from "../store/store";
+import React, { useCallback, useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import { View } from 'react-native-animatable';
+import CromaButton from '../components/CromaButton';
+import { material } from 'react-native-typography';
+import { useTranslation } from 'react-i18next';
+import { CromaContext } from '../store/store';
 // import { Dimensions } from "react-native";
-import { login, signUp } from "../network/login-and-signup";
+import { login, signUp } from '../network/login-and-signup';
 // import { notifyMessage } from "../libs/Helpers";
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 import {
   retrieveUserSession,
   storeUserSession,
-  removeUserSession,
-} from "../libs/EncryptedStoreage";
-import Notification from "../components/Notification";
+  removeUserSession
+} from '../libs/EncryptedStoreage';
+import Notification from '../components/Notification';
 
 // import {
 //   GoogleSignin,
@@ -30,24 +23,24 @@ import Notification from "../components/Notification";
 // } from "@react-native-google-signin/google-signin";
 // import googleLogo from '/assets/images/g-logo.png';
 
-const LOGIN = "LOGIN";
-const SIGN_UP = "SIGN_UP";
+const LOGIN = 'LOGIN';
+const SIGN_UP = 'SIGN_UP';
 
 const LOGIN_AND_SIGNUP_TEXT = {
   LOGIN: {
-    title: "Login",
-    orText: "Or Login with",
+    title: 'Login',
+    orText: 'Or Login with',
     linkTitle: "Don't have an account?",
-    linkText: " Sign Up Now",
-    buttonText: "Login",
+    linkText: ' Sign Up Now',
+    buttonText: 'Login'
   },
   SIGN_UP: {
-    title: "Signup",
-    orText: "Or Sign Up with",
-    linkTitle: "Already have and account?",
-    linkText: " Login Now",
-    buttonText: " Sign up",
-  },
+    title: 'Signup',
+    orText: 'Or Sign Up with',
+    linkTitle: 'Already have and account?',
+    linkText: ' Login Now',
+    buttonText: ' Sign up'
+  }
 };
 
 function checkValidEmail(email) {
@@ -62,19 +55,19 @@ function signUpValidations({ fullName, email, password, confirmPassword }) {
   let fullNameError, emailError, passwordError;
 
   if (!fullName || fullName.length === 0) {
-    fullNameError = "Full name required.";
+    fullNameError = 'Full name required.';
   }
 
   if (!email || !checkValidEmail(email)) {
-    emailError = "Please enter valid email.";
+    emailError = 'Please enter valid email.';
   }
 
   if (!password || password.length < 6) {
-    passwordError = "Minimum 6 characters required in password.";
+    passwordError = 'Minimum 6 characters required in password.';
   }
 
   if (password !== confirmPassword) {
-    passwordError = "Confirm password did not match.";
+    passwordError = 'Confirm password did not match.';
   }
   if (!fullNameError && !emailError && !passwordError) {
     return undefined;
@@ -82,7 +75,7 @@ function signUpValidations({ fullName, email, password, confirmPassword }) {
   return {
     fullName: fullNameError,
     email: emailError,
-    password: passwordError,
+    password: passwordError
   };
 }
 
@@ -96,7 +89,7 @@ function LoginScreen(props) {
   const [validationErrors, setValidationErrors] = useState(undefined);
   const [screenType, setScreenType] = useState(SIGN_UP);
   const { t } = useTranslation();
-  const { user, setUser }= React.useContext(CromaContext);
+  const { user, setUser } = React.useContext(CromaContext);
   console.log({ userData });
 
   useEffect(() => {
@@ -112,9 +105,7 @@ function LoginScreen(props) {
 
   useEffect(() => {
     props.navigation.setOptions({
-      title: userData
-        ? t("Profile")
-        : t(LOGIN_AND_SIGNUP_TEXT[screenType].title),
+      title: userData ? t('Profile') : t(LOGIN_AND_SIGNUP_TEXT[screenType].title)
     });
   }, [props.navigation, screenType, t, userData]);
 
@@ -148,7 +139,7 @@ function LoginScreen(props) {
         fullName,
         email,
         password,
-        confirmPassword,
+        confirmPassword
       });
       setValidationErrors(validationErrors);
       if (validationErrors) {
@@ -174,14 +165,7 @@ function LoginScreen(props) {
         }
       }
     }
-  }, [
-    confirmPassword,
-    email,
-    fullName,
-    password,
-    props.navigation,
-    screenType,
-  ]);
+  }, [confirmPassword, email, fullName, password, props.navigation, screenType]);
 
   // useEffect(() => {
   //   GoogleSignin.configure({
@@ -217,26 +201,23 @@ function LoginScreen(props) {
 
   if (userData) {
     return (
-      <ScrollView
-        style={styles.scrollView}
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <View style={[styles.logoutContainer]}>
           <Image style={styles.logo} source={{ uri: userData.avator }} />
           <Text style={styles.intro}>
-            {t("Name: ")}
+            {t('Name: ')}
             {userData.fullName}
           </Text>
           <Text style={styles.intro}>
-            {t("Email: ")}
+            {t('Email: ')}
             {userData.email}
           </Text>
           <CromaButton
-            style={{ backgroundColor: "#ff5c59", width: "100%" }}
-            textStyle={{ color: "#fff" }}
+            style={{ backgroundColor: '#ff5c59', width: '100%' }}
+            textStyle={{ color: '#fff' }}
             onPress={onLogout}
           >
-            {t("Logout")}
+            {t('Logout')}
           </CromaButton>
         </View>
       </ScrollView>
@@ -244,20 +225,10 @@ function LoginScreen(props) {
   }
   return (
     <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-      <View
-        style={[
-          styles.container,
-          { minHeight: screenType === LOGIN ? 400 : 500 },
-        ]}
-      >
-        <Text style={styles.title}>{t("Welcome,")}</Text>
-        <Text style={styles.intro}>{t("Glad to see you!,")}</Text>
-        {error && (
-          <Notification
-            message={error}
-            onPress={() => setError(undefined)}
-          ></Notification>
-        )}
+      <View style={[styles.container, { minHeight: screenType === LOGIN ? 400 : 500 }]}>
+        <Text style={styles.title}>{t('Welcome,')}</Text>
+        <Text style={styles.intro}>{t('Glad to see you!,')}</Text>
+        {error && <Notification message={error} onPress={() => setError(undefined)}></Notification>}
         {screenType === SIGN_UP && (
           <>
             {validationErrors && validationErrors.fullName && (
@@ -266,7 +237,7 @@ function LoginScreen(props) {
             <TextInput
               style={styles.input}
               onChangeText={setFullName}
-              placeholder={"Full name"}
+              placeholder={'Full name'}
               value={fullName}
             />
           </>
@@ -277,7 +248,7 @@ function LoginScreen(props) {
         <TextInput
           style={styles.input}
           onChangeText={onChangeText}
-          placeholder={"Email address"}
+          placeholder={'Email address'}
           value={email}
         />
         {validationErrors && validationErrors.password && (
@@ -296,9 +267,7 @@ function LoginScreen(props) {
             placeholder="Confirm Password"
             style={[
               styles.input,
-              password !== confirmPassword
-                ? { color: "red" }
-                : { color: "black" },
+              password !== confirmPassword ? { color: 'red' } : { color: 'black' }
             ]}
             onChangeText={setConfirmPassword}
             value={confirmPassword}
@@ -307,11 +276,11 @@ function LoginScreen(props) {
           />
         )}
         {screenType === LOGIN && (
-          <Text style={styles.forgotPassword}>{t("Forgot password ?")}</Text>
+          <Text style={styles.forgotPassword}>{t('Forgot password ?')}</Text>
         )}
         <CromaButton
-          style={{ backgroundColor: "#ff5c59" }}
-          textStyle={{ color: "#fff" }}
+          style={{ backgroundColor: '#ff5c59' }}
+          textStyle={{ color: '#fff' }}
           onPress={onSubmit}
         >
           {t(LOGIN_AND_SIGNUP_TEXT[screenType].buttonText)}
@@ -342,9 +311,7 @@ function LoginScreen(props) {
       >
         <View style={styles.changePage}>
           <Text>{t(LOGIN_AND_SIGNUP_TEXT[screenType].linkTitle)}</Text>
-          <Text style={styles.bold}>
-            {t(LOGIN_AND_SIGNUP_TEXT[screenType].linkText)}
-          </Text>
+          <Text style={styles.bold}>{t(LOGIN_AND_SIGNUP_TEXT[screenType].linkText)}</Text>
         </View>
       </TouchableOpacity>
     </ScrollView>
@@ -352,92 +319,92 @@ function LoginScreen(props) {
 }
 
 LoginScreen.propTypes = {
-  navigation: PropTypes.any,
+  navigation: PropTypes.any
 };
 
 const styles = StyleSheet.create({
   scrollView: {
     paddingLeft: 12,
-    paddingRight: 12,
+    paddingRight: 12
   },
   container: {
-    display: "flex",
-    justifyContent: "space-between",
-    flexDirection: "column",
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexDirection: 'column'
   },
   title: {
     paddingTop: 12,
     paddingBottom: 12,
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold'
   },
   intro: {
     paddingTop: 12,
     paddingBottom: 12,
-    fontSize: 16,
+    fontSize: 16
   },
   line: {
     ...material.body1,
     paddingBottom: 4,
-    fontSize: 15,
+    fontSize: 15
   },
   forgotPassword: {
-    marginLeft: "auto",
-    fontSize: 13,
+    marginLeft: 'auto',
+    fontSize: 13
   },
   orSignUp: {
     padding: 10,
-    fontSize: 13,
+    fontSize: 13
   },
   input: {
     borderWidth: 1,
-    borderColor: "#000",
+    borderColor: '#000',
     borderRadius: 5,
     paddingTop: 10,
     paddingBottom: 10,
-    paddingLeft: 10,
+    paddingLeft: 10
   },
   orSignUpContainer: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   changePage: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    height: 200,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 200
   },
   leftLine: {
     height: 1,
-    width: "25%",
-    backgroundColor: "#000",
+    width: '25%',
+    backgroundColor: '#000'
   },
   rightLine: {
     height: 1,
-    width: "25%",
-    backgroundColor: "#000",
+    width: '25%',
+    backgroundColor: '#000'
   },
   bold: {
-    fontWeight: "bold",
+    fontWeight: 'bold'
   },
   fieldError: {
     fontSize: 16,
-    color: "red",
+    color: 'red'
   },
   logoutContainer: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center'
   },
   logo: {
-    borderColor: "#000",
+    borderColor: '#000',
     height: 50,
     width: 50,
     marginTop: 30,
-    padding: 3,
-  },
+    padding: 3
+  }
 });
 
 export default LoginScreen;

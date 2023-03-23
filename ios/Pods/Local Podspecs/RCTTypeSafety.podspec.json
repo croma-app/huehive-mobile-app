@@ -21,17 +21,9 @@
     "HEADER_SEARCH_PATHS": "\"$(PODS_TARGET_SRCROOT)/Libraries/TypeSafety\" \"$(PODS_ROOT)/RCT-Folly\""
   },
   "dependencies": {
-    "FBLazyVector": [
-      "0.66.5"
-    ],
-    "RCT-Folly": [
-      "2021.06.28.00-v2"
-    ],
-    "RCTRequired": [
-      "0.66.5"
-    ],
-    "React-Core": [
-      "0.66.5"
-    ]
+    "FBLazyVector": ["0.66.5"],
+    "RCT-Folly": ["2021.06.28.00-v2"],
+    "RCTRequired": ["0.66.5"],
+    "React-Core": ["0.66.5"]
   }
 }

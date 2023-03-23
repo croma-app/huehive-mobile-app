@@ -1,2 +1,2 @@
-import ShareMenu from "react-native-share-menu";
+import ShareMenu from 'react-native-share-menu';
 export default ShareMenu;

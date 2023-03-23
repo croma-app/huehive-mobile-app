@@ -1,5 +1,5 @@
-import React from "react";
-import { Platform } from "react-native";
+import React from 'react';
+import { Platform } from 'react-native';
 
 export default class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -8,8 +8,8 @@ export default class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, info) {
-    if (Platform.OS === "web") {
-      window.location = "/";
+    if (Platform.OS === 'web') {
+      window.location = '/';
     }
     this.setState({ hasError: true });
   }

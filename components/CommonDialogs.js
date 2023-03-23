@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import * as Animatable from "react-native-animatable";
-import { View, Text, StyleSheet, Platform, Dimensions } from "react-native";
+import * as Animatable from 'react-native-animatable';
+import { View, Text, StyleSheet, Platform, Dimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
-export const DialogContainer = props => (
+export const DialogContainer = (props) => (
   <View style={styles.DialogContainer}>{props.children}</View>
 );
 
@@ -14,17 +14,17 @@ export const UndoDialog = (props) => {
   */
   const { name, undoDeletionByName } = props;
   const { t } = useTranslation();
-  
+
   return (
     <Animatable.View
-      animation={"fadeInUpBig"}
+      animation={'fadeInUpBig'}
       duration={500}
       style={[styles.undoCard, styles.marginAndRadius]}
       useNativeDriver={true}
     >
       <View>
         <Text style={styles.undoText}>
-          {t("Deleted")} {name}.
+          {t('Deleted')} {name}.
         </Text>
       </View>
       <TouchableOpacity
@@ -34,16 +34,15 @@ export const UndoDialog = (props) => {
           undoDeletionByName(name);
         }}
       >
-        <Text style={styles.undoButton}> {t("UNDO")} </Text>
+        <Text style={styles.undoButton}> {t('UNDO')} </Text>
       </TouchableOpacity>
     </Animatable.View>
   );
 };
 
-
-export const TextDialog = props => (
+export const TextDialog = (props) => (
   <Animatable.View
-    animation={"fadeInUp"}
+    animation={'fadeInUp'}
     duration={500}
     useNativeDriver={true}
     style={styles.undoCard}
@@ -56,39 +55,39 @@ export const TextDialog = props => (
 
 const styles = StyleSheet.create({
   undoCard: {
-    backgroundColor: "#303036",
+    backgroundColor: '#303036',
     padding: 15,
-    flexDirection: "row",
-    display: "flex",
-    justifyContent: "space-between"
+    flexDirection: 'row',
+    display: 'flex',
+    justifyContent: 'space-between'
   },
   marginAndRadius: {
     margin: 2,
     borderRadius: 6
   },
   undoText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 15
   },
   undoButton: {
-    fontWeight: "bold",
-    color: "#e6be0b",
+    fontWeight: 'bold',
+    color: '#e6be0b',
     fontSize: 15
   },
   DialogContainer:
-    Platform.OS === "web"
+    Platform.OS === 'web'
       ? {
-          position: "fixed",
+          position: 'fixed',
           bottom: 0,
           left: 0,
-          width: Math.min(Dimensions.get("window").width, 400) - 10,
+          width: Math.min(Dimensions.get('window').width, 400) - 10,
           margin: 5,
           zIndex: 10
         }
       : {
-          position: "absolute",
+          position: 'absolute',
           bottom: 0,
-          width: "100%",
+          width: '100%',
           zIndex: 10
         }
 });

@@ -19,11 +19,7 @@
   "source_files": "ios/**/*.{h,m}",
   "requires_arc": true,
   "dependencies": {
-    "React-Core": [
-
-    ],
-    "React-RCTImage": [
-
-    ]
+    "React-Core": [],
+    "React-RCTImage": []
   }
 }

@@ -68,3 +68,4 @@ ios/fastlane1/screenshots
 # Bundle artifact
 *.jsbundle
 localnotes.txt
+.env
