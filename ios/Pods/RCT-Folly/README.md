@@ -1,5 +1,4 @@
-Folly: Facebook Open-source Library
------------------------------------
+## Folly: Facebook Open-source Library
 
 ### What is `folly`?
 
@@ -30,9 +29,8 @@ dependencies, meaning that a given folly module may use any other
 folly components.
 
 All symbols are defined in the top-level namespace `folly`, except of
-course macros. Macro names are ALL_UPPERCASE and should be prefixed
-with `FOLLY_`. Namespace `folly` defines other internal namespaces
-such as `internal` or `detail`. User code should not depend on symbols
+course macros. Macro names are ALL*UPPERCASE and should be prefixed
+with `FOLLY*`. Namespace `folly`defines other internal namespaces such as`internal`or`detail`. User code should not depend on symbols
 in those namespaces.
 
 Folly has an `experimental` directory as well. This designation connotes
@@ -76,23 +74,23 @@ commit, we generally recommend building folly as a static library.
 #### build.sh
 
 The simplest way to build folly is using the `build.sh` script in the top-level
-of the repository.  `build.sh` can be used on Linux and MacOS, on Windows use
+of the repository. `build.sh` can be used on Linux and MacOS, on Windows use
 the `build.bat` script instead.
 
 This script will download and build all of the necessary dependencies first,
-and will then build folly.  This will help ensure that you build with recent
+and will then build folly. This will help ensure that you build with recent
 versions of all of the dependent libraries, regardless of what versions are
 installed locally on your system.
 
 By default this script will build and install folly and its dependencies in a
-scratch directory.  You can also specify a `--scratch-path` argument to control
-the location of the scratch directory used for the build.  There are also
+scratch directory. You can also specify a `--scratch-path` argument to control
+the location of the scratch directory used for the build. There are also
 `--install-dir` and `--install-prefix` arguments to provide some more
-fine-grained control of the installation directories.  However, given that
+fine-grained control of the installation directories. However, given that
 folly provides no compatibility guarantees between commits we generally
 recommend building and installing the libraries to a temporary location, and
 then pointing your project's build at this temporary location, rather than
-installing folly in the traditional system installation directories.  e.g., if
+installing folly in the traditional system installation directories. e.g., if
 you are building with CMake you can use the `CMAKE_PREFIX_PATH` variable to
 allow CMake to find folly in this temporary installation directory when
 building your project.
@@ -106,7 +104,7 @@ Linux (on the latest Ubuntu LTS release or newer.)
 
 folly requires a version of boost compiled with C++14 support.
 
-googletest is required to build and run folly's tests.  You can download
+googletest is required to build and run folly's tests. You can download
 it from https://github.com/google/googletest/archive/release-1.8.0.tar.gz
 The following commands can be used to download and install it:
 
@@ -125,7 +123,7 @@ make install
 If you have boost, gtest, or other dependencies installed in a non-default
 location, you can use the `CMAKE_INCLUDE_PATH` and `CMAKE_LIBRARY_PATH`
 variables to make CMAKE look also look for header files and libraries in
-non-standard locations.  For example, to also search the directories
+non-standard locations. For example, to also search the directories
 `/alt/include/path1` and `/alt/include/path2` for header files and the
 directories `/alt/lib/path1` and `/alt/lib/path2` for libraries, you can invoke
 `cmake` as follows:
@@ -191,6 +189,7 @@ sudo apt-get install \
 ```
 
 In the folly directory (e.g. the checkout root or the archive unpack root), run:
+
 ```
   mkdir _build && cd _build
   cmake ..
@@ -276,26 +275,28 @@ You may also use `vcpkg install folly:x64-windows --head` to build against `mast
 - additional platform specific dependencies:
 
   Fedora >= 21 64-bit (last tested on Fedora 28 64-bit)
-    - gcc
-    - gcc-c++
-    - cmake
-    - automake
-    - boost-devel
-    - libtool
-    - lz4-devel
-    - lzma-devel
-    - snappy-devel
-    - zlib-devel
-    - glog-devel
-    - gflags-devel
-    - scons
-    - double-conversion-devel
-    - openssl-devel
-    - libevent-devel
-    - fmt-devel
-    - libsodium-devel
+
+  - gcc
+  - gcc-c++
+  - cmake
+  - automake
+  - boost-devel
+  - libtool
+  - lz4-devel
+  - lzma-devel
+  - snappy-devel
+  - zlib-devel
+  - glog-devel
+  - gflags-devel
+  - scons
+  - double-conversion-devel
+  - openssl-devel
+  - libevent-devel
+  - fmt-devel
+  - libsodium-devel
 
   Optional
-    - libdwarf-devel
-    - elfutils-libelf-devel
-    - libunwind-devel
+
+  - libdwarf-devel
+  - elfutils-libelf-devel
+  - libunwind-devel

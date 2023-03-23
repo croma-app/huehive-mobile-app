@@ -10,11 +10,11 @@ module.exports = {
     getTransformOptions: async () => ({
       transform: {
         experimentalImportSupport: false,
-        inlineRequires: true,
+        inlineRequires: true
       },
       resolver: {
-        extraNodeModules: require('node-libs-react-native'),
-      },
-    }),
-  },
+        extraNodeModules: require('node-libs-react-native')
+      }
+    })
+  }
 };

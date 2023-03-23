@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, TextInput, Platform } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-import { PalettePreviewCard } from "../components/PalettePreviewCard";
-import Colors from "../constants/Colors";
-import CromaButton from "../components/CromaButton";
-import { CromaContext } from "../store/store";
-import { TextDialog } from "./CommonDialogs";
+import React, { useState, useEffect } from 'react';
+import { Text, View, StyleSheet, TextInput, Platform } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { PalettePreviewCard } from '../components/PalettePreviewCard';
+import Colors from '../constants/Colors';
+import CromaButton from '../components/CromaButton';
+import { CromaContext } from '../store/store';
+import { TextDialog } from './CommonDialogs';
 import { StackActions } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 
@@ -29,7 +29,7 @@ export const SavePalette = ({ navigation, title, navigationPath }) => {
 
   useEffect(() => {
     let colorsFromParams = colorList;
-    if (typeof colorsFromParams === "string") {
+    if (typeof colorsFromParams === 'string') {
       colorsFromParams = JSON.parse(colorsFromParams);
     }
     const colors = [...new Set(colorsFromParams || [])];
@@ -40,9 +40,9 @@ export const SavePalette = ({ navigation, title, navigationPath }) => {
     }, 5000);
   }, [colorList]);
 
-  const [paletteName, setPaletteName] = useState(suggestedName ?? "");
+  const [paletteName, setPaletteName] = useState(suggestedName ?? '');
   useEffect(() => {
-    setPaletteName(suggestedName ?? "");
+    setPaletteName(suggestedName ?? '');
   }, [suggestedName]);
 
   return (
@@ -57,7 +57,7 @@ export const SavePalette = ({ navigation, title, navigationPath }) => {
           style={styles.input}
           value={paletteName}
           placeholder={t('Enter a name for the palette')}
-          onChangeText={name => setPaletteName(name)}
+          onChangeText={(name) => setPaletteName(name)}
         />
       </View>
       <CromaButton
@@ -71,26 +71,20 @@ export const SavePalette = ({ navigation, title, navigationPath }) => {
           }
           const palette = { name: paletteName, colors: finalColors };
           addPalette(palette);
-          setSuggestedName("");
+          setSuggestedName('');
           setPaletteName(undefined);
           setColorList([]);
 
-          navigationPath === "Palette"
-            ? setCurrentPalette(palette)
-            : setCurrentPalette({});
-          (Platform.OS === "android" || Platform.OS === 'ios')
+          navigationPath === 'Palette' ? setCurrentPalette(palette) : setCurrentPalette({});
+          Platform.OS === 'android' || Platform.OS === 'ios'
             ? navigation.dispatch(StackActions.popToTop())
             : navigation.replace(navigationPath);
         }}
       >
-        {t("Save palette")}
+        {t('Save palette')}
       </CromaButton>
-      {isPaletteNameExist && (
-        <TextDialog text={t('A palette with same name already exists.')} />
-      )}
-      {isUnlockProNotification && (
-        <TextDialog text={t('Unlock pro to save more than 4 colors!')} />
-      )}
+      {isPaletteNameExist && <TextDialog text={t('A palette with same name already exists.')} />}
+      {isUnlockProNotification && <TextDialog text={t('Unlock pro to save more than 4 colors!')} />}
     </ScrollView>
   );
 };
@@ -98,29 +92,29 @@ export const SavePalette = ({ navigation, title, navigationPath }) => {
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    flexDirection: "column",
-    justifyContent: "center",
-    shadowColor: "rgba(0,0,0, .4)",
+    flexDirection: 'column',
+    justifyContent: 'center',
+    shadowColor: 'rgba(0,0,0, .4)',
     shadowOffset: { height: 1, width: 1 },
     shadowOpacity: 1,
     shadowRadius: 1,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     elevation: 2,
     height: 92,
     marginVertical: 10,
     padding: 10
   },
   title: {
-    fontWeight: "700"
+    fontWeight: '700'
   },
   input: {
     flex: 1,
-    borderBottomColor: "black",
+    borderBottomColor: 'black',
     borderBottomWidth: 1
   },
   bottom: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 16,
     height: 54
   },

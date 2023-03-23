@@ -1,11 +1,11 @@
-import React from "react";
-import { ScrollView, StyleSheet, Text } from "react-native";
-import { View } from "react-native-animatable";
-import CromaButton from "../components/CromaButton";
-import { CromaContext } from "../store/store";
-import { purchase, logEvent } from "../libs/Helpers";
-import { material } from "react-native-typography";
-import { initPurchase } from "../libs/Helpers";
+import React from 'react';
+import { ScrollView, StyleSheet, Text } from 'react-native';
+import { View } from 'react-native-animatable';
+import CromaButton from '../components/CromaButton';
+import { CromaContext } from '../store/store';
+import { purchase, logEvent } from '../libs/Helpers';
+import { material } from 'react-native-typography';
+import { initPurchase } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
 
 export default function ProScreen() {
@@ -13,53 +13,48 @@ export default function ProScreen() {
 
   const { isPro, setPurchase } = React.useContext(CromaContext);
   const purchaseDevelopment = () => {
-    purchase(setPurchase, "support_development");
+    purchase(setPurchase, 'support_development');
   };
   const purchasePro = async () => {
     if (await purchase(setPurchase)) {
-      logEvent("pro_version_screen_pur_pro_success");
+      logEvent('pro_version_screen_pur_pro_success');
     } else {
-      logEvent("pro_version_screen_pur_pro_failed");
+      logEvent('pro_version_screen_pur_pro_failed');
     }
   };
-  logEvent("pro_version_screen");
+  logEvent('pro_version_screen');
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View>
         <Text style={styles.title}>{t('Pro benefits')}</Text>
-        <Text style={[styles.line]}>
-          {t('1. Add more than 4 colors in a palette 🎨')}
-        </Text>
-        <Text style={[styles.line]}>
-          {t("2. Export/sync colors to private github repository")}
-        </Text>
+        <Text style={[styles.line]}>{t('1. Add more than 4 colors in a palette 🎨')}</Text>
+        <Text style={[styles.line]}>{t('2. Export/sync colors to private github repository')}</Text>
         <CromaButton
-          style={{ backgroundColor: "#ff5c59" }}
-          textStyle={{ color: "#fff" }}
+          style={{ backgroundColor: '#ff5c59' }}
+          textStyle={{ color: '#fff' }}
           onPress={purchasePro}
         >
-          {isPro ? t("You are a pro user! Enjoy the app") : t("Unlock pro")}
+          {isPro ? t('You are a pro user! Enjoy the app') : t('Unlock pro')}
         </CromaButton>
         <Text style={styles.line}>
-          {t("3. Support the development efforts to keep the app awesome and simple without any ads and annoying notifications 😊'")}
+          {t(
+            "3. Support the development efforts to keep the app awesome and simple without any ads and annoying notifications 😊'"
+          )}
         </Text>
-        <CromaButton onPress={purchaseDevelopment}>
-        {t("Buy me a coffee ☕")}
-        </CromaButton>
+        <CromaButton onPress={purchaseDevelopment}>{t('Buy me a coffee ☕')}</CromaButton>
 
-        {
-          !isPro &&
+        {!isPro && (
           <View>
-            <Text style={[styles.title]}>
-            {t("Restore purchase")}
-            </Text>
-            <CromaButton onPress={async () => {
-              await initPurchase(setPurchase);
-            }}>
-              {t("Restore Pro")}
+            <Text style={[styles.title]}>{t('Restore purchase')}</Text>
+            <CromaButton
+              onPress={async () => {
+                await initPurchase(setPurchase);
+              }}
+            >
+              {t('Restore Pro')}
             </CromaButton>
           </View>
-        }
+        )}
       </View>
     </ScrollView>
   );
@@ -74,7 +69,7 @@ const styles = StyleSheet.create({
     paddingTop: 12,
     paddingBottom: 12,
     fontSize: 20,
-    fontWeight: "bold"
+    fontWeight: 'bold'
   },
   line: {
     ...material.body1,

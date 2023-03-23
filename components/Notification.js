@@ -1,15 +1,15 @@
-import React from "react";
-import styled from "styled-components/native";
-import { View, Text, Dimensions, TouchableOpacity } from "react-native";
+import React from 'react';
+import styled from 'styled-components/native';
+import { View, Text, Dimensions, TouchableOpacity } from 'react-native';
 // import { TouchableOpacity } from "react-native-gesture-handler";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import AntDesign from "react-native-vector-icons/AntDesign";
-import { PropTypes } from "prop-types";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import { PropTypes } from 'prop-types';
 
 const Wrapper = styled(View)`
   padding: 5px;
   background: #fdbcbc;
-  width: ${Dimensions.get("window").width - 25};
+  width: ${Dimensions.get('window').width - 25};
   border: 1px solid red;
   display: flex;
   flex-direction: row;
@@ -38,11 +38,7 @@ const TouchableOpacityStyled = styled(TouchableOpacity)`
 const Notification = function ({ message, onPress }) {
   return (
     <Wrapper>
-      <MaterialCommunityIconsStyled
-        name="alert-octagon"
-        color={"red"}
-        size={22}
-      />
+      <MaterialCommunityIconsStyled name="alert-octagon" color={'red'} size={22} />
       <View>
         <Title> Error</Title>
         <Description> {message} </Description>
@@ -56,7 +52,7 @@ const Notification = function ({ message, onPress }) {
 
 Notification.propTypes = {
   message: PropTypes.string,
-  onPress: PropTypes.function,
+  onPress: PropTypes.function
 };
 
 export default Notification;

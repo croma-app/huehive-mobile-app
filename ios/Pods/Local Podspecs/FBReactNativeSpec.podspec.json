@@ -21,31 +21,17 @@
     "HEADER_SEARCH_PATHS": "\"$(PODS_TARGET_SRCROOT)/React/FBReactNativeSpec\" \"$(PODS_ROOT)/RCT-Folly\""
   },
   "dependencies": {
-    "RCT-Folly": [
-      "2021.06.28.00-v2"
-    ],
-    "RCTRequired": [
-      "0.66.5"
-    ],
-    "RCTTypeSafety": [
-      "0.66.5"
-    ],
-    "React-Core": [
-      "0.66.5"
-    ],
-    "React-jsi": [
-      "0.66.5"
-    ],
-    "ReactCommon/turbomodule/core": [
-      "0.66.5"
-    ]
+    "RCT-Folly": ["2021.06.28.00-v2"],
+    "RCTRequired": ["0.66.5"],
+    "RCTTypeSafety": ["0.66.5"],
+    "React-Core": ["0.66.5"],
+    "React-jsi": ["0.66.5"],
+    "ReactCommon/turbomodule/core": ["0.66.5"]
   },
   "prepare_command": "mkdir -p ../../React/FBReactNativeSpec/FBReactNativeSpec && touch -a ../../React/FBReactNativeSpec/FBReactNativeSpec/FBReactNativeSpec.h ../../React/FBReactNativeSpec/FBReactNativeSpec/FBReactNativeSpec-generated.mm",
   "script_phases": {
     "name": "Generate Specs",
-    "input_files": [
-      "${PODS_TARGET_SRCROOT}/../../Libraries"
-    ],
+    "input_files": ["${PODS_TARGET_SRCROOT}/../../Libraries"],
     "output_files": [
       "${DERIVED_FILE_DIR}/codegen-FBReactNativeSpec.log",
       " ${PODS_TARGET_SRCROOT}/../../React/FBReactNativeSpec/FBReactNativeSpec/FBReactNativeSpec.h",

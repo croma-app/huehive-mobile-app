@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
 
-import SingleColorCard from "../components/SingleColorCard";
+import SingleColorCard from '../components/SingleColorCard';
 import {
   Dimensions,
   Platform,
@@ -8,20 +8,25 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  View,TouchableOpacity
-} from "react-native";
-import { CromaContext } from "../store/store";
-import ActionButton from "react-native-action-button";
-import Colors from "../constants/Colors";
+  View,
+  TouchableOpacity
+} from 'react-native';
+import { CromaContext } from '../store/store';
+import ActionButton from 'react-native-action-button';
+import Colors from '../constants/Colors';
 import { useHeaderHeight } from '@react-navigation/elements';
-import EmptyView from "../components/EmptyView";
-import { logEvent } from "../libs/Helpers";
-import { DialogContainer, UndoDialog } from "../components/CommonDialogs";
-import Feather  from "react-native-vector-icons/Feather";
-import MaterialIcons  from "react-native-vector-icons/MaterialIcons";
+import EmptyView from '../components/EmptyView';
+import { logEvent } from '../libs/Helpers';
+import { DialogContainer, UndoDialog } from '../components/CommonDialogs';
+import Feather from 'react-native-vector-icons/Feather';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { notifyMessage } from '../libs/Helpers';
-import { NestableScrollContainer, NestableDraggableFlatList, RenderItemParams, ScaleDecorator } from "react-native-draggable-flatlist"
-
+import {
+  NestableScrollContainer,
+  NestableDraggableFlatList,
+  RenderItemParams,
+  ScaleDecorator
+} from 'react-native-draggable-flatlist';
 
 export default function PaletteScreen({ navigation }) {
   const {
@@ -36,31 +41,31 @@ export default function PaletteScreen({ navigation }) {
     setColorPickerCallback
   } = useContext(CromaContext);
 
-  const paletteName = currentPalette?.name ?? "";
+  const paletteName = currentPalette?.name ?? '';
 
-  const { height } = Dimensions.get("window");
+  const { height } = Dimensions.get('window');
   const colors = allPalettes[paletteName]?.colors;
   const deletedColors = allPalettes[paletteName]?.deletedColors
     ? allPalettes[paletteName]?.deletedColors
     : [];
 
-  const deleteColor = index => {
+  const deleteColor = (index) => {
     colorDeleteFromPalette(paletteName, index);
   };
-  logEvent("palette_screen");
+  logEvent('palette_screen');
 
   useLayoutEffect(() => {
     setNavigationOptions({ navigation, paletteName });
   }, [navigation, paletteName]);
   function renderItem(renderItemParams) {
-      //notifyMessage("item: " + JSON.stringify(renderItemParams));
-      return (
+    //notifyMessage("item: " + JSON.stringify(renderItemParams));
+    return (
       <ScaleDecorator>
         <SingleColorCard
           key={`${renderItemParams.item.color}`}
           onPress={() => {
             setDetailedColor(renderItemParams.item.color);
-            navigation.navigate("ColorDetails");
+            navigation.navigate('ColorDetails');
           }}
           onPressDrag={renderItemParams.drag}
           color={renderItemParams.item}
@@ -69,21 +74,16 @@ export default function PaletteScreen({ navigation }) {
           }}
         />
       </ScaleDecorator>
-      )
+    );
   }
   const keyExtractor = (item) => {
     //notifyMessage("item: " + JSON.stringify(item));
     return item.color;
-  }
+  };
   return (
     <>
-    <View
-     style={
-          (styles.container, { minHeight: height - useHeaderHeight() - 16 })
-        }
-    >
-      <NestableScrollContainer style={styles.listview}
-          showsVerticalScrollIndicator={false}>
+      <View style={(styles.container, { minHeight: height - useHeaderHeight() - 16 })}>
+        <NestableScrollContainer style={styles.listview} showsVerticalScrollIndicator={false}>
           <NestableDraggableFlatList
             data={colors?.slice(0, isPro ? colors.length : 4)}
             renderItem={renderItem}
@@ -96,53 +96,48 @@ export default function PaletteScreen({ navigation }) {
           <EmptyView />
         </NestableScrollContainer>
         <ActionButton
-            offsetY={76}
-            bgColor="rgba(68, 68, 68, 0.6)"
-            hideShadow={Platform.OS === "web" ? true : false}
-            fixNativeFeedbackRadius={true}
-            buttonColor={Colors.fabPrimary}
-            onPress={() => {
-              logEvent("palette_screen_add_color");
-              if (
-                ( Platform.OS === "android" || Platform.OS === "ios") &&
-                colors.length >= 4 &&
-                isPro === false
-              ) {
-                notifyMessage(
-                  "Unlock pro to add more than 4 colors!"
-                );
-                navigation.navigate("ProVersion");
-              } else {
-                setColorPickerCallback(color => {
-                  addColorToPalette(paletteName, color);
-                });
-                navigation.navigate("ColorPicker");
-              }
-            }}
-            style={styles.actionButton}
-          />
-      <DialogContainer>
-        {deletedColors.map((colorObj, index) => (
-          <UndoDialog
-            key={`UndoDialog-${colorObj.color}-${index}`}
-            name={colorObj.color}
-            undoDeletionByName={colorName => {
-              undoColorDeletion(paletteName, colorName);
-            }}
-          />
-        ))}
-      </DialogContainer>
+          offsetY={76}
+          bgColor="rgba(68, 68, 68, 0.6)"
+          hideShadow={Platform.OS === 'web' ? true : false}
+          fixNativeFeedbackRadius={true}
+          buttonColor={Colors.fabPrimary}
+          onPress={() => {
+            logEvent('palette_screen_add_color');
+            if (
+              (Platform.OS === 'android' || Platform.OS === 'ios') &&
+              colors.length >= 4 &&
+              isPro === false
+            ) {
+              notifyMessage('Unlock pro to add more than 4 colors!');
+              navigation.navigate('ProVersion');
+            } else {
+              setColorPickerCallback((color) => {
+                addColorToPalette(paletteName, color);
+              });
+              navigation.navigate('ColorPicker');
+            }
+          }}
+          style={styles.actionButton}
+        />
+        <DialogContainer>
+          {deletedColors.map((colorObj, index) => (
+            <UndoDialog
+              key={`UndoDialog-${colorObj.color}-${index}`}
+              name={colorObj.color}
+              undoDeletionByName={(colorName) => {
+                undoColorDeletion(paletteName, colorName);
+              }}
+            />
+          ))}
+        </DialogContainer>
       </View>
-      </>
-    
+    </>
   );
 }
 
 const CustomHeader = ({ currentPaletteName }) => {
   const [paletteName, setPaletteName] = useState(currentPaletteName);
-  const { renamePalette, currentPalette, setCurrentPalette } = useContext(
-    CromaContext
-  );
+  const { renamePalette, currentPalette, setCurrentPalette } = useContext(CromaContext);
   const [isEditingPaletteName, setIsEditingPaletteName] = useState(false);
 
   useEffect(() => {
@@ -157,16 +152,16 @@ const CustomHeader = ({ currentPaletteName }) => {
   };
 
   const onEdit = () => {
-    logEvent("edit_palette_name");
+    logEvent('edit_palette_name');
     setIsEditingPaletteName(true);
   };
   return (
     <View
       style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        width: "95%"
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '95%'
       }}
     >
       {isEditingPaletteName ? (
@@ -175,7 +170,7 @@ const CustomHeader = ({ currentPaletteName }) => {
             style={styles.input}
             value={paletteName}
             autoFocus={true}
-            onChangeText={name => {
+            onChangeText={(name) => {
               setPaletteName(name);
             }}
           />
@@ -187,7 +182,7 @@ const CustomHeader = ({ currentPaletteName }) => {
         <>
           <Text
             style={{
-              color: "#ffffff",
+              color: '#ffffff',
               fontSize: 18
             }}
           >
@@ -216,16 +211,16 @@ const styles = StyleSheet.create({
     margin: 8
   },
   actionButton:
-    Platform.OS === "web"
+    Platform.OS === 'web'
       ? {
-          position: "fixed",
-          transform: "scale(1) rotate(0deg) !important",
-          right: Math.max((Dimensions.get("window").width - 600) / 2, 0),
-          left: Math.max((Dimensions.get("window").width - 600) / 2, 0)
+          position: 'fixed',
+          transform: 'scale(1) rotate(0deg) !important',
+          right: Math.max((Dimensions.get('window').width - 600) / 2, 0),
+          left: Math.max((Dimensions.get('window').width - 600) / 2, 0)
         }
       : {},
   input: {
-    color: "#ffffff",
+    color: '#ffffff',
     fontSize: 18
   }
 });
