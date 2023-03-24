@@ -80,13 +80,13 @@ export default function useApplicationHook() {
       isLoading: false
     }));
 
-    const userDeviceId = await Storage.getUserDeviceId();
-
-    if (userDeviceId && userDeviceId.length > 0) {
+    const isUserAlreadyExits = await Storage.checkUserAlreadyExists();
+    if (isUserAlreadyExits != 'true') {
       Platform.OS === 'android' && (await initPurchase(setPurchase));
     }
-    console.log({ userDeviceId }, 'check it once ');
+
     // IF USER IS COMING FIRST TIME
+    await Storage.setUserAlreadyExists();
     await Storage.setUserDeviceId();
     await addPalette(DEFAULT_PALETTES);
 

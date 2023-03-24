@@ -4,6 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 const APPLICATION_STATE_KEY = 'APLICATION_STATE';
 const USER_DEVICE_ID = 'IS_USER_ALREADY_EXIST';
+const IS_USER_ALREADY_EXIST_KEY = 'IS_USER_ALREADY_EXIST';
+
 export default class Storage {
   static getApplicationState = async () => {
     let state = await AsyncStorage.getItem(APPLICATION_STATE_KEY);
@@ -24,5 +26,13 @@ export default class Storage {
 
   static getUserDeviceId = async () => {
     return await AsyncStorage.getItem(USER_DEVICE_ID);
+  };
+
+  static setUserAlreadyExists = async () => {
+    await AsyncStorage.setItem(IS_USER_ALREADY_EXIST_KEY, 'true');
+  };
+
+  static checkUserAlreadyExists = async () => {
+    return await AsyncStorage.getItem(IS_USER_ALREADY_EXIST_KEY);
   };
 }
