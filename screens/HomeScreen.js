@@ -74,22 +74,19 @@ const HomeScreen = function ({ navigation, route }) {
     return <ActivityIndicator />;
   } else {
     logEvent('home_screen', {
-      length: Object.keys(allPalettes).length
+      length: allPalettes.length
     });
     return (
       <>
         <View style={styles.container}>
           {pickImageLoading ? <ActivityIndicator /> : <View />}
           <ScrollView showsVerticalScrollIndicator={false}>
-            {Object.keys(allPalettes).map((name) => {
+            {allPalettes.map((palette) => {
               return (
                 <PaletteCard
-                  key={name}
-                  colors={allPalettes[name].colors.slice(
-                    0,
-                    isPro ? allPalettes[name].colors.length : 4
-                  )}
-                  name={name}
+                  key={palette.name}
+                  colors={palette.colors.slice(0, isPro ? palette.colors.length : 4)}
+                  name={palette.name}
                   navigation={navigation}
                   route={route}
                 />

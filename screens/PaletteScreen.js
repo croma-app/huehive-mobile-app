@@ -4,7 +4,6 @@ import SingleColorCard from '../components/SingleColorCard';
 import {
   Dimensions,
   Platform,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -24,9 +23,9 @@ import { notifyMessage } from '../libs/Helpers';
 import {
   NestableScrollContainer,
   NestableDraggableFlatList,
-  RenderItemParams,
   ScaleDecorator
 } from 'react-native-draggable-flatlist';
+import PropTypes from 'prop-types';
 
 export default function PaletteScreen({ navigation }) {
   const {
@@ -44,10 +43,9 @@ export default function PaletteScreen({ navigation }) {
   const paletteName = currentPalette?.name ?? '';
 
   const { height } = Dimensions.get('window');
-  const colors = allPalettes[paletteName]?.colors;
-  const deletedColors = allPalettes[paletteName]?.deletedColors
-    ? allPalettes[paletteName]?.deletedColors
-    : [];
+  const palette = allPalettes.find((palette) => palette.name === paletteName);
+  const colors = palette?.colors;
+  const deletedColors = palette?.deletedColors ? allPalettes[paletteName]?.deletedColors : [];
 
   const deleteColor = (index) => {
     colorDeleteFromPalette(paletteName, index);
@@ -135,6 +133,10 @@ export default function PaletteScreen({ navigation }) {
   );
 }
 
+PaletteScreen.propTypes = {
+  navigation: PropTypes.any
+};
+
 const CustomHeader = ({ currentPaletteName }) => {
   const [paletteName, setPaletteName] = useState(currentPaletteName);
   const { renamePalette, currentPalette, setCurrentPalette } = useContext(CromaContext);
@@ -162,8 +164,7 @@ const CustomHeader = ({ currentPaletteName }) => {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '95%'
-      }}
-    >
+      }}>
       {isEditingPaletteName ? (
         <>
           <TextInput
@@ -184,8 +185,7 @@ const CustomHeader = ({ currentPaletteName }) => {
             style={{
               color: '#ffffff',
               fontSize: 18
-            }}
-          >
+            }}>
             {paletteName}
           </Text>
           <TouchableOpacity onPress={onEdit}>
@@ -196,6 +196,8 @@ const CustomHeader = ({ currentPaletteName }) => {
     </View>
   );
 };
+
+CustomHeader.propTypes = { currentPaletteName: PropTypes.string };
 
 const setNavigationOptions = ({ navigation, paletteName }) => {
   navigation.setOptions({
