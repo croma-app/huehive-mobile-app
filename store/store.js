@@ -43,14 +43,25 @@ const sortPalettes = (allPalettes) => {
   return ordered;
 };
 
+const loadPlalettes = async () => {
+  const res = await network.getAllPalettes();
+  const allPalettes = res.data;
+  return allPalettes.map((palette) => ({
+    name: palette.name,
+    id: palette.id,
+    colors: palette.colors.map((color) => ({ name: color.name, color: color.hex }))
+  }));
+};
+
 export default function useApplicationHook() {
   const addPalette = async (palette) => {
     try {
-      const res = await network.createPalette({
+      await network.createPalette({
         ...palette,
         colors: palette.colors.map((color) => ({ name: null, hex: color.color }))
       });
-      console.log({ res });
+      const allPalettes = await loadPlalettes();
+      setState((state) => ({ ...state, allPalettes }));
     } catch (error) {
       notifyMessage(t(error.message));
     }
@@ -108,17 +119,10 @@ export default function useApplicationHook() {
 
     let allPalettes = _state.allPalettes;
     try {
-      const res = await network.getAllPalettes();
-      allPalettes = res.data;
+      allPalettes = await loadPlalettes();
     } catch (error) {
       console.log('error', error);
     }
-
-    allPalettes = allPalettes.map((palette) => ({
-      name: palette.name,
-      colors: palette.colors.map((color) => ({ name: color.name, color: color.hex }))
-    }));
-
     setState((state) => ({ ...state, ..._state, allPalettes, isLoading: false }));
     setStoreLoaded(true);
     return;

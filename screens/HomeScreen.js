@@ -9,6 +9,7 @@ import * as Permissions from 'expo-permissions';
 import EmptyView from '../components/EmptyView';
 import ShareMenu from '../libs/ShareMenu';
 import { logEvent } from '../libs/Helpers';
+import PropTypes from 'prop-types';
 
 const HomeScreen = function ({ navigation, route }) {
   const {
@@ -105,6 +106,11 @@ const HomeScreen = function ({ navigation, route }) {
       </>
     );
   }
+};
+
+HomeScreen.propTypes = {
+  navigation: PropTypes.any,
+  route: PropTypes.any
 };
 
 export default HomeScreen;

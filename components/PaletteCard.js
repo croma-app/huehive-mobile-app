@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, Platform, Clipboard, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Platform, TouchableOpacity } from 'react-native';
 import Card from './Card';
 import Colors from '../constants/Colors';
 import { Share, PermissionsAndroid } from 'react-native';
@@ -12,9 +12,11 @@ import ViewShot from 'react-native-view-shot';
 const RNFS = require('react-native-fs');
 import { t } from 'i18next';
 import RNFetchBlob from 'rn-fetch-blob';
+import PropTypes from 'prop-types';
 
 export const PaletteCard = (props) => {
-  const [shared, setShared] = React.useState(false);
+  console.log({ props });
+  const [shared] = React.useState(false);
   const [animationType, setAnimationType] = React.useState('fadeInLeftBig');
   const viewShotRef = React.useRef();
   const { deletePaletteByName, setCurrentPalette } = React.useContext(CromaContext);
@@ -92,12 +94,10 @@ export const PaletteCard = (props) => {
         setCurrentPalette({ name: props.name });
         props.navigation.navigate('Palette');
       }}
-      animationType={animationType}
-    >
+      animationType={animationType}>
       <ViewShot
         ref={viewShotRef}
-        options={{ fileName: props.name + '.png', format: 'png', quality: 0.9 }}
-      >
+        options={{ fileName: props.name + '.png', format: 'png', quality: 0.9 }}>
         <MultiColorView {...props}></MultiColorView>
       </ViewShot>
       <View style={styles.bottom}>
@@ -115,8 +115,7 @@ export const PaletteCard = (props) => {
                 padding: '5px ',
                 textAlign: 'center',
                 borderRadius: '6px'
-              }}
-            >
+              }}>
               Copied to Clipboard!
             </Text>
           )}
@@ -144,14 +143,21 @@ export const PaletteCard = (props) => {
                 }, 500);
               }
             }}
-            style={styles.actionButton}
-          >
+            style={styles.actionButton}>
             <FontAwesome size={20} name="trash" />
           </TouchableOpacity>
         </View>
       </View>
     </Card>
   );
+};
+
+PaletteCard.propTypes = {
+  name: PropTypes.string,
+  colors: PropTypes.array,
+  navigation: PropTypes.any,
+  onPress: PropTypes.func,
+  onLongPress: PropTypes.func
 };
 
 const styles = StyleSheet.create({
