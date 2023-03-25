@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import Storage from './../libs/Storage';
-import { initPurchase } from '../libs/Helpers';
+import { initPurchase, notifyMessage } from '../libs/Helpers';
 import { Platform } from 'react-native';
+import network from '../network';
+import { t } from 'i18next';
 
 //import { getAvailablePurchases } from 'react-native-iap';
 const UNDO_TIMEOUT = 3000;
@@ -43,16 +45,15 @@ const sortPalettes = (allPalettes) => {
 
 export default function useApplicationHook() {
   const addPalette = async (palette) => {
-    setState((state) => {
-      const { allPalettes } = state;
-      sortPaletteColors(palette);
-      if (!palette.createdAt) {
-        palette.createdAt = new Date().valueOf();
-      }
-      allPalettes[palette.name] = palette;
-      const ordered = sortPalettes(allPalettes);
-      return { ...state, allPalettes: ordered };
-    });
+    try {
+      const res = await network.createPalette({
+        ...palette,
+        colors: palette.colors.map((color) => ({ name: null, hex: color.color }))
+      });
+      console.log({ res });
+    } catch (error) {
+      notifyMessage(t(error.message));
+    }
   };
 
   const renamePalette = (oldName, name) => {
@@ -74,22 +75,51 @@ export default function useApplicationHook() {
     // Loading application state from localStorage
     // TODO network call...
     const _state = await Storage.getApplicationState();
-    setState((state) => ({
-      ...state,
-      ..._state,
-      isLoading: false
-    }));
-
     const isUserAlreadyExits = await Storage.checkUserAlreadyExists();
     if (isUserAlreadyExits != 'true') {
+      // For first time user check if user is pro or not.
       Platform.OS === 'android' && (await initPurchase(setPurchase));
+      // IF USER IS COMING FIRST TIME
+      await Storage.setUserAlreadyExists();
+      await Storage.setUserDeviceId();
+      await addPalette(DEFAULT_PALETTES);
+    }
+    const deviceId = await Storage.getUserDeviceId();
+    if (isUserAlreadyExits == 'true' && deviceId.length == 0) {
+      // Update user device id and local palettes to server if user is already exists
+      const paletteCreatePromises = _state.allPalettes.map(async (palette) => {
+        const payload = {
+          name: palette.name,
+          colors: palette.colors.map((color) => ({
+            name: color.name ? color.name : null,
+            hex: color.color
+          }))
+        };
+        return network.createPalette(payload);
+      });
+      try {
+        Promise.all(paletteCreatePromises);
+        await Storage.setUserDeviceId();
+      } catch (error) {
+        console.log('error', error);
+      }
+      await Storage.setUserDeviceId();
     }
 
-    // IF USER IS COMING FIRST TIME
-    await Storage.setUserAlreadyExists();
-    await Storage.setUserDeviceId();
-    await addPalette(DEFAULT_PALETTES);
+    let allPalettes = _state.allPalettes;
+    try {
+      const res = await network.getAllPalettes();
+      allPalettes = res.data;
+    } catch (error) {
+      console.log('error', error);
+    }
 
+    allPalettes = allPalettes.map((palette) => ({
+      name: palette.name,
+      colors: palette.colors.map((color) => ({ name: color.name, color: color.hex }))
+    }));
+
+    setState((state) => ({ ...state, ..._state, allPalettes, isLoading: false }));
     setStoreLoaded(true);
     return;
   };

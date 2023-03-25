@@ -3,7 +3,7 @@ import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
 const APPLICATION_STATE_KEY = 'APLICATION_STATE';
-const USER_DEVICE_ID = 'IS_USER_ALREADY_EXIST';
+const USER_DEVICE_ID = 'USER_DEVICE_ID';
 const IS_USER_ALREADY_EXIST_KEY = 'IS_USER_ALREADY_EXIST';
 
 export default class Storage {
