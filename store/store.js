@@ -165,30 +165,14 @@ export default function useApplicationHook() {
     });
   };
 
-  const deletePaletteByName = async (name) => {
-    setState((state) => {
-      const { allPalettes, deletedPalettes } = state;
-      if (allPalettes[name]) {
-        deletedPalettes[name] = { ...allPalettes[name] };
-        delete allPalettes[name];
-        deletedPalettes[name]['timeout'] = setTimeout(() => {
-          removePaletteFromStateByName(name);
-        }, UNDO_TIMEOUT);
-        return { ...state, allPalettes, deletedPalettes };
-      }
-      return { ...state };
-    });
-  };
-
-  const undoDeletionByName = (name) => {
-    setState((state) => {
-      const { deletedPalettes } = state;
-      if (deletedPalettes[name]) {
-        addPalette({ ...deletedPalettes[name] });
-        removePaletteFromStateByName(name);
-      }
-      return { ...state };
-    });
+  const deletePalette = async (id) => {
+    try {
+      await network.deletePalette(id);
+      const allPalettes = await loadPlalettes();
+      setState((state) => ({ ...state, allPalettes }));
+    } catch (error) {
+      notifyMessage(t(error.message));
+    }
   };
 
   const colorDeleteFromPalette = (name, colorIndex) => {
@@ -296,8 +280,7 @@ export default function useApplicationHook() {
       colorPickerCallback: () => {}
     },
     loadInitPaletteFromStore,
-    undoDeletionByName,
-    deletePaletteByName,
+    deletePalette,
     addPalette,
     updatePalette,
     renamePalette,

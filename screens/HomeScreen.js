@@ -3,7 +3,6 @@ import Color from 'pigment/full';
 import { ActivityIndicator, Linking, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { PaletteCard } from '../components/PaletteCard';
 import GridActionButton from '../components/GridActionButton';
-import { DialogContainer, UndoDialog } from '../components/CommonDialogs';
 import { CromaContext } from '../store/store';
 import * as Permissions from 'expo-permissions';
 import EmptyView from '../components/EmptyView';
@@ -12,16 +11,8 @@ import { logEvent } from '../libs/Helpers';
 import PropTypes from 'prop-types';
 
 const HomeScreen = function ({ navigation, route }) {
-  const {
-    isLoading,
-    allPalettes,
-    deletedPalettes,
-    undoDeletionByName,
-    isPro,
-    setColorList,
-    setSuggestedName,
-    clearPalette
-  } = React.useContext(CromaContext);
+  const { isLoading, allPalettes, isPro, setColorList, setSuggestedName, clearPalette } =
+    React.useContext(CromaContext);
   const [pickImageLoading, setPickImageLoading] = useState(false);
 
   const getPermissionAsync = async () => {
@@ -90,6 +81,7 @@ const HomeScreen = function ({ navigation, route }) {
                   name={palette.name}
                   navigation={navigation}
                   route={route}
+                  paletteId={palette.id}
                 />
               );
             })}
@@ -97,12 +89,6 @@ const HomeScreen = function ({ navigation, route }) {
           </ScrollView>
           <GridActionButton navigation={navigation} setPickImageLoading={setPickImageLoading} />
         </View>
-
-        <DialogContainer>
-          {Object.keys(deletedPalettes).map((name) => {
-            return <UndoDialog key={name} name={name} undoDeletionByName={undoDeletionByName} />;
-          })}
-        </DialogContainer>
       </>
     );
   }

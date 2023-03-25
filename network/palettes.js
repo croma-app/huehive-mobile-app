@@ -17,11 +17,15 @@ export const getAllPalettes = async () => {
 
 export const createPalette = async (palette) => {
   const axiosClient = await getAxiosClient();
-  console.log({ axiosClient });
   return axiosClient.post(
     'color_palettes.json',
     JSON.stringify({
       color_palette: palette
     })
   );
+};
+
+export const deletePalette = async (paletteId) => {
+  const axiosClient = await getAxiosClient();
+  return axiosClient.delete(`color_palettes/${paletteId}.json`);
 };
