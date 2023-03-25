@@ -15,6 +15,7 @@ import {
   removeUserSession
 } from '../libs/EncryptedStoreage';
 import Notification from '../components/Notification';
+import { resetAxiosClient } from '../network/axios.client';
 
 // import {
 //   GoogleSignin,
@@ -109,11 +110,13 @@ function LoginScreen(props) {
     });
   }, [props.navigation, screenType, t, userData]);
 
-  const onLogout = useCallback(() => {
-    removeUserSession();
+  const onLogout = useCallback(async () => {
+    await removeUserSession();
     setUserData(undefined);
     user.loggedIn = false;
     setUser(user);
+    // ressetting the axios client
+    resetAxiosClient();
   }, []);
 
   const onSubmit = useCallback(async () => {
@@ -129,6 +132,8 @@ function LoginScreen(props) {
         );
         user.loggedIn = true;
         setUser(user);
+        // ressetting the axios client
+        await resetAxiosClient();
         props.navigation.goBack();
       } catch (error) {
         setError(error.message);
@@ -156,6 +161,8 @@ function LoginScreen(props) {
         );
         user.loggedIn = true;
         setUser(user);
+        // ressetting the axios client
+        await resetAxiosClient();
         props.navigation.goBack();
       } catch (error) {
         if (error.response.data.error) {
@@ -215,8 +222,7 @@ function LoginScreen(props) {
           <CromaButton
             style={{ backgroundColor: '#ff5c59', width: '100%' }}
             textStyle={{ color: '#fff' }}
-            onPress={onLogout}
-          >
+            onPress={onLogout}>
             {t('Logout')}
           </CromaButton>
         </View>
@@ -281,8 +287,7 @@ function LoginScreen(props) {
         <CromaButton
           style={{ backgroundColor: '#ff5c59' }}
           textStyle={{ color: '#fff' }}
-          onPress={onSubmit}
-        >
+          onPress={onSubmit}>
           {t(LOGIN_AND_SIGNUP_TEXT[screenType].buttonText)}
         </CromaButton>
         {/* <View style={styles.orSignUpContainer}>
@@ -307,8 +312,7 @@ function LoginScreen(props) {
         onPress={() => {
           setScreenType(screenType === LOGIN ? SIGN_UP : LOGIN);
           setValidationErrors(undefined);
-        }}
-      >
+        }}>
         <View style={styles.changePage}>
           <Text>{t(LOGIN_AND_SIGNUP_TEXT[screenType].linkTitle)}</Text>
           <Text style={styles.bold}>{t(LOGIN_AND_SIGNUP_TEXT[screenType].linkText)}</Text>
