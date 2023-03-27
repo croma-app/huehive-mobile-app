@@ -1,10 +1,20 @@
 import { login, signUp } from './login-and-signup';
-import { getAllPalettes, createPalette, deletePalette } from './palettes';
+import {
+  getAllPalettes,
+  createPalette,
+  deletePalette,
+  patchPalette,
+  addNewColorToPalette,
+  deleteColorFromPalette
+} from './palettes';
 const network = {
   login: login,
   signUp: signUp,
   getAllPalettes: getAllPalettes,
   createPalette: createPalette,
-  deletePalette: deletePalette
+  deletePalette: deletePalette,
+  patchPalette: patchPalette,
+  addNewColorToPalette: addNewColorToPalette,
+  deleteColorFromPalette: deleteColorFromPalette
 };
 export default network;

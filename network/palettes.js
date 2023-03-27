@@ -29,3 +29,28 @@ export const deletePalette = async (paletteId) => {
   const axiosClient = await getAxiosClient();
   return axiosClient.delete(`color_palettes/${paletteId}.json`);
 };
+
+export const patchPalette = async (paletteId, palette) => {
+  const axiosClient = await getAxiosClient();
+  return axiosClient.put(
+    `color_palettes/${paletteId}.json`,
+    JSON.stringify({
+      color_palette: palette
+    })
+  );
+};
+
+export const addNewColorToPalette = async (paletteId, color) => {
+  const axiosClient = await getAxiosClient();
+  return axiosClient.post(
+    `color_palettes/${paletteId}/colors.json`,
+    JSON.stringify({
+      color: color
+    })
+  );
+};
+
+export const deleteColorFromPalette = async (paletteId, colorId) => {
+  const axiosClient = await getAxiosClient();
+  return axiosClient.delete(`color_palettes/${paletteId}/colors/${colorId}.json`);
+};
