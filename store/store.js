@@ -4,6 +4,7 @@ import { initPurchase, notifyMessage } from '../libs/Helpers';
 import { Platform } from 'react-native';
 import network from '../network';
 import { t } from 'i18next';
+import { resetAxiosClient } from '../network/axios.client';
 
 //import { getAvailablePurchases } from 'react-native-iap';
 // const UNDO_TIMEOUT = 3000;
@@ -79,10 +80,11 @@ export default function useApplicationHook() {
       // IF USER IS COMING FIRST TIME
       await Storage.setUserAlreadyExists();
       await Storage.setUserDeviceId();
+      resetAxiosClient();
       await addPalette(DEFAULT_PALETTES);
     }
     const deviceId = await Storage.getUserDeviceId();
-    if (isUserAlreadyExits == 'true' && deviceId.length == 0) {
+    if (isUserAlreadyExits == 'true' && deviceId && deviceId.length == 0) {
       // Update user device id and local palettes to server if user is already exists
       const paletteCreatePromises = _state.allPalettes.map(async (palette) => {
         const payload = {
@@ -95,12 +97,12 @@ export default function useApplicationHook() {
         return network.createPalette(payload);
       });
       try {
-        Promise.all(paletteCreatePromises);
-        await Storage.setUserDeviceId();
+        await Promise.all(paletteCreatePromises);
       } catch (error) {
         console.log('error', error);
       }
       await Storage.setUserDeviceId();
+      resetAxiosClient();
     }
 
     let allPalettes = _state.allPalettes;
