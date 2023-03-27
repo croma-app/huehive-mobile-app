@@ -82,9 +82,11 @@ export default function useApplicationHook() {
       await addPalette(DEFAULT_PALETTES);
     }
     const deviceId = await Storage.getUserDeviceId();
-    if (isUserAlreadyExits == 'true' && deviceId.length == 0) {
+    if (isUserAlreadyExits == 'true' && !deviceId) {
+      await Storage.setUserDeviceId();
       // Update user device id and local palettes to server if user is already exists
-      const paletteCreatePromises = _state.allPalettes.map(async (palette) => {
+      const paletteCreatePromises = Object.keys(_state.allPalettes).map(async (paletteName) => {
+        const palette = _state.allPalettes[paletteName];
         const payload = {
           name: palette.name,
           colors: palette.colors.map((color) => ({
@@ -95,12 +97,10 @@ export default function useApplicationHook() {
         return network.createPalette(payload);
       });
       try {
-        Promise.all(paletteCreatePromises);
-        await Storage.setUserDeviceId();
+        await Promise.all(paletteCreatePromises);
       } catch (error) {
         console.log('error', error);
       }
-      await Storage.setUserDeviceId();
     }
 
     let allPalettes = _state.allPalettes;
