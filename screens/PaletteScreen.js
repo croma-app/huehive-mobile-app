@@ -206,15 +206,7 @@ const styles = StyleSheet.create({
   listview: {
     margin: 8
   },
-  actionButton:
-    Platform.OS === 'web'
-      ? {
-          position: 'fixed',
-          transform: 'scale(1) rotate(0deg) !important',
-          right: Math.max((Dimensions.get('window').width - 600) / 2, 0),
-          left: Math.max((Dimensions.get('window').width - 600) / 2, 0)
-        }
-      : {},
+  actionButton: {},
   input: {
     color: '#ffffff',
     fontSize: 18

@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+// don't remove this. https://github.com/LinusU/react-native-get-random-values is needed for uuidv4
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 

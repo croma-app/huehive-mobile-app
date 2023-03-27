@@ -1,11 +1,9 @@
-import React, { useContext } from 'react';
-import { ScrollView, StyleSheet, Text, PermissionsAndroid, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { ScrollView, StyleSheet, Text, PermissionsAndroid } from 'react-native';
 import { View } from 'react-native-animatable';
 import CromaButton from '../components/CromaButton';
 import { CromaContext } from '../store/store';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import { logEvent } from '../libs/Helpers';
-import { authorize } from 'react-native-app-auth';
 import DocumentPicker from 'react-native-document-picker';
 import { material } from 'react-native-typography';
 const RNFS = require('react-native-fs');
@@ -17,7 +15,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 export default function SyncPalettesScreen(props) {
   const { t } = useTranslation();
   const navigation = props.navigation;
-  const { user, setUser, allPalettes, addPalette } = React.useContext(CromaContext);
+  const { user, allPalettes, addPalette } = React.useContext(CromaContext);
   const importFromFile = async () => {
     try {
       const palettesFromFile = await importPalettes();
@@ -43,8 +41,7 @@ export default function SyncPalettesScreen(props) {
             onPress={async () => {
               logEvent('login');
               navigation.navigate('Login');
-            }}
-          >
+            }}>
             {t('Login/Signup')}
           </CromaButton>
         </View>
@@ -60,8 +57,7 @@ export default function SyncPalettesScreen(props) {
               onPressWithLoader={async () => {
                 logEvent('sync_palettes_screen_export');
                 await saveFile(allPalettes);
-              }}
-            >
+              }}>
               {t('Export palettes to a file')}
             </CromaButton>
             <Text style={material.body1}>{t('Import palettes from previously saved file.')}</Text>
@@ -69,8 +65,7 @@ export default function SyncPalettesScreen(props) {
               onPressWithLoader={() => {
                 logEvent('sync_palettes_screen_import');
                 importFromFile();
-              }}
-            >
+              }}>
               {t('Import palettes from file.')}
             </CromaButton>
           </View>

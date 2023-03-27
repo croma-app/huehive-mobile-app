@@ -1,14 +1,6 @@
 import React, { useLayoutEffect } from 'react';
 import { SingleColorView } from '../components/SingleColorView';
-import {
-  ScrollView,
-  StyleSheet,
-  View,
-  Text,
-  Platform,
-  Button,
-  TouchableOpacity
-} from 'react-native';
+import { ScrollView, StyleSheet, View, Text, Platform, TouchableOpacity } from 'react-native';
 import CromaButton from '../components/CromaButton';
 import { logEvent } from '../libs/Helpers';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -40,8 +32,7 @@ export default function ColorListScreen({ navigation }) {
         <CromaButton
           onPress={() => {
             navigation.navigate('SavePalette');
-          }}
-        >
+          }}>
           {t('SAVE AS NEW PALETTE')}
         </CromaButton>
       )}
@@ -70,21 +61,18 @@ const CustomHeader = ({ navigation }) => {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '100%'
-      }}
-    >
+      }}>
       <Text
         style={{
           color: '#ffffff',
           fontSize: 18
-        }}
-      >
+        }}>
         {t('New palette')}
       </Text>
       <>
         <TouchableOpacity
           style={[styles.doneButton]}
-          onPress={() => navigation.navigate('SavePalette')}
-        >
+          onPress={() => navigation.navigate('SavePalette')}>
           <MaterialIcons name="done" size={24} color="white" />
         </TouchableOpacity>
       </>
