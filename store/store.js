@@ -4,7 +4,6 @@ import { initPurchase, notifyMessage } from '../libs/Helpers';
 import { Platform } from 'react-native';
 import network from '../network';
 import { t } from 'i18next';
-import { resetAxiosClient } from '../network/axios.client';
 
 //import { getAvailablePurchases } from 'react-native-iap';
 // const UNDO_TIMEOUT = 3000;
@@ -80,7 +79,6 @@ export default function useApplicationHook() {
       // IF USER IS COMING FIRST TIME
       await Storage.setUserAlreadyExists();
       await Storage.setUserDeviceId();
-      resetAxiosClient();
       await addPalette(DEFAULT_PALETTES);
     }
     const deviceId = await Storage.getUserDeviceId();
@@ -103,7 +101,6 @@ export default function useApplicationHook() {
       } catch (error) {
         console.log('error', error);
       }
-      resetAxiosClient();
     }
 
     let allPalettes = _state.allPalettes;

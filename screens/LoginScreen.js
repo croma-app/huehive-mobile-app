@@ -15,7 +15,6 @@ import {
   removeUserSession
 } from '../libs/EncryptedStoreage';
 import Notification from '../components/Notification';
-import { resetAxiosClient } from '../network/axios.client';
 
 // import {
 //   GoogleSignin,
@@ -115,9 +114,7 @@ function LoginScreen(props) {
     setUserData(undefined);
     user.loggedIn = false;
     setUser(user);
-    // ressetting the axios client
-    resetAxiosClient();
-  }, []);
+  }, [setUser, user]);
 
   const onSubmit = useCallback(async () => {
     if (screenType === LOGIN) {
@@ -132,8 +129,6 @@ function LoginScreen(props) {
         );
         user.loggedIn = true;
         setUser(user);
-        // ressetting the axios client
-        await resetAxiosClient();
         props.navigation.goBack();
       } catch (error) {
         setError(error.message);
@@ -161,8 +156,6 @@ function LoginScreen(props) {
         );
         user.loggedIn = true;
         setUser(user);
-        // ressetting the axios client
-        await resetAxiosClient();
         props.navigation.goBack();
       } catch (error) {
         if (error.response.data.error) {
@@ -172,7 +165,7 @@ function LoginScreen(props) {
         }
       }
     }
-  }, [confirmPassword, email, fullName, password, props.navigation, screenType]);
+  }, [confirmPassword, email, fullName, password, props.navigation, screenType, setUser, user]);
 
   // useEffect(() => {
   //   GoogleSignin.configure({
