@@ -86,7 +86,8 @@ export default function useApplicationHook() {
     const deviceId = await Storage.getUserDeviceId();
     if (isUserAlreadyExits == 'true' && !deviceId) {
       // Update user device id and local palettes to server if user is already exists
-      const paletteCreatePromises = _state.allPalettes.map(async (palette) => {
+      const paletteCreatePromises = Object.keys(_state.allPalettes).map(async (paletteName) => {
+        const palette = _state.allPalettes[paletteName];
         const payload = {
           name: palette.name,
           colors: palette.colors.map((color) => ({
