@@ -4,51 +4,78 @@ import Card from './Card';
 import Colors from '../constants/Colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import PropTypes from 'prop-types';
+import { UndoDialog } from './CommonDialogs';
 
-export default class SingleColorCard extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { animationType: 'fadeInLeftBig' };
-  }
-  render() {
-    return (
-      <Card {...this.props} animationType={this.state.animationType}>
-        <View>
-          <View style={{ backgroundColor: this.props.color.color, height: 100 }} />
-          <View style={styles.bottom}>
-            <Text style={styles.label}>
-              {this.props.color.color +
-                (this.props.color.name ? ' (' + this.props.color.name + ')' : '')}
-            </Text>
-            <View style={styles.actionButtonsView}>
-              <TouchableOpacity
-                {...{
-                  [Platform.OS === 'web' ? 'onClick' : 'onPress']: (event) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    this.setState({ animationType: 'fadeOutRightBig' });
-                    setTimeout(() => {
-                      this.props.colorDeleteFromPalette();
-                    }, 400);
-                  }
-                }}
-                style={styles.actionButton}
-              >
-                <FontAwesome size={20} name="trash" />
-              </TouchableOpacity>
-            </View>
+const SingleColorCard = function (props) {
+  const [animationType, setAnimationType] = React.useState('fadeInLeftBig');
+  const [isDeletedActive, setIsDeletedActive] = React.useState(false);
+  const timeout = React.useRef(null);
+  const { color, onColorDelete } = props;
+  const onColorDeleteLocal = () => {
+    setIsDeletedActive(true);
+    timeout.current = setTimeout(() => {
+      console.log(`Deleting color ${color.color}`);
+      onColorDelete(color.color);
+      setIsDeletedActive(false);
+    }, 2000);
+  };
 
-            <View style={styles.actionButtonsView}>
-              <TouchableOpacity onPressIn={this.props.onPressDrag}>
-                <MaterialIcons style={{ alignItems: 'center' }} size={20} name="drag-indicator" />
-              </TouchableOpacity>
+  const onUndo = React.useCallback(() => {
+    setIsDeletedActive(false);
+    clearTimeout(timeout.current);
+    setAnimationType('fadeInLeftBig');
+  }, []);
+
+  return (
+    <>
+      {!isDeletedActive ? (
+        <Card {...props} animationType={animationType}>
+          <View>
+            <View style={{ backgroundColor: props.color.color, height: 100 }} />
+            <View style={styles.bottom}>
+              <Text style={styles.label}>
+                {props.color.color + (props.color.name ? ' (' + props.color.name + ')' : '')}
+              </Text>
+              <View style={styles.actionButtonsView}>
+                <TouchableOpacity
+                  {...{
+                    [Platform.OS === 'web' ? 'onClick' : 'onPress']: (event) => {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      setAnimationType('fadeOutRightBig');
+                      onColorDeleteLocal();
+                    }
+                  }}
+                  style={styles.actionButton}>
+                  <FontAwesome size={20} name="trash" />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.actionButtonsView}>
+                <TouchableOpacity onPressIn={props.onPressDrag}>
+                  <MaterialIcons style={{ alignItems: 'center' }} size={20} name="drag-indicator" />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
-      </Card>
-    );
-  }
-}
+        </Card>
+      ) : (
+        <UndoDialog
+          key={`UndoDialog-${props.color}`}
+          name={props.color.color + (props.color.name ? ' (' + props.color.name + ')' : '')}
+          undoDeletion={onUndo}
+        />
+      )}
+    </>
+  );
+};
+
+SingleColorCard.propTypes = {
+  color: PropTypes.object,
+  onColorDelete: PropTypes.func,
+  onPressDrag: PropTypes.func
+};
 
 const styles = StyleSheet.create({
   bottom: {
@@ -71,3 +98,5 @@ const styles = StyleSheet.create({
     color: Colors.darkGrey
   }
 });
+
+export default SingleColorCard;

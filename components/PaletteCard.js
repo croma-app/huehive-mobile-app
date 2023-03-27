@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, Platform, Clipboard, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Platform, TouchableOpacity } from 'react-native';
 import Card from './Card';
 import Colors from '../constants/Colors';
 import { Share, PermissionsAndroid } from 'react-native';
@@ -9,15 +9,33 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { CromaContext } from '../store/store';
 import { logEvent, notifyMessage } from '../libs/Helpers';
 import ViewShot from 'react-native-view-shot';
+import { UndoDialog } from '../components/CommonDialogs';
+
 const RNFS = require('react-native-fs');
 import { t } from 'i18next';
 import RNFetchBlob from 'rn-fetch-blob';
+import PropTypes from 'prop-types';
 
 export const PaletteCard = (props) => {
-  const [shared, setShared] = React.useState(false);
+  const [shared] = React.useState(false);
   const [animationType, setAnimationType] = React.useState('fadeInLeftBig');
   const viewShotRef = React.useRef();
-  const { deletePaletteByName, setCurrentPalette } = React.useContext(CromaContext);
+  const { deletePalette, setCurrentPalette } = React.useContext(CromaContext);
+  const [isDeleteActive, setIsDeleteActive] = React.useState(false);
+  let timer = React.useRef(null);
+  const deletePaletteLocal = React.useCallback(() => {
+    setIsDeleteActive(true);
+    timer.current = setTimeout(() => {
+      deletePalette(props.paletteId);
+    }, 2000);
+  }, [deletePalette, props.paletteId]);
+
+  const undoDeletion = React.useCallback(() => {
+    setIsDeleteActive(false);
+    setAnimationType('fadeInRightBig');
+    clearTimeout(timer.current);
+  }, []);
+
   const onDownload = async () => {
     logEvent('home_screen_palette_card_download', props.colors.length + '');
     try {
@@ -86,72 +104,83 @@ export const PaletteCard = (props) => {
     }
   };
   return (
-    <Card
-      {...props}
-      onPress={() => {
-        setCurrentPalette({ name: props.name });
-        props.navigation.navigate('Palette');
-      }}
-      animationType={animationType}
-    >
-      <ViewShot
-        ref={viewShotRef}
-        options={{ fileName: props.name + '.png', format: 'png', quality: 0.9 }}
-      >
-        <MultiColorView {...props}></MultiColorView>
-      </ViewShot>
-      <View style={styles.bottom}>
-        <Text style={styles.label}>{props.name}</Text>
-        <View style={styles.actionButtonsView}>
-          {shared && (
-            <Text
-              style={{
-                position: 'absolute',
-                backgroundColor: 'rgb(64, 64, 58)',
-                top: '-35px',
-                right: '-10px',
-                width: '148px',
-                color: '#fff',
-                padding: '5px ',
-                textAlign: 'center',
-                borderRadius: '6px'
-              }}
-            >
-              Copied to Clipboard!
-            </Text>
-          )}
-          <TouchableOpacity onPress={onDownload} style={styles.actionButton}>
-            <FontAwesome size={20} name="download" />
-          </TouchableOpacity>
+    <>
+      {!isDeleteActive ? (
+        <Card
+          {...props}
+          onPress={() => {
+            setCurrentPalette({ name: props.name });
+            props.navigation.navigate('Palette');
+          }}
+          animationType={animationType}>
+          <ViewShot
+            ref={viewShotRef}
+            options={{ fileName: props.name + '.png', format: 'png', quality: 0.9 }}>
+            <MultiColorView {...props}></MultiColorView>
+          </ViewShot>
+          <View style={styles.bottom}>
+            <Text style={styles.label}>{props.name}</Text>
+            <View style={styles.actionButtonsView}>
+              {shared && (
+                <Text
+                  style={{
+                    position: 'absolute',
+                    backgroundColor: 'rgb(64, 64, 58)',
+                    top: '-35px',
+                    right: '-10px',
+                    width: '148px',
+                    color: '#fff',
+                    padding: '5px ',
+                    textAlign: 'center',
+                    borderRadius: '6px'
+                  }}>
+                  Copied to Clipboard!
+                </Text>
+              )}
+              <TouchableOpacity onPress={onDownload} style={styles.actionButton}>
+                <FontAwesome size={20} name="download" />
+              </TouchableOpacity>
 
-          {Platform.OS === 'web' ? (
-            <TouchableOpacity onClick={onShareWeb} style={styles.actionButton}>
-              <FontAwesome size={20} name="share" />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity onPress={onShare} style={styles.actionButton}>
-              <FontAwesome size={20} name="share" />
-            </TouchableOpacity>
-          )}
-          <TouchableOpacity
-            {...{
-              [Platform.OS === 'web' ? 'onClick' : 'onPress']: (event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                setAnimationType('fadeOutRightBig');
-                setTimeout(() => {
-                  deletePaletteByName(props.name);
-                }, 500);
-              }
-            }}
-            style={styles.actionButton}
-          >
-            <FontAwesome size={20} name="trash" />
-          </TouchableOpacity>
-        </View>
-      </View>
-    </Card>
+              {Platform.OS === 'web' ? (
+                <TouchableOpacity onClick={onShareWeb} style={styles.actionButton}>
+                  <FontAwesome size={20} name="share" />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity onPress={onShare} style={styles.actionButton}>
+                  <FontAwesome size={20} name="share" />
+                </TouchableOpacity>
+              )}
+              <TouchableOpacity
+                {...{
+                  [Platform.OS === 'web' ? 'onClick' : 'onPress']: (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    setAnimationType('fadeOutRightBig');
+                    setTimeout(() => {
+                      deletePaletteLocal();
+                    }, 500);
+                  }
+                }}
+                style={styles.actionButton}>
+                <FontAwesome size={20} name="trash" />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Card>
+      ) : (
+        <UndoDialog key={props.name} name={props.name} undoDeletion={undoDeletion} />
+      )}
+    </>
   );
+};
+
+PaletteCard.propTypes = {
+  name: PropTypes.string,
+  colors: PropTypes.array,
+  navigation: PropTypes.any,
+  onPress: PropTypes.func,
+  onLongPress: PropTypes.func,
+  paletteId: PropTypes.string
 };
 
 const styles = StyleSheet.create({

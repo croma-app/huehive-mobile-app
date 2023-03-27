@@ -8,8 +8,10 @@ import { CromaContext } from '../store/store';
 import { TextDialog } from './CommonDialogs';
 import { StackActions } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
 
-export const SavePalette = ({ navigation, title, navigationPath }) => {
+export const SavePalette = (props) => {
+  const { title, navigationPath, navigation } = props;
   const { t } = useTranslation();
 
   const {
@@ -62,7 +64,7 @@ export const SavePalette = ({ navigation, title, navigationPath }) => {
       </View>
       <CromaButton
         onPress={async () => {
-          if (allPalettes[paletteName]) {
+          if (allPalettes.findIndex((palette) => palette.name === paletteName) !== -1) {
             setIsPaletteNameExist(true);
             setTimeout(() => {
               setIsPaletteNameExist(false);
@@ -79,14 +81,19 @@ export const SavePalette = ({ navigation, title, navigationPath }) => {
           Platform.OS === 'android' || Platform.OS === 'ios'
             ? navigation.dispatch(StackActions.popToTop())
             : navigation.replace(navigationPath);
-        }}
-      >
+        }}>
         {t('Save palette')}
       </CromaButton>
       {isPaletteNameExist && <TextDialog text={t('A palette with same name already exists.')} />}
       {isUnlockProNotification && <TextDialog text={t('Unlock pro to save more than 4 colors!')} />}
     </ScrollView>
   );
+};
+
+SavePalette.propTypes = {
+  title: PropTypes.string,
+  navigationPath: PropTypes.string,
+  navigation: PropTypes.any
 };
 
 const styles = StyleSheet.create({

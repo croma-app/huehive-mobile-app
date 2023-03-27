@@ -1,38 +1,25 @@
-import axios from 'axios';
+import getAxiosClient from './axios.client';
 
 export const login = async (email, password) => {
-  return axios.post(
-    'https://huehive.co/users/sign_in',
+  const axiosClient = await getAxiosClient();
+  return axiosClient.post(
+    'users/sign_in',
     JSON.stringify({
       user: {
         email: email,
         password: password
       }
-    }),
-    {
-      headers: {
-        accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
-    }
+    })
   );
 };
 
 export const signUp = async (full_name, email, password) => {
-  return axios.post(
-    'https://huehive.co/users',
-    {
-      user: {
-        full_name,
-        email: email,
-        password: password
-      }
-    },
-    {
-      headers: {
-        accept: 'application/json',
-        'content-type': 'application/json'
-      }
+  const axiosClient = await getAxiosClient();
+  return axiosClient.post('users', {
+    user: {
+      full_name,
+      email: email,
+      password: password
     }
-  );
+  });
 };

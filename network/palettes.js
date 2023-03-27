@@ -1,27 +1,56 @@
-export const upsert = async (palettes, userAuthInfo) => {
-  return axios.post(
-    'https://huehive.co/color_palette/upsert_all',
+import getAxiosClient from './axios.client';
+
+// export const upsertAllPalettes = async (palettes) => {
+//   const axiosClient = await getAxiosClient();
+//   return axiosClient.post(
+//     'color_palette/upsert_all',
+//     JSON.stringify({
+//       palettes: palettes
+//     })
+//   );
+// };
+
+export const getAllPalettes = async () => {
+  const axiosClient = await getAxiosClient();
+  return axiosClient.get('color_palettes');
+};
+
+export const createPalette = async (palette) => {
+  const axiosClient = await getAxiosClient();
+  return axiosClient.post(
+    'color_palettes.json',
     JSON.stringify({
-      palettes: palettes
-    }),
-    {
-      headers: {
-        accept: 'application/json',
-        'Content-Type': 'application/json',
-        'X-User-Email': userAuthInfo.email,
-        'X-User-Token': userAuthInfo.userToken
-      }
-    }
+      color_palette: palette
+    })
   );
 };
 
-export const getAll = async (userAuthInfo) => {
-  return axios.get('https://huehive.co/color_palettes', {
-    headers: {
-      accept: 'application/json',
-      'Content-Type': 'application/json',
-      'X-User-Email': userAuthInfo.email,
-      'X-User-Token': userAuthInfo.userToken
-    }
-  });
+export const deletePalette = async (paletteId) => {
+  const axiosClient = await getAxiosClient();
+  return axiosClient.delete(`color_palettes/${paletteId}.json`);
+};
+
+export const patchPalette = async (paletteId, palette) => {
+  const axiosClient = await getAxiosClient();
+  return axiosClient.put(
+    `color_palettes/${paletteId}.json`,
+    JSON.stringify({
+      color_palette: palette
+    })
+  );
+};
+
+export const addNewColorToPalette = async (paletteId, color) => {
+  const axiosClient = await getAxiosClient();
+  return axiosClient.post(
+    `color_palettes/${paletteId}/colors.json`,
+    JSON.stringify({
+      color: color
+    })
+  );
+};
+
+export const deleteColorFromPalette = async (paletteId, colorId) => {
+  const axiosClient = await getAxiosClient();
+  return axiosClient.delete(`color_palettes/${paletteId}/colors/${colorId}.json`);
 };

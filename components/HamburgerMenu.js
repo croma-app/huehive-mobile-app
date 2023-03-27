@@ -54,8 +54,7 @@ const HamburgerMenu = (props) => {
         onPress={() => {
           logEvent('hm_home_screen');
           userData ? navigate('Login') : navigate('Home');
-        }}
-      >
+        }}>
         <View style={[styles.titleArea, { height: props.navigation.headerHeight }]}>
           <Image
             style={styles.logo}
@@ -79,8 +78,7 @@ const HamburgerMenu = (props) => {
               logEvent('hm_create_new_palette');
               clearPalette();
               navigate('AddPaletteManually');
-            }}
-          >
+            }}>
             <View style={styles.menuItemView}>
               <View style={[styles.menuIcon, { paddingLeft: 4 }]}>
                 <Ionicons name="md-color-filter" style={styles.icon} />
@@ -94,8 +92,7 @@ const HamburgerMenu = (props) => {
               logEvent('hm_palette_library');
               clearPalette();
               navigate('PaletteLibrary');
-            }}
-          >
+            }}>
             <View style={styles.menuItemView}>
               <View style={styles.menuIcon}>
                 <MaterialCommunityIcons name="palette-swatch" style={styles.icon} />
@@ -119,8 +116,7 @@ const HamburgerMenu = (props) => {
                   setColorList(JSON.parse(pickedColors)?.colors);
                   navigate('ColorList');
                 }
-              }}
-            >
+              }}>
               <View style={styles.menuItemView}>
                 <View style={styles.menuIcon}>
                   <MaterialCommunityIcons name="image" style={styles.icon} />
@@ -140,8 +136,7 @@ const HamburgerMenu = (props) => {
                 clearPalette();
                 setColorList(JSON.parse(pickedColors)?.colors);
                 navigate('ColorList');
-              }}
-            >
+              }}>
               <View style={styles.menuItemView}>
                 <View style={styles.menuIcon}>
                   <MaterialCommunityIcons name="credit-card-scan-outline" style={styles.icon} />
@@ -158,8 +153,7 @@ const HamburgerMenu = (props) => {
                   ? 'market://details?id=app.croma'
                   : 'https://apps.apple.com/app/id1596763657?action=write-review'
               }
-              icon={<MaterialIcons name="rate-review" style={styles.icon} />}
-            >
+              icon={<MaterialIcons name="rate-review" style={styles.icon} />}>
               {t('Like the App? Please rate us')}
             </MenuLink>
           }
@@ -168,8 +162,7 @@ const HamburgerMenu = (props) => {
             onPress={() => {
               logEvent('hm_pro_benefits');
               navigate('ProVersion');
-            }}
-          >
+            }}>
             <View style={styles.menuItemView}>
               <View style={[styles.menuIcon, { paddingLeft: 4 }]}>
                 <FontAwesome5 name="unlock" style={styles.icon} />
@@ -182,8 +175,7 @@ const HamburgerMenu = (props) => {
             onPress={async () => {
               logEvent('hm_sync_palettes');
               navigate('SyncPalettes');
-            }}
-          >
+            }}>
             <View style={styles.menuItemView}>
               <View style={styles.menuIcon}>
                 <FontAwesome5 name="file-import" style={styles.icon} />
@@ -196,8 +188,7 @@ const HamburgerMenu = (props) => {
             onPress={async () => {
               logEvent('hm_about_us');
               navigate('AboutUs');
-            }}
-          >
+            }}>
             <View style={styles.menuItemView}>
               <View style={{ ...styles.menuIcon, paddingLeft: 4 }}>
                 <MaterialCommunityIcons name="information-outline" style={styles.icon} />
@@ -211,8 +202,7 @@ const HamburgerMenu = (props) => {
               onPress={async () => {
                 logEvent('hm_login');
                 navigate('Login');
-              }}
-            >
+              }}>
               <View style={styles.menuItemView}>
                 <View style={{ ...styles.menuIcon, paddingLeft: 4 }}>
                   <MaterialCommunityIcons name="login" style={styles.icon} />
@@ -239,8 +229,7 @@ function MenuLink(props) {
       onPress={() => {
         logEvent('hm_link_' + props.id);
         Linking.openURL(props.link);
-      }}
-    >
+      }}>
       <View style={styles.menuItemView}>
         <View style={styles.menuIcon}>{props.icon}</View>
         <Text style={styles.textAreaMenuItem}>{props.children}</Text>

@@ -3,16 +3,21 @@ import { TouchableOpacity } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import { View, Text, StyleSheet, Platform, Dimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
 
 export const DialogContainer = (props) => (
   <View style={styles.DialogContainer}>{props.children}</View>
 );
 
+DialogContainer.propTypes = {
+  children: PropTypes.children
+};
+
 export const UndoDialog = (props) => {
   /*
     Todo - need to add deletion based on type
   */
-  const { name, undoDeletionByName } = props;
+  const { name, undoDeletion } = props;
   const { t } = useTranslation();
 
   return (
@@ -20,8 +25,7 @@ export const UndoDialog = (props) => {
       animation={'fadeInUpBig'}
       duration={500}
       style={[styles.undoCard, styles.marginAndRadius]}
-      useNativeDriver={true}
-    >
+      useNativeDriver={true}>
       <View>
         <Text style={styles.undoText}>
           {t('Deleted')} {name}.
@@ -31,27 +35,29 @@ export const UndoDialog = (props) => {
         onPress={(event) => {
           event.stopPropagation();
           event.preventDefault();
-          undoDeletionByName(name);
-        }}
-      >
+          undoDeletion();
+        }}>
         <Text style={styles.undoButton}> {t('UNDO')} </Text>
       </TouchableOpacity>
     </Animatable.View>
   );
 };
 
+UndoDialog.propTypes = { name: PropTypes.string, undoDeletion: PropTypes.func };
+
 export const TextDialog = (props) => (
   <Animatable.View
     animation={'fadeInUp'}
     duration={500}
     useNativeDriver={true}
-    style={styles.undoCard}
-  >
+    style={styles.undoCard}>
     <View>
       <Text style={styles.undoText}>{props.text}</Text>
     </View>
   </Animatable.View>
 );
+
+TextDialog.propTypes = { text: PropTypes.string };
 
 const styles = StyleSheet.create({
   undoCard: {
@@ -85,6 +91,7 @@ const styles = StyleSheet.create({
           zIndex: 10
         }
       : {
+          height: 100,
           position: 'absolute',
           bottom: 0,
           width: '100%',

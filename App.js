@@ -4,7 +4,7 @@ import AboutUsScreen from './screens/AboutUsScreen';
 import ColorPickerScreen from './screens/ColorPickerScreen';
 import HomeScreen from './screens/HomeScreen';
 import Colors from './constants/Colors';
-import applicationHook, { CromaContext } from './store/store';
+import useApplicationHook, { CromaContext } from './store/store';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ColorDetailsScreen from './screens/ColorDetailScreen';
@@ -31,7 +31,7 @@ const Stack = createNativeStackNavigator();
 LogBox.ignoreAllLogs();//Ignore all log notifications*/
 export default function App() {
   const [isPalettesLoaded, setIsPalettesLoaded] = useState(false);
-  const applicationState = applicationHook();
+  const applicationState = useApplicationHook();
   const [isMenuOpen, setMenu] = useState(false);
   const navigationRef = useNavigationContainerRef();
   useEffect(() => {
@@ -69,8 +69,7 @@ export default function App() {
             <HamburgerMenu navigation={navigationRef} toggleSideMenu={() => setMenu(!isMenuOpen)} />
           }
           isOpen={isMenuOpen}
-          onChange={(isOpen) => setMenu(isOpen)}
-        >
+          onChange={(isOpen) => setMenu(isOpen)}>
           <View style={[styles.container]}>
             <StatusBar
               barStyle="light-content"
@@ -85,8 +84,7 @@ export default function App() {
             />
             <View
               style={[{ flex: 1, backgroundColor: 'transparent' }]}
-              className={'navigation-workplace'}
-            >
+              className={'navigation-workplace'}>
               <NavigationContainer ref={navigationRef}>
                 <Stack.Navigator
                   screenOptions={{
@@ -95,8 +93,7 @@ export default function App() {
                       ...screenOptions.headerStyle,
                       height: HEADER_HEIGHT
                     }
-                  }}
-                >
+                  }}>
                   <Stack.Screen
                     name="Home"
                     options={() => {

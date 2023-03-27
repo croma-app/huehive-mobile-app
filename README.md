@@ -68,6 +68,8 @@ Feel free to send us pull request from the open issues. If you are not sure abou
 
 ### Debugging:
 
+Setup the react native debugger. It allows to inspect network request - https://github.com/jhen0409/react-native-debugger
+
 To see console log
 From the simulator, press (⌘+D) and press Remote JS Debugging.
 This will open a resource, http://localhost:8081/debugger-ui on localhost.
