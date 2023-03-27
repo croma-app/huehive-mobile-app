@@ -85,6 +85,7 @@ export default function useApplicationHook() {
     }
     const deviceId = await Storage.getUserDeviceId();
     if (isUserAlreadyExits == 'true' && !deviceId) {
+      await Storage.setUserDeviceId();
       // Update user device id and local palettes to server if user is already exists
       const paletteCreatePromises = Object.keys(_state.allPalettes).map(async (paletteName) => {
         const palette = _state.allPalettes[paletteName];
@@ -102,7 +103,6 @@ export default function useApplicationHook() {
       } catch (error) {
         console.log('error', error);
       }
-      await Storage.setUserDeviceId();
       resetAxiosClient();
     }
 
