@@ -5,7 +5,7 @@ const getAxiosClient = async function () {
   const userAuthInfo = await retrieveUserSession();
   const userDeviceId = await Storage.getUserDeviceId();
   return axios.create({
-    baseURL: 'https://huehive.co/',
+    baseURL: 'https://huehive.co/', // http://localhost:3000/
     timeout: 1000,
     headers: {
       accept: 'application/json',

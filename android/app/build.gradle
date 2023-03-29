@@ -140,7 +140,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 782166
-        versionName "2.8"
+        versionName "3.0"
         // Deprecated. Used by net.openid:appauth
         manifestPlaceholders = [appAuthRedirectScheme: 'app.croma']
         missingDimensionStrategy 'store', 'play'

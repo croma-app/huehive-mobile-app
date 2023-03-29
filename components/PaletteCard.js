@@ -17,7 +17,6 @@ import RNFetchBlob from 'rn-fetch-blob';
 import PropTypes from 'prop-types';
 
 export const PaletteCard = (props) => {
-  const [shared] = React.useState(false);
   const [animationType, setAnimationType] = React.useState('fadeInLeftBig');
   const viewShotRef = React.useRef();
   const { deletePalette, setCurrentPalette } = React.useContext(CromaContext);
@@ -121,45 +120,20 @@ export const PaletteCard = (props) => {
           <View style={styles.bottom}>
             <Text style={styles.label}>{props.name}</Text>
             <View style={styles.actionButtonsView}>
-              {shared && (
-                <Text
-                  style={{
-                    position: 'absolute',
-                    backgroundColor: 'rgb(64, 64, 58)',
-                    top: '-35px',
-                    right: '-10px',
-                    width: '148px',
-                    color: '#fff',
-                    padding: '5px ',
-                    textAlign: 'center',
-                    borderRadius: '6px'
-                  }}>
-                  Copied to Clipboard!
-                </Text>
-              )}
               <TouchableOpacity onPress={onDownload} style={styles.actionButton}>
                 <FontAwesome size={20} name="download" />
               </TouchableOpacity>
-
-              {Platform.OS === 'web' ? (
-                <TouchableOpacity onClick={onShareWeb} style={styles.actionButton}>
-                  <FontAwesome size={20} name="share" />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity onPress={onShare} style={styles.actionButton}>
-                  <FontAwesome size={20} name="share" />
-                </TouchableOpacity>
-              )}
+              <TouchableOpacity onPress={onShare} style={styles.actionButton}>
+                <FontAwesome size={20} name="share" />
+              </TouchableOpacity>
               <TouchableOpacity
-                {...{
-                  [Platform.OS === 'web' ? 'onClick' : 'onPress']: (event) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    setAnimationType('fadeOutRightBig');
-                    setTimeout(() => {
-                      deletePaletteLocal();
-                    }, 500);
-                  }
+                onPress={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  setAnimationType('fadeOutRightBig');
+                  setTimeout(() => {
+                    deletePaletteLocal();
+                  }, 500);
                 }}
                 style={styles.actionButton}>
                 <FontAwesome size={20} name="trash" />

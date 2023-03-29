@@ -12,7 +12,6 @@
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc"
   },
   "dependencies": {
-    "@octokit/rest": "^18.12.0",
     "@react-native-async-storage/async-storage": "^1.15.9",
     "@react-native-google-signin/google-signin": "^9.0.2",
     "@react-navigation/elements": "^1.2.1",
@@ -24,7 +23,6 @@
     "expo-font": "^10.0.3",
     "expo-permissions": "^13.0.3",
     "i18next": "^22.0.4",
-    "ml-kmeans": "^5.0.0",
     "node-libs-react-native": "^1.2.1",
     "pigment": "^0.1.0",
     "react": "17.0.2",
@@ -36,7 +34,7 @@
     "react-native-color-thief": "https://github.com/6DegreeLabs/react-native-color-thief.git",
     "react-native-config": "^1.5.0",
     "react-native-document-picker": "^7.1.1",
-    "react-native-draggable-flatlist": "^4.0.0",
+    "react-native-draggable-flatlist": "^4.0.1",
     "react-native-drawer": "^2.5.1",
     "react-native-encrypted-storage": "^4.0.3",
     "react-native-fs": "^2.18.0",

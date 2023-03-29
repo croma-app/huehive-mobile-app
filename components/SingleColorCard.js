@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, Platform, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import Card from './Card';
 import Colors from '../constants/Colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -17,7 +17,6 @@ const SingleColorCard = function (props) {
     timeout.current = setTimeout(() => {
       console.log(`Deleting color ${color.color}`);
       onColorDelete(color.color);
-      // setIsDeletedActive(false);
     }, 2000);
   };
 
@@ -49,13 +48,11 @@ const SingleColorCard = function (props) {
               </View>
               <View style={styles.actionButtonsView}>
                 <TouchableOpacity
-                  {...{
-                    [Platform.OS === 'web' ? 'onClick' : 'onPress']: (event) => {
-                      event.preventDefault();
-                      event.stopPropagation();
-                      setAnimationType('fadeOutRightBig');
-                      onColorDeleteLocal();
-                    }
+                  onPress={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    setAnimationType('fadeOutRightBig');
+                    onColorDeleteLocal();
                   }}
                   style={styles.actionButton}>
                   <FontAwesome size={20} name="trash" />
