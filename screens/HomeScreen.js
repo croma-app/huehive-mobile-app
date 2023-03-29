@@ -14,7 +14,6 @@ const HomeScreen = function ({ navigation, route }) {
   const { isLoading, allPalettes, isPro, setColorList, setSuggestedName, clearPalette } =
     React.useContext(CromaContext);
   const [pickImageLoading, setPickImageLoading] = useState(false);
-
   const getPermissionAsync = async () => {
     if (Platform?.OS === 'ios') {
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);

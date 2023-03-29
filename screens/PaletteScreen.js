@@ -58,9 +58,8 @@ export default function PaletteScreen({ navigation }) {
   const renderItem = React.useCallback(
     (renderItemParams) => {
       return (
-        <ScaleDecorator>
+        <ScaleDecorator key={`${renderItemParams.item.id}`}>
           <SingleColorCard
-            key={`${renderItemParams.item.id}`}
             onPress={() => {
               setDetailedColor(renderItemParams.item.color);
               navigation.navigate('ColorDetails');
@@ -97,31 +96,33 @@ export default function PaletteScreen({ navigation }) {
             }}
           />
           <EmptyView />
-          <ActionButton
-            offsetY={76}
-            bgColor="rgba(68, 68, 68, 0.6)"
-            hideShadow={Platform.OS === 'web' ? true : false}
-            fixNativeFeedbackRadius={true}
-            buttonColor={Colors.fabPrimary}
-            onPress={() => {
-              logEvent('palette_screen_add_color');
-              if (
-                (Platform.OS === 'android' || Platform.OS === 'ios') &&
-                colors.length >= 4 &&
-                isPro === false
-              ) {
-                notifyMessage('Unlock pro to add more than 4 colors!');
-                navigation.navigate('ProVersion');
-              } else {
-                setColorPickerCallback((color) => {
-                  addNewColorToPalette(palette.id, { hex: color.color });
-                });
-                navigation.navigate('ColorPicker');
-              }
-            }}
-            style={styles.actionButton}
-          />
+          <EmptyView />
+          <EmptyView />
         </NestableScrollContainer>
+        <ActionButton
+          offsetY={76}
+          bgColor="rgba(68, 68, 68, 0.6)"
+          hideShadow={Platform.OS === 'web' ? true : false}
+          fixNativeFeedbackRadius={true}
+          buttonColor={Colors.fabPrimary}
+          onPress={() => {
+            logEvent('palette_screen_add_color');
+            if (
+              (Platform.OS === 'android' || Platform.OS === 'ios') &&
+              colors.length >= 4 &&
+              isPro === false
+            ) {
+              notifyMessage('Unlock pro to add more than 4 colors!');
+              navigation.navigate('ProVersion');
+            } else {
+              setColorPickerCallback((color) => {
+                addNewColorToPalette(palette.id, { hex: color.color });
+              });
+              navigation.navigate('ColorPicker');
+            }
+          }}
+          style={styles.actionButton}
+        />
       </View>
     </>
   );
