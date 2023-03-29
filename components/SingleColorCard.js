@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, View, Text, Platform, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import Card from './Card';
 import Colors from '../constants/Colors';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -17,7 +17,6 @@ const SingleColorCard = function (props) {
     timeout.current = setTimeout(() => {
       console.log(`Deleting color ${color.color}`);
       onColorDelete(color.color);
-      // setIsDeletedActive(false);
     }, 2000);
   };
 
@@ -39,26 +38,24 @@ const SingleColorCard = function (props) {
               </Text>
               <View style={styles.actionButtonsView}>
                 <TouchableOpacity
+                  onPress={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    setAnimationType('fadeOutRightBig');
+                    onColorDeleteLocal();
+                  }}
+                  style={styles.actionButton}>
+                  <FontAwesome size={20} name="trash" />
+                </TouchableOpacity>
+              </View>
+              <View style={[styles.actionButtonsView, styles.dragDropButton]}>
+                <TouchableOpacity
                   onPressIn={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     props.onPressDrag();
                   }}>
                   <MaterialIcons style={{ alignItems: 'center' }} size={20} name="drag-indicator" />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.actionButtonsView}>
-                <TouchableOpacity
-                  {...{
-                    [Platform.OS === 'web' ? 'onClick' : 'onPress']: (event) => {
-                      event.preventDefault();
-                      event.stopPropagation();
-                      setAnimationType('fadeOutRightBig');
-                      onColorDeleteLocal();
-                    }
-                  }}
-                  style={styles.actionButton}>
-                  <FontAwesome size={20} name="trash" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -84,19 +81,23 @@ SingleColorCard.propTypes = {
 const styles = StyleSheet.create({
   bottom: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    height: 54
   },
   actionButtonsView: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     padding: 10
   },
-
+  dragDropButton: {
+    marginRight: 14
+  },
   label: {
     flex: 1,
     marginHorizontal: 4,
-    fontWeight: '500',
-    color: Colors.darkGrey
+    fontWeight: '600',
+    color: Colors.darkGrey,
+    padding: 10
   }
 });
 
