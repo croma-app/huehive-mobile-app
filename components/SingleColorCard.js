@@ -38,16 +38,6 @@ const SingleColorCard = function (props) {
               </Text>
               <View style={styles.actionButtonsView}>
                 <TouchableOpacity
-                  onPressIn={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    props.onPressDrag();
-                  }}>
-                  <MaterialIcons style={{ alignItems: 'center' }} size={20} name="drag-indicator" />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.actionButtonsView}>
-                <TouchableOpacity
                   onPress={(event) => {
                     event.preventDefault();
                     event.stopPropagation();
@@ -56,6 +46,16 @@ const SingleColorCard = function (props) {
                   }}
                   style={styles.actionButton}>
                   <FontAwesome size={20} name="trash" />
+                </TouchableOpacity>
+              </View>
+              <View style={[styles.actionButtonsView, styles.dragDropButton]}>
+                <TouchableOpacity
+                  onPressIn={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    props.onPressDrag();
+                  }}>
+                  <MaterialIcons style={{ alignItems: 'center' }} size={20} name="drag-indicator" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -81,19 +81,23 @@ SingleColorCard.propTypes = {
 const styles = StyleSheet.create({
   bottom: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    height: 54
   },
   actionButtonsView: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     padding: 10
   },
-
+  dragDropButton: {
+    marginRight: 14
+  },
   label: {
     flex: 1,
     marginHorizontal: 4,
-    fontWeight: '500',
-    color: Colors.darkGrey
+    fontWeight: '600',
+    color: Colors.darkGrey,
+    padding: 10
   }
 });
 
