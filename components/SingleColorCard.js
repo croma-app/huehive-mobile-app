@@ -17,7 +17,7 @@ const SingleColorCard = function (props) {
     timeout.current = setTimeout(() => {
       console.log(`Deleting color ${color.color}`);
       onColorDelete(color.color);
-      setIsDeletedActive(false);
+      // setIsDeletedActive(false);
     }, 2000);
   };
 
@@ -39,6 +39,16 @@ const SingleColorCard = function (props) {
               </Text>
               <View style={styles.actionButtonsView}>
                 <TouchableOpacity
+                  onPressIn={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    props.onPressDrag();
+                  }}>
+                  <MaterialIcons style={{ alignItems: 'center' }} size={20} name="drag-indicator" />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.actionButtonsView}>
+                <TouchableOpacity
                   {...{
                     [Platform.OS === 'web' ? 'onClick' : 'onPress']: (event) => {
                       event.preventDefault();
@@ -49,12 +59,6 @@ const SingleColorCard = function (props) {
                   }}
                   style={styles.actionButton}>
                   <FontAwesome size={20} name="trash" />
-                </TouchableOpacity>
-              </View>
-
-              <View style={styles.actionButtonsView}>
-                <TouchableOpacity onPressIn={props.onPressDrag}>
-                  <MaterialIcons style={{ alignItems: 'center' }} size={20} name="drag-indicator" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -80,17 +84,14 @@ SingleColorCard.propTypes = {
 const styles = StyleSheet.create({
   bottom: {
     flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-    height: 54
+    alignItems: 'center'
   },
   actionButtonsView: {
     flexDirection: 'row',
-    alignItems: 'flex-end'
+    alignItems: 'flex-end',
+    padding: 10
   },
-  actionButton: {
-    paddingRight: 16
-  },
+
   label: {
     flex: 1,
     marginHorizontal: 4,

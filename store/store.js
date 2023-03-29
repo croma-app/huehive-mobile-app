@@ -126,11 +126,20 @@ export default function useApplicationHook() {
     });
   };
 
-  const updatePalette = async (id, palette) => {
+  const updatePalette = async (id, _palette) => {
     try {
-      await network.patchPalette(id, palette);
-      const allPalettes = await loadPlalettes();
-      setState((state) => ({ ...state, allPalettes }));
+      setState((state) => {
+        const allPalettes = state.allPalettes.map((palette) => {
+          if (palette.id === id) {
+            return _palette;
+          }
+          return palette;
+        });
+        return { ...state, allPalettes: [...allPalettes] };
+      });
+      await network.patchPalette(id, _palette);
+      // const allPalettes = await loadPlalettes();
+      // setState((state) => ({ ...state, allPalettes }));
     } catch (error) {
       notifyMessage(t(error.message));
     }
