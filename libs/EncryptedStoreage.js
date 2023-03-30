@@ -1,6 +1,6 @@
 import EncryptedStorage from 'react-native-encrypted-storage';
 
-export async function storeUserSession(fullName, email, token, avator) {
+export async function storeUserSession(fullName, email, token, avatar_url) {
   try {
     await EncryptedStorage.setItem(
       'user_session',
@@ -8,7 +8,7 @@ export async function storeUserSession(fullName, email, token, avator) {
         token,
         fullName,
         email,
-        avator
+        avatar_url
       })
     );
 

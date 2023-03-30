@@ -203,7 +203,7 @@ function LoginScreen(props) {
     return (
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         <View style={[styles.logoutContainer]}>
-          <Image style={styles.logo} source={{ uri: userData.avator }} />
+          <Image style={styles.logo} source={{ uri: userData.avatar_url }} />
           <Text style={styles.intro}>
             {t('Name: ')}
             {userData.fullName}
