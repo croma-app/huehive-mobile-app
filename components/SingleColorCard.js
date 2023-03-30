@@ -32,33 +32,41 @@ const SingleColorCard = function (props) {
         <Card {...props} animationType={animationType}>
           <View>
             <View style={{ backgroundColor: props.color.color, height: 100 }} />
-            <View style={styles.bottom}>
-              <Text style={styles.label}>
-                {props.color.color + (props.color.name ? ' (' + props.color.name + ')' : '')}
-              </Text>
-              <View style={styles.actionButtonsView}>
-                <TouchableOpacity
-                  onPress={(event) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    setAnimationType('fadeOutRightBig');
-                    onColorDeleteLocal();
-                  }}
-                  style={styles.actionButton}>
-                  <FontAwesome size={20} name="trash" />
-                </TouchableOpacity>
+            <TouchableOpacity
+              onPress={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}>
+              <View style={styles.bottom}>
+                <Text style={styles.label}>
+                  {props.color.color + (props.color.name ? ' (' + props.color.name + ')' : '')}
+                </Text>
+                <View style={styles.actionButtonsView}>
+                  <TouchableOpacity
+                    onPress={(event) => {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      setAnimationType('fadeOutRightBig');
+                      onColorDeleteLocal();
+                    }}
+                    style={styles.actionButton}>
+                    <FontAwesome size={20} name="trash" />
+                  </TouchableOpacity>
+                </View>
+                <View style={[styles.actionButtonsView, styles.dragDropButton]}>
+                  <TouchableOpacity
+                    onPressIn={(e) => {
+                      props.onPressDrag();
+                    }}>
+                    <MaterialIcons
+                      style={{ alignItems: 'center' }}
+                      size={20}
+                      name="drag-indicator"
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
-              <View style={[styles.actionButtonsView, styles.dragDropButton]}>
-                <TouchableOpacity
-                  onPressIn={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    props.onPressDrag();
-                  }}>
-                  <MaterialIcons style={{ alignItems: 'center' }} size={20} name="drag-indicator" />
-                </TouchableOpacity>
-              </View>
-            </View>
+            </TouchableOpacity>
           </View>
         </Card>
       ) : (
@@ -87,10 +95,11 @@ const styles = StyleSheet.create({
   actionButtonsView: {
     flexDirection: 'row',
     alignItems: 'flex-end',
-    padding: 10
+    padding: 5
   },
   dragDropButton: {
-    marginRight: 14
+    marginRight: 10,
+    padding: 10
   },
   label: {
     flex: 1,
