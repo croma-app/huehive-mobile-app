@@ -23,3 +23,8 @@ export const signUp = async (full_name, email, password) => {
     }
   });
 };
+
+export const googleLogin = async (userInfo) => {
+  const axiosClient = await getAxiosClient();
+  return axiosClient.post('users/google_login', userInfo);
+};
