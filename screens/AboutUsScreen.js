@@ -16,6 +16,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useTranslation } from 'react-i18next';
 
 const GITHUB_URL = 'https://github.com/croma-app/croma-react';
+const INSTAGRAM_URL = "https://www.instagram.com/huehiveco/";
 const CROMA_APP_URL = 'https://web.croma.app/';
 const CROMA_IOS_URL = 'https://apps.apple.com/app/croma-palette-manager/id1596763657';
 const CROMA_PLAYSTORE_URL = 'https://play.google.com/store/apps/details?id=app.croma';
@@ -36,6 +37,13 @@ const AboutUsScreen = () => {
         </Text>
       </View>
       <View style={styles.linksMainView}>
+        <TouchableOpacity onPress={() => Linking.openURL(`${INSTAGRAM_URL}`)}>
+          <View style={styles.linkView}>
+            <Entypo name="instagram" style={styles.icon} />
+            <Text style={[styles.line, styles.subtitle]}>{t('Follow us on instagram')}</Text>
+            <Text style={[styles.line, styles.link]}>{INSTAGRAM_URL}</Text>
+          </View>
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => Linking.openURL(`${DISCORD_URL}`)}>
           <View style={styles.linkView}>
             <MaterialCommunityIcons name="discord" style={styles.icon} />
