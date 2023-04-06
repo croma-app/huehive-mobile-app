@@ -184,7 +184,6 @@ function LoginScreen(props) {
       // this.setState({ userInfo });
       // console.log({ userInfo });
       const res = await googleLogin(userInfo);
-      console.log({ res });
       await storeUserSession(
         res.data.user.full_name,
         res.data.user.email,

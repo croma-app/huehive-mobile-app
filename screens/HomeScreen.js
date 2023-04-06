@@ -65,7 +65,7 @@ const HomeScreen = function ({ navigation, route }) {
     return <ActivityIndicator />;
   } else {
     logEvent('home_screen', {
-      length: !allPalettes ? 0 : allPalettes.length
+      length: allPalettes.length
     });
     return (
       <>
