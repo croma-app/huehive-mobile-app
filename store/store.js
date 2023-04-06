@@ -104,11 +104,7 @@ export default function useApplicationHook() {
     }
 
     let allPalettes = _state.allPalettes;
-    try {
-      allPalettes = await loadPlalettes();
-    } catch (error) {
-      console.log('error', error);
-    }
+    allPalettes = await loadPlalettes();
     setState((state) => ({ ...state, ..._state, allPalettes, isLoading: false }));
     setStoreLoaded(true);
     return;
