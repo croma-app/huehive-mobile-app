@@ -23,16 +23,8 @@ import {
 } from '../libs/EncryptedStoreage';
 import Notification from '../components/Notification';
 
-import {
-  GoogleSignin,
-  statusCodes,
-  GoogleSigninButton
-} from '@react-native-google-signin/google-signin';
-// import googleLogo from '/assets/images/g-logo.png';
-GoogleSignin.configure({
-  webClientId: '865618605576-j2tb9toevqc7tonmbp01dim1ddvod7r0.apps.googleusercontent.com'
-  // offlineAccess: false
-});
+import { GoogleSignin, GoogleSigninButton } from '@react-native-google-signin/google-signin';
+
 const LOGIN = 'LOGIN';
 const SIGN_UP = 'SIGN_UP';
 
@@ -101,7 +93,13 @@ function LoginScreen(props) {
   const { t } = useTranslation();
   const { user, setUser } = React.useContext(CromaContext);
   console.log({ userData });
-
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: '865618605576-j2tb9toevqc7tonmbp01dim1ddvod7r0.apps.googleusercontent.com',
+      forceCodeForRefreshToken: true,
+      offlineAccess: false
+    });
+  }, []);
   useEffect(() => {
     // check if already logged in
     (async () => {
@@ -124,6 +122,13 @@ function LoginScreen(props) {
     setUserData(undefined);
     user.loggedIn = false;
     setUser(user);
+    try {
+      await GoogleSignin.revokeAccess();
+    } catch (error) {
+      console.error(error);
+    }
+    // Google Account disconnected from your app.
+    // Perform clean-up actions, such as deleting data associated with the disconnected account.
   }, [setUser, user]);
 
   const onSubmit = useCallback(async () => {

@@ -16,7 +16,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { useTranslation } from 'react-i18next';
 
 const GITHUB_URL = 'https://github.com/croma-app/croma-react';
-const INSTAGRAM_URL = "https://www.instagram.com/huehiveco/";
+const INSTAGRAM_URL = 'https://www.instagram.com/huehiveco/';
 const CROMA_APP_URL = 'https://web.croma.app/';
 const CROMA_IOS_URL = 'https://apps.apple.com/app/croma-palette-manager/id1596763657';
 const CROMA_PLAYSTORE_URL = 'https://play.google.com/store/apps/details?id=app.croma';
