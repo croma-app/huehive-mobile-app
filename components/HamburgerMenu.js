@@ -65,14 +65,12 @@ const HamburgerMenu = (props) => {
                   require('../assets/images/icon.png')
             }
           />
-          <Text style={styles.title}>
-            {userData ? userData.fullName : t('Croma - Save you colors')}
-          </Text>
+          <Text>{userData ? userData.fullName : t('Croma - Save you colors')}</Text>
         </View>
       </TouchableOpacity>
       <ScrollView>
         <View style={styles.menu}>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.menuItem}
             onPress={() => {
               logEvent('hm_create_new_palette');
@@ -85,7 +83,7 @@ const HamburgerMenu = (props) => {
               </View>
               <Text style={styles.textAreaMenuItem}>{t('Create new palette')}</Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity
             style={styles.menuItem}
             onPress={async () => {
@@ -100,7 +98,7 @@ const HamburgerMenu = (props) => {
               <Text style={styles.textAreaMenuItem}>{t('Palette library')}</Text>
             </View>
           </TouchableOpacity>
-          {Platform.OS === 'android' && (
+          {/* {Platform.OS === 'android' && (
             <TouchableOpacity
               style={styles.menuItem}
               onPress={async () => {
@@ -124,8 +122,8 @@ const HamburgerMenu = (props) => {
                 <Text style={styles.textAreaMenuItem}>{t('Pick colors from an image')}</Text>
               </View>
             </TouchableOpacity>
-          )}
-          {Platform.OS == 'android' && (
+          )} */}
+          {/* {Platform.OS == 'android' && (
             <TouchableOpacity
               style={styles.menuItem}
               onPress={async () => {
@@ -144,7 +142,7 @@ const HamburgerMenu = (props) => {
                 <Text style={styles.textAreaMenuItem}>{t('Scan color codes')}</Text>
               </View>
             </TouchableOpacity>
-          )}
+          )} */}
           {
             <MenuLink
               id={'rate-us'}
@@ -193,7 +191,7 @@ const HamburgerMenu = (props) => {
               <View style={{ ...styles.menuIcon, paddingLeft: 4 }}>
                 <MaterialCommunityIcons name="information-outline" style={styles.icon} />
               </View>
-              <Text style={styles.textAreaMenuItem}>{t('About us')}</Text>
+              <Text style={[styles.textAreaMenuItem, styles.title]}>{t('About us')}</Text>
             </View>
           </TouchableOpacity>
           {!userData && (
@@ -207,7 +205,7 @@ const HamburgerMenu = (props) => {
                 <View style={{ ...styles.menuIcon, paddingLeft: 4 }}>
                   <MaterialCommunityIcons name="login" style={styles.icon} />
                 </View>
-                <Text style={styles.textAreaMenuItem}>{t('Login/Signup')}</Text>
+                <Text style={[styles.title, styles.textAreaMenuItem]}>{t('Login/Signup')}</Text>
               </View>
             </TouchableOpacity>
           )}
@@ -263,10 +261,10 @@ const styles = StyleSheet.create({
     padding: padding
   },
   title: {
-    fontWeight: '800',
-    textAlignVertical: 'center',
-    padding: padding,
-    color: Colors.primary
+    color: 'black'
+    // textAlignVertical: 'center',
+    // padding: padding,
+    // color: Colors.primary
   },
   menu: {
     flex: 1,
