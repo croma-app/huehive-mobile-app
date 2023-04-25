@@ -1,5 +1,5 @@
 import React from 'react';
-import { NativeModules } from 'react-native';
+import { NativeModules, Image, Linking } from 'react-native';
 import Color from 'pigment/full';
 import RNColorThief from 'react-native-color-thief';
 import { notifyMessage } from '../libs/Helpers';
@@ -132,13 +132,17 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
             }
           },
           {
-            icon: <Ionicons size={20} color={Colors.fabPrimary} name="md-color-filter" />,
-            text1: t('Palette'),
-            text2: t('library'),
+            icon: (
+              <Image
+                style={{ height: 30, width: 30 }}
+                // eslint-disable-next-line no-undef
+                source={require('../assets/images/icon-chatgpt.png')}></Image>
+            ),
+            text1: t('Create using'),
+            text2: t(' ChatGPT'),
             onPress: async () => {
-              logEvent('hm_palette_library');
-              clearPalette();
-              navigation.navigate('PaletteLibrary');
+              logEvent('hm_create_palette_using_chatgpt');
+              Linking.openURL('https://huehive.co/');
             }
           },
           isPro
