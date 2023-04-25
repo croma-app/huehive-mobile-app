@@ -38,17 +38,17 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
       config={[
         [
           {
-            icon: <Ionicons name="md-color-filter" color={Colors.fabPrimary} size={20} />,
-            text1: t('Create New'),
-            text2: t('Palette'),
-            onPress: () => {
-              try {
-                logEvent('create_new_palette');
-                clearPalette();
-                navigation.navigate('AddPaletteManually');
-              } catch (error) {
-                notifyMessage(t('Error  - ') + error);
-              }
+            icon: <MaterialCommunityIcons name="camera" size={20} color={Colors.fabPrimary} />,
+            text1: 'Pick colors',
+            text2: 'using camera',
+            onPress: async () => {
+              const pickedColors = await NativeModules.CromaModule.navigateToColorPicker();
+              logEvent('hm_pick_text_colors_from_camera', {
+                length: pickedColors.length
+              });
+              clearPalette();
+              setColorList(JSON.parse(pickedColors)?.colors);
+              navigation.navigate('ColorList');
             }
           },
           {
@@ -147,23 +147,17 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
           },
           isPro
             ? {
-                icon: (
-                  <MaterialCommunityIcons
-                    name="credit-card-scan-outline"
-                    size={20}
-                    color={Colors.fabPrimary}
-                  />
-                ),
-                text1: 'Scan color',
-                text2: 'codes',
-                onPress: async () => {
-                  const pickedColors = await NativeModules.CromaModule.navigateToColorPicker();
-                  logEvent('hm_pick_text_colors_from_camera', {
-                    length: pickedColors.length
-                  });
-                  clearPalette();
-                  setColorList(JSON.parse(pickedColors)?.colors);
-                  navigation.navigate('ColorList');
+                icon: <Ionicons name="md-color-filter" color={Colors.fabPrimary} size={20} />,
+                text1: t('Create New'),
+                text2: t('Palette'),
+                onPress: () => {
+                  try {
+                    logEvent('create_new_palette');
+                    clearPalette();
+                    navigation.navigate('AddPaletteManually');
+                  } catch (error) {
+                    notifyMessage(t('Error  - ') + error);
+                  }
                 }
               }
             : {
