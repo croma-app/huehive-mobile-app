@@ -12,6 +12,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { launchImageLibrary } from 'react-native-image-picker';
 import { CromaContext } from '../store/store';
 import { useTranslation } from 'react-i18next';
+import PropTypes from 'prop-types';
 
 const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   const { t } = useTranslation();
@@ -53,7 +54,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
           {
             icon: <Ionicons name="md-image" color={Colors.fabPrimary} size={20} />,
             text1: t('Get palette'),
-            text2: t('form image'),
+            text2: t('from image'),
             onPress: async () => {
               try {
                 setPickImageLoading(true);
@@ -97,7 +98,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
               <MaterialCommunityIcons name="palette-swatch" color={Colors.fabPrimary} size={20} />
             ),
             text1: t('Get palette'),
-            text2: t('form color'),
+            text2: t('from color'),
             onPress: () => {
               logEvent('get_palette_from_color');
               clearPalette();
@@ -168,9 +169,13 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                 onPress: () => purchase(setPurchase)
               }
         ]
-      ]}
-    ></ActionButtonContainer>
+      ]}></ActionButtonContainer>
   );
+};
+
+GridActionButtonAndroid.propTypes = {
+  navigation: PropTypes.any,
+  setPickImageLoading: PropTypes.func
 };
 
 export default GridActionButtonAndroid;
