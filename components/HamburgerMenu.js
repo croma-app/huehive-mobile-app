@@ -27,13 +27,13 @@ const HamburgerMenu = (props) => {
   const { t } = useTranslation();
   const [userData, setUserData] = useState();
 
-  const pickImageResult = async () => {
-    const result = await launchImageLibrary({
-      mediaType: 'photo',
-      quality: 1
-    });
-    return result;
-  };
+  // const pickImageResult = async () => {
+  //   const result = await launchImageLibrary({
+  //     mediaType: 'photo',
+  //     quality: 1
+  //   });
+  //   return result;
+  // };
 
   useEffect(() => {
     // check if already logged in
@@ -189,7 +189,7 @@ const HamburgerMenu = (props) => {
             }}>
             <View style={styles.menuItemView}>
               <View style={{ ...styles.menuIcon, paddingLeft: 4 }}>
-                <MaterialCommunityIcons name="information-outline" style={styles.icon} />
+                <Ionicons name="information-circle" style={styles.icon} />
               </View>
               <Text style={[styles.textAreaMenuItem, styles.title]}>{t('About us')}</Text>
             </View>
