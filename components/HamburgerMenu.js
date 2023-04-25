@@ -60,7 +60,7 @@ const HamburgerMenu = (props) => {
             style={styles.logo}
             source={
               userData
-                ? { uri: userData.avator }
+                ? { uri: userData.avatar_url }
                 : // eslint-disable-next-line no-undef
                   require('../assets/images/icon.png')
             }

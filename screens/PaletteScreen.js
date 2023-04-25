@@ -14,16 +14,11 @@ import { CromaContext } from '../store/store';
 import ActionButton from 'react-native-action-button';
 import Colors from '../constants/Colors';
 import { useHeaderHeight } from '@react-navigation/elements';
-import EmptyView from '../components/EmptyView';
 import { logEvent } from '../libs/Helpers';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { notifyMessage } from '../libs/Helpers';
-import {
-  NestableScrollContainer,
-  NestableDraggableFlatList,
-  ScaleDecorator
-} from 'react-native-draggable-flatlist';
+import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import PropTypes from 'prop-types';
 
 export default function PaletteScreen({ navigation }) {
@@ -85,20 +80,16 @@ export default function PaletteScreen({ navigation }) {
   return (
     <>
       <View style={(styles.container, { minHeight: height - useHeaderHeight() - 16 })}>
-        <NestableScrollContainer style={styles.listview} showsVerticalScrollIndicator={false}>
-          <NestableDraggableFlatList
-            data={colorsToShow}
-            renderItem={renderItem}
-            keyExtractor={keyExtractor}
-            onDragEnd={({ data: reorderedColors }) => {
-              //notifyMessage(JSON.stringify(reorderedColors));
-              updatePalette(palette.id, { ...palette, colors: reorderedColors });
-            }}
-          />
-          <EmptyView />
-          <EmptyView />
-          <EmptyView />
-        </NestableScrollContainer>
+        <DraggableFlatList
+          data={colorsToShow}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          style={styles.listview}
+          onDragEnd={({ data: reorderedColors }) => {
+            //notifyMessage(JSON.stringify(reorderedColors));
+            updatePalette(palette.id, { ...palette, colors: reorderedColors });
+          }}
+        />
         <ActionButton
           offsetY={76}
           bgColor="rgba(68, 68, 68, 0.6)"
