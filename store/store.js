@@ -8,11 +8,6 @@ import { t } from 'i18next';
 //import { getAvailablePurchases } from 'react-native-iap';
 // const UNDO_TIMEOUT = 3000;
 
-const DEFAULT_PALETTES = {
-  name: 'Croma example palette',
-  colors: [{ color: '#f0675f' }, { color: '#2f95dc' }, { color: '#ebef5c' }, { color: '#c9ef5b' }]
-};
-
 const syncStateToStore = function (state) {
   // TODO: We need to find a better way to do storage management.
   // Fix this in a generic way with better storage management.
@@ -79,7 +74,6 @@ export default function useApplicationHook() {
       // IF USER IS COMING FIRST TIME
       await Storage.setUserAlreadyExists();
       await Storage.setUserDeviceId();
-      await addPalette(DEFAULT_PALETTES);
     }
     const deviceId = await Storage.getUserDeviceId();
     if (isUserAlreadyExits == 'true' && !deviceId) {
