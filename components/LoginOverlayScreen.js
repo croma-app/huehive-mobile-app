@@ -1,22 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  Dimensions
-} from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import { View } from 'react-native-animatable';
 import CromaButton from '../components/CromaButton';
 import { material } from 'react-native-typography';
 import { useTranslation } from 'react-i18next';
-import { CromaContext } from '../store/store';
 import { login, signUp, googleLogin } from '../network/login-and-signup';
 // import { notifyMessage } from "../libs/Helpers";
-import { storeUserSession, removeUserSession } from '../libs/EncryptedStoreage';
+import { storeUserSession } from '../libs/EncryptedStoreage';
 import Notification from '../components/Notification';
+import Storage from '../libs/Storage';
+import { PropTypes } from 'prop-types';
 
 import { GoogleSignin, GoogleSigninButton } from '@react-native-google-signin/google-signin';
 
@@ -76,7 +69,8 @@ function signUpValidations({ fullName, email, password, confirmPassword }) {
   };
 }
 
-function LoginOverlayScreen() {
+function LoginOverlayScreen({ markLoginStepDone }) {
+  console.log({ markLoginStepDone });
   const [email, setEmail] = useState();
   const [fullName, setFullName] = useState();
   const [password, setPassword] = useState();
@@ -172,12 +166,17 @@ function LoginOverlayScreen() {
     }
   };
 
+  const _markLoginStepDone = () => {
+    Storage.markOverflowStepDone();
+    markLoginStepDone();
+  };
+
   const onChangeText = useCallback((text) => {
     setEmail(text);
   }, []);
 
   return (
-    <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+    <View style={styles.rootContainer} showsVerticalScrollIndicator={false}>
       <View style={[styles.container, { minHeight: screenType === LOGIN ? 400 : 500 }]}>
         <Text style={styles.title}>{t('Welcome,')}</Text>
         <Text style={styles.intro}>{t('Glad to see you!,')}</Text>
@@ -258,16 +257,22 @@ function LoginOverlayScreen() {
           <Text style={styles.bold}>{t(LOGIN_AND_SIGNUP_TEXT[screenType].linkText)}</Text>
         </View>
       </TouchableOpacity>
-    </ScrollView>
+      <TouchableOpacity style={styles.skip} onPress={_markLoginStepDone}>
+        <Text style={styles.close}>{t('Skip')}</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
-LoginOverlayScreen.propTypes = {};
+LoginOverlayScreen.propTypes = {
+  markLoginStepDone: PropTypes.func
+};
 
 const styles = StyleSheet.create({
-  scrollView: {
+  rootContainer: {
     paddingLeft: 12,
-    paddingRight: 12
+    paddingRight: 12,
+    minHeight: Dimensions.get('window').height
   },
   container: {
     display: 'flex',
@@ -346,6 +351,11 @@ const styles = StyleSheet.create({
     width: 50,
     marginTop: 30,
     padding: 3
+  },
+  skip: {
+    position: 'absolute',
+    bottom: 0,
+    padding: 10
   }
 });
 
