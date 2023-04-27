@@ -92,7 +92,6 @@ function LoginScreen(props) {
   const [screenType, setScreenType] = useState(SIGN_UP);
   const { t } = useTranslation();
   const { user, setUser } = React.useContext(CromaContext);
-  console.log({ userData });
   useEffect(() => {
     GoogleSignin.configure({
       webClientId: '865618605576-j2tb9toevqc7tonmbp01dim1ddvod7r0.apps.googleusercontent.com',
@@ -187,7 +186,6 @@ function LoginScreen(props) {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       // this.setState({ userInfo });
-      // console.log({ userInfo });
       const res = await googleLogin(userInfo);
       await storeUserSession(
         res.data.user.full_name,
@@ -199,7 +197,6 @@ function LoginScreen(props) {
       setUser(user);
       props.navigation.goBack();
     } catch (error) {
-      console.log({ error });
       setError(error.message);
       //if (error.code === statusCodes.SIGN_IN_CANCELLED) {
       // user cancelled the login flow

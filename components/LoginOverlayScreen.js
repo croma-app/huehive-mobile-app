@@ -143,7 +143,6 @@ function LoginOverlayScreen({ markLoginStepDone }) {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       // this.setState({ userInfo });
-      // console.log({ userInfo });
       const res = await googleLogin(userInfo);
       await storeUserSession(
         res.data.user.full_name,
@@ -153,7 +152,6 @@ function LoginOverlayScreen({ markLoginStepDone }) {
       );
       _markLoginStepDone();
     } catch (error) {
-      console.log({ error });
       setError(error.message);
       //if (error.code === statusCodes.SIGN_IN_CANCELLED) {
       // user cancelled the login flow

@@ -43,7 +43,6 @@ export default function App() {
       }
       await applicationState.loadInitPaletteFromStore();
       setIsPalettesLoaded(true);
-      console.log(applicationState.isPro);
     })();
     return () => {
       RNIap.endConnection();

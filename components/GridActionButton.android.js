@@ -67,11 +67,9 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                   10,
                   false
                 );
-                console.log(t('Picked colors: '), pickedColors);
                 clearPalette();
                 setColorList(
                   pickedColors.map((colorThiefColor) => {
-                    //console.log("colorThiefColor: ", colorThiefColor);
                     const hex = new Color(
                       'rgb(' +
                         colorThiefColor.r +
@@ -81,7 +79,6 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                         colorThiefColor.b +
                         ')'
                     ).tohex();
-                    //console.log("Hex: ", hex, colorThiefColor);
                     return { color: hex };
                   })
                 );
