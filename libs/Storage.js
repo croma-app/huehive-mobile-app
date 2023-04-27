@@ -36,4 +36,11 @@ export default class Storage {
   static checkUserAlreadyExists = async () => {
     return await AsyncStorage.getItem(IS_USER_ALREADY_EXIST_KEY);
   };
+
+  static markOverflowStepDone = async () => {
+    return await AsyncStorage.setItem('IS_LOGIN_OVERLAY_STEP_DONE', 'yes');
+  };
+  static isLoginOverlayStepDone = async () => {
+    return await AsyncStorage.getItem('IS_LOGIN_OVERLAY_STEP_DONE');
+  };
 }

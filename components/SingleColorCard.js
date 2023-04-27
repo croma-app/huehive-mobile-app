@@ -15,7 +15,6 @@ const SingleColorCard = function (props) {
   const onColorDeleteLocal = () => {
     setIsDeletedActive(true);
     timeout.current = setTimeout(() => {
-      console.log(`Deleting color ${color.color}`);
       onColorDelete(color.color);
     }, 2000);
   };

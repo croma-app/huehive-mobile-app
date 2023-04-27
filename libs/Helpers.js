@@ -8,7 +8,6 @@ const logEvent = (eventName, value) => {
     throw 'eventName length should be smaller then equal to 40';
   }
   if (Platform.OS === 'android') {
-    console.log('event: ', eventName, JSON.stringify(value));
     NativeModules.CromaModule.logEvent(
       eventName,
       isObject(value) ? JSON.stringify(value) : `${value}`
@@ -51,7 +50,6 @@ const initPurchase = async function (setPurchase) {
 
 const getAvailablePurchases = async () => {
   try {
-    console.log('Get available purchases (non-consumable or unconsumed consumable)');
     const purchases = await RNIap.getAvailablePurchases();
     console.info('Available purchases :: ', purchases);
     if (purchases && purchases.length > 0) {

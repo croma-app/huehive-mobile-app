@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 
 const GITHUB_URL = 'https://github.com/croma-app/croma-react';
 const INSTAGRAM_URL = 'https://www.instagram.com/huehiveco/';
-const CROMA_APP_URL = 'https://web.croma.app/';
+const CROMA_APP_URL = 'https://huehive.co';
 const CROMA_IOS_URL = 'https://apps.apple.com/app/croma-palette-manager/id1596763657';
 const CROMA_PLAYSTORE_URL = 'https://play.google.com/store/apps/details?id=app.croma';
 const DISCORD_URL = 'https://discord.com/invite/ZSBVsBqDtg';
@@ -51,22 +51,22 @@ const AboutUsScreen = () => {
             <Text style={[styles.line, styles.link]}>{DISCORD_URL}</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => Linking.openURL(`${GITHUB_URL}`)}>
+        {/* <TouchableOpacity onPress={() => Linking.openURL(`${GITHUB_URL}`)}>
           <View style={styles.linkView}>
             <Entypo name="github-with-circle" style={styles.icon} />
             <Text style={[styles.line, styles.subtitle]}>{t('Find us on Github !')}</Text>
             <Text style={[styles.line, styles.link]}>{GITHUB_URL}</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity onPress={() => Linking.openURL(`${CROMA_APP_URL}`)}>
           <View style={styles.linkView}>
             <MaterialCommunityIcons name="web" style={styles.icon} />
-            <Text style={[styles.line, styles.subtitle]}>{t('Lightweight web version')}</Text>
-            <Text style={[styles.line, styles.subtitle]}>{t('to preview and share palettes')}</Text>
+            <Text style={[styles.line, styles.subtitle]}>{t('Web version with ')}</Text>
+            <Text style={[styles.line, styles.subtitle]}>{t('ChatGPT support')}</Text>
             <Text style={[styles.line, styles.link]}>{CROMA_APP_URL}</Text>
           </View>
         </TouchableOpacity>
-        {Platform.OS == 'android' && (
+        {/* {Platform.OS == 'android' && (
           <TouchableOpacity onPress={() => Linking.openURL(`${CROMA_IOS_URL}`)}>
             <View style={styles.linkView}>
               <FontAwesome5 name="app-store-ios" style={styles.icon} />
@@ -83,7 +83,7 @@ const AboutUsScreen = () => {
               <Text style={[styles.line, styles.link]}>{CROMA_PLAYSTORE_URL}</Text>
             </View>
           </TouchableOpacity>
-        )}
+        )} */}
       </View>
     </ScrollView>
   );
@@ -115,7 +115,8 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   link: {
-    fontSize: 14
+    fontSize: 14,
+    color: 'blue'
   }
 });
 
