@@ -65,9 +65,7 @@ const HamburgerMenu = (props) => {
                   require('../assets/images/icon.png')
             }
           />
-          <Text style={styles.title}>
-            {userData ? userData.fullName : t('Croma - Save you colors')}
-          </Text>
+          <Text>{userData ? userData.fullName : t('Croma - Save you colors')}</Text>
         </View>
       </TouchableOpacity>
       <ScrollView>
@@ -207,7 +205,7 @@ const HamburgerMenu = (props) => {
                 <View style={{ ...styles.menuIcon, paddingLeft: 4 }}>
                   <MaterialCommunityIcons name="login" style={styles.icon} />
                 </View>
-                <Text style={styles.textAreaMenuItem}>{t('Login/Signup')}</Text>
+                <Text style={[styles.title, styles.textAreaMenuItem]}>{t('Login/Signup')}</Text>
               </View>
             </TouchableOpacity>
           )}
@@ -264,10 +262,10 @@ const styles = StyleSheet.create({
     borderRadius: 24
   },
   title: {
-    fontWeight: '800',
-    textAlignVertical: 'center',
-    padding: padding,
-    color: Colors.primary
+    color: 'black'
+    // textAlignVertical: 'center',
+    // padding: padding,
+    // color: Colors.primary
   },
   menu: {
     flex: 1,
