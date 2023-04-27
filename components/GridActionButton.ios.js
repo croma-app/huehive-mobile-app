@@ -52,11 +52,9 @@ const GridActionButton = ({ navigation, setPickImageLoading }) => {
                   10,
                   false
                 );
-                console.log('Picked colors: ', pickedColors);
                 clearPalette();
                 setColorList(
                   pickedColors.map((colorThiefColor) => {
-                    //console.log("colorThiefColor: ", colorThiefColor);
                     const hex = new Color(
                       'rgb(' +
                         colorThiefColor.r +
@@ -66,7 +64,6 @@ const GridActionButton = ({ navigation, setPickImageLoading }) => {
                         colorThiefColor.b +
                         ')'
                     ).tohex();
-                    //console.log("Hex: ", hex, colorThiefColor);
                     return { color: hex };
                   })
                 );
@@ -139,8 +136,7 @@ const GridActionButton = ({ navigation, setPickImageLoading }) => {
                 onPress: () => purchase(setPurchase)
               }
         ]
-      ]}
-    ></ActionButtonContainer>
+      ]}></ActionButtonContainer>
   );
 };
 

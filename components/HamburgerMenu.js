@@ -191,7 +191,7 @@ const HamburgerMenu = (props) => {
               <View style={{ ...styles.menuIcon, paddingLeft: 4 }}>
                 <Ionicons name="information-circle" style={styles.icon} />
               </View>
-              <Text style={[styles.textAreaMenuItem, styles.title]}>{t('About us')}</Text>
+              <Text style={[styles.textAreaMenuItem]}>{t('About us')}</Text>
             </View>
           </TouchableOpacity>
           {!userData && (
@@ -258,7 +258,8 @@ const styles = StyleSheet.create({
   logo: {
     width: 48,
     height: 48,
-    padding: padding
+    padding: padding,
+    borderRadius: 24
   },
   title: {
     color: 'black'

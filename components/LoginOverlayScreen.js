@@ -1,27 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  Dimensions
-} from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import { View } from 'react-native-animatable';
 import CromaButton from '../components/CromaButton';
 import { material } from 'react-native-typography';
 import { useTranslation } from 'react-i18next';
-import { CromaContext } from '../store/store';
 import { login, signUp, googleLogin } from '../network/login-and-signup';
 // import { notifyMessage } from "../libs/Helpers";
-import PropTypes from 'prop-types';
-import {
-  retrieveUserSession,
-  storeUserSession,
-  removeUserSession
-} from '../libs/EncryptedStoreage';
+import { storeUserSession } from '../libs/EncryptedStoreage';
 import Notification from '../components/Notification';
+import Storage from '../libs/Storage';
+import { PropTypes } from 'prop-types';
 
 import { GoogleSignin, GoogleSigninButton } from '@react-native-google-signin/google-signin';
 
@@ -81,17 +69,15 @@ function signUpValidations({ fullName, email, password, confirmPassword }) {
   };
 }
 
-function LoginScreen(props) {
+function LoginOverlayScreen({ markLoginStepDone }) {
   const [email, setEmail] = useState();
   const [fullName, setFullName] = useState();
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
   const [error, setError] = useState();
-  const [userData, setUserData] = useState();
   const [validationErrors, setValidationErrors] = useState(undefined);
   const [screenType, setScreenType] = useState(SIGN_UP);
   const { t } = useTranslation();
-  const { user, setUser } = React.useContext(CromaContext);
   useEffect(() => {
     GoogleSignin.configure({
       webClientId: '865618605576-j2tb9toevqc7tonmbp01dim1ddvod7r0.apps.googleusercontent.com',
@@ -99,36 +85,11 @@ function LoginScreen(props) {
       offlineAccess: false
     });
   }, []);
-  useEffect(() => {
-    // check if already logged in
-    (async () => {
-      const userData = await retrieveUserSession();
-      if (userData) {
-        setUserData(userData);
-        // props.navigation.goBack();
-      }
-    })();
-  }, [props.navigation]);
 
-  useEffect(() => {
-    props.navigation.setOptions({
-      title: userData ? t('Profile') : t(LOGIN_AND_SIGNUP_TEXT[screenType].title)
-    });
-  }, [props.navigation, screenType, t, userData]);
-
-  const onLogout = useCallback(async () => {
-    await removeUserSession();
-    setUserData(undefined);
-    user.loggedIn = false;
-    setUser(user);
-    try {
-      await GoogleSignin.revokeAccess();
-    } catch (error) {
-      console.error(error);
-    }
-    // Google Account disconnected from your app.
-    // Perform clean-up actions, such as deleting data associated with the disconnected account.
-  }, [setUser, user]);
+  const _markLoginStepDone = useCallback(() => {
+    Storage.markOverflowStepDone();
+    markLoginStepDone();
+  }, [markLoginStepDone]);
 
   const onSubmit = useCallback(async () => {
     if (screenType === LOGIN) {
@@ -141,9 +102,7 @@ function LoginScreen(props) {
           res.data.userToken,
           res.data.user.avatar_url
         );
-        user.loggedIn = true;
-        setUser(user);
-        props.navigation.goBack();
+        _markLoginStepDone();
       } catch (error) {
         setError(error.message);
       }
@@ -168,9 +127,7 @@ function LoginScreen(props) {
           res.data.userToken,
           res.data.user.avatar_url
         );
-        user.loggedIn = true;
-        setUser(user);
-        props.navigation.goBack();
+        _markLoginStepDone();
       } catch (error) {
         if (error.response.data.error) {
           setError(error.response.data.error);
@@ -179,7 +136,7 @@ function LoginScreen(props) {
         }
       }
     }
-  }, [confirmPassword, email, fullName, password, props.navigation, screenType, setUser, user]);
+  }, [_markLoginStepDone, confirmPassword, email, fullName, password, screenType]);
 
   const signIn = async () => {
     try {
@@ -193,9 +150,7 @@ function LoginScreen(props) {
         res.data.userToken,
         res.data.user.avatar_url
       );
-      user.loggedIn = true;
-      setUser(user);
-      props.navigation.goBack();
+      _markLoginStepDone();
     } catch (error) {
       setError(error.message);
       //if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -214,31 +169,8 @@ function LoginScreen(props) {
     setEmail(text);
   }, []);
 
-  if (userData) {
-    return (
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        <View style={[styles.logoutContainer]}>
-          <Image style={styles.logo} source={{ uri: userData.avatar_url }} />
-          <Text style={styles.intro}>
-            {t('Name: ')}
-            {userData.fullName}
-          </Text>
-          <Text style={styles.intro}>
-            {t('Email: ')}
-            {userData.email}
-          </Text>
-          <CromaButton
-            style={{ backgroundColor: '#ff5c59', width: '100%' }}
-            textStyle={{ color: '#fff' }}
-            onPress={onLogout}>
-            {t('Logout')}
-          </CromaButton>
-        </View>
-      </ScrollView>
-    );
-  }
   return (
-    <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+    <View style={styles.rootContainer} showsVerticalScrollIndicator={false}>
       <View style={[styles.container, { minHeight: screenType === LOGIN ? 400 : 500 }]}>
         <Text style={styles.title}>{t('Welcome,')}</Text>
         <Text style={styles.intro}>{t('Glad to see you!,')}</Text>
@@ -319,18 +251,22 @@ function LoginScreen(props) {
           <Text style={styles.bold}>{t(LOGIN_AND_SIGNUP_TEXT[screenType].linkText)}</Text>
         </View>
       </TouchableOpacity>
-    </ScrollView>
+      <TouchableOpacity style={styles.skip} onPress={_markLoginStepDone}>
+        <Text style={styles.close}>{t('Skip')}</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
-LoginScreen.propTypes = {
-  navigation: PropTypes.any
+LoginOverlayScreen.propTypes = {
+  markLoginStepDone: PropTypes.func
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
+  rootContainer: {
     paddingLeft: 12,
-    paddingRight: 12
+    paddingRight: 12,
+    minHeight: Dimensions.get('window').height
   },
   container: {
     display: 'flex',
@@ -409,7 +345,12 @@ const styles = StyleSheet.create({
     width: 50,
     marginTop: 30,
     padding: 3
+  },
+  skip: {
+    position: 'absolute',
+    bottom: 0,
+    padding: 10
   }
 });
 
-export default LoginScreen;
+export default LoginOverlayScreen;
