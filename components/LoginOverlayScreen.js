@@ -70,7 +70,6 @@ function signUpValidations({ fullName, email, password, confirmPassword }) {
 }
 
 function LoginOverlayScreen({ markLoginStepDone }) {
-  console.log({ markLoginStepDone });
   const [email, setEmail] = useState();
   const [fullName, setFullName] = useState();
   const [password, setPassword] = useState();
@@ -87,6 +86,11 @@ function LoginOverlayScreen({ markLoginStepDone }) {
     });
   }, []);
 
+  const _markLoginStepDone = useCallback(() => {
+    Storage.markOverflowStepDone();
+    markLoginStepDone();
+  }, [markLoginStepDone]);
+
   const onSubmit = useCallback(async () => {
     if (screenType === LOGIN) {
       // to handle login
@@ -98,8 +102,7 @@ function LoginOverlayScreen({ markLoginStepDone }) {
           res.data.userToken,
           res.data.user.avatar_url
         );
-        // user.loggedIn = true;
-        // setUser(user);
+        _markLoginStepDone();
       } catch (error) {
         setError(error.message);
       }
@@ -124,8 +127,7 @@ function LoginOverlayScreen({ markLoginStepDone }) {
           res.data.userToken,
           res.data.user.avatar_url
         );
-        // user.loggedIn = true;
-        // setUser(user);
+        _markLoginStepDone();
       } catch (error) {
         if (error.response.data.error) {
           setError(error.response.data.error);
@@ -134,7 +136,7 @@ function LoginOverlayScreen({ markLoginStepDone }) {
         }
       }
     }
-  }, [confirmPassword, email, fullName, password, screenType]);
+  }, [_markLoginStepDone, confirmPassword, email, fullName, password, screenType]);
 
   const signIn = async () => {
     try {
@@ -149,8 +151,7 @@ function LoginOverlayScreen({ markLoginStepDone }) {
         res.data.userToken,
         res.data.user.avatar_url
       );
-      // user.loggedIn = true;
-      // setUser(user);
+      _markLoginStepDone();
     } catch (error) {
       console.log({ error });
       setError(error.message);
@@ -164,11 +165,6 @@ function LoginOverlayScreen({ markLoginStepDone }) {
       // some other error happened
       //}
     }
-  };
-
-  const _markLoginStepDone = () => {
-    Storage.markOverflowStepDone();
-    markLoginStepDone();
   };
 
   const onChangeText = useCallback((text) => {
