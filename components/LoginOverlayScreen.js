@@ -5,7 +5,6 @@ import CromaButton from '../components/CromaButton';
 import { material } from 'react-native-typography';
 import { useTranslation } from 'react-i18next';
 import { login, signUp, googleLogin } from '../network/login-and-signup';
-// import { notifyMessage } from "../libs/Helpers";
 import { storeUserSession } from '../libs/EncryptedStoreage';
 import Notification from '../components/Notification';
 import Storage from '../libs/Storage';
@@ -172,8 +171,8 @@ function LoginOverlayScreen({ markLoginStepDone }) {
   return (
     <View style={styles.rootContainer} showsVerticalScrollIndicator={false}>
       <View style={[styles.container, { minHeight: screenType === LOGIN ? 400 : 500 }]}>
-        <Text style={styles.title}>{t('Welcome,')}</Text>
-        <Text style={styles.intro}>{t('Glad to see you!,')}</Text>
+        <Text style={styles.title}>{t('Welcome to HueHive (Croma),')}</Text>
+        <Text style={styles.intro}>{t('Please Singin/Signup to continue...')}</Text>
         {error && <Notification message={error} onPress={() => setError(undefined)}></Notification>}
         {screenType === SIGN_UP && (
           <>
