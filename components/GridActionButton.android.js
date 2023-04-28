@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NativeModules, Image, Linking } from 'react-native';
 import Color from 'pigment/full';
 import RNColorThief from 'react-native-color-thief';
@@ -13,6 +13,7 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import { CromaContext } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import { retrieveUserSession } from '../libs/EncryptedStoreage';
 
 const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   const { t } = useTranslation();
@@ -25,7 +26,14 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
     setDetailedColor,
     clearPalette
   } = React.useContext(CromaContext);
-
+  const [userData, setUserData] = useState();
+  useEffect(() => {
+    // check if already logged in
+    (async () => {
+      const userData = await retrieveUserSession();
+      setUserData(userData);
+    })();
+  }, []);
   const pickImageResult = async () => {
     const result = await launchImageLibrary({
       mediaType: 'photo',
@@ -139,7 +147,11 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
             text2: t(' ChatGPT'),
             onPress: async () => {
               logEvent('hm_create_palette_using_chatgpt');
-              Linking.openURL('https://huehive.co/');
+              let link = 'https://huehive.co/';
+              if (userData && userData.userToken) {
+                link = link + 'users/login_using_token?token=' + userData.userToken;
+              }
+              Linking.openURL(link);
             }
           },
           isPro
