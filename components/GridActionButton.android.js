@@ -148,8 +148,8 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
             onPress: async () => {
               logEvent('hm_create_palette_using_chatgpt');
               let link = 'https://huehive.co/';
-              if (userData && userData.userToken) {
-                link = link + 'users/login_using_token?token=' + userData.userToken;
+              if (userData && userData.token) {
+                link = link + 'users/login_using_token?token=' + userData.token;
               }
               Linking.openURL(link);
             }
