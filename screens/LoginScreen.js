@@ -14,7 +14,6 @@ import { material } from 'react-native-typography';
 import { useTranslation } from 'react-i18next';
 import { CromaContext } from '../store/store';
 import { login, signUp, googleLogin } from '../network/login-and-signup';
-// import { notifyMessage } from "../libs/Helpers";
 import PropTypes from 'prop-types';
 import {
   retrieveUserSession,
@@ -240,8 +239,8 @@ function LoginScreen(props) {
   return (
     <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
       <View style={[styles.container, { minHeight: screenType === LOGIN ? 400 : 500 }]}>
-        <Text style={styles.title}>{t('Welcome,')}</Text>
-        <Text style={styles.intro}>{t('Glad to see you!,')}</Text>
+        <Text style={styles.title}>{t('Welcome to HueHive (Croma),')}</Text>
+        <Text style={styles.intro}>{t('Please Singin/Signup to continue...')}</Text>
         {error && <Notification message={error} onPress={() => setError(undefined)}></Notification>}
         {screenType === SIGN_UP && (
           <>

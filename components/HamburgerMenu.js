@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import {
   Image,
   Linking,
-  NativeModules,
   StyleSheet,
   Text,
   View,
@@ -10,14 +9,12 @@ import {
   Platform,
   TouchableOpacity
 } from 'react-native';
-import Colors from '../constants/Colors';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { logEvent } from '../libs/Helpers';
 import { ScrollView } from 'react-native-gesture-handler';
-import { launchImageLibrary } from 'react-native-image-picker';
 import { CromaContext } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
