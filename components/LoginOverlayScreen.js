@@ -11,6 +11,7 @@ import Storage from '../libs/Storage';
 import { PropTypes } from 'prop-types';
 
 import { GoogleSignin, GoogleSigninButton } from '@react-native-google-signin/google-signin';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const LOGIN = 'LOGIN';
 const SIGN_UP = 'SIGN_UP';
@@ -169,11 +170,23 @@ function LoginOverlayScreen({ markLoginStepDone }) {
   }, []);
 
   return (
-    <View style={styles.rootContainer} showsVerticalScrollIndicator={false}>
-      <View style={[styles.container, { minHeight: screenType === LOGIN ? 400 : 500 }]}>
+    <ScrollView style={styles.rootContainer} showsVerticalScrollIndicator={true}>
+      <View style={[styles.container]}>
         <Text style={styles.title}>{t('Welcome to HueHive (Croma),')}</Text>
-        <Text style={styles.intro}>{t('Please Singin/Signup to continue...')}</Text>
+        <Text style={styles.intro}>{t('Please sign-in/sign-up to continue.')}</Text>
         {error && <Notification message={error} onPress={() => setError(undefined)}></Notification>}
+        <GoogleSigninButton
+          style={{
+            width: Dimensions.get('window').width * (95 / 100),
+            height: 60
+          }}
+          size={GoogleSigninButton.Size.Wide}
+          color={GoogleSigninButton.Color.Dark}
+          onPress={signIn}
+        />
+        <View style={[styles.separator]}>
+          <Text>or sign-up/sign-in using email and password</Text>
+        </View>
         {screenType === SIGN_UP && (
           <>
             {validationErrors && validationErrors.fullName && (
@@ -229,16 +242,6 @@ function LoginOverlayScreen({ markLoginStepDone }) {
           onPress={onSubmit}>
           {t(LOGIN_AND_SIGNUP_TEXT[screenType].buttonText)}
         </CromaButton>
-
-        <GoogleSigninButton
-          style={{
-            width: Dimensions.get('window').width * (95 / 100),
-            height: 60
-          }}
-          size={GoogleSigninButton.Size.Wide}
-          color={GoogleSigninButton.Color.Dark}
-          onPress={signIn}
-        />
       </View>
       <TouchableOpacity
         onPress={() => {
@@ -250,10 +253,10 @@ function LoginOverlayScreen({ markLoginStepDone }) {
           <Text style={styles.bold}>{t(LOGIN_AND_SIGNUP_TEXT[screenType].linkText)}</Text>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.skip} onPress={_markLoginStepDone}>
-        <Text style={styles.close}>{t('Skip')}</Text>
-      </TouchableOpacity>
-    </View>
+      <CromaButton style={[styles.skip]} onPress={_markLoginStepDone}>
+        {t('Skip')}
+      </CromaButton>
+    </ScrollView>
   );
 }
 
@@ -302,7 +305,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingTop: 10,
     paddingBottom: 10,
-    paddingLeft: 10
+    paddingLeft: 10,
+    marginTop: 10
   },
   orSignUpContainer: {
     display: 'flex',
@@ -345,10 +349,12 @@ const styles = StyleSheet.create({
     marginTop: 30,
     padding: 3
   },
+  separator: {
+    marginTop: 10,
+    marginBottom: 10
+  },
   skip: {
-    position: 'absolute',
-    bottom: 0,
-    padding: 10
+    marginBottom: 20
   }
 });
 

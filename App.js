@@ -1,15 +1,18 @@
 import React from 'react';
+import { ActivityIndicator } from 'react-native';
 import LoginOverlayScreen from './components/LoginOverlayScreen';
 import ApplicationRoot from './ApplicationRoot';
 import Storage from './libs/Storage';
 
 export default function App() {
+  const [isLoading, setIsLoading] = React.useState(false);
   const [isLoginOverlayStepDone, setIsLoginOverlayStepDone] = React.useState(true);
   React.useEffect(() => {
     Storage.isLoginOverlayStepDone().then((value) => {
       if (value === 'yes') {
         setIsLoginOverlayStepDone(false);
       }
+      setIsLoading(true);
     });
   }, []);
 
@@ -17,9 +20,13 @@ export default function App() {
     setIsLoginOverlayStepDone(false);
   };
 
-  return isLoginOverlayStepDone ? (
-    <LoginOverlayScreen markLoginStepDone={markLoginStepDone} />
+  return isLoading ? (
+    isLoginOverlayStepDone ? (
+      <LoginOverlayScreen markLoginStepDone={markLoginStepDone} />
+    ) : (
+      <ApplicationRoot />
+    )
   ) : (
-    <ApplicationRoot />
+    <ActivityIndicator />
   );
 }
