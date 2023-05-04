@@ -15,12 +15,13 @@ KEY FEATURES
 • A color palette library including Material design palettes, CSS named colors etc.
 • Download PNG of the palette
 • Rearange colors in a palette
+• Generate color palettes using ChatGPT(AI)
 
 
 PRO BENEFITS
 
 • Add more than 4 colors in a palette.
-• Export/sync palettes to the private GitHub repository
+
 
 
 DESCRIPTION
@@ -44,6 +45,8 @@ We made Croma to help designers manage colors easily, because colors matter. Whi
 
 
 Croma can be helpful in various tasks, such as web and graphic design, anywhere colors are needed. It's a must-have productivity tool for designers.
+
+Generate color palettes in our website huehive using ChatGPT and view and edit palettes in the app.
 
 
 OPEN SOURCE
