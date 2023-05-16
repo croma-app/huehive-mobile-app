@@ -4,6 +4,7 @@ import CromaButton from '../components/CromaButton';
 import { CromaColorPicker as ColorPicker } from 'croma-color-picker';
 import { logEvent } from '../libs/Helpers';
 import { CromaContext } from '../store/store';
+import SliderColorPicker from '../components/SliderColorPicker';
 export default function ColorPickerScreen({ navigation }) {
   const [color, setColor] = useState('#db0a5b');
   const { colorPickerCallback } = useContext(CromaContext);
@@ -11,6 +12,7 @@ export default function ColorPickerScreen({ navigation }) {
   logEvent('color_picker_screen');
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
+      <SliderColorPicker></SliderColorPicker>
       <View style={styles.container}>
         <ColorPicker
           onChangeColor={(color) => {
@@ -22,8 +24,7 @@ export default function ColorPickerScreen({ navigation }) {
           onPress={() => {
             navigation.goBack();
             colorPickerCallback({ color });
-          }}
-        >
+          }}>
           Done
         </CromaButton>
       </View>
