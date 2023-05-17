@@ -7133,6 +7133,13 @@ react-native-drawer@^2.5.1:
     prop-types "^15.5.8"
     tween-functions "^1.0.1"
 
+react-native-element-dropdown@^2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/react-native-element-dropdown/-/react-native-element-dropdown-2.9.0.tgz#c218ab512bd8be69fa0ac70462293863f8cfd527"
+  integrity sha512-2Y/bmoFPTdKOUXbYloEKpMTWYE2VHrvva/5tgEuHqAlfAtGGr3r/ob0L0YYH1am5N0n1PKo3+eLf0c79QUSzYw==
+  dependencies:
+    lodash "^4.17.21"
+
 react-native-encrypted-storage@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/react-native-encrypted-storage/-/react-native-encrypted-storage-4.0.3.tgz#2a4d65459870511e8f4ccd22f02433dab7fa5e91"
