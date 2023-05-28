@@ -1,0 +1,21 @@
+{
+  "name": "react-native-encrypted-storage",
+  "version": "4.0.3",
+  "summary": "A React Native wrapper over SharedPreferences and Keychain to provide a secure alternative to Async Storage",
+  "homepage": "https://github.com/emeraldsanto/react-native-encrypted-storage#readme",
+  "license": "MIT",
+  "authors": "emeraldsanto <yanick.belanger@yahoo.com> (https://github.com/emeraldsanto)",
+  "platforms": {
+    "ios": "10.0"
+  },
+  "source": {
+    "git": "https://github.com/emeraldsanto/react-native-encrypted-storage.git",
+    "tag": "4.0.3"
+  },
+  "source_files": "ios/**/*.{h,m,mm,swift}",
+  "dependencies": {
+    "React-Core": [
+
+    ]
+  }
+}
