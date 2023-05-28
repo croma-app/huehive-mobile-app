@@ -28,33 +28,30 @@ export const ColorDetail = ({ color }) => {
   });
   const fullColor = new Color(color);
 
-  const formatedHwb = () => {
-    const hwb = fullColor.tohwb(); // Call the original function
+  const result = fullColor.tohwb(); // Call the original function
 
-    // Extract the individual values from the returned string
-    const regex = /hwb\((\d+), ([\d.]+)%, ([\d.]+)%\)/;
-    const [, hue, saturation, lightness] = regex.exec(hwb);
+  // Extract the individual values from the returned string
+  const regex = /hwb\((\d+), ([\d.]+)%, ([\d.]+)%\)/;
+  const [, hue, saturation, lightness] = regex.exec(result);
 
-    // Round off the percentage values
-    const roundedSaturation = parseFloat(saturation);
-    const roundedLightness = parseFloat(lightness);
+  // Round off the percentage values
+  const roundedSaturation = parseFloat(saturation);
+  const roundedLightness = parseFloat(lightness);
 
-    const roundedSaturationStr =
-      roundedSaturation % 1 !== 0 ? roundedSaturation.toFixed(2) : roundedSaturation.toFixed(0);
-    const roundedLightnessStr =
-      roundedLightness % 1 !== 0 ? roundedLightness.toFixed(2) : roundedLightness.toFixed(0);
+  const roundedSaturationStr =
+    roundedSaturation % 1 !== 0 ? roundedSaturation.toFixed(2) : roundedSaturation.toFixed(0);
+  const roundedLightnessStr =
+    roundedLightness % 1 !== 0 ? roundedLightness.toFixed(2) : roundedLightness.toFixed(0);
 
-    // Construct the modified HWB color string with rounded percentage values
-    const modifiedHwb = `hwb(${hue}, ${roundedSaturationStr}%, ${roundedLightnessStr}%)`;
-    return modifiedHwb;
-  };
+  // Construct the modified HWB color string with rounded percentage values
+  const modifiedResult = `hwb(${hue}, ${roundedSaturationStr}%, ${roundedLightnessStr}%)`;
 
   let items = [
     { key: 'HEX', value: fullColor.tohex() },
     { key: 'RGB', value: fullColor.torgb() },
     { key: 'HSL', value: fullColor.tohsl() },
     { key: 'HSV', value: fullColor.tohsv() },
-    { key: 'HWB', value: formatedHwb() },
+    { key: 'HWB', value: modifiedResult },
     { key: 'CMYK', value: fullColor.tocmyk() },
     { key: 'CIELAB', value: fullColor.tolab() },
     { key: 'Luminance', value: (fullColor.luminance() * 100).toFixed(2) + '%' },
