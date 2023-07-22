@@ -97,7 +97,7 @@ export default function App() {
                     name="Home"
                     options={() => {
                       return {
-                        title: t('Croma'),
+                        title: t('Huehive'),
                         headerLeft: () => hamburgerMenuIcon(),
                         headerTitleContainerStyle: { left: 40 }
                       };

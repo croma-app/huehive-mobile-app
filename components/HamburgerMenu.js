@@ -62,7 +62,7 @@ const HamburgerMenu = (props) => {
                   require('../assets/images/icon.png')
             }
           />
-          <Text>{userData ? userData.fullName : t('Croma - Save you colors')}</Text>
+          <Text style={styles.headerText}>{userData ? userData.fullName : t('HueHive')}</Text>
         </View>
       </TouchableOpacity>
       <ScrollView>
@@ -289,6 +289,9 @@ const styles = StyleSheet.create({
     fontSize: menuHeight - 2 * padding,
     padding: padding,
     color: 'black'
+  },
+  headerText: {
+    paddingLeft: 5
   }
 });
 
