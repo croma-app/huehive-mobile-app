@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { ScrollView, View, StyleSheet, Text } from 'react-native';
+import { ScrollView, View, StyleSheet } from 'react-native';
 import CromaButton from '../components/CromaButton';
 import { CromaColorPicker as ColorPicker } from 'croma-color-picker';
 import { logEvent } from '../libs/Helpers';

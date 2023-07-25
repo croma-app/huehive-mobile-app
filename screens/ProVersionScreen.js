@@ -32,8 +32,7 @@ export default function ProScreen() {
         <CromaButton
           style={{ backgroundColor: '#ff5c59' }}
           textStyle={{ color: '#fff' }}
-          onPress={purchasePro}
-        >
+          onPress={purchasePro}>
           {isPro ? t('You are a pro user! Enjoy the app') : t('Unlock pro')}
         </CromaButton>
         <Text style={styles.line}>
@@ -49,8 +48,7 @@ export default function ProScreen() {
             <CromaButton
               onPress={async () => {
                 await initPurchase(setPurchase);
-              }}
-            >
+              }}>
               {t('Restore Pro')}
             </CromaButton>
           </View>

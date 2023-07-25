@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useContext } from 'react';
-import { ScrollView, StyleSheet, Text } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 
 import { logEvent } from '../libs/Helpers';
 import { PalettePreviewCard } from '../components/PalettePreviewCard';
