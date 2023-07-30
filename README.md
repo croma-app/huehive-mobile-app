@@ -1,4 +1,5 @@
-## [Croma](https://croma.app)
+## [HueHive (Formerly Croma)](https://huehive.co)
+### Croma is now renamed to Huehive ###
 
 [![Croma DEMO](https://img.youtube.com/vi/KqrsdAuvW40/0.jpg)](https://www.youtube.com/watch?v=KqrsdAuvW40)
 
