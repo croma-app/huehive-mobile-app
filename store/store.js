@@ -5,9 +5,6 @@ import { Platform } from 'react-native';
 import network from '../network';
 import { t } from 'i18next';
 
-//import { getAvailablePurchases } from 'react-native-iap';
-// const UNDO_TIMEOUT = 3000;
-
 const syncStateToStore = function (state) {
   // TODO: We need to find a better way to do storage management.
   // Fix this in a generic way with better storage management.
@@ -15,28 +12,6 @@ const syncStateToStore = function (state) {
   delete stateCopy.isStoreLoaded;
   Storage.setApplicationState(stateCopy);
 };
-
-// const sortPaletteColors = (palette) => palette.colors.sort((a, b) => (a.color > b.color ? 1 : -1));
-
-// const sortPalettes = (allPalettes) => {
-//   // sorting palettes before save
-//   const allPalettesArray = Object.keys(allPalettes).map((key) => allPalettes[key]);
-//   allPalettesArray.sort((a, b) => {
-//     // Just a check for old user
-//     if (!a.createdAt) {
-//       a.createdAt = 0;
-//     }
-//     if (!b.createdAt) {
-//       b.createdAt = 0;
-//     }
-//     return new Date(b.createdAt) - new Date(a.createdAt);
-//   });
-//   const ordered = {};
-//   allPalettesArray.forEach(function (_palette) {
-//     ordered[_palette.name] = _palette;
-//   });
-//   return ordered;
-// };
 
 const loadPlalettes = async () => {
   const res = await network.getAllPalettes();
