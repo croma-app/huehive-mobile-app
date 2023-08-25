@@ -24,14 +24,6 @@ const HamburgerMenu = (props) => {
   const { t } = useTranslation();
   const [userData, setUserData] = useState();
 
-  // const pickImageResult = async () => {
-  //   const result = await launchImageLibrary({
-  //     mediaType: 'photo',
-  //     quality: 1
-  //   });
-  //   return result;
-  // };
-
   useEffect(() => {
     // check if already logged in
     (async () => {
@@ -40,7 +32,7 @@ const HamburgerMenu = (props) => {
     })();
   }, [props]);
 
-  const { setColorList, clearPalette } = React.useContext(CromaContext);
+  const { clearPalette } = React.useContext(CromaContext);
   const navigate = function (screen) {
     props.toggleSideMenu();
     props.navigation.navigate(screen);
@@ -67,20 +59,6 @@ const HamburgerMenu = (props) => {
       </TouchableOpacity>
       <ScrollView>
         <View style={styles.menu}>
-          {/* <TouchableOpacity
-            style={styles.menuItem}
-            onPress={() => {
-              logEvent('hm_create_new_palette');
-              clearPalette();
-              navigate('AddPaletteManually');
-            }}>
-            <View style={styles.menuItemView}>
-              <View style={[styles.menuIcon, { paddingLeft: 4 }]}>
-                <Ionicons name="md-color-filter" style={styles.icon} />
-              </View>
-              <Text style={styles.textAreaMenuItem}>{t('Create new palette')}</Text>
-            </View>
-          </TouchableOpacity> */}
           <TouchableOpacity
             style={styles.menuItem}
             onPress={async () => {
@@ -95,51 +73,6 @@ const HamburgerMenu = (props) => {
               <Text style={styles.textAreaMenuItem}>{t('Palette library')}</Text>
             </View>
           </TouchableOpacity>
-          {/* {Platform.OS === 'android' && (
-            <TouchableOpacity
-              style={styles.menuItem}
-              onPress={async () => {
-                const imageResult = await pickImageResult();
-                if (!imageResult.didCancel) {
-                  const pickedColors = await NativeModules.CromaModule.navigateToImageColorPicker(
-                    imageResult.assets[0].uri
-                  );
-                  logEvent('hm_pick_colors_from_img', {
-                    length: pickedColors.length
-                  });
-                  clearPalette();
-                  setColorList(JSON.parse(pickedColors)?.colors);
-                  navigate('ColorList');
-                }
-              }}>
-              <View style={styles.menuItemView}>
-                <View style={styles.menuIcon}>
-                  <MaterialCommunityIcons name="image" style={styles.icon} />
-                </View>
-                <Text style={styles.textAreaMenuItem}>{t('Pick colors from an image')}</Text>
-              </View>
-            </TouchableOpacity>
-          )} */}
-          {/* {Platform.OS == 'android' && (
-            <TouchableOpacity
-              style={styles.menuItem}
-              onPress={async () => {
-                const pickedColors = await NativeModules.CromaModule.navigateToColorPicker();
-                logEvent('hm_pick_text_colors_from_camera', {
-                  length: pickedColors.length
-                });
-                clearPalette();
-                setColorList(JSON.parse(pickedColors)?.colors);
-                navigate('ColorList');
-              }}>
-              <View style={styles.menuItemView}>
-                <View style={styles.menuIcon}>
-                  <MaterialCommunityIcons name="credit-card-scan-outline" style={styles.icon} />
-                </View>
-                <Text style={styles.textAreaMenuItem}>{t('Scan color codes')}</Text>
-              </View>
-            </TouchableOpacity>
-          )} */}
           {
             <MenuLink
               id={'rate-us'}
@@ -260,9 +193,6 @@ const styles = StyleSheet.create({
   },
   title: {
     color: 'black'
-    // textAlignVertical: 'center',
-    // padding: padding,
-    // color: Colors.primary
   },
   menu: {
     flex: 1,
