@@ -5,7 +5,8 @@ import {
   TouchableOpacity,
   View,
   TextInput,
-  Button
+  Button,
+  Dimensions
 } from 'react-native';
 import React, { useState } from 'react';
 import { material } from 'react-native-typography';
@@ -60,15 +61,17 @@ const ChatSessionScreen = () => {
   console.log('messages', messages);
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <View>
-        {messages.map((message, index) => (
-          <View key={index}>
-            <Text style={styles.message}>{message.message}</Text>
-            <Text style={styles.message}>{message.sender_type}</Text>
-          </View>
-        ))}
-      </View>
+    <View style={styles.container}>
+      <ScrollView style={styles.chat_container} showsVerticalScrollIndicator={false}>
+        <View>
+          {messages.map((message, index) => (
+            <View key={index}>
+              <Text style={styles.message}>{message.message}</Text>
+              <Text style={styles.message}>{message.sender_type} </Text>
+            </View>
+          ))}
+        </View>
+      </ScrollView>
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
@@ -80,7 +83,7 @@ const ChatSessionScreen = () => {
           <Button title="Send" onPress={handleSend} />
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -110,8 +113,14 @@ const styles = StyleSheet.create({
     color: 'blue'
   },
   container: {
-    paddingHorizontal: 12,
-    paddingVertical: 12
+    display: 'flex',
+    flexDirection: 'column',
+    // height: Dimensions.get('window').height,
+    flex: 1,
+    padding: 12
+  },
+  chat_container: {
+    flex: 1
   },
   message: {
     ...material.body1,
@@ -119,9 +128,11 @@ const styles = StyleSheet.create({
     textAlign: 'justify'
   },
   inputContainer: {
+    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 12
+    height: 60,
+    paddingTop: 12
   },
   input: {
     flex: 1,
@@ -130,7 +141,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderWidth: 1,
     borderColor: 'gray',
-    borderRadius: 8
+    borderRadius: 8,
+    height: 40
   }
 });
 export default ChatSessionScreen;
