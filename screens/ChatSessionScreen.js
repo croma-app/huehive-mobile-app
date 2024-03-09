@@ -11,32 +11,62 @@ import React, { useState } from 'react';
 import { material } from 'react-native-typography';
 import { logEvent } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
+import { createChatSession, getChatSession } from '../network/chat_session';
 
 const ChatSessionScreen = () => {
   const { t } = useTranslation();
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
-
-  const handleSend = () => {
-    // Logic to send the message
-    const newMessage = {
-      text: inputText,
-      sender: 'user' // or 'ai' for AI messages
+  console.log('check the route is working or not ???');
+  const handleSend = async () => {
+    const message = {
+      chat_session: {
+        chat_session_type: 'color_palette',
+        messages_attributes: [
+          {
+            message: inputText,
+            sender_type: 'user'
+          }
+        ]
+      }
     };
-    setMessages([...messages, newMessage]);
-    setInputText('');
+    try {
+      const chatSession = await createChatSession(message);
+      console.log('chat session', chatSession);
+      console.log('chat session', chatSession.data.messages);
+      setMessages([...messages, ...chatSession.data.messages]);
+      const interval = setInterval(async () => {
+        const messageResponse = await getChatSession(
+          chatSession.data.id,
+          chatSession.data.messages[0].id
+        );
+        if (messageResponse.data.length > 0) {
+          console.log('messageResponse', messageResponse);
+          clearInterval(interval);
+          setMessages((messages) => [...messages, ...messageResponse.data]);
+        }
+      }, 1000);
+      // setMessages([...messages, newMessage]);
+      setInputText('');
+    } catch (error) {
+      console.error('Error sending message', error);
+    }
+    // setMessages([...messages, newMessage]);
+    // setInputText('');
   };
 
   logEvent('chat_session_screen');
 
+  console.log('messages', messages);
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View>
-        {/* Render the messages */}
         {messages.map((message, index) => (
-          <Text key={index} style={styles.message}>
-            {message.text}
-          </Text>
+          <View key={index}>
+            <Text style={styles.message}>{message.message}</Text>
+            <Text style={styles.message}>{message.sender_type}</Text>
+          </View>
         ))}
       </View>
       <View style={styles.inputContainer}>
