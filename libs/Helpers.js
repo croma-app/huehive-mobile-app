@@ -75,4 +75,54 @@ function notifyMessage(msg, duration = ToastAndroid.LONG) {
   }
 }
 
+function extractHexColors1(text) {
+  let hexColors = [];
+  let regex = /([1-9]{1,}\. ([A-Z a-z]*?))?([ \-\(])*#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})/g;
+  let matches = text.matchAll(regex);
+  let hexSet = new Set();
+  for (let match of matches) {
+    let hex = '#' + match[4];
+    if (!hexSet.has(hex)) {
+      hexSet.add(hex);
+      let colorName = match[2]?.trim();
+      hexColors.push({ color: hex, name: colorName });
+    }
+  }
+  return hexColors;
+}
+
+function extractHexColors2(text) {
+  let hexColors = [];
+  let regex = /Color Name:\s+(.+?)\s+Hex Code:\s+#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})/g;
+  let matches = text.matchAll(regex);
+  let hexSet = new Set();
+  for (let match of matches) {
+    let hex = '#' + match[1];
+    if (!hexSet.has(hex)) {
+      hexSet.add(hex);
+      let colorName = match[0]?.trim();
+      hexColors.push({ color: hex, name: colorName });
+    }
+  }
+  return hexColors;
+}
+export function extractHexColors(text) {
+  let extractedColors1 = extractHexColors1(text);
+  let extractedColors2 = extractHexColors2(text);
+  let combinedHexMap = {};
+  for (let color of extractedColors1) {
+    let hex = color.color;
+    combinedHexMap[hex] = color;
+  }
+  for (let color of extractedColors2) {
+    let hex = color.color;
+    if (hex in combinedHexMap) {
+      combinedHexMap[hex].name = combinedHexMap[hex].name || color.name;
+    } else {
+      combinedHexMap[hex] = color;
+    }
+  }
+  return Object.values(combinedHexMap);
+}
+
 export { logEvent, purchase, getAvailablePurchases, notifyMessage, initPurchase };

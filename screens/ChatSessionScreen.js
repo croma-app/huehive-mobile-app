@@ -1,24 +1,27 @@
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-  TextInput,
-  Button,
-  Dimensions
-} from 'react-native';
-import React, { useState } from 'react';
+import { ScrollView, StyleSheet, TouchableOpacity, View, TextInput, Button } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { material } from 'react-native-typography';
 import { logEvent } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
 import { createChatSession, getChatSession } from '../network/chat_session';
+import { retrieveUserSession } from '../libs/EncryptedStoreage';
+import ChatCard from '../components/ChatCard';
 
-const ChatSessionScreen = () => {
+const ChatSessionScreen = ({ navigation }) => {
   const { t } = useTranslation();
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
-  console.log('check the route is working or not ???');
+  const [userData, setUserData] = useState();
+  useEffect(() => {
+    (async () => {
+      const userData = await retrieveUserSession();
+      if (userData) {
+        setUserData(userData);
+      }
+    })();
+    logEvent('chat_session_screen');
+  }, []);
+
   const handleSend = async () => {
     const message = {
       chat_session: {
@@ -33,8 +36,6 @@ const ChatSessionScreen = () => {
     };
     try {
       const chatSession = await createChatSession(message);
-      console.log('chat session', chatSession);
-      console.log('chat session', chatSession.data.messages);
       setMessages([...messages, ...chatSession.data.messages]);
       const interval = setInterval(async () => {
         const messageResponse = await getChatSession(
@@ -56,19 +57,19 @@ const ChatSessionScreen = () => {
     // setInputText('');
   };
 
-  logEvent('chat_session_screen');
-
-  console.log('messages', messages);
-
   return (
     <View style={styles.container}>
       <ScrollView style={styles.chat_container} showsVerticalScrollIndicator={false}>
         <View>
           {messages.map((message, index) => (
-            <View key={index}>
-              <Text style={styles.message}>{message.message}</Text>
-              <Text style={styles.message}>{message.sender_type} </Text>
-            </View>
+            <ChatCard
+              sender={message.sender_type}
+              userData={userData}
+              message={message.message}
+              key={index}
+              index={index}
+              navigation={navigation}
+            />
           ))}
         </View>
       </ScrollView>
