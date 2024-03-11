@@ -1,5 +1,13 @@
-import { ScrollView, StyleSheet, TouchableOpacity, View, TextInput, Button } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  TextInput,
+  Button,
+  ActivityIndicator
+} from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
 import { material } from 'react-native-typography';
 import { logEvent } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +20,9 @@ const ChatSessionScreen = ({ navigation }) => {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const [userData, setUserData] = useState();
+  const scrollViewRef = useRef();
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     (async () => {
       const userData = await retrieveUserSession();
@@ -36,6 +47,7 @@ const ChatSessionScreen = ({ navigation }) => {
     };
     try {
       let chatSession;
+      setIsLoading(true);
       if (messages.length === 0) {
         chatSession = await createChatSession(message);
       } else {
@@ -48,11 +60,15 @@ const ChatSessionScreen = ({ navigation }) => {
         if (messageResponse.data.length > 0) {
           clearInterval(interval);
           setMessages((messages) => [...messages, ...messageResponse.data]);
+          scrollViewRef.current.scrollToEnd({ animated: true });
+          setIsLoading(false);
         }
       }, 2000);
       setInputText('');
+      scrollViewRef.current.scrollToEnd({ animated: true });
     } catch (error) {
       console.error('Error sending message', error);
+      setIsLoading(false);
     }
     // setMessages([...messages, newMessage]);
     // setInputText('');
@@ -60,19 +76,21 @@ const ChatSessionScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.chat_container} showsVerticalScrollIndicator={false}>
-        <View>
-          {messages.map((message, index) => (
-            <ChatCard
-              sender={message.sender_type}
-              userData={userData}
-              message={message.message}
-              key={index}
-              index={index}
-              navigation={navigation}
-            />
-          ))}
-        </View>
+      <ScrollView
+        ref={scrollViewRef}
+        style={styles.chat_container}
+        showsVerticalScrollIndicator={false}>
+        {messages.map((message, index) => (
+          <ChatCard
+            sender={message.sender_type}
+            userData={userData}
+            message={message.message}
+            key={index}
+            index={index}
+            navigation={navigation}
+          />
+        ))}
+        <ActivityIndicator animating={isLoading} size="large" color="#0000ff" />
       </ScrollView>
       <View style={styles.inputContainer}>
         <TextInput
@@ -82,7 +100,7 @@ const ChatSessionScreen = ({ navigation }) => {
           placeholder="Type your message..."
         />
         <TouchableOpacity>
-          <Button title="Send" onPress={handleSend} />
+          <Button title="Send" disabled={isLoading} onPress={handleSend} />
         </TouchableOpacity>
       </View>
     </View>
