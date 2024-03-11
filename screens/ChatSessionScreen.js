@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { material } from 'react-native-typography';
 import { logEvent } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
-import { createChatSession, getChatSession } from '../network/chat_session';
+import { createChatSession, followUpChatSession, getChatSession } from '../network/chat_session';
 import { retrieveUserSession } from '../libs/EncryptedStoreage';
 import ChatCard from '../components/ChatCard';
 
@@ -35,20 +35,21 @@ const ChatSessionScreen = ({ navigation }) => {
       }
     };
     try {
-      const chatSession = await createChatSession(message);
-      setMessages([...messages, ...chatSession.data.messages]);
+      let chatSession;
+      if (messages.length === 0) {
+        chatSession = await createChatSession(message);
+      } else {
+        chatSession = await followUpChatSession(messages[0].chat_session_id, message);
+      }
+      const latestMessage = chatSession.data.messages[chatSession.data.messages.length - 1];
+      setMessages([...messages, latestMessage]);
       const interval = setInterval(async () => {
-        const messageResponse = await getChatSession(
-          chatSession.data.id,
-          chatSession.data.messages[0].id
-        );
+        const messageResponse = await getChatSession(chatSession.data.id, latestMessage.id);
         if (messageResponse.data.length > 0) {
-          console.log('messageResponse', messageResponse);
           clearInterval(interval);
           setMessages((messages) => [...messages, ...messageResponse.data]);
         }
-      }, 1000);
-      // setMessages([...messages, newMessage]);
+      }, 2000);
       setInputText('');
     } catch (error) {
       console.error('Error sending message', error);
