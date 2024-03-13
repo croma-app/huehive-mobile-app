@@ -22,11 +22,10 @@ import HamburgerMenu from './components/HamburgerMenu';
 import SideMenu from 'react-native-side-menu';
 import { HEADER_HEIGHT } from './constants/Layout';
 import Entypo from 'react-native-vector-icons/Entypo';
-import { notifyMessage } from './libs/Helpers';
-import RNIap from 'react-native-iap';
 import { t } from 'i18next';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 const Stack = createNativeStackNavigator();
+
 /*import { LogBox } from 'react-native'; // enabled for recording demos
 LogBox.ignoreAllLogs();//Ignore all log notifications*/
 export default function App() {
@@ -36,17 +35,9 @@ export default function App() {
   const navigationRef = useNavigationContainerRef();
   useEffect(() => {
     (async () => {
-      try {
-        await RNIap.initConnection();
-      } catch (e) {
-        notifyMessage(t('Error initializing purchase: ') + e);
-      }
       await applicationState.loadInitPaletteFromStore();
       setIsPalettesLoaded(true);
     })();
-    return () => {
-      RNIap.endConnection();
-    };
   }, []);
 
   const spinner = (
