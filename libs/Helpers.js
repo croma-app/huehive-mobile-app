@@ -1,5 +1,7 @@
 import { NativeModules, Platform, Alert, ToastAndroid } from 'react-native';
-import RNIap from 'react-native-iap';
+import * as RNIap from 'react-native-iap';
+import { requestPurchase, getProducts } from 'react-native-iap';
+
 const productSku = function () {
   return Platform.OS === 'android' ? 'croma_pro' : 'app_croma';
 };
@@ -24,8 +26,11 @@ const purchase = async function (setPurchase, productSKU) {
     productSKU = productSku();
   }
   try {
-    await RNIap.getProducts([productSKU]);
-    const details = await RNIap.requestPurchase(productSKU, false);
+    await getProducts({ skus: [productSKU] });
+    const details = await requestPurchase({
+      skus: [productSKU],
+      andDangerouslyFinishTransactionAutomatically: true
+    });
     await setPurchase(details);
     logEvent('purchase_successful');
     notifyMessage('Congrats, You are now a pro user!');
@@ -36,18 +41,16 @@ const purchase = async function (setPurchase, productSKU) {
   }
 };
 const initPurchase = async function (setPurchase) {
-  // const productSKU = productSku();
-  await setPurchase('Free pro user');
-  notifyMessage('Congrats, You are a pro user. Huehive pro version is now free for limited time!');
-  // try {
-  //   let products = await getAvailablePurchases();
-  //   if (products.find((product) => product.productId === productSKU)) {
-  //     await setPurchase(products.find((product) => product.productId === productSKU));
-  //     notifyMessage('Congrats, You are already a pro user!');
-  //   }
-  // } catch (e) {
-  //   notifyMessage('Failed during initialization of purchase: ' + e);
-  // }
+  const productSKU = productSku();
+  try {
+    let products = await getAvailablePurchases();
+    if (products.find((product) => product.productId === productSKU)) {
+      await setPurchase(products.find((product) => product.productId === productSKU));
+      notifyMessage('Congrats, You are already a pro user!');
+    }
+  } catch (e) {
+    notifyMessage('Failed during initialization of purchase: ' + e);
+  }
 };
 
 const getAvailablePurchases = async () => {
