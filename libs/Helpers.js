@@ -36,18 +36,17 @@ const purchase = async function (setPurchase, productSKU) {
   }
 };
 const initPurchase = async function (setPurchase) {
-  // const productSKU = productSku();
-  await setPurchase('Free pro user');
+  const productSKU = productSku();
   notifyMessage('Congrats, You are a pro user. Huehive pro version is now free for limited time!');
-  // try {
-  //   let products = await getAvailablePurchases();
-  //   if (products.find((product) => product.productId === productSKU)) {
-  //     await setPurchase(products.find((product) => product.productId === productSKU));
-  //     notifyMessage('Congrats, You are already a pro user!');
-  //   }
-  // } catch (e) {
-  //   notifyMessage('Failed during initialization of purchase: ' + e);
-  // }
+  try {
+    let products = await getAvailablePurchases();
+    if (products.find((product) => product.productId === productSKU)) {
+      await setPurchase(products.find((product) => product.productId === productSKU));
+      notifyMessage('Congrats, You are already a pro user!');
+    }
+  } catch (e) {
+    notifyMessage('Failed during initialization of purchase: ' + e);
+  }
 };
 
 const getAvailablePurchases = async () => {
