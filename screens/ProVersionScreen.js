@@ -28,7 +28,6 @@ export default function ProScreen() {
       <View>
         <Text style={styles.title}>{t('Pro benefits')}</Text>
         <Text style={[styles.line]}>{t('1. Add more than 4 colors in a palette 🎨')}</Text>
-        <Text style={[styles.line]}>{t('2. Export/sync colors to private github repository')}</Text>
         <CromaButton
           style={{ backgroundColor: '#ff5c59' }}
           textStyle={{ color: '#fff' }}
@@ -37,10 +36,11 @@ export default function ProScreen() {
         </CromaButton>
         <Text style={styles.line}>
           {t(
-            "3. Support the development efforts to keep the app awesome and simple without any ads and annoying notifications 😊'"
+            "2. Support the development efforts to keep the app awesome and simple without any ads and annoying notifications 😊'"
           )}
         </Text>
-        <CromaButton onPress={purchaseDevelopment}>{t('Buy me a coffee ☕')}</CromaButton>
+        <Text style={styles.line}>{t("3. Help us keep the app open source'")}</Text>
+        <CromaButton onPress={purchaseDevelopment}>{t('Support development')}</CromaButton>
 
         {!isPro && (
           <View>

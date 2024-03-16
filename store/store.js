@@ -33,12 +33,12 @@ export default function useApplicationHook() {
     setState((state) => ({ ...state, isLoading: true }));
     const isUserAlreadyExits = await Storage.checkUserAlreadyExists();
     if (isUserAlreadyExits != 'true') {
-      // For first time user check if user is pro or not.
-      Platform.OS === 'android' && (await initPurchase(setPurchase));
       // IF USER IS COMING FIRST TIME
       await Storage.setUserAlreadyExists();
       await Storage.setUserDeviceId();
     }
+    Platform.OS === 'android' &&
+      (await initPurchase(setPurchase, /* showMessage=*/ !isUserAlreadyExits));
     const allPalettes = await loadPlalettes();
     setState((state) => ({ ...state, allPalettes, isLoading: false }));
     setStoreLoaded(true);
