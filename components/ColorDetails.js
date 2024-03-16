@@ -27,12 +27,34 @@ export const ColorDetail = ({ color }) => {
     }
   });
   const fullColor = new Color(color);
+
+  const formatedHwb = () => {
+    const hwb = fullColor.tohwb(); // Call the original function
+
+    // Extract the individual values from the returned string
+    const regex = /hwb\((\d+), ([\d.]+)%, ([\d.]+)%\)/;
+    const [, hue, saturation, lightness] = regex.exec(hwb);
+
+    // Round off the percentage values
+    const roundedSaturation = parseFloat(saturation);
+    const roundedLightness = parseFloat(lightness);
+
+    const roundedSaturationStr =
+      roundedSaturation % 1 !== 0 ? roundedSaturation.toFixed(2) : roundedSaturation.toFixed(0);
+    const roundedLightnessStr =
+      roundedLightness % 1 !== 0 ? roundedLightness.toFixed(2) : roundedLightness.toFixed(0);
+
+    // Construct the modified HWB color string with rounded percentage values
+    const modifiedHwb = `hwb(${hue}, ${roundedSaturationStr}%, ${roundedLightnessStr}%)`;
+    return modifiedHwb;
+  };
+
   let items = [
     { key: 'HEX', value: fullColor.tohex() },
     { key: 'RGB', value: fullColor.torgb() },
     { key: 'HSL', value: fullColor.tohsl() },
     { key: 'HSV', value: fullColor.tohsv() },
-    { key: 'HWB', value: fullColor.tohwb() },
+    { key: 'HWB', value: formatedHwb() },
     { key: 'CMYK', value: fullColor.tocmyk() },
     { key: 'CIELAB', value: fullColor.tolab() },
     { key: 'Luminance', value: (fullColor.luminance() * 100).toFixed(2) + '%' },
@@ -65,8 +87,7 @@ export const ColorDetail = ({ color }) => {
         flexDirection: 'column',
         padding: 8,
         backgroundColor: '#fff'
-      }}
-    >
+      }}>
       <View style={[styles.backgroundColor]}></View>
       {/* <Text {...props} style={[props.style, { fontFamily: 'space-mono' }]} >{props.color}</Text> */}
       <View style={{ marginTop: 20 }}>
@@ -87,8 +108,7 @@ export const ColorDetail = ({ color }) => {
                     padding: '5px',
                     textAlign: 'center',
                     borderRadius: '6px'
-                  }}
-                >
+                  }}>
                   Copied!
                 </Text>
               )}

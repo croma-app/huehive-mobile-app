@@ -53,31 +53,25 @@ function checkValidEmail(email) {
 }
 
 function signUpValidations({ fullName, email, password, confirmPassword }) {
-  let fullNameError, emailError, passwordError;
+  const errors = {};
 
   if (!fullName || fullName.length === 0) {
-    fullNameError = 'Full name required.';
+    errors.fullName = 'Full name required.';
   }
 
   if (!email || !checkValidEmail(email)) {
-    emailError = 'Please enter valid email.';
+    errors.email = 'Please enter a valid email.';
   }
 
   if (!password || password.length < 6) {
-    passwordError = 'Minimum 6 characters required in password.';
+    errors.password = 'Minimum 6 characters required in password.';
   }
 
   if (password !== confirmPassword) {
-    passwordError = 'Confirm password did not match.';
+    errors.password = 'Confirm password did not match.';
   }
-  if (!fullNameError && !emailError && !passwordError) {
-    return undefined;
-  }
-  return {
-    fullName: fullNameError,
-    email: emailError,
-    password: passwordError
-  };
+
+  return Object.keys(errors).length > 0 ? errors : {};
 }
 
 function LoginScreen(props) {

@@ -5,39 +5,6 @@ import { Platform } from 'react-native';
 import network from '../network';
 import { t } from 'i18next';
 
-//import { getAvailablePurchases } from 'react-native-iap';
-// const UNDO_TIMEOUT = 3000;
-
-const syncStateToStore = function (state) {
-  // TODO: We need to find a better way to do storage management.
-  // Fix this in a generic way with better storage management.
-  const stateCopy = JSON.parse(JSON.stringify(state));
-  delete stateCopy.isStoreLoaded;
-  Storage.setApplicationState(stateCopy);
-};
-
-// const sortPaletteColors = (palette) => palette.colors.sort((a, b) => (a.color > b.color ? 1 : -1));
-
-// const sortPalettes = (allPalettes) => {
-//   // sorting palettes before save
-//   const allPalettesArray = Object.keys(allPalettes).map((key) => allPalettes[key]);
-//   allPalettesArray.sort((a, b) => {
-//     // Just a check for old user
-//     if (!a.createdAt) {
-//       a.createdAt = 0;
-//     }
-//     if (!b.createdAt) {
-//       b.createdAt = 0;
-//     }
-//     return new Date(b.createdAt) - new Date(a.createdAt);
-//   });
-//   const ordered = {};
-//   allPalettesArray.forEach(function (_palette) {
-//     ordered[_palette.name] = _palette;
-//   });
-//   return ordered;
-// };
-
 const loadPlalettes = async () => {
   const res = await network.getAllPalettes();
   const allPalettes = res.data;
@@ -64,9 +31,6 @@ export default function useApplicationHook() {
 
   const loadInitPaletteFromStore = async () => {
     setState((state) => ({ ...state, isLoading: true }));
-    // Loading application state from localStorage
-    // TODO network call...
-    const _state = await Storage.getApplicationState();
     const isUserAlreadyExits = await Storage.checkUserAlreadyExists();
     if (isUserAlreadyExits != 'true') {
       // For first time user check if user is pro or not.
@@ -75,31 +39,8 @@ export default function useApplicationHook() {
       await Storage.setUserAlreadyExists();
       await Storage.setUserDeviceId();
     }
-    const deviceId = await Storage.getUserDeviceId();
-    if (isUserAlreadyExits == 'true' && !deviceId) {
-      await Storage.setUserDeviceId();
-      // Update user device id and local palettes to server if user is already exists
-      const paletteCreatePromises = Object.keys(_state.allPalettes).map(async (paletteName) => {
-        const palette = _state.allPalettes[paletteName];
-        const payload = {
-          name: palette.name,
-          colors: palette.colors.map((color) => ({
-            name: color.name ? color.name : null,
-            hex: color.color
-          }))
-        };
-        return network.createPalette(payload);
-      });
-      try {
-        await Promise.all(paletteCreatePromises);
-      } catch (error) {
-        console.log('error', error);
-      }
-    }
-
-    let allPalettes = _state.allPalettes;
-    allPalettes = await loadPlalettes();
-    setState((state) => ({ ...state, ..._state, allPalettes, isLoading: false }));
+    const allPalettes = await loadPlalettes();
+    setState((state) => ({ ...state, allPalettes, isLoading: false }));
     setStoreLoaded(true);
     return;
   };
@@ -243,10 +184,6 @@ export default function useApplicationHook() {
     setSuggestedName,
     clearPalette
   });
-  // Sync state to local storage
-  if (state.isStoreLoaded === true) {
-    syncStateToStore(state);
-  }
   return state;
 }
 

@@ -1,9 +1,8 @@
 import React, { useLayoutEffect } from 'react';
 import { SingleColorView } from '../components/SingleColorView';
-import { ScrollView, StyleSheet, View, Text, Platform, TouchableOpacity } from 'react-native';
+import { ScrollView, StyleSheet, View, Text, Platform } from 'react-native';
 import CromaButton from '../components/CromaButton';
 import { logEvent } from '../libs/Helpers';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { CromaContext } from '../store/store';
 import { useTranslation } from 'react-i18next';
 
@@ -28,14 +27,12 @@ export default function ColorListScreen({ navigation }) {
       {colors.map((color) => (
         <SingleColorView key={color.color} color={color} />
       ))}
-      {Platform.OS == 'web' && (
-        <CromaButton
-          onPress={() => {
-            navigation.navigate('SavePalette');
-          }}>
-          {t('SAVE AS NEW PALETTE')}
-        </CromaButton>
-      )}
+      <CromaButton
+        onPress={() => {
+          navigation.navigate('SavePalette');
+        }}>
+        {t('SAVE AS NEW PALETTE')}
+      </CromaButton>
     </ScrollView>
   );
 }
@@ -69,13 +66,6 @@ const CustomHeader = ({ navigation }) => {
         }}>
         {t('New palette')}
       </Text>
-      <>
-        <TouchableOpacity
-          style={[styles.doneButton]}
-          onPress={() => navigation.navigate('SavePalette')}>
-          <MaterialIcons name="done" size={24} color="white" />
-        </TouchableOpacity>
-      </>
     </View>
   );
 };
