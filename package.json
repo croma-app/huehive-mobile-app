@@ -41,7 +41,7 @@
     "react-native-fs": "^2.18.0",
     "react-native-gesture-handler": "^2.0.0",
     "react-native-get-random-values": "^1.8.0",
-    "react-native-iap": "^7.5.5",
+    "react-native-iap": "^12.0.0",
     "react-native-image-picker": "^4.3.0",
     "react-native-localize": "^2.2.4",
     "react-native-reanimated": "^2.2.3",
