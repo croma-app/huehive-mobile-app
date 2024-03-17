@@ -90,7 +90,7 @@ const ChatSessionScreen = ({ navigation }) => {
             navigation={navigation}
           />
         ))}
-        <ActivityIndicator animating={isLoading} size="large" color="#0000ff" />
+        <ActivityIndicator animating={isLoading} size="large" color="#bae0ff" />
       </ScrollView>
       <View style={styles.inputContainer}>
         <TextInput
