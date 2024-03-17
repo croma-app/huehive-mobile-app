@@ -36,7 +36,7 @@ const ChatCard = ({ sender, userData, message, navigation }) => {
             if (token === '\n' || !token) return null;
             if (token.startsWith('```'))
               return (
-                <>
+                <View key={index}>
                   <View style={styles.codeContainer}>
                     {token
                       .replace(/```/g, '')
@@ -61,7 +61,7 @@ const ChatCard = ({ sender, userData, message, navigation }) => {
                     name="Click to save"
                     colors={colors}
                   />
-                </>
+                </View>
               );
             return <Text key={index}>{token}</Text>;
           })}

@@ -70,8 +70,6 @@ const ChatSessionScreen = ({ navigation }) => {
       console.error('Error sending message', error);
       setIsLoading(false);
     }
-    // setMessages([...messages, newMessage]);
-    // setInputText('');
   };
 
   return (
@@ -90,7 +88,7 @@ const ChatSessionScreen = ({ navigation }) => {
             navigation={navigation}
           />
         ))}
-        <ActivityIndicator animating={isLoading} size="large" color="#bae0ff" />
+        <ActivityIndicator animating={isLoading} size="large" color="#ff7875" />
       </ScrollView>
       <View style={styles.inputContainer}>
         <TextInput
