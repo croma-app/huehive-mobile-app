@@ -121,6 +121,7 @@ const styles = {
     flex: 1
   },
   codeContainer: {
+    marginTop: 5,
     paddingHorizontal: 10,
     paddingVertical: 5,
     backgroundColor: '#ffe7ba',
