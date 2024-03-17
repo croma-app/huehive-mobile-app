@@ -13,7 +13,12 @@ const ChatCard = ({ sender, userData, message, navigation }) => {
   const tokens = testingMessage.split(/(```[\s\S]+?```)|(\n)/g);
 
   return (
-    <View style={[styles.chatCard, sender === 'user' ? { marginRight: 20 } : { marginLeft: 20 }]}>
+    <View
+      style={[
+        styles.chatCard,
+        sender === 'user' ? { backgroundColor: '#fff1f0' } : { marginLeft: 20, marginRight: 10 }
+      ]}>
+      <View style={sender === 'user' ? styles.chatCardLeftArrow : styles.chatCardRightArrow}></View>
       <Image
         style={styles.avatar}
         source={
@@ -72,14 +77,41 @@ const styles = {
   chatCard: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10
+    marginBottom: 15,
+    backgroundColor: '#fff7e6',
+    padding: 5,
+    borderRadius: 10,
+    position: 'relative',
+    marginLeft: 10,
+    marginRight: 20
+  },
+  chatCardLeftArrow: {
+    position: 'absolute',
+    width: 20,
+    height: 10,
+    backgroundColor: 'transparent',
+    borderTopWidth: 10,
+    borderLeftWidth: 10,
+    borderTopColor: '#fff1f0',
+    borderLeftColor: 'transparent',
+    left: -10
+  },
+  chatCardRightArrow: {
+    position: 'absolute',
+    width: 20,
+    height: 10,
+    backgroundColor: 'transparent',
+    borderTopWidth: 10,
+    borderRightWidth: 10,
+    borderTopColor: '#fff7e6',
+    borderRightColor: 'transparent',
+    right: -10
   },
   avatar: {
-    width: 30,
-    height: 30,
+    width: 20,
+    height: 20,
     borderRadius: 15,
-    marginRight: 10
+    marginRight: 8
   },
   message: {
     flex: 1,
@@ -91,7 +123,7 @@ const styles = {
   codeContainer: {
     paddingHorizontal: 10,
     paddingVertical: 5,
-    backgroundColor: '#ccc',
+    backgroundColor: '#ffe7ba',
     borderRadius: 5,
     marginBottom: 10
   },

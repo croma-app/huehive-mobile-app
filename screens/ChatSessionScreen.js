@@ -136,11 +136,12 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     // height: Dimensions.get('window').height,
-    flex: 1,
-    padding: 12
+    flex: 1
   },
   chat_container: {
-    flex: 1
+    flex: 1,
+    paddingTop: 10,
+    padding: 5
   },
   message: {
     ...material.body1,
@@ -151,6 +152,8 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: '#fff2e8',
+    padding: 10,
     height: 60,
     paddingTop: 12
   },
