@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'column',
+    backgroundColor: '#d6e4ff',
     // height: Dimensions.get('window').height,
     flex: 1
   },
