@@ -5,10 +5,11 @@ import {
   TouchableOpacity,
   View,
   TextInput,
-  Button,
   ActivityIndicator,
-  Text
+  Text,
+  ImageBackground
 } from 'react-native';
+import Colors from '../constants/Colors';
 import React, { useState, useEffect, useRef } from 'react';
 import { material } from 'react-native-typography';
 import { logEvent } from '../libs/Helpers';
@@ -17,9 +18,11 @@ import ChatCard from '../components/ChatCard';
 import LoginScreen from './LoginScreen';
 import useUserData from '../Hooks/getUserData';
 
+const bgImage = require('../assets/images/colorful_background.jpg');
+
 const ExamplePhrase = ({ phrase, onPress }) => (
   <TouchableOpacity onPress={() => onPress(phrase)}>
-    <Text style={styles.examplePhrase}>Example: {phrase}</Text>
+    <Text style={styles.examplePhrase}>{phrase}</Text>
   </TouchableOpacity>
 );
 
@@ -105,80 +108,90 @@ const ChatSessionScreen = (props) => {
 
   return (
     <View style={styles.container}>
-      {isCreatingSession ? (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator animating={true} size="large" color="#ff7875" />
-          <Text style={styles.loadingText}>Creating chat session...</Text>
-        </View>
-      ) : (
-        <>
-          <ScrollView
-            ref={scrollViewRef}
-            style={styles.chat_container}
-            showsVerticalScrollIndicator={false}>
-            {messages.length === 0 ? (
-              <View style={styles.emptyChat}>
-                <Text style={styles.emptyChatText}>
-                  Welcome to HueHive AI! Start a conversation by sending a message.
-                </Text>
-                <View style={styles.examplePhrasesContainer}>
-                  <ExamplePhrase
-                    phrase="Create a color palette for a kids website"
-                    onPress={setInputText}
-                  />
-                  <ExamplePhrase
-                    phrase="Design a color palette for a fashion brand"
-                    onPress={setInputText}
-                  />
-                  <ExamplePhrase
-                    phrase="Generate a color scheme for a travel website"
-                    onPress={setInputText}
-                  />
-                  <ExamplePhrase
-                    phrase="Create a color palette for a food blog"
-                    onPress={setInputText}
-                  />
-                  <ExamplePhrase
-                    phrase="Design a color scheme for a fitness app"
-                    onPress={setInputText}
-                  />
+      <ImageBackground source={bgImage} style={styles.backgroundImage}>
+        <View style={styles.bgImageOpecity}>
+        {isCreatingSession ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator animating={true} size="large" color="#ff7875" />
+            <Text style={styles.loadingText}>Creating chat session...</Text>
+          </View>
+        ) : (
+          <>
+            <ScrollView
+              ref={scrollViewRef}
+              style={styles.chat_container}
+              showsVerticalScrollIndicator={false}>
+              {messages.length === 0 ? (
+                <View style={styles.emptyChat}>
+                  <Text style={styles.emptyChatText}>
+                    Welcome to HueHive AI! Start a conversation to create color palettes for your
+                    next project
+                  </Text>
+                  <Text style={styles.emptyChatSubtext}>Here are few examples</Text>
+                  <View style={styles.examplePhrasesContainer}>
+                    <ExamplePhrase
+                      phrase="Create a color palette for a kids website"
+                      onPress={setInputText}
+                    />
+                    <ExamplePhrase
+                      phrase="Design a color palette for a fashion brand"
+                      onPress={setInputText}
+                    />
+                    <ExamplePhrase
+                      phrase="Generate a color scheme for a travel website"
+                      onPress={setInputText}
+                    />
+                    <ExamplePhrase
+                      phrase="Create a color palette for a food blog"
+                      onPress={setInputText}
+                    />
+                    <ExamplePhrase
+                      phrase="Design a color scheme for a fitness app"
+                      onPress={setInputText}
+                    />
+                  </View>
                 </View>
-              </View>
-            ) : (
-              messages.map((message, index) => (
-                <ChatCard
-                  sender={message.sender_type}
-                  userData={userData}
-                  message={message.message}
-                  key={index}
-                  index={index}
-                  navigation={navigation}
-                />
-              ))
-            )}
-            <ActivityIndicator animating={isLoading} size="large" color="#ff7875" />
-          </ScrollView>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              value={inputText}
-              onChangeText={setInputText}
-              placeholder={
-                messages.length == 0
-                  ? 'Ex: create a color palette for kids website'
-                  : 'follow up message to change the color palette'
-              }
-            />
-            <TouchableOpacity>
-              <Button
-                title="Send"
+              ) : (
+                messages.map((message, index) => (
+                  <ChatCard
+                    sender={message.sender_type}
+                    userData={userData}
+                    message={message.message}
+                    key={index}
+                    index={index}
+                    navigation={navigation}
+                  />
+                ))
+              )}
+              <ActivityIndicator animating={isLoading} size="large" color="#ff7875" />
+            </ScrollView>
+
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                value={inputText}
+                onChangeText={setInputText}
+                placeholder={
+                  messages.length == 0
+                    ? 'Ex: create a color palette for kids website'
+                    : 'follow up message to change the color palette'
+                }
+              />
+              <TouchableOpacity
                 disabled={isLoading || inputText.trim() === ''}
                 onPress={handleSend}
-              />
-            </TouchableOpacity>
-          </View>
-        </>
-      )}
+                style={
+                  isLoading || inputText.trim() === ''
+                    ? styles.disableSendButton
+                    : styles.sendButton
+                }>
+                <Text style={styles.textSend}> Send </Text>
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
+        </View>
+      </ImageBackground>
     </View>
   );
 };
@@ -229,7 +242,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff2e8',
+    backgroundColor: 'transparent',
     padding: 10,
     height: 60,
     paddingTop: 12
@@ -255,6 +268,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 10
   },
+  emptyChatSubtext: {
+    ...material.body1,
+    textAlign: 'center',
+    marginBottom: 10
+  },
   emptyChatExample: {
     ...material.body1,
     textAlign: 'center',
@@ -268,6 +286,34 @@ const styles = StyleSheet.create({
   loadingText: {
     ...material.body1,
     marginTop: 10
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center'
+  },
+  bgImageOpecity: {
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    flex: 1
+  },
+  examplePhrase: {
+    padding: 5
+  },
+  sendButton: {
+    padding: 8,
+    backgroundColor: Colors.primary,
+    borderRadius: 8
+  },
+  disableSendButton: {
+    padding: 8,
+    backgroundColor: 'gray',
+    borderRadius: 8
+  },
+  textSend: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center'
   }
 });
 
