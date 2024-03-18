@@ -220,9 +220,7 @@ function LoginScreen(props) {
   return (
     <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
       <View style={[styles.container, { minHeight: screenType === LOGIN ? 400 : 500 }]}>
-        {props.reloadScreen === undefined && (
-          <Text style={styles.title}>{t('Welcome to HueHive (Croma),')}</Text>
-        )}
+        {!props.hideWelcomeMessage && <Text style={styles.title}>{t('Welcome to HueHive')}</Text>}
         <Text style={styles.intro}>
           {props.signupMessage || t('Please sign in or sign up to continue...')}
         </Text>
@@ -306,7 +304,8 @@ function LoginScreen(props) {
 
 LoginScreen.propTypes = {
   navigation: PropTypes.any,
-  reloadScreen: PropTypes.func
+  hideWelcomeMessage: PropTypes.bool,
+  signupMessage: PropTypes.string | undefined
 };
 
 const styles = StyleSheet.create({
