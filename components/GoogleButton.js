@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const GoogleButton = ({ buttonType, onPress }) => {
-  const buttonText = buttonType === 'signin' ? 'Sign In with Google' : 'Sign Up with Google';
+  const buttonText = buttonType === 'LOGIN' ? 'Sign In with Google' : 'Sign Up with Google';
 
   return (
     <TouchableOpacity style={styles.button} onPress={onPress}>

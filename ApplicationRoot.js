@@ -108,7 +108,7 @@ export default function App() {
                   />
                   <Stack.Screen
                     name={'ChatSession'}
-                    options={{ title: t('Chat session') }}
+                    options={{ title: t('HueHive AI assistant') }}
                     component={ChatSessionScreen}
                   />
                   <Stack.Screen

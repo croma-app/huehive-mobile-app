@@ -6,7 +6,8 @@ import {
   View,
   TextInput,
   Button,
-  ActivityIndicator
+  ActivityIndicator,
+  Text
 } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 import { material } from 'react-native-typography';
@@ -16,12 +17,19 @@ import ChatCard from '../components/ChatCard';
 import LoginScreen from './LoginScreen';
 import useUserData from '../Hooks/getUserData';
 
+const ExamplePhrase = ({ phrase, onPress }) => (
+  <TouchableOpacity onPress={() => onPress(phrase)}>
+    <Text style={styles.examplePhrase}>Example: {phrase}</Text>
+  </TouchableOpacity>
+);
+
 const ChatSessionScreen = (props) => {
   const { navigation } = props;
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const scrollViewRef = useRef();
   const [isLoading, setIsLoading] = useState(false);
+  const [isCreatingSession, setIsCreatingSession] = useState(false);
 
   const { userData, isUserDataLoading, getUserData } = useUserData();
 
@@ -45,7 +53,9 @@ const ChatSessionScreen = (props) => {
       let chatSession;
       setIsLoading(true);
       if (messages.length === 0) {
+        setIsCreatingSession(true);
         chatSession = await createChatSession(message);
+        setIsCreatingSession(false);
       } else {
         chatSession = await followUpChatSession(messages[0].chat_session_id, message);
       }
@@ -65,8 +75,16 @@ const ChatSessionScreen = (props) => {
     } catch (error) {
       console.error('Error sending message', error);
       setIsLoading(false);
+      setIsCreatingSession(false);
     }
   };
+
+  useEffect(() => {
+    let interval;
+    return () => {
+      clearInterval(interval);
+    };
+  }, [messages]);
 
   if (isUserDataLoading) {
     return (
@@ -87,33 +105,80 @@ const ChatSessionScreen = (props) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView
-        ref={scrollViewRef}
-        style={styles.chat_container}
-        showsVerticalScrollIndicator={false}>
-        {messages.map((message, index) => (
-          <ChatCard
-            sender={message.sender_type}
-            userData={userData}
-            message={message.message}
-            key={index}
-            index={index}
-            navigation={navigation}
-          />
-        ))}
-        <ActivityIndicator animating={isLoading} size="large" color="#ff7875" />
-      </ScrollView>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          value={inputText}
-          onChangeText={setInputText}
-          placeholder="Type your message..."
-        />
-        <TouchableOpacity>
-          <Button title="Send" disabled={isLoading} onPress={handleSend} />
-        </TouchableOpacity>
-      </View>
+      {isCreatingSession ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator animating={true} size="large" color="#ff7875" />
+          <Text style={styles.loadingText}>Creating chat session...</Text>
+        </View>
+      ) : (
+        <>
+          <ScrollView
+            ref={scrollViewRef}
+            style={styles.chat_container}
+            showsVerticalScrollIndicator={false}>
+            {messages.length === 0 ? (
+              <View style={styles.emptyChat}>
+                <Text style={styles.emptyChatText}>
+                  Welcome to HueHive AI! Start a conversation by sending a message.
+                </Text>
+                <View style={styles.examplePhrasesContainer}>
+                  <ExamplePhrase
+                    phrase="Create a color palette for a kids website"
+                    onPress={setInputText}
+                  />
+                  <ExamplePhrase
+                    phrase="Design a color palette for a fashion brand"
+                    onPress={setInputText}
+                  />
+                  <ExamplePhrase
+                    phrase="Generate a color scheme for a travel website"
+                    onPress={setInputText}
+                  />
+                  <ExamplePhrase
+                    phrase="Create a color palette for a food blog"
+                    onPress={setInputText}
+                  />
+                  <ExamplePhrase
+                    phrase="Design a color scheme for a fitness app"
+                    onPress={setInputText}
+                  />
+                </View>
+              </View>
+            ) : (
+              messages.map((message, index) => (
+                <ChatCard
+                  sender={message.sender_type}
+                  userData={userData}
+                  message={message.message}
+                  key={index}
+                  index={index}
+                  navigation={navigation}
+                />
+              ))
+            )}
+            <ActivityIndicator animating={isLoading} size="large" color="#ff7875" />
+          </ScrollView>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              value={inputText}
+              onChangeText={setInputText}
+              placeholder={
+                messages.length == 0
+                  ? 'Ex: create a color palette for kids website'
+                  : 'follow up message to change the color palette'
+              }
+            />
+            <TouchableOpacity>
+              <Button
+                title="Send"
+                disabled={isLoading || inputText.trim() === ''}
+                onPress={handleSend}
+              />
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
     </View>
   );
 };
@@ -178,6 +243,32 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderRadius: 8,
     height: 40
+  },
+  emptyChat: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20
+  },
+  emptyChatText: {
+    ...material.headline,
+    textAlign: 'center',
+    marginBottom: 10
+  },
+  emptyChatExample: {
+    ...material.body1,
+    textAlign: 'center',
+    color: 'gray'
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  loadingText: {
+    ...material.body1,
+    marginTop: 10
   }
 });
+
 export default ChatSessionScreen;

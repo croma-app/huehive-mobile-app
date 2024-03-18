@@ -224,11 +224,11 @@ function LoginScreen(props) {
           <Text style={styles.title}>{t('Welcome to HueHive (Croma),')}</Text>
         )}
         <Text style={styles.intro}>
-          {props.signupMessage || t('Please Sign in/Sign up to continue...')}
+          {props.signupMessage || t('Please sign in or sign up to continue...')}
         </Text>
         {error && <Notification message={error} onPress={() => setError(undefined)}></Notification>}
 
-        <GoogleButton buttonType="primary" onPress={googleSignIn} />
+        <GoogleButton buttonType={screenType} onPress={googleSignIn} />
 
         <View style={styles.separator}>
           <View style={styles.separatorLine} />
