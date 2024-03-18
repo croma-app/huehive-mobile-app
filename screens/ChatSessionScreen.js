@@ -103,7 +103,8 @@ const ChatSessionScreen = (props) => {
       <LoginScreen
         {...props}
         signupMessage="Please sign in or sign up to use HueHive AI"
-        hideWelcomeMessage={true}></LoginScreen>
+        hideWelcomeMessage={true}
+        reloadScreen={getUserData}></LoginScreen>
     );
   }
 

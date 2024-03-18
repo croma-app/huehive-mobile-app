@@ -104,6 +104,14 @@ function LoginScreen(props) {
     });
   }, [props.navigation, screenType, t, userData]);
 
+  const naviagteAfterLogin = useCallback(() => {
+    if (props.reloadScreen) {
+      props.reloadScreen();
+    } else {
+      props.navigation.goBack();
+    }
+  }, [props]);
+
   const onLogout = useCallback(async () => {
     await removeUserSession();
     setUserData(undefined);
@@ -131,7 +139,7 @@ function LoginScreen(props) {
         );
         user.loggedIn = true;
         setUser(user);
-        props.navigation.goBack();
+        naviagteAfterLogin();
       } catch (error) {
         setError(error.message);
       }
@@ -158,7 +166,7 @@ function LoginScreen(props) {
         );
         user.loggedIn = true;
         setUser(user);
-        props.navigation.goBack();
+        naviagteAfterLogin();
       } catch (error) {
         if (error.response.data.error) {
           setError(error.response.data.error);
@@ -167,7 +175,7 @@ function LoginScreen(props) {
         }
       }
     }
-  }, [confirmPassword, email, fullName, password, props.navigation, screenType, setUser, user]);
+  }, [confirmPassword, email, fullName, naviagteAfterLogin, password, screenType, setUser, user]);
 
   const googleSignIn = async () => {
     try {
@@ -183,7 +191,7 @@ function LoginScreen(props) {
       );
       user.loggedIn = true;
       setUser(user);
-      props.navigation.goBack();
+      naviagteAfterLogin();
     } catch (error) {
       setError(error.message);
     }
@@ -305,6 +313,7 @@ function LoginScreen(props) {
 LoginScreen.propTypes = {
   navigation: PropTypes.any,
   hideWelcomeMessage: PropTypes.bool,
+  reloadScreen: PropTypes.func,
   signupMessage: PropTypes.string | undefined
 };
 
