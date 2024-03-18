@@ -5,7 +5,7 @@ import { extractHexColors } from '../libs/Helpers';
 import { PalettePreviewCard } from './PalettePreviewCard';
 import { CromaContext } from '../store/store';
 
-const ChatCard = ({ sender, userData, message, navigation }) => {
+const ChatCard = ({ sender, message, navigation }) => {
   const { setColorList, setSuggestedName } = useContext(CromaContext);
   const colors = extractHexColors(message);
   const tokens = message.split(/(```[\s\S]+?```)|(\n)/g);
@@ -42,12 +42,12 @@ const ChatCard = ({ sender, userData, message, navigation }) => {
                     {token
                       .replace(/```/g, '')
                       .replace(/color_palette/g, '')
-                      .split(/[0-9]\./g)
+                      .split(/\n+/)
                       .map((line, index) => {
                         return (
                           <>
                             <Text style={styles.code} key={index}>
-                              {index + 1}. {line}
+                              {line}
                             </Text>
                           </>
                         );

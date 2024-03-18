@@ -18,6 +18,7 @@ import ChatCard from '../components/ChatCard';
 import LoginScreen from './LoginScreen';
 import useUserData from '../Hooks/getUserData';
 
+// eslint-disable-next-line no-undef
 const bgImage = require('../assets/images/colorful_background.jpg');
 
 const ExamplePhrase = ({ phrase, onPress }) => (
@@ -110,86 +111,85 @@ const ChatSessionScreen = (props) => {
     <View style={styles.container}>
       <ImageBackground source={bgImage} style={styles.backgroundImage}>
         <View style={styles.bgImageOpecity}>
-        {isCreatingSession ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator animating={true} size="large" color="#ff7875" />
-            <Text style={styles.loadingText}>Creating chat session...</Text>
-          </View>
-        ) : (
-          <>
-            <ScrollView
-              ref={scrollViewRef}
-              style={styles.chat_container}
-              showsVerticalScrollIndicator={false}>
-              {messages.length === 0 ? (
-                <View style={styles.emptyChat}>
-                  <Text style={styles.emptyChatText}>
-                    Welcome to HueHive AI! Start a conversation to create color palettes for your
-                    next project
-                  </Text>
-                  <Text style={styles.emptyChatSubtext}>Here are few examples</Text>
-                  <View style={styles.examplePhrasesContainer}>
-                    <ExamplePhrase
-                      phrase="Create a color palette for a kids website"
-                      onPress={setInputText}
-                    />
-                    <ExamplePhrase
-                      phrase="Design a color palette for a fashion brand"
-                      onPress={setInputText}
-                    />
-                    <ExamplePhrase
-                      phrase="Generate a color scheme for a travel website"
-                      onPress={setInputText}
-                    />
-                    <ExamplePhrase
-                      phrase="Create a color palette for a food blog"
-                      onPress={setInputText}
-                    />
-                    <ExamplePhrase
-                      phrase="Design a color scheme for a fitness app"
-                      onPress={setInputText}
-                    />
-                  </View>
-                </View>
-              ) : (
-                messages.map((message, index) => (
-                  <ChatCard
-                    sender={message.sender_type}
-                    userData={userData}
-                    message={message.message}
-                    key={index}
-                    index={index}
-                    navigation={navigation}
-                  />
-                ))
-              )}
-              <ActivityIndicator animating={isLoading} size="large" color="#ff7875" />
-            </ScrollView>
-
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.input}
-                value={inputText}
-                onChangeText={setInputText}
-                placeholder={
-                  messages.length == 0
-                    ? 'Ex: create a color palette for kids website'
-                    : 'follow up message to change the color palette'
-                }
-              />
-              <TouchableOpacity
-                disabled={isLoading || inputText.trim() === ''}
-                onPress={handleSend}
-                style={
-                  isLoading || inputText.trim() === ''
-                    ? styles.disableSendButton
-                    : styles.sendButton
-                }>
-                <Text style={styles.textSend}> Send </Text>
-              </TouchableOpacity>
+          {isCreatingSession ? (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator animating={true} size="large" color="#ff7875" />
+              <Text style={styles.loadingText}>Creating chat session...</Text>
             </View>
-          </>
-        )}
+          ) : (
+            <>
+              <ScrollView
+                ref={scrollViewRef}
+                style={styles.chat_container}
+                showsVerticalScrollIndicator={false}>
+                {messages.length === 0 ? (
+                  <View style={styles.emptyChat}>
+                    <Text style={styles.emptyChatText}>
+                      Welcome to HueHive AI! Start a conversation to create color palettes for your
+                      next project
+                    </Text>
+                    <Text style={styles.emptyChatSubtext}>Here are few examples</Text>
+                    <View style={styles.examplePhrasesContainer}>
+                      <ExamplePhrase
+                        phrase="Create a color palette for a kids website"
+                        onPress={setInputText}
+                      />
+                      <ExamplePhrase
+                        phrase="Design a color palette for a fashion brand"
+                        onPress={setInputText}
+                      />
+                      <ExamplePhrase
+                        phrase="Generate a color scheme for a travel website"
+                        onPress={setInputText}
+                      />
+                      <ExamplePhrase
+                        phrase="Create a color palette for a food blog"
+                        onPress={setInputText}
+                      />
+                      <ExamplePhrase
+                        phrase="Design a color scheme for a fitness app"
+                        onPress={setInputText}
+                      />
+                    </View>
+                  </View>
+                ) : (
+                  messages.map((message, index) => (
+                    <ChatCard
+                      sender={message.sender_type}
+                      message={message.message}
+                      key={index}
+                      index={index}
+                      navigation={navigation}
+                    />
+                  ))
+                )}
+                <ActivityIndicator animating={isLoading} size="large" color="#ff7875" />
+              </ScrollView>
+
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={styles.input}
+                  value={inputText}
+                  onChangeText={setInputText}
+                  placeholder={
+                    messages.length == 0
+                      ? 'Ex: create a color palette for kids website'
+                      : 'follow up message to change the color palette'
+                  }
+                />
+                <TouchableOpacity
+                  disabled={isLoading || inputText.trim() === ''}
+                  onPress={handleSend}
+                  style={
+                    isLoading || inputText.trim() === ''
+                      ? styles.disableSendButton
+                      : styles.sendButton
+                  }>
+                  <Text style={styles.textSend}> Send </Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
         </View>
       </ImageBackground>
     </View>
