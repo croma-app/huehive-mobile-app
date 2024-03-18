@@ -11,7 +11,6 @@ import {
 import React, { useState, useEffect, useRef } from 'react';
 import { material } from 'react-native-typography';
 import { logEvent } from '../libs/Helpers';
-import { useTranslation } from 'react-i18next';
 import { createChatSession, followUpChatSession, getChatSession } from '../network/chat_session';
 import ChatCard from '../components/ChatCard';
 import LoginScreen from './LoginScreen';
@@ -19,7 +18,6 @@ import useUserData from '../Hooks/getUserData';
 
 const ChatSessionScreen = (props) => {
   const { navigation } = props;
-  const { t } = useTranslation();
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const scrollViewRef = useRef();
@@ -79,7 +77,12 @@ const ChatSessionScreen = (props) => {
   }
 
   if (!userData) {
-    return <LoginScreen {...props} reloadScreen={getUserData}></LoginScreen>;
+    return (
+      <LoginScreen
+        {...props}
+        signupMessage="Please sign in or sign up to use HueHive AI"
+        reloadScreen={getUserData}></LoginScreen>
+    );
   }
 
   return (

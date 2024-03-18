@@ -1,13 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  Dimensions
-} from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, Image } from 'react-native';
 import { View } from 'react-native-animatable';
 import CromaButton from '../components/CromaButton';
 import { material } from 'react-native-typography';
@@ -21,8 +13,9 @@ import {
   removeUserSession
 } from '../libs/EncryptedStoreage';
 import Notification from '../components/Notification';
+import GoogleButton from '../components/GoogleButton';
 
-import { GoogleSignin, GoogleSigninButton } from '@react-native-google-signin/google-signin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const LOGIN = 'LOGIN';
 const SIGN_UP = 'SIGN_UP';
@@ -236,7 +229,9 @@ function LoginScreen(props) {
         {props.reloadScreen === undefined && (
           <Text style={styles.title}>{t('Welcome to HueHive (Croma),')}</Text>
         )}
-        <Text style={styles.intro}>{t('Please Singin/Signup to continue...')}</Text>
+        <Text style={styles.intro}>
+          {props.signupMessage || t('Please Singin/Signup to continue...')}
+        </Text>
         {error && <Notification message={error} onPress={() => setError(undefined)}></Notification>}
         {screenType === SIGN_UP && (
           <>
@@ -293,14 +288,8 @@ function LoginScreen(props) {
           onPress={onSubmit}>
           {t(LOGIN_AND_SIGNUP_TEXT[screenType].buttonText)}
         </CromaButton>
-
-        <GoogleSigninButton
-          style={{
-            width: Dimensions.get('window').width * (95 / 100),
-            height: 60
-          }}
-          size={GoogleSigninButton.Size.Wide}
-          color={GoogleSigninButton.Color.Dark}
+        <GoogleButton
+          buttonType={screenType == 'LOGIN' ? 'signin' : 'signup'}
           onPress={googleSignIn}
         />
       </View>
