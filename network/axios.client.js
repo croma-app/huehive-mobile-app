@@ -13,7 +13,7 @@ const getAxiosClient = async function () {
       accept: 'application/json',
       'Content-Type': 'application/json',
       'X-User-Email': userAuthInfo?.email || null,
-      'X-User-Token': userAuthInfo?.userToken || null,
+      'X-User-Token': userAuthInfo?.token || null,
       'X-User-Device-Id': userDeviceId || null
     }
   });

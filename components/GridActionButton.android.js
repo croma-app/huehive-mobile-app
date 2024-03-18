@@ -139,19 +139,15 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
           {
             icon: (
               <Image
-                style={{ height: 30, width: 30 }}
+                style={{ height: 20, width: 20 }}
                 // eslint-disable-next-line no-undef
-                source={require('../assets/images/icon-chatgpt.png')}></Image>
+                source={require('../assets/images/icon.png')}></Image>
             ),
             text1: t('Create using'),
-            text2: t(' ChatGPT'),
+            text2: t('HueHive AI'),
             onPress: async () => {
-              logEvent('hm_create_palette_using_chatgpt');
-              let link = 'https://huehive.co/';
-              if (userData && userData.token) {
-                link = link + 'users/login_using_token?token=' + userData.token;
-              }
-              Linking.openURL(link);
+              logEvent('chat_session_action_button');
+              navigation.navigate('ChatSession');
             }
           },
           isPro
