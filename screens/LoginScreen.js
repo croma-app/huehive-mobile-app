@@ -174,7 +174,7 @@ function LoginScreen(props) {
     }
   }, [confirmPassword, email, fullName, password, props.navigation, screenType, setUser, user]);
 
-  const signIn = async () => {
+  const googleSignIn = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
@@ -233,7 +233,9 @@ function LoginScreen(props) {
   return (
     <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
       <View style={[styles.container, { minHeight: screenType === LOGIN ? 400 : 500 }]}>
-        <Text style={styles.title}>{t('Welcome to HueHive (Croma),')}</Text>
+        {props.reloadScreen === undefined && (
+          <Text style={styles.title}>{t('Welcome to HueHive (Croma),')}</Text>
+        )}
         <Text style={styles.intro}>{t('Please Singin/Signup to continue...')}</Text>
         {error && <Notification message={error} onPress={() => setError(undefined)}></Notification>}
         {screenType === SIGN_UP && (
@@ -299,7 +301,7 @@ function LoginScreen(props) {
           }}
           size={GoogleSigninButton.Size.Wide}
           color={GoogleSigninButton.Color.Dark}
-          onPress={signIn}
+          onPress={googleSignIn}
         />
       </View>
       <TouchableOpacity
@@ -317,7 +319,8 @@ function LoginScreen(props) {
 }
 
 LoginScreen.propTypes = {
-  navigation: PropTypes.any
+  navigation: PropTypes.any,
+  reloadScreen: PropTypes.func
 };
 
 const styles = StyleSheet.create({

@@ -141,10 +141,10 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
               <Image
                 style={{ height: 30, width: 30 }}
                 // eslint-disable-next-line no-undef
-                source={require('../assets/images/icon-chatgpt.png')}></Image>
+                source={require('../assets/images/icon.png')}></Image>
             ),
             text1: t('Create using'),
-            text2: t(' ChatGPT'),
+            text2: t(' AI'),
             onPress: async () => {
               logEvent('chat_session_action_button');
               navigation.navigate('ChatSession');

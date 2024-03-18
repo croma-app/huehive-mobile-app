@@ -24,7 +24,7 @@ const ChatCard = ({ sender, userData, message, navigation }) => {
           style={styles.avatar}
           source={
             // eslint-disable-next-line no-undef
-            require('../assets/images/icon-chatgpt.png')
+            require('../assets/images/icon.png')
           }
         />
       )}

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   ScrollView,
   StyleSheet,
@@ -12,24 +13,21 @@ import { material } from 'react-native-typography';
 import { logEvent } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
 import { createChatSession, followUpChatSession, getChatSession } from '../network/chat_session';
-import { retrieveUserSession } from '../libs/EncryptedStoreage';
 import ChatCard from '../components/ChatCard';
+import LoginScreen from './LoginScreen';
+import useUserData from '../Hooks/getUserData';
 
-const ChatSessionScreen = ({ navigation }) => {
+const ChatSessionScreen = (props) => {
+  const { navigation } = props;
   const { t } = useTranslation();
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
-  const [userData, setUserData] = useState();
   const scrollViewRef = useRef();
   const [isLoading, setIsLoading] = useState(false);
 
+  const { userData, isUserDataLoading, getUserData } = useUserData();
+
   useEffect(() => {
-    (async () => {
-      const userData = await retrieveUserSession();
-      if (userData) {
-        setUserData(userData);
-      }
-    })();
     logEvent('chat_session_screen');
   }, []);
 
@@ -71,6 +69,18 @@ const ChatSessionScreen = ({ navigation }) => {
       setIsLoading(false);
     }
   };
+
+  if (isUserDataLoading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator animating={true} size="large" color="#ff7875" />
+      </View>
+    );
+  }
+
+  if (!userData) {
+    return <LoginScreen {...props} reloadScreen={getUserData}></LoginScreen>;
+  }
 
   return (
     <View style={styles.container}>
