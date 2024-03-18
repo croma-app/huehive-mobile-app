@@ -14,20 +14,21 @@ const ChatCard = ({ sender, userData, message, navigation }) => {
     <View
       style={[
         styles.chatCard,
-        sender === 'user' ? { backgroundColor: '#fffbe6' } : { marginLeft: 20, marginRight: 10 }
+        sender === 'user'
+          ? { backgroundColor: '#fffbe6', marginLeft: 40, marginRight: 15 }
+          : { marginRight: 20, marginLeft: 15 }
       ]}>
-      <View style={sender === 'user' ? styles.chatCardLeftArrow : styles.chatCardRightArrow}></View>
-      <Image
-        style={styles.avatar}
-        source={
-          sender === 'user'
-            ? {
-                uri: userData.avatar_url
-              }
-            : // eslint-disable-next-line no-undef
-              require('../assets/images/icon-chatgpt.png')
-        }
-      />
+      <View style={sender === 'user' ? styles.chatCardRightArrow : styles.chatCardLeftArrow}></View>
+      {sender !== 'user' && (
+        <Image
+          style={styles.avatar}
+          source={
+            // eslint-disable-next-line no-undef
+            require('../assets/images/icon-chatgpt.png')
+          }
+        />
+      )}
+
       {sender === 'user' ? (
         <Text style={styles.message}>{message}</Text>
       ) : (
@@ -80,30 +81,32 @@ const styles = {
     padding: 5,
     borderRadius: 10,
     position: 'relative',
-    marginLeft: 10,
-    marginRight: 20
+    marginLeft: 0,
+    marginRight: 0
   },
   chatCardLeftArrow: {
     position: 'absolute',
     width: 20,
-    height: 10,
+    height: 15,
     backgroundColor: 'transparent',
-    borderTopWidth: 10,
-    borderLeftWidth: 10,
+    borderTopWidth: 15,
+    borderLeftWidth: 15,
     borderTopColor: '#fffbe6',
     borderLeftColor: 'transparent',
-    left: -10
+    left: -10,
+    borderRadius: 2
   },
   chatCardRightArrow: {
     position: 'absolute',
     width: 20,
-    height: 10,
+    height: 15,
     backgroundColor: 'transparent',
-    borderTopWidth: 10,
-    borderRightWidth: 10,
+    borderTopWidth: 15,
+    borderRightWidth: 15,
     borderTopColor: '#fff7e6',
     borderRightColor: 'transparent',
-    right: -10
+    right: -10,
+    borderRadius: 2
   },
   avatar: {
     width: 20,
