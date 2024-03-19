@@ -1,5 +1,4 @@
 import React from 'react';
-import { NativeModules } from 'react-native';
 import Color from 'pigment/full';
 import RNColorThief from 'react-native-color-thief';
 import { notifyMessage } from '../libs/Helpers';

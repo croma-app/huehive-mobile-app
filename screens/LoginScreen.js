@@ -1,13 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  Dimensions
-} from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, Image } from 'react-native';
 import { View } from 'react-native-animatable';
 import CromaButton from '../components/CromaButton';
 import { material } from 'react-native-typography';
@@ -21,8 +13,9 @@ import {
   removeUserSession
 } from '../libs/EncryptedStoreage';
 import Notification from '../components/Notification';
+import GoogleButton from '../components/GoogleButton';
 
-import { GoogleSignin, GoogleSigninButton } from '@react-native-google-signin/google-signin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const LOGIN = 'LOGIN';
 const SIGN_UP = 'SIGN_UP';
@@ -38,7 +31,7 @@ const LOGIN_AND_SIGNUP_TEXT = {
   SIGN_UP: {
     title: 'Signup',
     orText: 'Or Sign Up with',
-    linkTitle: 'Already have and account?',
+    linkTitle: 'Already have an account?',
     linkText: ' Login Now',
     buttonText: ' Sign up'
   }
@@ -85,6 +78,7 @@ function LoginScreen(props) {
   const [screenType, setScreenType] = useState(SIGN_UP);
   const { t } = useTranslation();
   const { user, setUser } = React.useContext(CromaContext);
+
   useEffect(() => {
     GoogleSignin.configure({
       webClientId: '865618605576-j2tb9toevqc7tonmbp01dim1ddvod7r0.apps.googleusercontent.com',
@@ -92,6 +86,7 @@ function LoginScreen(props) {
       offlineAccess: false
     });
   }, []);
+
   useEffect(() => {
     // check if already logged in
     (async () => {
@@ -108,6 +103,14 @@ function LoginScreen(props) {
       title: userData ? t('Profile') : t(LOGIN_AND_SIGNUP_TEXT[screenType].title)
     });
   }, [props.navigation, screenType, t, userData]);
+
+  const naviagteAfterLogin = useCallback(() => {
+    if (props.reloadScreen) {
+      props.reloadScreen();
+    } else {
+      props.navigation.goBack();
+    }
+  }, [props]);
 
   const onLogout = useCallback(async () => {
     await removeUserSession();
@@ -136,7 +139,7 @@ function LoginScreen(props) {
         );
         user.loggedIn = true;
         setUser(user);
-        props.navigation.goBack();
+        naviagteAfterLogin();
       } catch (error) {
         setError(error.message);
       }
@@ -163,7 +166,7 @@ function LoginScreen(props) {
         );
         user.loggedIn = true;
         setUser(user);
-        props.navigation.goBack();
+        naviagteAfterLogin();
       } catch (error) {
         if (error.response.data.error) {
           setError(error.response.data.error);
@@ -172,9 +175,9 @@ function LoginScreen(props) {
         }
       }
     }
-  }, [confirmPassword, email, fullName, password, props.navigation, screenType, setUser, user]);
+  }, [confirmPassword, email, fullName, naviagteAfterLogin, password, screenType, setUser, user]);
 
-  const signIn = async () => {
+  const googleSignIn = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
@@ -188,18 +191,9 @@ function LoginScreen(props) {
       );
       user.loggedIn = true;
       setUser(user);
-      props.navigation.goBack();
+      naviagteAfterLogin();
     } catch (error) {
       setError(error.message);
-      //if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-      // user cancelled the login flow
-      //} else if (error.code === statusCodes.IN_PROGRESS) {
-      // operation (e.g. sign in) is in progress already
-      //} else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-      // play services not available or outdated
-      //} else {
-      // some other error happened
-      //}
     }
   };
 
@@ -230,12 +224,24 @@ function LoginScreen(props) {
       </ScrollView>
     );
   }
+
   return (
     <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
       <View style={[styles.container, { minHeight: screenType === LOGIN ? 400 : 500 }]}>
-        <Text style={styles.title}>{t('Welcome to HueHive (Croma),')}</Text>
-        <Text style={styles.intro}>{t('Please Singin/Signup to continue...')}</Text>
+        {!props.hideWelcomeMessage && <Text style={styles.title}>{t('Welcome to HueHive')}</Text>}
+        <Text style={styles.intro}>
+          {props.signupMessage || t('Please sign in or sign up to continue...')}
+        </Text>
         {error && <Notification message={error} onPress={() => setError(undefined)}></Notification>}
+
+        <GoogleButton buttonType={screenType} onPress={googleSignIn} />
+
+        <View style={styles.separator}>
+          <View style={styles.separatorLine} />
+          <Text style={styles.separatorText}>or</Text>
+          <View style={styles.separatorLine} />
+        </View>
+
         {screenType === SIGN_UP && (
           <>
             {validationErrors && validationErrors.fullName && (
@@ -282,25 +288,13 @@ function LoginScreen(props) {
             password={true}
           />
         )}
-        {screenType === LOGIN && (
-          <Text style={styles.forgotPassword}>{t('Forgot password ?')}</Text>
-        )}
+        {screenType === LOGIN && <Text style={styles.forgotPassword}>{t('Forgot password?')}</Text>}
         <CromaButton
           style={{ backgroundColor: '#ff5c59' }}
           textStyle={{ color: '#fff' }}
           onPress={onSubmit}>
           {t(LOGIN_AND_SIGNUP_TEXT[screenType].buttonText)}
         </CromaButton>
-
-        <GoogleSigninButton
-          style={{
-            width: Dimensions.get('window').width * (95 / 100),
-            height: 60
-          }}
-          size={GoogleSigninButton.Size.Wide}
-          color={GoogleSigninButton.Color.Dark}
-          onPress={signIn}
-        />
       </View>
       <TouchableOpacity
         onPress={() => {
@@ -317,7 +311,10 @@ function LoginScreen(props) {
 }
 
 LoginScreen.propTypes = {
-  navigation: PropTypes.any
+  navigation: PropTypes.any,
+  hideWelcomeMessage: PropTypes.bool,
+  reloadScreen: PropTypes.func,
+  signupMessage: PropTypes.string | undefined
 };
 
 const styles = StyleSheet.create({
@@ -350,10 +347,6 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     fontSize: 13
   },
-  orSignUp: {
-    padding: 10,
-    fontSize: 13
-  },
   input: {
     borderWidth: 1,
     borderColor: '#000',
@@ -362,11 +355,19 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingLeft: 10
   },
-  orSignUpContainer: {
-    display: 'flex',
+  separator: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    marginVertical: 20
+  },
+  separatorLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#ccc'
+  },
+  separatorText: {
+    marginHorizontal: 10,
+    fontSize: 16
   },
   changePage: {
     display: 'flex',
@@ -374,16 +375,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: 200
-  },
-  leftLine: {
-    height: 1,
-    width: '25%',
-    backgroundColor: '#000'
-  },
-  rightLine: {
-    height: 1,
-    width: '25%',
-    backgroundColor: '#000'
   },
   bold: {
     fontWeight: 'bold'
@@ -397,11 +388,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   logo: {
-    borderColor: '#000',
     height: 50,
     width: 50,
-    marginTop: 30,
-    padding: 3
+    marginTop: 30
   }
 });
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StatusBar, StyleSheet, View, TouchableOpacity } from 'react-native';
 import AboutUsScreen from './screens/AboutUsScreen';
+import ChatSessionScreen from './screens/ChatSessionScreen';
 import ColorPickerScreen from './screens/ColorPickerScreen';
 import HomeScreen from './screens/HomeScreen';
 import Colors from './constants/Colors';
@@ -104,6 +105,11 @@ export default function App() {
                     name={'AboutUs'}
                     options={{ title: t('About us') }}
                     component={AboutUsScreen}
+                  />
+                  <Stack.Screen
+                    name={'ChatSession'}
+                    options={{ title: t('HueHive AI assistant') }}
+                    component={ChatSessionScreen}
                   />
                   <Stack.Screen
                     name="ColorDetails"
