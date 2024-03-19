@@ -3,6 +3,7 @@ import * as RNIap from 'react-native-iap';
 import { requestPurchase, getProducts } from 'react-native-iap';
 
 const productSku = function () {
+  //return 'local_test1';
   return Platform.OS === 'android' ? 'croma_pro' : 'app_croma';
 };
 const logEvent = (eventName, value) => {
@@ -32,6 +33,7 @@ const purchase = async function (setPurchase, productSKU) {
       andDangerouslyFinishTransactionAutomatically: true
     });
     await setPurchase(details);
+    RNIap.finishTransaction(details, false);
     logEvent('purchase_successful');
     notifyMessage('Congrats, You are now a pro user!');
   } catch (err) {
