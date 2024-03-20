@@ -119,7 +119,7 @@ const saveFile = async (allPalettes) => {
       if (Platform.OS == 'android') {
         RNFetchBlob.android.addCompleteDownload({
           title: fileName,
-          description: t('Croma palettes exported successfully'),
+          description: t('Palettes exported successfully'),
           mime: 'text/json',
           path: path,
           showNotification: true

@@ -22,8 +22,7 @@ export default function ColorDetailScreen({ navigation }) {
         onPress={() => {
           setDetailedColor(detailedColor);
           navigation.navigate('Palettes');
-        }}
-      >
+        }}>
         {t('See color palettes')}
       </CromaButton>
     </ScrollView>
