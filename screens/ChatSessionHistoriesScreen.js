@@ -1,14 +1,37 @@
-import { ScrollView, StyleSheet, Text } from 'react-native';
-import React from 'react';
+import { ScrollView, StyleSheet, Text, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from 'react';
 import { material } from 'react-native-typography';
 import { logEvent } from '../libs/Helpers';
+import { getChatSessions } from '../network/chat_session';
 
 const ChatSessionHistoriesScreen = () => {
   logEvent('chat_session_histories_screen');
+  const [chatSessions, setChatSessions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchChatSessions = async () => {
+      const sessions = await getChatSessions();
+      setChatSessions(sessions.data);
+      setLoading(false);
+    };
+
+    fetchChatSessions();
+  }, []);
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <Text>Hello.....</Text>
+      {loading ? (
+        <ActivityIndicator size="large" color="black" />
+      ) : (
+        <>
+          {chatSessions.map((session, index) => (
+            <Text key={index} style={styles.line}>
+              {session.messages.length > 0 ? session.messages[0].message : 'Untitled'}
+            </Text>
+          ))}
+        </>
+      )}
     </ScrollView>
   );
 };
