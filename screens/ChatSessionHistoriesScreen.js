@@ -14,6 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import ActionButton from 'react-native-action-button';
 import Colors from '../constants/Colors';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const ChatSessionHistoriesScreen = () => {
   logEvent('chat_session_histories_screen');
@@ -41,7 +42,7 @@ const ChatSessionHistoriesScreen = () => {
           <>
             {chatSessions.length === 0 && (
               <Text style={styles.noChatSessionMessage}>
-                No chat sessions yet. Start a new one by clicking the + button.
+                No chat sessions yet. Start a new one by clicking the action button.
               </Text>
             )}
             {chatSessions.map((session, index) => (
@@ -76,6 +77,7 @@ const ChatSessionHistoriesScreen = () => {
           logEvent('add_chat_session_fab');
           navigation.navigate('ChatSession');
         }}
+        renderIcon={() => <FontAwesome5 name="magic" size={20} color="white" />}
         style={styles.actionButton}
       />
     </>
