@@ -33,7 +33,6 @@ const purchase = async function (setPurchase, productSKU) {
       andDangerouslyFinishTransactionAutomatically: true
     });
     await setPurchase(details);
-    RNIap.finishTransaction(details, false);
     logEvent('purchase_successful');
     notifyMessage('Congrats, You are now a pro user!');
   } catch (err) {
