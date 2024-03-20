@@ -12,7 +12,7 @@ import {
 import Colors from '../constants/Colors';
 import React, { useState, useEffect, useRef } from 'react';
 import { material } from 'react-native-typography';
-import { logEvent, notifyMessage } from '../libs/Helpers';
+import { logEvent } from '../libs/Helpers';
 import { createChatSession, followUpChatSession, getChatSession } from '../network/chat_session';
 import ChatCard from '../components/ChatCard';
 import LoginScreen from './LoginScreen';

@@ -30,6 +30,7 @@ const ChatSessionHistoriesScreen = () => {
     fetchChatSessions();
   }, []);
 
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {loading ? (
@@ -46,10 +47,12 @@ const ChatSessionHistoriesScreen = () => {
                   <Text style={styles.message}>
                     {session.messages.length > 0 ? session.messages[0].message : 'Untitled'}
                   </Text>
-                  <Text style={styles.updatedAt}>{moment(session.updated_at).format('MMMM D, YYYY')}</Text>
-                </View>
-                <View style={styles.iconContainer}>
-                  <Text style={styles.icon}>{'>'}</Text>
+                  <View style={styles.metaContainer}>
+                    <Text style={styles.updatedAt}>
+                      {moment(session.updated_at).format('MMMM D, YYYY')}
+                    </Text>
+                    <Text style={styles.messageCount}>{session.messages.length} messages</Text>
+                  </View>
                 </View>
               </View>
             </TouchableOpacity>
@@ -87,10 +90,19 @@ const styles = StyleSheet.create({
   messageContainer: {
     flex: 1
   },
+  metaContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4
+  },
   updatedAt: {
     ...material.caption,
     color: '#888',
-    marginTop: 4
+    marginRight: 8
+  },
+  messageCount: {
+    ...material.caption,
+    color: '#888'
   },
   message: {
     ...material.body1,
