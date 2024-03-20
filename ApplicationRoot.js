@@ -25,6 +25,7 @@ import { HEADER_HEIGHT } from './constants/Layout';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { t } from 'i18next';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import useIAPConnection from './hooks/useIAPConnection';
 const Stack = createNativeStackNavigator();
 
 /*import { LogBox } from 'react-native'; // enabled for recording demos
@@ -40,6 +41,7 @@ export default function App() {
       setIsPalettesLoaded(true);
     })();
   }, []);
+  useIAPConnection();
 
   const spinner = (
     <View style={{ flex: 1, marginTop: '20%' }}>
