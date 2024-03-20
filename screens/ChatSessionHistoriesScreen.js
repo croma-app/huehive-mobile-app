@@ -12,6 +12,8 @@ import { logEvent } from '../libs/Helpers';
 import { getChatSessions } from '../network/chat_session';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
+import ActionButton from 'react-native-action-button';
+import Colors from '../constants/Colors';
 
 const ChatSessionHistoriesScreen = () => {
   logEvent('chat_session_histories_screen');
@@ -30,36 +32,53 @@ const ChatSessionHistoriesScreen = () => {
     fetchChatSessions();
   }, []);
 
-
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {loading ? (
-        <ActivityIndicator size="large" color="black" />
-      ) : (
-        <>
-          {chatSessions.map((session, index) => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate('ChatSession', { messages: session.messages })}
-              key={index}
-              style={styles.card}>
-              <View style={styles.cardContent}>
-                <View style={styles.messageContainer}>
-                  <Text style={styles.message}>
-                    {session.messages.length > 0 ? session.messages[0].message : 'Untitled'}
-                  </Text>
-                  <View style={styles.metaContainer}>
-                    <Text style={styles.updatedAt}>
-                      {moment(session.updated_at).format('MMMM D, YYYY')}
+    <>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        {loading ? (
+          <ActivityIndicator size="large" color="black" />
+        ) : (
+          <>
+            {chatSessions.length === 0 && (
+              <Text style={styles.noChatSessionMessage}>
+                No chat sessions yet. Start a new one by clicking the + button.
+              </Text>
+            )}
+            {chatSessions.map((session, index) => (
+              <TouchableOpacity
+                onPress={() => navigation.navigate('ChatSession', { messages: session.messages })}
+                key={index}
+                style={styles.card}>
+                <View style={styles.cardContent}>
+                  <View style={styles.messageContainer}>
+                    <Text style={styles.message}>
+                      {session.messages.length > 0 ? session.messages[0].message : 'Untitled'}
                     </Text>
-                    <Text style={styles.messageCount}>{session.messages.length} messages</Text>
+                    <View style={styles.metaContainer}>
+                      <Text style={styles.updatedAt}>
+                        {moment(session.updated_at).format('MMMM D, YYYY')}
+                      </Text>
+                      <Text style={styles.messageCount}>{session.messages.length} messages</Text>
+                    </View>
                   </View>
                 </View>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </>
-      )}
-    </ScrollView>
+              </TouchableOpacity>
+            ))}
+          </>
+        )}
+      </ScrollView>
+      <ActionButton
+        offsetY={76}
+        bgColor="rgba(68, 68, 68, 0.6)"
+        fixNativeFeedbackRadius={true}
+        buttonColor={Colors.fabPrimary}
+        onPress={() => {
+          logEvent('add_chat_session_fab');
+          navigation.navigate('ChatSession');
+        }}
+        style={styles.actionButton}
+      />
+    </>
   );
 };
 
@@ -121,6 +140,12 @@ const styles = StyleSheet.create({
     ...material.body1,
     fontSize: 16,
     color: '#888'
+  },
+  actionButton: {},
+  noChatSessionMessage: {
+    ...material.headline,
+    textAlign: 'center',
+    marginTop: 100
   }
 });
 

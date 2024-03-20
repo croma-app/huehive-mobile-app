@@ -22,8 +22,7 @@ export default function PaletteLibraryScreen({ navigation }) {
               logEvent('hm_matrial_palettes');
               setCommonPalettes(palettes);
               navigation.navigate('CommonPalettes');
-            }}
-          >
+            }}>
             <View>
               <View>
                 <Text style={styles.title}>{palettes.name}</Text>
