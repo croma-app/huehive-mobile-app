@@ -23,6 +23,7 @@
     "expo-font": "^10.0.3",
     "expo-permissions": "^13.0.3",
     "i18next": "^22.0.4",
+    "moment": "^2.30.1",
     "node-libs-react-native": "^1.2.1",
     "pigment": "^0.1.0",
     "react": "17.0.2",

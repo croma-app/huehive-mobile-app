@@ -1,11 +1,22 @@
-import { ScrollView, StyleSheet, Text, ActivityIndicator } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  ActivityIndicator,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { material } from 'react-native-typography';
 import { logEvent } from '../libs/Helpers';
 import { getChatSessions } from '../network/chat_session';
+import { useNavigation } from '@react-navigation/native';
+import moment from 'moment';
 
 const ChatSessionHistoriesScreen = () => {
   logEvent('chat_session_histories_screen');
+  const navigation = useNavigation();
+
   const [chatSessions, setChatSessions] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -26,9 +37,22 @@ const ChatSessionHistoriesScreen = () => {
       ) : (
         <>
           {chatSessions.map((session, index) => (
-            <Text key={index} style={styles.line}>
-              {session.messages.length > 0 ? session.messages[0].message : 'Untitled'}
-            </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('ChatSession', { messages: session.messages })}
+              key={index}
+              style={styles.card}>
+              <View style={styles.cardContent}>
+                <View style={styles.messageContainer}>
+                  <Text style={styles.message}>
+                    {session.messages.length > 0 ? session.messages[0].message : 'Untitled'}
+                  </Text>
+                  <Text style={styles.updatedAt}>{moment(session.updated_at).format('MMMM D, YYYY')}</Text>
+                </View>
+                <View style={styles.iconContainer}>
+                  <Text style={styles.icon}>{'>'}</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
           ))}
         </>
       )}
@@ -38,32 +62,53 @@ const ChatSessionHistoriesScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 12,
-    paddingVertical: 12
+    paddingHorizontal: 16,
+    paddingVertical: 16
   },
-  line: {
-    ...material.body1,
-    fontSize: 15,
-    textAlign: 'justify'
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    marginBottom: 16,
+    padding: 16,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4
   },
-  icon: {
-    fontSize: 40,
-    color: 'black'
-  },
-  linksMainView: {
-    paddingVertical: 15
-  },
-  linkView: {
-    paddingVertical: 20,
+  cardContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center'
   },
-  subtitle: {
-    fontSize: 18,
-    textAlign: 'center'
+  messageContainer: {
+    flex: 1
   },
-  link: {
-    fontSize: 14,
-    color: 'blue'
+  updatedAt: {
+    ...material.caption,
+    color: '#888',
+    marginTop: 4
+  },
+  message: {
+    ...material.body1,
+    fontSize: 16,
+    color: '#333'
+  },
+  iconContainer: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#eee',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  icon: {
+    ...material.body1,
+    fontSize: 16,
+    color: '#888'
   }
 });
 
