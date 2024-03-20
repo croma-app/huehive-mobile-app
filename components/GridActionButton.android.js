@@ -14,6 +14,7 @@ import { CromaContext } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { retrieveUserSession } from '../libs/EncryptedStoreage';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   const { t } = useTranslation();
@@ -137,12 +138,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
             }
           },
           {
-            icon: (
-              <Image
-                style={{ height: 20, width: 20 }}
-                // eslint-disable-next-line no-undef
-                source={require('../assets/images/icon.png')}></Image>
-            ),
+            icon: <FontAwesome5 name="magic" size={20} color={Colors.fabPrimary} />,
             text1: t('Create using'),
             text2: t('HueHive AI'),
             onPress: async () => {

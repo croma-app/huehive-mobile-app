@@ -28,8 +28,8 @@ const ExamplePhrase = ({ phrase, onPress }) => (
 );
 
 const ChatSessionScreen = (props) => {
-  const { navigation } = props;
-  const [messages, setMessages] = useState([]);
+  const { route, navigation } = props;
+  const [messages, setMessages] = useState(route.params?.messages || []);
   const [inputText, setInputText] = useState('');
   const scrollViewRef = useRef();
   const [isLoading, setIsLoading] = useState(false);

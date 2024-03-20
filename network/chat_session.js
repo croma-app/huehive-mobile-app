@@ -16,3 +16,9 @@ export const followUpChatSession = async (id, chatSession) => {
   const axiosClient = await getAxiosClient();
   return axiosClient.patch(`chat_sessions/${id}.json`, chatSession);
 };
+
+export const getChatSessions = async () => {
+  const axiosClient = await getAxiosClient();
+  // https://huehive.co/chat_sessions.json?chat_session_type=color_palette
+  return axiosClient.get('chat_sessions.json?chat_session_type=color_palette');
+};
