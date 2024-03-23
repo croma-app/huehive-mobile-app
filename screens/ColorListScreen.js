@@ -24,9 +24,11 @@ export default function ColorListScreen({ navigation }) {
   logEvent('color_list_screen');
   return (
     <ScrollView style={styles.listview} showsVerticalScrollIndicator={false}>
-      {colors.map((color) => (
-        <SingleColorView key={color.color} color={color} />
-      ))}
+      <View>
+        {colors.map((color) => (
+          <SingleColorView key={color.color} color={color} />
+        ))}
+      </View>
       <CromaButton
         onPress={() => {
           navigation.navigate('SavePalette');
@@ -48,7 +50,7 @@ function uniqueColors(colors) {
   return uniqueColors;
 }
 
-const CustomHeader = ({ navigation }) => {
+const CustomHeader = () => {
   const { t } = useTranslation();
 
   return (

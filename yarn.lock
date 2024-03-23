@@ -3547,10 +3547,10 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4, create-hmac@^1.1.7:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-croma-color-picker@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/croma-color-picker/-/croma-color-picker-1.1.4.tgz#595be3a6803e7e085170a04d5c9398c8f6cb33c9"
-  integrity sha512-HSwRtJWP+D/OxRvcGIC+cxU4vpETM5cyR6t8AfjscC5N3CxDi5RbFGXHdDjxrRpZ9xt82xTQ0Iljysq7tr4uNg==
+croma-color-picker@^1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/croma-color-picker/-/croma-color-picker-1.1.5.tgz#687d5ee1b9838317aadb61b9075bba2f9decceae"
+  integrity sha512-RvOSAEmNeBrssDu6VRoExrccwE1MR+Q6q/ft6qLCN2XlCyNTr+VRIz4TMMKZj+jcWXo0mB2nReS5SM392D3h2A==
   dependencies:
     pigment "^0.1.0"
     react-native-platform-touchable "^1.1.1"

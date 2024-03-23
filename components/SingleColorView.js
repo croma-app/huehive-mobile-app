@@ -12,8 +12,7 @@ export class SingleColorView extends React.Component {
           }
           Clipboard.setString(this.props.color.color);
         }}
-        style={[styles.container, { backgroundColor: this.props.color.color }]}
-      >
+        style={[styles.container, { backgroundColor: this.props.color.color }]}>
         <Text style={styles.colorText}>
           {this.props.color.color +
             (this.props.color.name ? ' (' + this.props.color.name + ')' : '')}

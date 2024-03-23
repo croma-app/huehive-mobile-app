@@ -119,7 +119,9 @@ export const PaletteCard = (props) => {
             <MultiColorView {...props}></MultiColorView>
           </ViewShot>
           <View style={styles.bottom}>
-            <Text style={styles.label}>{props.name}</Text>
+            <Text style={styles.label}>
+              {props.name.substring(0, 50) + (props.name.length > 50 ? '...' : '')}
+            </Text>
             <View style={styles.actionButtonsView}>
               <TouchableOpacity onPress={onDownload} style={styles.actionButton}>
                 <FontAwesome size={20} name="download" />
@@ -131,6 +133,7 @@ export const PaletteCard = (props) => {
                 onPress={(event) => {
                   event.preventDefault();
                   event.stopPropagation();
+                  logEvent('home_screen_palette_card_delete');
                   setAnimationType('fadeOutRightBig');
                   setTimeout(() => {
                     deletePaletteLocal();
