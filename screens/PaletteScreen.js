@@ -149,7 +149,7 @@ const CustomHeader = ({ currentPaletteName }) => {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        width: '95%'
+        width: '90%'
       }}>
       {isEditingPaletteName ? (
         <>
@@ -170,9 +170,9 @@ const CustomHeader = ({ currentPaletteName }) => {
           <Text
             style={{
               color: '#ffffff',
-              fontSize: 18
+              fontSize: 16
             }}>
-            {paletteName}
+            {paletteName.substring(0, 30) + (paletteName.length > 30 ? '...' : '')}
           </Text>
           <TouchableOpacity onPress={onEdit}>
             <Feather name="edit" size={24} color="white" />
@@ -201,6 +201,7 @@ const styles = StyleSheet.create({
   actionButton: {},
   input: {
     color: '#ffffff',
-    fontSize: 18
+    fontSize: 18,
+    maxWidth: '80%'
   }
 });
