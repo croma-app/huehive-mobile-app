@@ -18,9 +18,11 @@ const styles = StyleSheet.create({
   palette: {
     alignItems: 'stretch',
     flexDirection: 'row',
-    height: 112
+    height: 112,
+    overflow: 'hidden'
   },
   color: {
-    flex: 1
+    flex: 1,
+    marginStart: -1
   }
 });

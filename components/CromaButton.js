@@ -54,7 +54,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    borderRadius: 8
   },
   text: {
     textTransform: 'uppercase',

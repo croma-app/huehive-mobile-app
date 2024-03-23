@@ -109,7 +109,8 @@ const styles = StyleSheet.create({
     elevation: 2,
     height: 92,
     marginVertical: 10,
-    padding: 10
+    padding: 10,
+    borderRadius: 8
   },
   title: {
     fontWeight: '700'
