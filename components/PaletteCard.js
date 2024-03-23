@@ -131,6 +131,7 @@ export const PaletteCard = (props) => {
                 onPress={(event) => {
                   event.preventDefault();
                   event.stopPropagation();
+                  logEvent('home_screen_palette_card_delete');
                   setAnimationType('fadeOutRightBig');
                   setTimeout(() => {
                     deletePaletteLocal();

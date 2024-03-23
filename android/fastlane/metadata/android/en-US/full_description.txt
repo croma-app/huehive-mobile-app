@@ -1,21 +1,22 @@
-Croma is a simple color palette manager and color picker made for designers, aiming to make it quick and fun to create and share color palettes on the go.
+HueHive is a color palette manager(powered by AI) and color picker made for designers, aiming to make it quick and fun to create and share color palettes on the go.
 
 
 KEY FEATURES
 
+• Generate, preview and modify color palettes using HueHive AI using a chat assistant.
 • Automatically extract prominent colors from an image from your gallery or camera.
 • Manually pick any number of colors in an object with your camera.
 • Manually pick any number of colors from images.
 • Recognize and save hex color codes in the text using your camera.
-• Generate palettes with various color models such as complementary, split-complementary, triadic, tetradic, analogous, monochromatic etc.
+• Generate palettes with various color models such as complementary, split complementary, Split complementary CW, split complementary CCW, triadic, Clash, natural, analogous, four tone CW,four tone CCW, Five tone A to E, Six tone CW, Six tone CCW, monochromatic.
 • Share palettes with a link for quick preview.
 • View various information about a color and convert to other color codes.
+    • HEX, RGB, HSL, HSV, HWB, CMYK, CIELAB, Lumninance and darkness   
 • Copy color codes to your clipboard with a tap.
 • Add colors using various color code formats including CSS named colors.
-• A color palette library including Material design palettes, CSS named colors etc.
+• A color palette library including Material design palettes, CSS named colors, tailwind color palettes
 • Download PNG of the palette
-• Rearange colors in a palette
-• Generate color palettes using ChatGPT(AI)
+• Rearange colors in a palette with ease
 
 
 PRO BENEFITS
@@ -35,24 +36,24 @@ Grab color codes from any random text, such as an email your client sent, or som
 Generate harmonious color schemes from an existing color using various models such as complementary, split-complementary, triadic, tetradic, analogous, monochromatic etc. and save them to your library.
 
 
-Sharing is important, so we made it easier than ever to share color palettes. The recipient gets a link to quickly preview the colors in Croma. Even if he doesn't have the app.
+Sharing is important, so we made it easier than ever to share color palettes. The recipient gets a link to quickly preview the colors in HueHive. Even if they doesn't have the app.
 
 
 See all sorts of details about a color. Convert any color code to various color code formats easily. When adding a color, you can use any color code format including the CSS named colors. Copy the color code to your clipboard with just a tap.
 
 
-We made Croma to help designers manage colors easily, because colors matter. While it's very easy to have lots of features and be bloated, we like to keep things simple, helping you with the things you need the most and allow you to work seamlessly without getting in your way.
+We made HueHive to help designers manage colors easily, because colors matter. While it's very easy to have lots of features and be bloated, we like to keep things simple, helping you with the things you need the most and allow you to work seamlessly without getting in your way.
 
 
-Croma can be helpful in various tasks, such as web and graphic design, anywhere colors are needed. It's a must-have productivity tool for designers.
+HueHive can be helpful in various tasks, such as web and graphic design, anywhere colors are needed. It's a must-have productivity tool for designers.
 
-Generate color palettes in our website huehive using ChatGPT and view and edit palettes in the app.
+You can also generate color palettes in our website huehive using AI (ChatGPT) and view and edit palettes in the app.
 
 
 OPEN SOURCE
 
-We believe in open source. The source code for Croma is hosted at:
-https://github.com/croma-app/croma-react
+We believe in open source. The source code for HueHive is hosted at:
+https://github.com/croma-app/huehive-mobile-app
 
 Support:
 Have any question or suggestion? Please join our discord channel:
