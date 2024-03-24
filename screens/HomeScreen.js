@@ -13,11 +13,11 @@ import { PaletteCard } from '../components/PaletteCard';
 import GridActionButton from '../components/GridActionButton';
 import { CromaContext } from '../store/store';
 import * as Permissions from 'expo-permissions';
-import EmptyView from '../components/EmptyView';
 import ShareMenu from '../libs/ShareMenu';
 import { logEvent } from '../libs/Helpers';
 import PropTypes from 'prop-types';
 import { material } from 'react-native-typography';
+import Spacer from '../components/Spacer';
 
 const HomeScreen = function ({ navigation, route }) {
   const { isLoading, allPalettes, isPro, setColorList, setSuggestedName, clearPalette } =
@@ -98,7 +98,7 @@ const HomeScreen = function ({ navigation, route }) {
                 />
               );
             })}
-            <EmptyView />
+            <Spacer />
           </ScrollView>
           <GridActionButton navigation={navigation} setPickImageLoading={setPickImageLoading} />
         </View>

@@ -38,7 +38,7 @@ const purchase = async function (setPurchase, productSKU) {
   } catch (err) {
     console.warn(err.code, err.message);
     notifyMessage(`Purchase unsuccessful ${err}`);
-    logEvent('purchase_failed');
+    logEvent('purchase_failed', err.message);
   }
 };
 const initPurchase = async function (setPurchase, showMessage = true) {
@@ -52,7 +52,8 @@ const initPurchase = async function (setPurchase, showMessage = true) {
       }
     }
   } catch (e) {
-    notifyMessage('Failed during initialization of purchase: ' + e);
+    logEvent('init_purchase_failed', e.message);
+    notifyMessage('Init purchase failed: ' + e);
   }
 };
 
@@ -69,7 +70,8 @@ const getAvailablePurchases = async () => {
     return purchases;
   } catch (err) {
     console.warn(err.code, err.message);
-    notifyMessage(err.message);
+    logEvent('get_available_purchases_failed', err.message);
+    throw err;
   }
 };
 
@@ -131,4 +133,4 @@ export function extractHexColors(text) {
   return Object.values(combinedHexMap);
 }
 
-export { logEvent, purchase, getAvailablePurchases, notifyMessage, initPurchase };
+export { logEvent, purchase, notifyMessage, initPurchase };

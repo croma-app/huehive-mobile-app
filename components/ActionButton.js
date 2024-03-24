@@ -37,14 +37,12 @@ const ActionButtonContainer = function (props) {
       style={[
         styles.actionButtonContainer,
         { height: Dimensions.get('window').height - headerHeight }
-      ]}
-    >
+      ]}>
       <TouchableOpacity
         onPress={() => {
           setActive(false);
         }}
-        style={[styles.actionButton, styles.actionButtonClose]}
-      >
+        style={[styles.actionButton, styles.actionButtonClose]}>
         <Animatable.View duration={300} animation={rotateAnimation}>
           <AntDesign name="plus" color={'#fff'} size={24} />
         </Animatable.View>
@@ -52,14 +50,12 @@ const ActionButtonContainer = function (props) {
       <Animatable.View
         duration={300}
         animation="slideInUp"
-        style={{ backgroundColor: '#fff', padding: 10 }}
-      >
+        style={{ backgroundColor: '#fff', padding: 10 }}>
         {rows.map((cols, index) => {
           return (
             <>
               <View
-                style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}
-              >
+                style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
                 {cols.map((item, index) => {
                   const { icon, text1, text2, onPress } = item;
                   return (
@@ -69,8 +65,7 @@ const ActionButtonContainer = function (props) {
                           setActive(false);
                           onPress();
                         }}
-                        style={{ flexBasis: 90 }}
-                      >
+                        style={{ flexBasis: 90 }}>
                         <ActionButton icon={icon} t1={text1} t2={text2} />
                       </TouchableOpacity>
                       {index < cols.length - 1 && <VerticalLine />}
@@ -91,8 +86,7 @@ const ActionButtonContainer = function (props) {
       onPress={() => {
         setActive(true);
       }}
-      style={[styles.actionButton, styles.actionButtonOpen]}
-    >
+      style={[styles.actionButton, styles.actionButtonOpen]}>
       <AntDesign name="plus" color={'#fff'} size={24} />
     </TouchableOpacity>
   );
