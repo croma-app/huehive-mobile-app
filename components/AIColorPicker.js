@@ -1,16 +1,20 @@
 // components/AIColorPicker.js
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
+import { View, TextInput, StyleSheet, ActivityIndicator } from 'react-native';
 import CromaButton from './CromaButton';
 
 export default function AIColorPicker({ color, setColor }) {
   const [query, setQuery] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const generateColorFromQuery = () => {
+  const generateColorFromQuery = async () => {
+    setLoading(true);
     // TODO: Implement the AI color generation logic based on the query
-    // For now, let's just generate a random color
+    // For now, let's just simulate an async operation with a delay
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
     setColor(randomColor);
+    setLoading(false);
   };
 
   return (
@@ -21,8 +25,13 @@ export default function AIColorPicker({ color, setColor }) {
         value={query}
         onChangeText={setQuery}
       />
-      <CromaButton onPress={generateColorFromQuery}>Generate Color</CromaButton>
-      <View style={[styles.colorPreview, { backgroundColor: color }]} />
+      <CromaButton onPress={generateColorFromQuery} disabled={loading}>
+        {loading ? <ActivityIndicator size="small" color="#ffffff" /> : 'Generate Color'}
+      </CromaButton>
+      <View style={styles.selectedColorView}>
+        <TextInput style={styles.input} value={color} onChangeText={(color) => setColor(color)} />
+        <View style={[styles.selectedColor, { backgroundColor: color }]}></View>
+      </View>
     </View>
   );
 }
@@ -39,5 +48,14 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 100,
     marginTop: 16
+  },
+  selectedColorView: {
+    marginTop: 10,
+    flexDirection: 'row',
+    flex: 2,
+    padding: 10
+  },
+  selectedColor: {
+    width: '50%'
   }
 });

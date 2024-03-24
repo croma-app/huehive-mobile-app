@@ -9,7 +9,7 @@ import {
   flushFailedPurchasesCachedAsPendingAndroid,
   finishTransaction,
 } from 'react-native-iap';
-import { notifyMessage } from  '../libs/Helpers';
+import { notifyMessage, logEvent } from  '../libs/Helpers';
 // https://react-native-iap.dooboolab.com/docs/guides/purchases
 // TODO: We need to implement this properly with server side validation.
 const useIAPConnection = () => {
@@ -42,6 +42,7 @@ const useIAPConnection = () => {
                 // If not consumable
                 
                 await finishTransaction({purchase, isConsumable: false});
+                logEvent('purchase_event_finish_transaction');
                 notifyMessage('Purchase successful');
               }
             },
@@ -49,6 +50,7 @@ const useIAPConnection = () => {
           purchaseErrorSubscription = purchaseErrorListener(
             (error: PurchaseError) => {
               console.warn('purchaseErrorListener', error);
+              logEvent('purchase_event_error');
             },
           );
         });

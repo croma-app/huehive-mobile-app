@@ -1,12 +1,12 @@
 import React, { useState, useContext } from 'react';
-import { ScrollView, View, StyleSheet, TouchableOpacity, Text, TextInput } from 'react-native';
+import { ScrollView, View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import CromaButton from '../components/CromaButton';
 import { CromaColorPicker as ColorPicker } from 'croma-color-picker';
 import { logEvent } from '../libs/Helpers';
 import { CromaContext } from '../store/store';
 import SliderColorPicker from '../components/SliderColorPicker';
 import AIColorPicker from '../components/AIColorPicker';
-
+import Colors from '../constants/Colors';
 
 export default function ColorPickerScreen({ navigation }) {
   const [color, setColor] = useState('#db0a5b');
@@ -20,15 +20,16 @@ export default function ColorPickerScreen({ navigation }) {
         <TouchableOpacity
           style={[styles.tab, activeTab === 'basic' && styles.activeTab]}
           onPress={() => setActiveTab('basic')}>
-          <Text style={styles.tabText}>Basic</Text>
+          <Text style={styles.tabText}>Standard</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.tab, activeTab === 'HSB' && styles.activeTab]}
           onPress={() => setActiveTab('HSB')}>
           <Text style={styles.tabText}>HSB</Text>
         </TouchableOpacity>
+        {/* AI Color Picker is under development */}
         <TouchableOpacity
-          style={[styles.tab, activeTab === 'AI' && styles.activeTab]}
+          style={[styles.tab, activeTab === 'AI' && styles.activeTab, { display: 'none' }]}
           onPress={() => setActiveTab('AI')}>
           <Text style={styles.tabText}>AI Color Picker</Text>
         </TouchableOpacity>
@@ -66,8 +67,7 @@ export default function ColorPickerScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff'
+    flex: 1
   },
   tabContainer: {
     flexDirection: 'row',
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   },
   activeTab: {
     borderBottomWidth: 2,
-    borderBottomColor: '#000'
+    borderBottomColor: Colors.primary
   },
   tabText: {
     fontSize: 16,

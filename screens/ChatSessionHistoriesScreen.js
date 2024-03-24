@@ -15,6 +15,7 @@ import moment from 'moment';
 import ActionButton from 'react-native-action-button';
 import Colors from '../constants/Colors';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Spacer from '../components/Spacer';
 
 const ChatSessionHistoriesScreen = () => {
   logEvent('chat_session_histories_screen');
@@ -67,6 +68,7 @@ const ChatSessionHistoriesScreen = () => {
             ))}
           </>
         )}
+        <Spacer />
       </ScrollView>
       <ActionButton
         offsetY={76}
