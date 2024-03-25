@@ -58,6 +58,21 @@ const HamburgerMenu = (props) => {
         </View>
       </TouchableOpacity>
       <ScrollView>
+        {userData && (
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={async () => {
+              logEvent('hm_chat_session_histories');
+              navigate('ChatSessionHistories');
+            }}>
+            <View style={styles.menuItemView}>
+              <View style={styles.menuIcon}>
+                <MaterialCommunityIcons name="history" style={styles.icon} />
+              </View>
+              <Text style={styles.textAreaMenuItem}>{t('Your AI Chats')}</Text>
+            </View>
+          </TouchableOpacity>
+        )}
         <View style={styles.menu}>
           <TouchableOpacity
             style={styles.menuItem}

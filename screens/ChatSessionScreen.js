@@ -16,7 +16,7 @@ import { logEvent } from '../libs/Helpers';
 import { createChatSession, followUpChatSession, getChatSession } from '../network/chat_session';
 import ChatCard from '../components/ChatCard';
 import LoginScreen from './LoginScreen';
-import useUserData from '../Hooks/getUserData';
+import useUserData from '../hooks/getUserData';
 
 // eslint-disable-next-line no-undef
 const bgImage = require('../assets/images/colorful_background.jpg');
@@ -28,8 +28,8 @@ const ExamplePhrase = ({ phrase, onPress }) => (
 );
 
 const ChatSessionScreen = (props) => {
-  const { navigation } = props;
-  const [messages, setMessages] = useState([]);
+  const { route, navigation } = props;
+  const [messages, setMessages] = useState(route.params?.messages || []);
   const [inputText, setInputText] = useState('');
   const scrollViewRef = useRef();
   const [isLoading, setIsLoading] = useState(false);

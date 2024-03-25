@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import Color from 'pigment/full';
-import { ActivityIndicator, Linking, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Linking,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+  Text
+} from 'react-native';
 import { PaletteCard } from '../components/PaletteCard';
 import GridActionButton from '../components/GridActionButton';
 import { CromaContext } from '../store/store';
 import * as Permissions from 'expo-permissions';
-import EmptyView from '../components/EmptyView';
 import ShareMenu from '../libs/ShareMenu';
 import { logEvent } from '../libs/Helpers';
 import PropTypes from 'prop-types';
+import { material } from 'react-native-typography';
+import Spacer from '../components/Spacer';
 
 const HomeScreen = function ({ navigation, route }) {
   const { isLoading, allPalettes, isPro, setColorList, setSuggestedName, clearPalette } =
@@ -72,6 +81,11 @@ const HomeScreen = function ({ navigation, route }) {
         <View style={styles.container}>
           {pickImageLoading ? <ActivityIndicator /> : <View />}
           <ScrollView showsVerticalScrollIndicator={false}>
+            {allPalettes.length == 0 && (
+              <Text style={styles.noColorPaletteMessage}>
+                No color palettes found. Tap the + button below to create a new one.
+              </Text>
+            )}
             {allPalettes.map((palette) => {
               return (
                 <PaletteCard
@@ -84,7 +98,7 @@ const HomeScreen = function ({ navigation, route }) {
                 />
               );
             })}
-            <EmptyView />
+            <Spacer />
           </ScrollView>
           <GridActionButton navigation={navigation} setPickImageLoading={setPickImageLoading} />
         </View>
@@ -108,5 +122,10 @@ const styles = StyleSheet.create({
     padding: 8,
     justifyContent: 'center',
     position: 'relative'
+  },
+  noColorPaletteMessage: {
+    ...material.headline,
+    textAlign: 'center',
+    marginTop: 100
   }
 });

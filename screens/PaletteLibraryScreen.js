@@ -22,8 +22,7 @@ export default function PaletteLibraryScreen({ navigation }) {
               logEvent('hm_matrial_palettes');
               setCommonPalettes(palettes);
               navigation.navigate('CommonPalettes');
-            }}
-          >
+            }}>
             <View>
               <View>
                 <Text style={styles.title}>{palettes.name}</Text>
@@ -48,7 +47,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white,
     marginVertical: 8,
     elevation: 1,
-    padding: 4
+    padding: 8,
+    borderRadius: 8
   },
   title: {
     ...material.title

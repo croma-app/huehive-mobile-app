@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StatusBar, StyleSheet, View, TouchableOpacity } from 'react-native';
 import AboutUsScreen from './screens/AboutUsScreen';
 import ChatSessionScreen from './screens/ChatSessionScreen';
+import ChatSessionHistoriesScreen from './screens/ChatSessionHistoriesScreen';
 import ColorPickerScreen from './screens/ColorPickerScreen';
 import HomeScreen from './screens/HomeScreen';
 import Colors from './constants/Colors';
@@ -25,6 +26,7 @@ import { HEADER_HEIGHT } from './constants/Layout';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { t } from 'i18next';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import useIAPConnection from './hooks/useIAPConnection';
 const Stack = createNativeStackNavigator();
 
 /*import { LogBox } from 'react-native'; // enabled for recording demos
@@ -40,6 +42,7 @@ export default function App() {
       setIsPalettesLoaded(true);
     })();
   }, []);
+  useIAPConnection();
 
   const spinner = (
     <View style={{ flex: 1, marginTop: '20%' }}>
@@ -89,7 +92,7 @@ export default function App() {
                     name="Home"
                     options={() => {
                       return {
-                        title: t('Huehive'),
+                        title: t('HueHive'),
                         headerLeft: () => hamburgerMenuIcon(),
                         headerTitleContainerStyle: { left: 40 }
                       };
@@ -110,6 +113,11 @@ export default function App() {
                     name={'ChatSession'}
                     options={{ title: t('HueHive AI assistant') }}
                     component={ChatSessionScreen}
+                  />
+                  <Stack.Screen
+                    name={'ChatSessionHistories'}
+                    options={{ title: t('Your chats') }}
+                    component={ChatSessionHistoriesScreen}
                   />
                   <Stack.Screen
                     name="ColorDetails"

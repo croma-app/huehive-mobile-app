@@ -10,7 +10,8 @@ import Notification from '../components/Notification';
 import Storage from '../libs/Storage';
 import { PropTypes } from 'prop-types';
 
-import { GoogleSignin, GoogleSigninButton } from '@react-native-google-signin/google-signin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import GoogleButton from '../components/GoogleButton';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const LOGIN = 'LOGIN';
@@ -19,16 +20,16 @@ const SIGN_UP = 'SIGN_UP';
 const LOGIN_AND_SIGNUP_TEXT = {
   LOGIN: {
     title: 'Login',
-    orText: 'Or Login with',
+    orText: 'Or sign in with',
     linkTitle: "Don't have an account?",
-    linkText: ' Sign Up Now',
+    linkText: ' Sign up now',
     buttonText: 'Login'
   },
   SIGN_UP: {
     title: 'Signup',
-    orText: 'Or Sign Up with',
+    orText: 'Or Sign up with',
     linkTitle: 'Already have and account?',
-    linkText: ' Login Now',
+    linkText: ' Login now',
     buttonText: ' Sign up'
   }
 };
@@ -153,15 +154,6 @@ function LoginOverlayScreen({ markLoginStepDone }) {
       _markLoginStepDone();
     } catch (error) {
       setError(error.message);
-      //if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-      // user cancelled the login flow
-      //} else if (error.code === statusCodes.IN_PROGRESS) {
-      // operation (e.g. sign in) is in progress already
-      //} else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-      // play services not available or outdated
-      //} else {
-      // some other error happened
-      //}
     }
   };
 
@@ -172,20 +164,19 @@ function LoginOverlayScreen({ markLoginStepDone }) {
   return (
     <ScrollView style={styles.rootContainer} showsVerticalScrollIndicator={true}>
       <View style={[styles.container]}>
-        <Text style={styles.title}>{t('Welcome to HueHive (Croma),')}</Text>
-        <Text style={styles.intro}>{t('Please sign-in/sign-up to continue.')}</Text>
+        <Text style={styles.title}>{t('Welcome to HueHive,')}</Text>
+        <Text style={styles.intro}>
+          {t(`Please ${screenType === LOGIN ? 'sign in' : 'sign up'} to continue.`)}
+        </Text>
         {error && <Notification message={error} onPress={() => setError(undefined)}></Notification>}
-        <GoogleSigninButton
-          style={{
-            width: Dimensions.get('window').width * (95 / 100),
-            height: 60
-          }}
-          size={GoogleSigninButton.Size.Wide}
-          color={GoogleSigninButton.Color.Dark}
-          onPress={signIn}
-        />
+        <GoogleButton buttonType={screenType} onPress={signIn} />
+        <View style={styles.separator}>
+          <View style={styles.separatorLine} />
+          <Text style={styles.separatorText}>or</Text>
+          <View style={styles.separatorLine} />
+        </View>
         <View style={[styles.separator]}>
-          <Text>or sign-up/sign-in using email and password</Text>
+          <Text>{screenType === LOGIN ? 'Sign in' : 'Sign up'} your email and password</Text>
         </View>
         {screenType === SIGN_UP && (
           <>
@@ -350,8 +341,18 @@ const styles = StyleSheet.create({
     padding: 3
   },
   separator: {
-    marginTop: 10,
-    marginBottom: 10
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10
+  },
+  separatorLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#ccc'
+  },
+  separatorText: {
+    marginHorizontal: 10,
+    fontSize: 16
   },
   skip: {
     marginBottom: 20

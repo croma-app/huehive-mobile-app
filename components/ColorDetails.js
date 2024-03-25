@@ -86,9 +86,11 @@ export const ColorDetail = ({ color }) => {
         flex: 1,
         flexDirection: 'column',
         padding: 8,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        borderRadius: 8,
+        marginTop: 12
       }}>
-      <View style={[styles.backgroundColor]}></View>
+      <View style={[styles.backgroundColor, { borderRadius: 8 }]}></View>
       {/* <Text {...props} style={[props.style, { fontFamily: 'space-mono' }]} >{props.color}</Text> */}
       <View style={{ marginTop: 20 }}>
         {items.map((item, index) => (

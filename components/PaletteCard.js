@@ -79,14 +79,15 @@ export const PaletteCard = (props) => {
   const onShare = async () => {
     try {
       logEvent('home_screen_palette_card_share', props.colors.length + '');
+      // https://huehive.co/color_palettes/f8a6a1-dcdcdc-f2b3ad-e0e0e0-aec6cf-c4c4c4
       const result = await Share.share({
-        message: `Croma - Palette Manager\nColors:\n${props.colors
+        message: `HueHive - Palette Manager\nColors:\n${props.colors
           .map((colorObj) => colorObj.color)
           .join('\n')}
 
-          https://web.croma.app/Main/SavePalette?name=${encodeURIComponent(
-            props.name
-          )}&colors=${encodeURIComponent(JSON.stringify(props.colors))}`
+          https://huehive.co/color_palettes/${props.colors
+            .map((colorObj) => colorObj.color.replace('#', '').toLowerCase())
+            .join('-')}?name=${encodeURIComponent(props.name)}`
       });
 
       if (result.action === Share.sharedAction) {
@@ -118,7 +119,9 @@ export const PaletteCard = (props) => {
             <MultiColorView {...props}></MultiColorView>
           </ViewShot>
           <View style={styles.bottom}>
-            <Text style={styles.label}>{props.name}</Text>
+            <Text style={styles.label}>
+              {props.name.substring(0, 50) + (props.name.length > 50 ? '...' : '')}
+            </Text>
             <View style={styles.actionButtonsView}>
               <TouchableOpacity onPress={onDownload} style={styles.actionButton}>
                 <FontAwesome size={20} name="download" />
@@ -130,6 +133,7 @@ export const PaletteCard = (props) => {
                 onPress={(event) => {
                   event.preventDefault();
                   event.stopPropagation();
+                  logEvent('home_screen_palette_card_delete');
                   setAnimationType('fadeOutRightBig');
                   setTimeout(() => {
                     deletePaletteLocal();
