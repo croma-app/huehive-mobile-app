@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import { StyleSheet, View, Text, Platform, TouchableOpacity } from 'react-native';
 import Card from './Card';
 import Colors from '../constants/Colors';
@@ -11,18 +12,33 @@ import { logEvent, notifyMessage } from '../libs/Helpers';
 import ViewShot from 'react-native-view-shot';
 import { UndoDialog } from '../components/CommonDialogs';
 
-const RNFS = require('react-native-fs');
+import RNFS from 'react-native-fs';
 import { t } from 'i18next';
 import RNFetchBlob from 'rn-fetch-blob';
 import PropTypes from 'prop-types';
+import { Menu, MenuItem } from 'react-native-material-menu';
+
+const MenuAnchor = ({ onPress }) => (
+  <TouchableOpacity style={styles.menuAnchorContainer} onPress={onPress}>
+    <FontAwesome style={styles.actionButton} size={20} name="ellipsis-v" />
+    <View style={styles.menuAnchor} />
+  </TouchableOpacity>
+);
 
 export const PaletteCard = (props) => {
   const [animationType, setAnimationType] = React.useState('fadeInLeftBig');
   const viewShotRef = React.useRef();
   const { deletePalette, setCurrentPalette } = React.useContext(CromaContext);
   const [isDeleteActive, setIsDeleteActive] = React.useState(false);
+  const [visible, setVisible] = useState(false);
+
+  const hideMenu = () => setVisible(false);
+
+  const showMenu = () => setVisible(true);
   let timer = React.useRef(null);
+
   const deletePaletteLocal = React.useCallback(() => {
+    hideMenu();
     setIsDeleteActive(true);
     timer.current = setTimeout(() => {
       deletePalette(props.paletteId);
@@ -123,25 +139,37 @@ export const PaletteCard = (props) => {
               {props.name.substring(0, 50) + (props.name.length > 50 ? '...' : '')}
             </Text>
             <View style={styles.actionButtonsView}>
-              <TouchableOpacity onPress={onDownload} style={styles.actionButton}>
-                <FontAwesome size={20} name="download" />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={onShare} style={styles.actionButton}>
-                <FontAwesome size={20} name="share" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={(event) => {
-                  event.preventDefault();
-                  event.stopPropagation();
-                  logEvent('home_screen_palette_card_delete');
-                  setAnimationType('fadeOutRightBig');
-                  setTimeout(() => {
-                    deletePaletteLocal();
-                  }, 500);
-                }}
-                style={styles.actionButton}>
-                <FontAwesome size={20} name="trash" />
-              </TouchableOpacity>
+              <Menu
+                visible={visible}
+                anchor={<MenuAnchor onPress={showMenu} />}
+                onRequestClose={hideMenu}>
+                <MenuItem onPress={onShare} style={styles.actionButton}>
+                  <View style={styles.actionButtonContainer}>
+                    <FontAwesome size={20} name="share" />
+                    <Text style={styles.actionButtonText}>Share</Text>
+                  </View>
+                </MenuItem>
+                <MenuItem onPress={onDownload} style={styles.actionButton}>
+                  <View style={styles.actionButtonContainer}>
+                    <FontAwesome size={20} name="download" />
+                    <Text style={styles.actionButtonText}>Download</Text>
+                  </View>
+                </MenuItem>
+                <MenuItem
+                  onPress={() => {
+                    logEvent('home_screen_palette_card_delete');
+                    setAnimationType('fadeOutRightBig');
+                    setTimeout(() => {
+                      deletePaletteLocal();
+                    }, 500);
+                  }}
+                  style={styles.actionButton}>
+                  <View style={styles.actionButtonContainer}>
+                    <FontAwesome size={20} name="trash" />
+                    <Text style={styles.actionButtonText}>Delete</Text>
+                  </View>
+                </MenuItem>
+              </Menu>
             </View>
           </View>
         </Card>
@@ -179,5 +207,27 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 16,
     color: Colors.darkGrey
+  },
+  menuAnchorContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingStart: 8,
+    paddingEnd: 8
+  },
+  menuAnchor: {
+    position: 'absolute',
+    top: 20,
+    right: 0,
+    backgroundColor: 'transparent',
+    width: 1,
+    height: 1
+  },
+  actionButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  actionButtonText: {
+    fontSize: 16,
+    marginStart: 8
   }
 });
