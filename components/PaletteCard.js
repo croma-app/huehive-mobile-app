@@ -85,6 +85,7 @@ export const PaletteCard = (props) => {
           path: path,
           showNotification: true
         });
+        notifyMessage('Palette exported. Check download status in notifications.');
       }
       if (Platform.OS == 'ios') {
         await RNFetchBlob.ios.previewDocument(path);
@@ -148,6 +149,7 @@ export const PaletteCard = (props) => {
             </Text>
             <View style={styles.actionButtonsView}>
               <Menu
+                key="palette-menu"
                 visible={visible}
                 anchor={<MenuAnchor onPress={showMenu} />}
                 onRequestClose={hideMenu}>
@@ -160,7 +162,7 @@ export const PaletteCard = (props) => {
                 <MenuItem onPress={onDownload} style={styles.actionButton}>
                   <View style={styles.actionButtonContainer}>
                     <FontAwesome size={20} name="download" />
-                    <Text style={styles.actionButtonText}>Download</Text>
+                    <Text style={styles.actionButtonText}>Export</Text>
                   </View>
                 </MenuItem>
                 <MenuItem
@@ -224,11 +226,9 @@ const styles = StyleSheet.create({
   },
   menuAnchor: {
     position: 'absolute',
-    top: 20,
-    right: 0,
     backgroundColor: 'transparent',
-    width: 1,
-    height: 1
+    width: 20,
+    height: 20
   },
   actionButtonContainer: {
     flexDirection: 'row',
