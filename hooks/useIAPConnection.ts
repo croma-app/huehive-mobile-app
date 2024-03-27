@@ -49,8 +49,8 @@ const useIAPConnection = () => {
           );
           purchaseErrorSubscription = purchaseErrorListener(
             (error: PurchaseError) => {
-              console.warn('purchaseErrorListener', error);
-              sendClientError('purchase_event_error', error);
+              console.warn('purchaseErrorListener', error.toString());
+              sendClientError('purchase_event_error', error.toString());
               logEvent('purchase_event_error');
             },
           );

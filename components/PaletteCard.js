@@ -8,13 +8,14 @@ import { Share, PermissionsAndroid } from 'react-native';
 import MultiColorView from './MultiColorView';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { CromaContext } from '../store/store';
-import { logEvent, notifyMessage } from '../libs/Helpers';
+import { logEvent, notifyMessage, sendClientError } from '../libs/Helpers';
 import ViewShot from 'react-native-view-shot';
 import { UndoDialog } from '../components/CommonDialogs';
 
 import RNFS from 'react-native-fs';
 import { t } from 'i18next';
 import RNFetchBlob from 'rn-fetch-blob';
+
 import PropTypes from 'prop-types';
 import { Menu, MenuItem } from 'react-native-material-menu';
 
@@ -57,38 +58,44 @@ export const PaletteCard = (props) => {
       const uri = await viewShotRef.current.capture();
       let granted = Platform.OS == 'ios';
       if (Platform.OS == 'android') {
-        granted =
-          (await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-          )) === PermissionsAndroid.RESULTS.GRANTED;
+        // Download works without this permission also in some devices. Need to explore this more. For now keeping it for the safer side. Will monitor events and errors.
+        await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
+          title: 'Storage Permission Required',
+          message: 'This app needs access to your storage to export color palette to png image.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK'
+        });
       }
       const downloadPath =
         Platform.OS === 'ios' ? RNFS.DocumentDirectoryPath : RNFS.DownloadDirectoryPath;
-      if (granted) {
-        let path = downloadPath + '/' + props.name + '.png';
-        const isFileExists = await RNFS.exists(path);
-        if (isFileExists) {
-          path = downloadPath + '/' + props.name + Math.floor(Math.random() * 100000) + '.png';
-        }
-        // write a new file
-        await RNFS.copyFile(uri, path);
-        if (Platform.OS == 'android') {
-          RNFetchBlob.android.addCompleteDownload({
-            title: props.name,
-            description: t('Download complete'),
-            mime: 'image/png',
-            path: path,
-            showNotification: true
-          });
-        }
-        if (Platform.OS == 'ios') {
-          await RNFetchBlob.ios.previewDocument(path);
-        }
-      } else {
-        notifyMessage('Please give storage permission to download png.');
+
+      let path = downloadPath + '/' + props.name + '.png';
+      const isFileExists = await RNFS.exists(path);
+      if (isFileExists) {
+        path = downloadPath + '/' + props.name + Math.floor(Math.random() * 100000) + '.png';
+      }
+      // write a new file
+      await RNFS.copyFile(uri, path);
+      if (Platform.OS == 'android') {
+        RNFetchBlob.android.addCompleteDownload({
+          title: props.name,
+          description: t('Download complete'),
+          mime: 'image/png',
+          path: path,
+          showNotification: true
+        });
+      }
+      if (Platform.OS == 'ios') {
+        await RNFetchBlob.ios.previewDocument(path);
+      }
+
+      if (!granted) {
+        sendClientError('home_screen_palette_card_download', 'Permission denied for storage');
       }
     } catch (error) {
       notifyMessage('Error: ' + error.toString());
+      sendClientError('home_screen_palette_card_download', error.toString());
     }
   };
 
@@ -116,7 +123,8 @@ export const PaletteCard = (props) => {
         // dismissed
       }
     } catch (error) {
-      alert(error.message);
+      notifyMessage('Error while sharing: ' + error.message);
+      sendClientError('home_screen_palette_card_share', error.toString());
     }
   };
   return (
