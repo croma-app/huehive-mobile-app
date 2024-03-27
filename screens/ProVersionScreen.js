@@ -28,18 +28,19 @@ export default function ProScreen() {
       <View>
         <Text style={styles.title}>{t('Pro benefits')}</Text>
         <Text style={[styles.line]}>{t('1. Add more than 4 colors in a palette 🎨')}</Text>
+        <Text style={[styles.line]}>{t('2. Lifetime access to all current set of features')}</Text>
         <CromaButton
           style={{ backgroundColor: '#ff5c59' }}
           textStyle={{ color: '#fff' }}
           onPress={purchasePro}>
-          {isPro ? t('You are a pro user! Enjoy the app') : t('Unlock pro')}
+          {isPro ? t('You are a pro user! Enjoy the app') : t('Unlock pro for lifetime access')}
         </CromaButton>
         <Text style={styles.line}>
           {t(
-            "2. Support the development efforts to keep the app awesome and simple without any ads and annoying notifications 😊'"
+            "3. Support the development efforts to keep the app awesome and simple without any ads and annoying notifications 😊'"
           )}
         </Text>
-        <Text style={styles.line}>{t("3. Help us keep the app open source'")}</Text>
+        <Text style={styles.line}>{t("4. Help us keep the app open source'")}</Text>
         <CromaButton onPress={purchaseDevelopment}>{t('Support development')}</CromaButton>
 
         {!isPro && (

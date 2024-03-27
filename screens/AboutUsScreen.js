@@ -5,6 +5,8 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { logEvent } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const INSTAGRAM_URL = 'https://www.instagram.com/huehiveco/';
 const CROMA_APP_URL = 'https://huehive.co';
@@ -12,7 +14,7 @@ const DISCORD_URL = 'https://discord.com/invite/ZSBVsBqDtg';
 
 const AboutUsScreen = () => {
   const { t } = useTranslation();
-
+  const navigation = useNavigation();
   logEvent('about_us_screen');
 
   return (
@@ -20,7 +22,7 @@ const AboutUsScreen = () => {
       <View>
         <Text style={styles.line}>
           {t(
-            'Huehive is a simple color palette manager and color picker made for designers, aiming to make it quick and fun to create and share color palettes on the go.'
+            'We are a small team of developers and designers is passionate about simplifying the color selection process and inspiring creativity.'
           )}
         </Text>
       </View>
@@ -46,6 +48,21 @@ const AboutUsScreen = () => {
             <Text style={[styles.line, styles.subtitle]}>{t('Web version with ')}</Text>
             <Text style={[styles.line, styles.subtitle]}>{t('ChatGPT support')}</Text>
             <Text style={[styles.line, styles.link]}>{CROMA_APP_URL}</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={() => {
+            logEvent('about_us_pro_benefits');
+            navigation.navigate('ProVersion');
+          }}>
+          <View style={styles.linkView}>
+            <View style={[styles.menuIcon, { paddingLeft: 4 }]}>
+              <FontAwesome5 name="unlock" style={styles.icon} />
+            </View>
+            <Text style={[styles.line, styles.subtitle]}>{t('Support us by ')}</Text>
+            <Text style={[styles.line, styles.subtitle]}>{t('buying pro version ')}</Text>
+            <Text style={[styles.line, styles.link]}>Unlock all features</Text>
           </View>
         </TouchableOpacity>
       </View>
