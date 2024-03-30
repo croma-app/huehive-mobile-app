@@ -1,7 +1,7 @@
 import { NativeModules, Platform, Alert, ToastAndroid } from 'react-native';
 import * as RNIap from 'react-native-iap';
 import { requestPurchase, getProducts } from 'react-native-iap';
-import {sendClientErrorAsync} from '../network/errors';
+import { sendClientErrorAsync } from '../network/errors';
 
 const productSku = function () {
   //return 'local_test1';

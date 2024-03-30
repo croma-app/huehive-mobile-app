@@ -10,13 +10,15 @@ import {
   ImageBackground
 } from 'react-native';
 import Colors from '../constants/Colors';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, NativeModules } from 'react';
 import { material } from 'react-native-typography';
 import { logEvent } from '../libs/Helpers';
-import { createChatSession, followUpChatSession, getChatSession } from '../network/chat_session';
 import ChatCard from '../components/ChatCard';
 import LoginScreen from './LoginScreen';
 import useUserData from '../hooks/getUserData';
+import CromaButton from '../components/CromaButton';
+import { CromaContext } from '../store/store';
+import useChatSession from '../hooks/useChatSession';
 
 // eslint-disable-next-line no-undef
 const bgImage = require('../assets/images/colorful_background.jpg');
@@ -29,19 +31,39 @@ const ExamplePhrase = ({ phrase, onPress }) => (
 
 const ChatSessionScreen = (props) => {
   const { route, navigation } = props;
-  const [messages, setMessages] = useState(route.params?.messages || []);
+
   const [inputText, setInputText] = useState('');
   const scrollViewRef = useRef();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isCreatingSession, setIsCreatingSession] = useState(false);
+
+  const { isPro } = React.useContext(CromaContext);
+  const { messages, isLoading, isCreatingSession, createSession, followUpSession } = useChatSession(
+    route.params?.messages
+  );
 
   const { userData, isUserDataLoading, getUserData } = useUserData();
+  const [canUserCreateChat, setCanUserCreateChat] = useState();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!canUserCreateChat && !isUserDataLoading) {
+        if (userData && !isPro) {
+          setCanUserCreateChat(
+            await NativeModules.CromaModule.getConfigString('ai_behind_pro_version')
+          );
+        }
+        if (isPro && userData) {
+          setCanUserCreateChat(true);
+        }
+      }
+    };
+    fetchData();
+  }, [canUserCreateChat, isPro, isUserDataLoading, userData]);
 
   useEffect(() => {
     logEvent('chat_session_screen');
   }, []);
 
-  const handleSend = async () => {
+  const handleSendMessage = async () => {
     const message = {
       chat_session: {
         chat_session_type: 'color_palette',
@@ -53,33 +75,17 @@ const ChatSessionScreen = (props) => {
         ]
       }
     };
+
     try {
-      let chatSession;
-      setIsLoading(true);
       if (messages.length === 0) {
-        setIsCreatingSession(true);
-        chatSession = await createChatSession(message);
-        setIsCreatingSession(false);
+        await createSession(message);
       } else {
-        chatSession = await followUpChatSession(messages[0].chat_session_id, message);
+        await followUpSession(messages[0].chat_session_id, message);
       }
-      const latestMessage = chatSession.data.messages[chatSession.data.messages.length - 1];
-      setMessages([...messages, latestMessage]);
-      const interval = setInterval(async () => {
-        const messageResponse = await getChatSession(chatSession.data.id, latestMessage.id);
-        if (messageResponse.data.length > 0) {
-          clearInterval(interval);
-          setMessages((messages) => [...messages, ...messageResponse.data]);
-          scrollViewRef.current.scrollToEnd({ animated: true });
-          setIsLoading(false);
-        }
-      }, 2000);
       setInputText('');
       scrollViewRef.current.scrollToEnd({ animated: true });
     } catch (error) {
       console.error('Error sending message', error);
-      setIsLoading(false);
-      setIsCreatingSession(false);
     }
   };
 
@@ -166,29 +172,40 @@ const ChatSessionScreen = (props) => {
                 )}
                 <ActivityIndicator animating={isLoading} size="large" color="#ff7875" />
               </ScrollView>
-
-              <View style={styles.inputContainer}>
-                <TextInput
-                  style={styles.input}
-                  value={inputText}
-                  onChangeText={setInputText}
-                  placeholder={
-                    messages.length == 0
-                      ? 'Ex: create a color palette for kids website'
-                      : 'follow up message to change the color palette'
-                  }
-                />
-                <TouchableOpacity
-                  disabled={isLoading || inputText.trim() === ''}
-                  onPress={handleSend}
-                  style={
-                    isLoading || inputText.trim() === ''
-                      ? styles.disableSendButton
-                      : styles.sendButton
-                  }>
-                  <Text style={styles.textSend}> Send </Text>
-                </TouchableOpacity>
-              </View>
+              {canUserCreateChat ? (
+                <View style={styles.inputContainer}>
+                  <TextInput
+                    style={styles.input}
+                    value={inputText}
+                    onChangeText={setInputText}
+                    placeholder={
+                      messages.length == 0
+                        ? 'Ex: create a color palette for kids website'
+                        : 'follow up message to change the color palette'
+                    }
+                  />
+                  <TouchableOpacity
+                    disabled={isLoading || inputText.trim() === ''}
+                    onPress={handleSendMessage}
+                    style={
+                      isLoading || inputText.trim() === ''
+                        ? styles.disableSendButton
+                        : styles.sendButton
+                    }>
+                    <Text style={styles.textSend}> Send </Text>
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <CromaButton
+                  style={{ backgroundColor: '#ff5c59', margin: 10 }}
+                  textStyle={{ color: '#fff' }}
+                  onPress={() => {
+                    logEvent('chat_session_pro_button');
+                    navigation.navigate('ProVersion');
+                  }}>
+                  Unlock pro to use this feature
+                </CromaButton>
+              )}
             </>
           )}
         </View>
