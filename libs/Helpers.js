@@ -1,11 +1,16 @@
 import { NativeModules, Platform, Alert, ToastAndroid } from 'react-native';
 import * as RNIap from 'react-native-iap';
 import { requestPurchase, getProducts } from 'react-native-iap';
+import {sendClientErrorAsync} from '../network/errors';
 
 const productSku = function () {
   //return 'local_test1';
   return Platform.OS === 'android' ? 'croma_pro' : 'app_croma';
 };
+const sendClientError = (event, errorMessage, stacktrace) => {
+  sendClientErrorAsync(event + ' -  ' + errorMessage, stacktrace || new Error().stack);
+};
+
 const logEvent = (eventName, value) => {
   if (eventName.length > 40) {
     throw 'eventName length should be smaller then equal to 40';
@@ -38,6 +43,7 @@ const purchase = async function (setPurchase, productSKU) {
   } catch (err) {
     console.warn(err.code, err.message);
     notifyMessage(`Purchase unsuccessful ${err}`);
+    sendClientError('purchase_failed', err.message, err.stack);
     logEvent('purchase_failed', err.message);
   }
 };
@@ -54,6 +60,7 @@ const initPurchase = async function (setPurchase, showMessage = true) {
   } catch (e) {
     logEvent('init_purchase_failed', e.message);
     notifyMessage('Init purchase failed: ' + e);
+    sendClientError('init_purchase_failed', e.message, e.stack);
   }
 };
 
@@ -71,6 +78,7 @@ const getAvailablePurchases = async () => {
   } catch (err) {
     console.warn(err.code, err.message);
     logEvent('get_available_purchases_failed', err.message);
+    sendClientError('get_available_purchases_failed', err.message, err.stack);
     throw err;
   }
 };
@@ -133,4 +141,4 @@ export function extractHexColors(text) {
   return Object.values(combinedHexMap);
 }
 
-export { logEvent, purchase, notifyMessage, initPurchase };
+export { logEvent, sendClientError, purchase, notifyMessage, initPurchase };

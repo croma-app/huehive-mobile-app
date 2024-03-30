@@ -132,7 +132,11 @@ export default function App() {
                   />
                   <Stack.Screen name="AddPaletteManually" component={AddPaletteManuallyScreen} />
                   <Stack.Screen name="Palette" component={PaletteScreen} />
-                  <Stack.Screen name="ProVersion" component={ProVersionScreen} />
+                  <Stack.Screen
+                    name="ProVersion"
+                    options={{ title: t('Pro benefits') }}
+                    component={ProVersionScreen}
+                  />
                   <Stack.Screen
                     name="SyncPalettes"
                     options={{ title: t('Import/Export your palettes') }}

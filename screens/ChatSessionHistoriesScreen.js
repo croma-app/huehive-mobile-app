@@ -16,6 +16,42 @@ import ActionButton from 'react-native-action-button';
 import Colors from '../constants/Colors';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Spacer from '../components/Spacer';
+import Color from 'pigment/full';
+
+function extractColorsFromChatSession(session) {
+  if (session.messages) {
+    return Color.parse(
+      session.messages
+        .map((message) => {
+          return message.message;
+        })
+        .join(' ')
+    ).map((colorObj) => colorObj.tohex());
+  } else {
+    return [];
+  }
+}
+
+const ChatSessionColorPreview = ({ colors }) => {
+  const maxColors = 8;
+  const displayedColors = colors.slice(0, maxColors);
+  const remainingColors = colors.length - maxColors;
+
+  return (
+    <View style={styles.colorPreviewContainer}>
+      <View style={styles.colorContainer}>
+        {displayedColors.map((color, index) => (
+          <View key={index} style={[styles.colorCircle, { backgroundColor: color }]} />
+        ))}
+        {remainingColors > 0 && (
+          <View style={styles.moreColorsContainer}>
+            <Text style={styles.moreColorsText}>+{remainingColors}</Text>
+          </View>
+        )}
+      </View>
+    </View>
+  );
+};
 
 const ChatSessionHistoriesScreen = () => {
   logEvent('chat_session_histories_screen');
@@ -64,6 +100,7 @@ const ChatSessionHistoriesScreen = () => {
                     </View>
                   </View>
                 </View>
+                {<ChatSessionColorPreview colors={extractColorsFromChatSession(session)} />}
               </TouchableOpacity>
             ))}
           </>
@@ -150,6 +187,32 @@ const styles = StyleSheet.create({
     ...material.headline,
     textAlign: 'center',
     marginTop: 100
+  },
+  colorPreviewContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4
+  },
+  colorContainer: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  colorCircle: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    marginRight: 4
+  },
+  moreColorsContainer: {
+    backgroundColor: '#E0E0E0',
+    borderRadius: 10,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    marginLeft: 4
+  },
+  moreColorsText: {
+    fontSize: 10,
+    color: '#757575'
   }
 });
 

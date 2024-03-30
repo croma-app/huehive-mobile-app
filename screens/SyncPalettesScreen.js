@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, PermissionsAndroid } from 'react-native';
+import { ScrollView, StyleSheet, Text, PermissionsAndroid, Platform } from 'react-native';
 import { View } from 'react-native-animatable';
 import CromaButton from '../components/CromaButton';
 import { CromaContext } from '../store/store';
@@ -101,9 +101,14 @@ const saveFile = async (allPalettes) => {
     let granted = Platform.OS == 'ios';
     if (Platform.OS == 'android') {
       granted =
-        (await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-        )) === PermissionsAndroid.RESULTS.GRANTED;
+        (await PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: 'Storage Permission Required',
+          message: 'This app needs access to your storage to download files.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK'
+        }) === PermissionsAndroid.RESULTS.GRANTED;
     }
     const downloadPath =
       Platform.OS === 'ios' ? RNFS.DocumentDirectoryPath : RNFS.DownloadDirectoryPath;

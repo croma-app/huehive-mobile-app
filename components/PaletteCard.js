@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState } from 'react';
 import { StyleSheet, View, Text, Platform, TouchableOpacity } from 'react-native';
 import Card from './Card';
 import Colors from '../constants/Colors';
@@ -7,22 +8,38 @@ import { Share, PermissionsAndroid } from 'react-native';
 import MultiColorView from './MultiColorView';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { CromaContext } from '../store/store';
-import { logEvent, notifyMessage } from '../libs/Helpers';
+import { logEvent, notifyMessage, sendClientError } from '../libs/Helpers';
 import ViewShot from 'react-native-view-shot';
 import { UndoDialog } from '../components/CommonDialogs';
 
-const RNFS = require('react-native-fs');
+import RNFS from 'react-native-fs';
 import { t } from 'i18next';
 import RNFetchBlob from 'rn-fetch-blob';
+
 import PropTypes from 'prop-types';
+import { Menu, MenuItem } from 'react-native-material-menu';
+
+const MenuAnchor = ({ onPress }) => (
+  <TouchableOpacity style={styles.menuAnchorContainer} onPress={onPress}>
+    <FontAwesome style={styles.actionButton} size={20} name="ellipsis-v" />
+    <View style={styles.menuAnchor} />
+  </TouchableOpacity>
+);
 
 export const PaletteCard = (props) => {
   const [animationType, setAnimationType] = React.useState('fadeInLeftBig');
   const viewShotRef = React.useRef();
   const { deletePalette, setCurrentPalette } = React.useContext(CromaContext);
   const [isDeleteActive, setIsDeleteActive] = React.useState(false);
+  const [visible, setVisible] = useState(false);
+
+  const hideMenu = () => setVisible(false);
+
+  const showMenu = () => setVisible(true);
   let timer = React.useRef(null);
+
   const deletePaletteLocal = React.useCallback(() => {
+    hideMenu();
     setIsDeleteActive(true);
     timer.current = setTimeout(() => {
       deletePalette(props.paletteId);
@@ -41,38 +58,45 @@ export const PaletteCard = (props) => {
       const uri = await viewShotRef.current.capture();
       let granted = Platform.OS == 'ios';
       if (Platform.OS == 'android') {
-        granted =
-          (await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-          )) === PermissionsAndroid.RESULTS.GRANTED;
+        // Download works without this permission also in some devices. Need to explore this more. For now keeping it for the safer side. Will monitor events and errors.
+        await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
+          title: 'Storage Permission Required',
+          message: 'This app needs access to your storage to export color palette to png image.',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK'
+        });
       }
       const downloadPath =
         Platform.OS === 'ios' ? RNFS.DocumentDirectoryPath : RNFS.DownloadDirectoryPath;
-      if (granted) {
-        let path = downloadPath + '/' + props.name + '.png';
-        const isFileExists = await RNFS.exists(path);
-        if (isFileExists) {
-          path = downloadPath + '/' + props.name + Math.floor(Math.random() * 100000) + '.png';
-        }
-        // write a new file
-        await RNFS.copyFile(uri, path);
-        if (Platform.OS == 'android') {
-          RNFetchBlob.android.addCompleteDownload({
-            title: props.name,
-            description: t('Download complete'),
-            mime: 'image/png',
-            path: path,
-            showNotification: true
-          });
-        }
-        if (Platform.OS == 'ios') {
-          await RNFetchBlob.ios.previewDocument(path);
-        }
-      } else {
-        notifyMessage('Please give storage permission to download png.');
+
+      let path = downloadPath + '/' + props.name + '.png';
+      const isFileExists = await RNFS.exists(path);
+      if (isFileExists) {
+        path = downloadPath + '/' + props.name + Math.floor(Math.random() * 100000) + '.png';
+      }
+      // write a new file
+      await RNFS.copyFile(uri, path);
+      if (Platform.OS == 'android') {
+        RNFetchBlob.android.addCompleteDownload({
+          title: props.name,
+          description: t('Download complete'),
+          mime: 'image/png',
+          path: path,
+          showNotification: true
+        });
+        notifyMessage('Palette exported. Check download status in notifications.');
+      }
+      if (Platform.OS == 'ios') {
+        await RNFetchBlob.ios.previewDocument(path);
+      }
+
+      if (!granted) {
+        sendClientError('home_screen_palette_card_download', 'Permission denied for storage');
       }
     } catch (error) {
       notifyMessage('Error: ' + error.toString());
+      sendClientError('home_screen_palette_card_download', error.toString());
     }
   };
 
@@ -100,7 +124,8 @@ export const PaletteCard = (props) => {
         // dismissed
       }
     } catch (error) {
-      alert(error.message);
+      notifyMessage('Error while sharing: ' + error.message);
+      sendClientError('home_screen_palette_card_share', error.toString());
     }
   };
   return (
@@ -123,25 +148,38 @@ export const PaletteCard = (props) => {
               {props.name.substring(0, 50) + (props.name.length > 50 ? '...' : '')}
             </Text>
             <View style={styles.actionButtonsView}>
-              <TouchableOpacity onPress={onDownload} style={styles.actionButton}>
-                <FontAwesome size={20} name="download" />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={onShare} style={styles.actionButton}>
-                <FontAwesome size={20} name="share" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={(event) => {
-                  event.preventDefault();
-                  event.stopPropagation();
-                  logEvent('home_screen_palette_card_delete');
-                  setAnimationType('fadeOutRightBig');
-                  setTimeout(() => {
-                    deletePaletteLocal();
-                  }, 500);
-                }}
-                style={styles.actionButton}>
-                <FontAwesome size={20} name="trash" />
-              </TouchableOpacity>
+              <Menu
+                key="palette-menu"
+                visible={visible}
+                anchor={<MenuAnchor onPress={showMenu} />}
+                onRequestClose={hideMenu}>
+                <MenuItem onPress={onShare} style={styles.actionButton}>
+                  <View style={styles.actionButtonContainer}>
+                    <FontAwesome size={20} name="share" />
+                    <Text style={styles.actionButtonText}>Share</Text>
+                  </View>
+                </MenuItem>
+                <MenuItem onPress={onDownload} style={styles.actionButton}>
+                  <View style={styles.actionButtonContainer}>
+                    <FontAwesome size={20} name="download" />
+                    <Text style={styles.actionButtonText}>Export</Text>
+                  </View>
+                </MenuItem>
+                <MenuItem
+                  onPress={() => {
+                    logEvent('home_screen_palette_card_delete');
+                    setAnimationType('fadeOutRightBig');
+                    setTimeout(() => {
+                      deletePaletteLocal();
+                    }, 500);
+                  }}
+                  style={styles.actionButton}>
+                  <View style={styles.actionButtonContainer}>
+                    <FontAwesome size={20} name="trash" />
+                    <Text style={styles.actionButtonText}>Delete</Text>
+                  </View>
+                </MenuItem>
+              </Menu>
             </View>
           </View>
         </Card>
@@ -179,5 +217,25 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 16,
     color: Colors.darkGrey
+  },
+  menuAnchorContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingStart: 8,
+    paddingEnd: 8
+  },
+  menuAnchor: {
+    position: 'absolute',
+    backgroundColor: 'transparent',
+    width: 20,
+    height: 20
+  },
+  actionButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  actionButtonText: {
+    fontSize: 16,
+    marginStart: 8
   }
 });
