@@ -42,9 +42,8 @@ const ChatSessionScreen = (props) => {
   const scrollViewRef = useRef();
 
   const { isPro } = React.useContext(CromaContext);
-  const { messages, isLoading, isCreatingSession, createSession, followUpSession } = useChatSession(
-    route.params?.messages
-  );
+  const { messages, isLoading, isCreatingSession, error, createSession, followUpSession } =
+    useChatSession(route.params?.messages);
 
   const { userData, isUserDataLoading, getUserData } = useUserData();
   const [canUserCreateChat, setCanUserCreateChat] = useState();
@@ -81,18 +80,13 @@ const ChatSessionScreen = (props) => {
         ]
       }
     };
-
-    try {
-      if (messages.length === 0) {
-        await createSession(message);
-      } else {
-        await followUpSession(messages[0].chat_session_id, message);
-      }
-      setInputText('');
-      scrollViewRef.current.scrollToEnd({ animated: true });
-    } catch (error) {
-      console.error('Error sending message', error);
+    if (messages.length === 0) {
+      await createSession(message);
+    } else {
+      await followUpSession(messages[0].chat_session_id, message);
     }
+    setInputText('');
+    scrollViewRef.current.scrollToEnd({ animated: true });
   };
 
   useEffect(() => {
@@ -159,8 +153,14 @@ const ChatSessionScreen = (props) => {
                     />
                   ))
                 )}
-                <ActivityIndicator animating={isLoading} size="large" color="#ff7875" />
               </ScrollView>
+              {error && (
+                <View style={styles.errorMessageContainer}>
+                  <Text style={styles.errorMessageTitle}>Error: </Text>
+                  <Text style={styles.errorMessageText}>{error}</Text>
+                </View>
+              )}
+              <ActivityIndicator animating={isLoading} size="large" color="#ff7875" />
               {canUserCreateChat ? (
                 <View style={styles.inputContainer}>
                   <TextInput
@@ -321,6 +321,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center'
+  },
+  errorMessageContainer: {
+    marginLeft: 10,
+    marginRight: 10,
+    backgroundColor: '#ff5c59',
+    borderRadius: 8
+  },
+  errorMessageText: {
+    color: 'white',
+    padding: 5
+  },
+  errorMessageTitle: {
+    color: 'white',
+    paddingLeft: 5,
+    paddingRight: 5
   }
 });
 

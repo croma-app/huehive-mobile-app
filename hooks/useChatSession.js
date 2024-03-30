@@ -5,54 +5,64 @@ const useChatSession = (initialMessages) => {
   const [messages, setMessages] = useState(initialMessages || []);
   const [isLoading, setIsLoading] = useState(false);
   const [isCreatingSession, setIsCreatingSession] = useState(false);
+  const [error, setError] = useState();
+
+  const fetchNewMessages = async (chatSession, latestMessage) => {
+    const interval = setInterval(async () => {
+      try {
+        const messageResponse = await getChatSession(chatSession.data.id, latestMessage.id);
+        if (messageResponse.data.length > 0) {
+          clearInterval(interval);
+          setMessages((prevMessages) => [...prevMessages, ...messageResponse.data]);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error('Error fetching chat session updates', error);
+        setError(error);
+        clearInterval(interval);
+      }
+    }, 2000);
+  };
 
   const createSession = async (message) => {
     setIsLoading(true);
     setIsCreatingSession(true);
+    setError(null);
     try {
       const chatSession = await createChatSession(message);
-      setIsCreatingSession(false);
+      const latestMessage = chatSession.data.messages[chatSession.data.messages.length - 1];
+      setMessages([...messages, latestMessage]);
+      await fetchNewMessages(chatSession, latestMessage);
       return chatSession;
     } catch (error) {
       console.error('Error creating chat session', error);
-      setIsCreatingSession(false);
+      setError(error);
       throw error;
     } finally {
-      setIsLoading(false);
+      setIsCreatingSession(false);
     }
   };
 
   const followUpSession = async (sessionId, message) => {
     setIsLoading(true);
+    setError(null);
+
     try {
       const chatSession = await followUpChatSession(sessionId, message);
       const latestMessage = chatSession.data.messages[chatSession.data.messages.length - 1];
       setMessages((prevMessages) => [...prevMessages, latestMessage]);
-
-      const interval = setInterval(async () => {
-        const messageResponse = await getChatSession(chatSession.data.id, latestMessage.id);
-        if (messageResponse.data.length > 0) {
-          clearInterval(interval);
-          setMessages((prevMessages) => [...prevMessages, ...messageResponse.data]);
-        }
-      }, 2000);
-
+      await fetchNewMessages(chatSession, latestMessage);
       return chatSession;
     } catch (error) {
       console.error('Error following up chat session', error);
+      setError(error);
       throw error;
     } finally {
       setIsLoading(false);
     }
   };
 
-  return {
-    messages,
-    isLoading,
-    isCreatingSession,
-    createSession,
-    followUpSession
-  };
+  return { messages, isLoading, isCreatingSession, error, createSession, followUpSession };
 };
 
 export default useChatSession;
