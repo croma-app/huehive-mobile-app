@@ -22,7 +22,13 @@ import useChatSession from '../hooks/useChatSession';
 
 // eslint-disable-next-line no-undef
 const bgImage = require('../assets/images/colorful_background.jpg');
-
+const EXAMPLE_PHRASES = [
+  'Create a color palette for a kids website',
+  'Design a color palette for a fashion brand',
+  'Generate a color scheme for a travel website',
+  'Create a color palette for a food blog',
+  'Design a color scheme for a fitness app'
+];
 const ExamplePhrase = ({ phrase, onPress }) => (
   <TouchableOpacity onPress={() => onPress(phrase)}>
     <Text style={styles.examplePhrase}>{phrase}</Text>
@@ -137,26 +143,9 @@ const ChatSessionScreen = (props) => {
                     </Text>
                     <Text style={styles.emptyChatSubtext}>Here are few examples</Text>
                     <View style={styles.examplePhrasesContainer}>
-                      <ExamplePhrase
-                        phrase="Create a color palette for a kids website"
-                        onPress={setInputText}
-                      />
-                      <ExamplePhrase
-                        phrase="Design a color palette for a fashion brand"
-                        onPress={setInputText}
-                      />
-                      <ExamplePhrase
-                        phrase="Generate a color scheme for a travel website"
-                        onPress={setInputText}
-                      />
-                      <ExamplePhrase
-                        phrase="Create a color palette for a food blog"
-                        onPress={setInputText}
-                      />
-                      <ExamplePhrase
-                        phrase="Design a color scheme for a fitness app"
-                        onPress={setInputText}
-                      />
+                      {EXAMPLE_PHRASES.map((phrase, index) => (
+                        <ExamplePhrase key={index} phrase={phrase} onPress={setInputText} />
+                      ))}
                     </View>
                   </View>
                 ) : (
