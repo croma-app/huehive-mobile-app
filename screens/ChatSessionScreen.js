@@ -81,8 +81,10 @@ const ChatSessionScreen = (props) => {
       }
     };
     if (messages.length === 0) {
+      logEvent('chat_session_create');
       await createSession(message);
     } else {
+      logEvent('chat_session_follow_up');
       await followUpSession(messages[0].chat_session_id, message);
     }
     setInputText('');

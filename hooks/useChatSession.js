@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { createChatSession, followUpChatSession, getChatSession } from '../network/chat_session';
+import { sendClientError } from '../libs/Helpers';
 
 const useChatSession = (initialMessages) => {
   const [messages, setMessages] = useState(initialMessages || []);
@@ -19,6 +20,7 @@ const useChatSession = (initialMessages) => {
       } catch (error) {
         console.error('Error fetching chat session updates', error);
         setError(error);
+        sendClientError('fetch_new_message', error.message);
         clearInterval(interval);
       }
     }, 2000);
@@ -37,6 +39,7 @@ const useChatSession = (initialMessages) => {
     } catch (error) {
       console.error('Error creating chat session', error);
       setError(error);
+      sendClientError('create_session', error.message);
       throw error;
     } finally {
       setIsCreatingSession(false);
@@ -56,6 +59,7 @@ const useChatSession = (initialMessages) => {
     } catch (error) {
       console.error('Error following up chat session', error);
       setError(error);
+      sendClientError('followUpSession', error.message);
       throw error;
     } finally {
       setIsLoading(false);
