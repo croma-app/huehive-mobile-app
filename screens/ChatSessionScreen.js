@@ -10,9 +10,9 @@ import {
   ImageBackground
 } from 'react-native';
 import Colors from '../constants/Colors';
-import React, { useState, useEffect, useRef, NativeModules } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { material } from 'react-native-typography';
-import { logEvent } from '../libs/Helpers';
+import { logEvent, readRemoteConfig } from '../libs/Helpers';
 import ChatCard from '../components/ChatCard';
 import LoginScreen from './LoginScreen';
 import useUserData from '../hooks/getUserData';
@@ -52,9 +52,7 @@ const ChatSessionScreen = (props) => {
     const fetchData = async () => {
       if (!canUserCreateChat && !isUserDataLoading) {
         if (userData && !isPro) {
-          setCanUserCreateChat(
-            await NativeModules.CromaModule.getConfigString('ai_behind_pro_version')
-          );
+          setCanUserCreateChat(await readRemoteConfig('ai_behind_pro_version'));
         }
         if (isPro && userData) {
           setCanUserCreateChat(true);

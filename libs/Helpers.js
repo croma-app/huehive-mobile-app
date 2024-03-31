@@ -3,6 +3,11 @@ import * as RNIap from 'react-native-iap';
 import { requestPurchase, getProducts } from 'react-native-iap';
 import { sendClientErrorAsync } from '../network/errors';
 
+const readRemoteConfig = async (key) => {
+  // Native module always returns string. So, we need to convert it to boolean.
+  return (await NativeModules.CromaModule.getConfigString(key)) == 'true';
+};
+
 const productSku = function () {
   //return 'local_test1';
   return Platform.OS === 'android' ? 'croma_pro' : 'app_croma';
@@ -161,4 +166,4 @@ export function extractHexColors(text) {
   return Object.values(combinedHexMap);
 }
 
-export { logEvent, sendClientError, purchase, notifyMessage, initPurchase };
+export { logEvent, sendClientError, purchase, notifyMessage, initPurchase, readRemoteConfig };

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, ActivityIndicator, NativeModules } from 'react-native';
+import { ScrollView, StyleSheet, Text, ActivityIndicator } from 'react-native';
 import { View } from 'react-native-animatable';
 import CromaButton from '../components/CromaButton';
 import { CromaContext } from '../store/store';
-import { purchase, logEvent } from '../libs/Helpers';
+import { purchase, logEvent, readRemoteConfig } from '../libs/Helpers';
 import { material } from 'react-native-typography';
 import { initPurchase } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
@@ -18,7 +18,7 @@ export default function ProScreen() {
   };
   useEffect(() => {
     const fetchData = async () => {
-      setAiBehindFF(await NativeModules.CromaModule.getConfigString('ai_behind_pro_version'));
+      setAiBehindFF(await readRemoteConfig('ai_behind_pro_version'));
       setLoading(false);
     };
     fetchData();
