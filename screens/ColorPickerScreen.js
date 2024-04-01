@@ -7,13 +7,16 @@ import { CromaContext } from '../store/store';
 import SliderColorPicker from '../components/SliderColorPicker';
 import AIColorPicker from '../components/AIColorPicker';
 import Colors from '../constants/Colors';
+import { useEffect } from 'react/cjs/react.production.min';
 
 export default function ColorPickerScreen({ navigation }) {
   const [color, setColor] = useState('#db0a5b');
   const [activeTab, setActiveTab] = useState('basic');
   const { colorPickerCallback } = useContext(CromaContext);
 
-  logEvent('color_picker_screen');
+  useEffect(() => {
+    logEvent('color_picker_screen_' + activeTab);
+  }, [activeTab]);
   return (
     <View style={styles.container}>
       <View style={styles.tabContainer}>

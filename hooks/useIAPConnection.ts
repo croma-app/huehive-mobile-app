@@ -19,7 +19,8 @@ const useIAPConnection = () => {
 
     initConnection().then(() => {
       flushFailedPurchasesCachedAsPendingAndroid()
-        .catch(() => {
+        .catch((error) => {
+          sendClientError('purchase_event_error_flush', error.message);
           // exception can happen here if:
           // - there are pending purchases that are still pending (we can't consume a pending purchase)
           // in any case, you might not want to do anything special with the error
@@ -49,8 +50,8 @@ const useIAPConnection = () => {
           );
           purchaseErrorSubscription = purchaseErrorListener(
             (error: PurchaseError) => {
-              console.warn('purchaseErrorListener', error.toString());
-              sendClientError('purchase_event_error', error.toString());
+              console.warn('purchaseErrorListener', error.message);
+              sendClientError('purchase_event_error', error.message);
               logEvent('purchase_event_error');
             },
           );

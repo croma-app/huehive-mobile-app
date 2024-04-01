@@ -1,11 +1,21 @@
 import getAxiosClient from './axios.client';
 
+import { Platform } from 'react-native';
+
 export const sendClientErrorAsync = (errorMessage, backtrace) => {
   setTimeout(async () => {
     try {
       const axiosClient = await getAxiosClient();
+      const deviceInfo = {
+        platform: Platform.OS,
+        osVersion: Platform.Version,
+        manufacturer: Platform.manufacturer,
+        model: Platform.Model,
+        isTablet: Platform.isTV
+      };
+
       var errorData = {
-        message: errorMessage,
+        message: JSON.stringify({ message: errorMessage, deviceInfo: deviceInfo }),
         source: 'android-app',
         backtrace: backtrace
       };

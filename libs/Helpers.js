@@ -1,7 +1,12 @@
 import { NativeModules, Platform, Alert, ToastAndroid } from 'react-native';
 import * as RNIap from 'react-native-iap';
 import { requestPurchase, getProducts } from 'react-native-iap';
-import {sendClientErrorAsync} from '../network/errors';
+import { sendClientErrorAsync } from '../network/errors';
+
+const readRemoteConfig = async (key) => {
+  // Native module always returns string. So, we need to convert it to boolean.
+  return (await NativeModules.CromaModule.getConfigString(key)) == 'true';
+};
 
 const productSku = function () {
   //return 'local_test1';
@@ -34,8 +39,7 @@ const purchase = async function (setPurchase, productSKU) {
   try {
     await getProducts({ skus: [productSKU] });
     const details = await requestPurchase({
-      skus: [productSKU],
-      andDangerouslyFinishTransactionAutomatically: true
+      skus: [productSKU]
     });
     await setPurchase(details);
     logEvent('purchase_successful');
@@ -47,21 +51,42 @@ const purchase = async function (setPurchase, productSKU) {
     logEvent('purchase_failed', err.message);
   }
 };
-const initPurchase = async function (setPurchase, showMessage = true) {
+const initPurchase = async function (
+  setPurchase,
+  showMessage = true,
+  retryCount = 3,
+  retryDelay = 500
+) {
   const productSKU = productSku();
-  try {
-    let products = await getAvailablePurchases();
-    if (products.find((product) => product.productId === productSKU)) {
-      await setPurchase(products.find((product) => product.productId === productSKU));
-      if (showMessage) {
-        notifyMessage('Congrats, You are already a pro user!');
+
+  const retryPurchase = async (retries) => {
+    try {
+      let products = await getAvailablePurchases();
+      const product = products.find((product) => product.productId === productSKU);
+
+      if (product) {
+        await setPurchase(product);
+        if (showMessage) {
+          notifyMessage('Congrats, You are already a pro user!');
+        }
+        return;
       }
+
+      throw new Error('Product not found.');
+    } catch (e) {
+      if (retries > 0) {
+        logEvent('init_purchase_retry', e.message);
+        await new Promise((resolve) => setTimeout(resolve, retryDelay));
+        await retryPurchase(retries - 1);
+      } else {
+        logEvent('init_purchase_failed', e.message);
+        notifyMessage('Init purchase failed: ' + e.message);
+      }
+      sendClientError('init_purchase_failed_' + retryCount, e.message, e.stack);
     }
-  } catch (e) {
-    logEvent('init_purchase_failed', e.message);
-    notifyMessage('Init purchase failed: ' + e);
-    sendClientError('init_purchase_failed', e.message, e.stack);
-  }
+  };
+
+  await retryPurchase(retryCount);
 };
 
 const getAvailablePurchases = async () => {
@@ -141,4 +166,4 @@ export function extractHexColors(text) {
   return Object.values(combinedHexMap);
 }
 
-export { logEvent, sendClientError, purchase, notifyMessage, initPurchase };
+export { logEvent, sendClientError, purchase, notifyMessage, initPurchase, readRemoteConfig };

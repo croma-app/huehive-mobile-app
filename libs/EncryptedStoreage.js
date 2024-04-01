@@ -21,9 +21,7 @@ export async function storeUserSession(fullName, email, token, avatar_url) {
 export async function retrieveUserSession() {
   try {
     const session = await EncryptedStorage.getItem('user_session');
-
     if (session !== undefined) {
-      // Congrats! You've just retrieved your first value!
       return JSON.parse(session);
     }
   } catch (error) {

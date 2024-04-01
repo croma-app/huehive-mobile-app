@@ -7,13 +7,9 @@ const useUserData = function () {
 
   const getUserData = useCallback(async () => {
     setIsUserDataLoading(true);
-    try {
-      const userData = await retrieveUserSession();
-      if (userData) {
-        setUserData(userData);
-      }
-    } catch (error) {
-      console.error('Error retrieving user data', error);
+    const userData = await retrieveUserSession();
+    if (userData) {
+      setUserData(userData);
     }
     setIsUserDataLoading(false);
   }, []);
