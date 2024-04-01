@@ -69,10 +69,7 @@ const initPurchase = async function (
         if (showMessage) {
           notifyMessage('Congrats, You are already a pro user!');
         }
-        return;
       }
-
-      throw new Error('Product not found.');
     } catch (e) {
       if (retries > 0) {
         logEvent('init_purchase_retry', e.message);
