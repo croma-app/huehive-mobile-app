@@ -130,17 +130,23 @@ const ChatSessionScreen = (props) => {
                 style={styles.chat_container}
                 showsVerticalScrollIndicator={false}>
                 {messages.length === 0 ? (
-                  <View style={styles.emptyChat}>
-                    <Text style={styles.emptyChatText}>
-                      Welcome to HueHive AI! Start a conversation to create color palettes for your
-                      next project
-                    </Text>
-                    <Text style={styles.emptyChatSubtext}>Here are few examples</Text>
-                    <View style={styles.examplePhrasesContainer}>
-                      {EXAMPLE_PHRASES.map((phrase, index) => (
-                        <ExamplePhrase key={index} phrase={phrase} onPress={setInputText} />
-                      ))}
-                    </View>
+                  <View style={styles.searchContainer}>
+                    <TextInput
+                      style={styles.searchInput}
+                      value={inputText}
+                      onChangeText={setInputText}
+                      placeholder="Search..."
+                    />
+                    <TouchableOpacity
+                      disabled={isLoading || inputText.trim() === ''}
+                      onPress={handleSendMessage}
+                      style={
+                        isLoading || inputText.trim() === ''
+                          ? styles.disableSearchButton
+                          : styles.searchButton
+                      }>
+                      <Text style={styles.searchButtonText}>Search</Text>
+                    </TouchableOpacity>
                   </View>
                 ) : (
                   messages.map((message, index) => (
@@ -336,7 +342,39 @@ const styles = StyleSheet.create({
     color: 'white',
     paddingLeft: 5,
     paddingRight: 5
-  }
+  },
+  searchContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  searchInput: {
+    width: '80%',
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+  },
+  searchButton: {
+    backgroundColor: Colors.primary,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  disableSearchButton: {
+    backgroundColor: 'gray',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  searchButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
 
 export default ChatSessionScreen;

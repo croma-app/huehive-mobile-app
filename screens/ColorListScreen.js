@@ -1,15 +1,16 @@
 import React, { useLayoutEffect } from 'react';
 import { SingleColorView } from '../components/SingleColorView';
-import { ScrollView, StyleSheet, View, Text, Platform } from 'react-native';
+import { StyleSheet, View, Text, Platform } from 'react-native';
 import CromaButton from '../components/CromaButton';
 import { logEvent } from '../libs/Helpers';
 import { CromaContext } from '../store/store';
 import { useTranslation } from 'react-i18next';
+import DraggableFlatList from 'react-native-draggable-flatlist';
 
 export default function ColorListScreen({ navigation }) {
   const { t } = useTranslation();
 
-  const { colorList } = React.useContext(CromaContext);
+  const { colorList, setColorList } = React.useContext(CromaContext);
   const colors = uniqueColors(colorList);
 
   useLayoutEffect(() => {
@@ -20,22 +21,30 @@ export default function ColorListScreen({ navigation }) {
           : t('Colors')
     });
   }, []);
+  const renderItem = ({ item, index, drag, isActive }) => (
+    <SingleColorView key={item.color} color={item} drag={drag} />
+  );
+
+  const onDragEnd = ({ data }) => {
+    setColorList(data);
+  };
 
   logEvent('color_list_screen');
   return (
-    <ScrollView style={styles.listview} showsVerticalScrollIndicator={false}>
-      <View>
-        {colors.map((color) => (
-          <SingleColorView key={color.color} color={color} />
-        ))}
-      </View>
+    <View style={styles.container}>
+      <DraggableFlatList
+        data={colors}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.color}
+        onDragEnd={onDragEnd}
+      />
       <CromaButton
         onPress={() => {
           navigation.navigate('SavePalette');
         }}>
         {t('SAVE AS NEW PALETTE')}
       </CromaButton>
-    </ScrollView>
+    </View>
   );
 }
 function uniqueColors(colors) {
@@ -73,7 +82,8 @@ const CustomHeader = () => {
 };
 
 const styles = StyleSheet.create({
-  listview: {
+  container: {
+    flex: 1,
     margin: 8
   },
   doneButton: {

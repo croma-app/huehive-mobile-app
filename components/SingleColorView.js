@@ -12,6 +12,7 @@ export class SingleColorView extends React.Component {
           }
           Clipboard.setString(this.props.color.color);
         }}
+        onLongPress={this.props.drag}
         style={[styles.container, { backgroundColor: this.props.color.color }]}>
         <Text style={styles.colorText}>
           {this.props.color.color +
