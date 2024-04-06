@@ -2,7 +2,7 @@ import React, { useLayoutEffect } from 'react';
 import { SingleColorView } from '../components/SingleColorView';
 import { StyleSheet, View, Text, Platform } from 'react-native';
 import CromaButton from '../components/CromaButton';
-import { logEvent } from '../libs/Helpers';
+import { logEvent, notifyMessage } from '../libs/Helpers';
 import { CromaContext } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import DraggableFlatList from 'react-native-draggable-flatlist';
@@ -21,12 +21,36 @@ export default function ColorListScreen({ navigation }) {
           : t('Colors')
     });
   }, []);
-  const renderItem = ({ item, index, drag, isActive }) => (
-    <SingleColorView key={item.color} color={item} drag={drag} />
+  const renderItem = ({ item, drag }) => (
+    <SingleColorView
+      onColorChange={(updatedColor) => {
+        const index = colors.findIndex((color) => color.color === updatedColor.color);
+        const updatedColors = [...colors];
+        updatedColors[index] = updatedColor;
+        setColorList(updatedColors);
+      }}
+      key={item.color + '-' + item.locked}
+      color={item}
+      drag={drag}
+    />
   );
 
   const onDragEnd = ({ data }) => {
     setColorList(data);
+  };
+  const regenerateUnlockedColors = () => {
+    if (colors.filter((color) => !color.locked).length == 0) {
+      notifyMessage(t('Please unlock at least one color'));
+    } else {
+      // TODO: improve this algorithm.
+      const newColors = colors.map((color) => {
+        if (!color.locked) {
+          color.color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+        }
+        return color;
+      });
+      setColorList(newColors);
+    }
   };
 
   logEvent('color_list_screen');
@@ -35,9 +59,15 @@ export default function ColorListScreen({ navigation }) {
       <DraggableFlatList
         data={colors}
         renderItem={renderItem}
-        keyExtractor={(item) => item.color}
+        keyExtractor={(item) => item.color + '-' + item.locked}
         onDragEnd={onDragEnd}
       />
+      <CromaButton
+        onPress={() => {
+          regenerateUnlockedColors();
+        }}>
+        {t('Generate')}
+      </CromaButton>
       <CromaButton
         onPress={() => {
           navigation.navigate('SavePalette');
@@ -52,6 +82,9 @@ function uniqueColors(colors) {
   let uniqueColors = [];
   colors.forEach((color) => {
     if (!set.has(color.color)) {
+      if (color.locked === undefined) {
+        color.locked = true;
+      }
       uniqueColors.push(color);
     }
     set.add(color.color);
