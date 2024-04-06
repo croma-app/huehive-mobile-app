@@ -33,10 +33,11 @@ export const SingleColorView = ({ color, onColorChange, drag }) => {
   return (
     <TouchableOpacity
       onPress={handlePress}
+      //onPressIn={drag}
       onLongPress={drag}
       style={[styles.container, { backgroundColor: color.color }]}>
       <Text style={[styles.colorText, { color: textColor }]}>
-        {color.color + (color.name ? ' (' + color.name + ')' : '')}
+        {color.color.toUpperCase() + (color.name ? ' (' + color.name + ')' : '')}
       </Text>
       <View style={styles.actionArea}>
         <TouchableOpacity
@@ -59,15 +60,15 @@ export const SingleColorView = ({ color, onColorChange, drag }) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: 88,
-    justifyContent: 'center',
+    height: 72,
+    //justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
     flexDirection: 'row'
   },
   colorText: {
     fontWeight: '700',
-    paddingLeft: 8,
+    paddingLeft: 16,
     paddingRight: 8
   },
   actionArea: {

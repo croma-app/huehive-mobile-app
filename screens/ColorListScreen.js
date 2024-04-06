@@ -36,9 +36,11 @@ export default function ColorListScreen({ navigation }) {
   );
 
   const onDragEnd = ({ data }) => {
+    logEvent('drag_end_event_color_list');
     setColorList(data);
   };
   const regenerateUnlockedColors = () => {
+    logEvent('regenerate_unlocked_colors', colors.filter((color) => !color.locked).length);
     if (colors.filter((color) => !color.locked).length == 0) {
       notifyMessage(t('Please unlock at least one color'));
     } else {
@@ -56,19 +58,27 @@ export default function ColorListScreen({ navigation }) {
   logEvent('color_list_screen');
   return (
     <View style={styles.container}>
-      <DraggableFlatList
-        data={colors}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.color + '-' + item.locked}
-        onDragEnd={onDragEnd}
-      />
+      {/* this is to make sure scrolling works */}
+      <View style={{ flex: 1 }}>
+        <DraggableFlatList
+          data={colors}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.color + '-' + item.locked}
+          onDragEnd={onDragEnd}
+          autoscrollThreshold={100}
+        />
+      </View>
+      <Text style={styles.hintText}>Generate new colors for unlocked colors</Text>
       <CromaButton
+        style={styles.button}
         onPress={() => {
           regenerateUnlockedColors();
         }}>
-        {t('Generate')}
+        {t('Generate new colors')}
       </CromaButton>
+      <View style={styles.separator} />
       <CromaButton
+        style={styles.button}
         onPress={() => {
           navigation.navigate('SavePalette');
         }}>
@@ -117,9 +127,24 @@ const CustomHeader = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 8
+    marginTop: 8,
+    marginBottom: 8
   },
-  doneButton: {
-    marginRight: '20%'
+  hintText: {
+    fontSize: 12,
+    color: '#888',
+    marginTop: 8,
+    marginBottom: 4,
+    textAlign: 'center'
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#ccc',
+    marginVertical: 16,
+    marginHorizontal: 8
+  },
+  button: {
+    marginLeft: 32,
+    marginRight: 32
   }
 });
