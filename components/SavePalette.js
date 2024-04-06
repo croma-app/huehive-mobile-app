@@ -40,7 +40,7 @@ export const SavePalette = (props) => {
     setTimeout(() => {
       setIsUnlockProNotification(false);
     }, 5000);
-  }, [colorList]);
+  }, [colorList, isPro]);
 
   const [paletteName, setPaletteName] = useState(suggestedName ?? '');
   useEffect(() => {
