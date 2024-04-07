@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { Platform, StyleSheet, Text, Clipboard, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+import { Platform, StyleSheet, Text, Clipboard, TouchableOpacity, View, Modal } from 'react-native';
 import { notifyMessage } from '../libs/Helpers';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -21,19 +21,29 @@ function getContrastColor(bgColor) {
 }
 
 export const SingleColorView = ({ color, onColorChange, drag }) => {
-  const handlePress = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  const handleCopyColor = () => {
     if (Platform?.OS === 'android' || Platform.OS === 'ios') {
       notifyMessage(color.color + ' copied to clipboard!');
     }
     Clipboard.setString(color.color);
+    closeModal();
   };
 
   const textColor = getContrastColor(color.color);
 
   return (
     <TouchableOpacity
-      onPress={handlePress}
-      //onPressIn={drag}
+      onPress={openModal}
       onLongPress={drag}
       style={[styles.container, { backgroundColor: color.color }]}>
       <Text style={[styles.colorText, { color: textColor }]}>
@@ -54,6 +64,24 @@ export const SingleColorView = ({ color, onColorChange, drag }) => {
           <MaterialIcons style={[styles.icon, { color: textColor }]} name="drag-indicator" />
         </TouchableOpacity>
       </View>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={closeModal}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>{color.color.toUpperCase()}</Text>
+            <TouchableOpacity style={styles.copyButton} onPress={handleCopyColor}>
+              <Text style={styles.copyButtonText}>Copy Color</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </TouchableOpacity>
   );
 };
@@ -84,5 +112,44 @@ const styles = StyleSheet.create({
   actionAreaItem: {
     marginRight: 8,
     marginLeft: 8
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    alignItems: 'center',
+    height: '40%'
+  },
+  modalText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20
+  },
+  copyButton: {
+    backgroundColor: 'blue',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 4,
+    marginBottom: 10
+  },
+  copyButtonText: {
+    color: 'white',
+    fontSize: 16
+  },
+  closeButton: {
+    backgroundColor: 'gray',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 4
+  },
+  closeButtonText: {
+    color: 'white',
+    fontSize: 16
   }
 });
