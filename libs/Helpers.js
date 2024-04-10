@@ -3,6 +3,11 @@ import * as RNIap from 'react-native-iap';
 import { requestPurchase, getProducts } from 'react-native-iap';
 import { sendClientErrorAsync } from '../network/errors';
 
+const isProduction = () => {
+  // eslint-disable-next-line no-undef
+  return __DEV__ === false;
+};
+
 const readRemoteConfig = async (key) => {
   // Native module always returns string. So, we need to convert it to boolean.
   return (await NativeModules.CromaModule.getConfigString(key)) == 'true';
@@ -13,7 +18,11 @@ const productSku = function () {
   return Platform.OS === 'android' ? 'croma_pro' : 'app_croma';
 };
 const sendClientError = (event, errorMessage, stacktrace) => {
-  sendClientErrorAsync(event + ' -  ' + errorMessage, stacktrace || new Error().stack);
+  if (isProduction) {
+    sendClientErrorAsync(event + ' -  ' + errorMessage, stacktrace || new Error().stack);
+  } else {
+    console.log('Client error', event, errorMessage, stacktrace);
+  }
 };
 
 const logEvent = (eventName, value) => {
@@ -45,10 +54,15 @@ const purchase = async function (setPurchase, productSKU) {
     logEvent('purchase_successful');
     notifyMessage('Congrats, You are now a pro user!');
   } catch (err) {
-    console.warn(err.code, err.message);
-    notifyMessage(`Purchase unsuccessful ${err}`);
-    sendClientError('purchase_failed', err.message, err.stack);
+    if (err.code == 'E_ALREADY_OWNED') {
+      setPurchase('Already owned');
+      notifyMessage('Purchase restored successfully!');
+    } else {
+      console.warn(err.code, err.message);
+      notifyMessage(`Purchase unsuccessful ${err.message}`);
+    }
     logEvent('purchase_failed', err.message);
+    sendClientError('purchase_failed', err.message + 'Error code: ' + err.code, err.stack);
   }
 };
 const initPurchase = async function (

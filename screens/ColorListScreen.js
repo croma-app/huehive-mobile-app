@@ -6,7 +6,7 @@ import { logEvent } from '../libs/Helpers';
 import { CromaContext } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import DraggableFlatList from 'react-native-draggable-flatlist';
-var Color = require("pigment/full");
+import { Color } from 'pigment/full';
 
 export default function ColorListScreen({ navigation }) {
   const { t } = useTranslation();
