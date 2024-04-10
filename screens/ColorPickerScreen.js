@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { ScrollView, View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import CromaButton from '../components/CromaButton';
 import { CromaColorPicker as ColorPicker } from 'croma-color-picker';
@@ -7,7 +7,6 @@ import { CromaContext } from '../store/store';
 import SliderColorPicker from '../components/SliderColorPicker';
 import AIColorPicker from '../components/AIColorPicker';
 import Colors from '../constants/Colors';
-import { useEffect } from 'react/cjs/react.production.min';
 
 export default function ColorPickerScreen({ navigation }) {
   const [color, setColor] = useState('#db0a5b');

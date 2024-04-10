@@ -1,17 +1,22 @@
 import React, { useLayoutEffect } from 'react';
 import { SingleColorView } from '../components/SingleColorView';
-import { StyleSheet, View, Text, Platform } from 'react-native';
+import { StyleSheet, View, Text, Platform, Animated } from 'react-native';
 import CromaButton from '../components/CromaButton';
-import { logEvent, notifyMessage } from '../libs/Helpers';
+import { logEvent } from '../libs/Helpers';
 import { CromaContext } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import DraggableFlatList from 'react-native-draggable-flatlist';
+import { Color } from 'pigment/full';
 
 export default function ColorListScreen({ navigation }) {
   const { t } = useTranslation();
+  const [helpMessage, setHelpMessage] = React.useState('Generate new colors for unlocked colors');
 
   const { colorList, setColorList } = React.useContext(CromaContext);
-  const colors = uniqueColors(colorList);
+  const colors = uniqueColors(colorList).map((color) => ({
+    ...color,
+    opacity: color.opacity || new Animated.Value(1)
+  }));
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -21,19 +26,59 @@ export default function ColorListScreen({ navigation }) {
           : t('Colors')
     });
   }, []);
-  const renderItem = ({ item, drag }) => (
-    <SingleColorView
-      onColorChange={(updatedColor) => {
-        const index = colors.findIndex((color) => color.color === updatedColor.color);
-        const updatedColors = [...colors];
-        updatedColors[index] = updatedColor;
-        setColorList(updatedColors);
-      }}
-      key={item.color + '-' + item.locked}
-      color={item}
-      drag={drag}
-    />
-  );
+  const renderItem = ({ item, drag }) => {
+    const opecity = item.opacity;
+    return (
+      <SingleColorView
+        onColorChange={(updatedColor) => {
+          const index = colors.findIndex((color) => color.color === updatedColor.color);
+          const updatedColors = [...colors];
+          updatedColors[index] = updatedColor;
+          setColorList(updatedColors);
+        }}
+        opacity={opecity}
+        key={item.color + '-' + item.locked}
+        color={item}
+        drag={drag}
+        onAdd={() => {
+          logEvent('add_color_to_palette');
+          const index = colors.findIndex((color) => color.color === item.color);
+          const currentColor = new Color(colors[index].color);
+          const newColor = {
+            color: currentColor.darken(0.1).tohex(),
+            locked: false,
+            opacity: new Animated.Value(0)
+          };
+          const updatedColors = [
+            ...colors.slice(0, index + 1),
+            newColor,
+            ...colors.slice(index + 1)
+          ];
+
+          setColorList(updatedColors);
+
+          // Find the opacity value of the newly added color
+          const newColorOpacity = updatedColors[index + 1].opacity;
+          newColorOpacity.setValue(0);
+          Animated.timing(newColorOpacity, {
+            toValue: 1,
+            duration: 1000,
+            useNativeDriver: true
+          }).start();
+        }}
+        onRemove={() => {
+          Animated.timing(opecity, {
+            toValue: 0,
+            duration: 600,
+            useNativeDriver: true
+          }).start(() => {
+            logEvent('remove_color_from_palette');
+            setColorList(colors.filter((color) => color.color !== item.color));
+          });
+        }}
+      />
+    );
+  };
 
   const onDragEnd = ({ data }) => {
     logEvent('drag_end_event_color_list');
@@ -42,7 +87,7 @@ export default function ColorListScreen({ navigation }) {
   const regenerateUnlockedColors = () => {
     logEvent('regenerate_unlocked_colors', colors.filter((color) => !color.locked).length);
     if (colors.filter((color) => !color.locked).length == 0) {
-      notifyMessage(t('Please unlock at least one color'));
+      setHelpMessage('Please unlock some colors or add colors to generate new colors');
     } else {
       // TODO: improve this algorithm.
       const newColors = colors.map((color) => {
@@ -68,7 +113,7 @@ export default function ColorListScreen({ navigation }) {
           autoscrollThreshold={100}
         />
       </View>
-      <Text style={styles.hintText}>Generate new colors for unlocked colors</Text>
+      <Text style={styles.hintText}>{helpMessage}</Text>
       <CromaButton
         style={styles.button}
         onPress={() => {
