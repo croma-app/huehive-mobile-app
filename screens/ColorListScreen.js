@@ -1,6 +1,6 @@
 import React, { useLayoutEffect } from 'react';
 import { SingleColorView } from '../components/SingleColorView';
-import { StyleSheet, View, Text, Platform } from 'react-native';
+import { StyleSheet, View, Text, Platform, Animated } from 'react-native';
 import CromaButton from '../components/CromaButton';
 import { logEvent, notifyMessage } from '../libs/Helpers';
 import { CromaContext } from '../store/store';
@@ -11,7 +11,10 @@ export default function ColorListScreen({ navigation }) {
   const { t } = useTranslation();
 
   const { colorList, setColorList } = React.useContext(CromaContext);
-  const colors = uniqueColors(colorList);
+  const colors = uniqueColors(colorList).map((color) => ({
+    ...color,
+    opacity: color.opacity || new Animated.Value(1)
+  }));
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -21,19 +24,58 @@ export default function ColorListScreen({ navigation }) {
           : t('Colors')
     });
   }, []);
-  const renderItem = ({ item, drag }) => (
-    <SingleColorView
-      onColorChange={(updatedColor) => {
-        const index = colors.findIndex((color) => color.color === updatedColor.color);
-        const updatedColors = [...colors];
-        updatedColors[index] = updatedColor;
-        setColorList(updatedColors);
-      }}
-      key={item.color + '-' + item.locked}
-      color={item}
-      drag={drag}
-    />
-  );
+  const renderItem = ({ item, drag }) => {
+    const opecity = item.opacity;
+    return (
+      <SingleColorView
+        onColorChange={(updatedColor) => {
+          const index = colors.findIndex((color) => color.color === updatedColor.color);
+          const updatedColors = [...colors];
+          updatedColors[index] = updatedColor;
+          setColorList(updatedColors);
+        }}
+        opacity={opecity}
+        key={item.color + '-' + item.locked}
+        color={item}
+        drag={drag}
+        onAdd={() => {
+          logEvent('add_color_to_palette');
+          const newColor = {
+            color: '#' + Math.floor(Math.random() * 16777215).toString(16),
+            locked: false,
+            opacity: new Animated.Value(0)
+          };
+          const index = colors.findIndex((color) => color.color === item.color);
+          const updatedColors = [
+            ...colors.slice(0, index + 1),
+            newColor,
+            ...colors.slice(index + 1)
+          ];
+
+          setColorList(updatedColors);
+
+          // Find the opacity value of the newly added color
+          const newColorOpacity = updatedColors[index + 1].opacity;
+          newColorOpacity.setValue(0);
+          Animated.timing(newColorOpacity, {
+            toValue: 1,
+            duration: 1000,
+            useNativeDriver: true
+          }).start();
+        }}
+        onRemove={() => {
+          Animated.timing(opecity, {
+            toValue: 0,
+            duration: 600,
+            useNativeDriver: true
+          }).start(() => {
+            logEvent('remove_color_from_palette');
+            setColorList(colors.filter((color) => color.color !== item.color));
+          });
+        }}
+      />
+    );
+  };
 
   const onDragEnd = ({ data }) => {
     logEvent('drag_end_event_color_list');

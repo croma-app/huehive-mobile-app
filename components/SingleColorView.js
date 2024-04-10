@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { Platform, StyleSheet, Text, Clipboard, TouchableOpacity, View, Modal } from 'react-native';
+import {
+  Platform,
+  StyleSheet,
+  Text,
+  Clipboard,
+  TouchableOpacity,
+  View,
+  Modal,
+  TouchableWithoutFeedback, Animated
+} from 'react-native';
 import { notifyMessage } from '../libs/Helpers';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -20,7 +29,7 @@ function getContrastColor(bgColor) {
   return L > 0.179 ? 'black' : 'white';
 }
 
-export const SingleColorView = ({ color, onColorChange, drag }) => {
+export const SingleColorView = ({ color, onColorChange, drag, onRemove, onAdd }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const openModal = () => {
@@ -39,50 +48,75 @@ export const SingleColorView = ({ color, onColorChange, drag }) => {
     closeModal();
   };
 
+  const handleRmoveColor = () => {
+    onRemove();
+    closeModal();
+  };
+  const handleAddColor = () => {
+    onAdd();
+    closeModal();
+  };
+
   const textColor = getContrastColor(color.color);
-
+  const menuItems = [
+    { label: 'Copy Color', onPress: handleCopyColor },
+    //{ label: 'Edit Color', onPress: handleEditColor },
+    { label: 'Add Color', onPress: handleAddColor },
+    { label: 'Remove Color', onPress: handleRmoveColor }
+  ];
   return (
-    <TouchableOpacity
-      onPress={openModal}
-      onLongPress={drag}
-      style={[styles.container, { backgroundColor: color.color }]}>
-      <Text style={[styles.colorText, { color: textColor }]}>
-        {color.color.toUpperCase() + (color.name ? ' (' + color.name + ')' : '')}
-      </Text>
-      <View style={styles.actionArea}>
-        <TouchableOpacity
-          style={styles.actionAreaItem}
-          onPress={() => {
-            onColorChange({ ...color, color: color.color, locked: !color.locked });
-          }}>
-          <FontAwesome5
-            style={[styles.icon, { color: textColor }]}
-            name={color.locked ? 'lock' : 'unlock'}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.actionAreaItem} onPressIn={drag}>
-          <MaterialIcons style={[styles.icon, { color: textColor }]} name="drag-indicator" />
-        </TouchableOpacity>
-      </View>
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={closeModal}>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalText}>{color.color.toUpperCase()}</Text>
-            <TouchableOpacity style={styles.copyButton} onPress={handleCopyColor}>
-              <Text style={styles.copyButtonText}>Copy Color</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
-              <Text style={styles.closeButtonText}>Close</Text>
-            </TouchableOpacity>
-          </View>
+    <Animated.View style={[styles.container, { opacity: color.opacity }]}>
+      <TouchableOpacity
+        onPress={openModal}
+        onLongPress={drag}
+        style={[styles.container, { backgroundColor: color.color }]}>
+        <Text style={[styles.colorText, { color: textColor }]}>
+          {color.color.toUpperCase() + (color.name ? ' (' + color.name + ')' : '')}
+        </Text>
+        <View style={styles.actionArea}>
+          <TouchableOpacity
+            style={styles.actionAreaItem}
+            onPress={() => {
+              onColorChange({ ...color, color: color.color, locked: !color.locked });
+            }}>
+            <FontAwesome5
+              style={[styles.icon, { color: textColor }]}
+              name={color.locked ? 'lock' : 'unlock'}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.actionAreaItem} onPressIn={drag}>
+            <MaterialIcons style={[styles.icon, { color: textColor }]} name="drag-indicator" />
+          </TouchableOpacity>
         </View>
-      </Modal>
-    </TouchableOpacity>
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={closeModal}>
+          <TouchableWithoutFeedback onPress={closeModal}>
+            <View style={styles.modalContainer}>
+              <TouchableWithoutFeedback onPress={() => {}}>
+                <View style={styles.modalContent}>
+                  <Text style={styles.modalText}>{color.color.toUpperCase()}</Text>
+                  {menuItems.map((item, index) => (
+                    <>
+                      <TouchableOpacity
+                        key={index}
+                        style={[styles.menuButton]}
+                        onPress={item.onPress}>
+                        <Text style={styles.menuButtonText}>{item.label}</Text>
+                      </TouchableOpacity>
+                      <View style={styles.lineseperator}></View>
+                    </>
+                  ))}
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+      </TouchableOpacity>
+    </Animated.View>
   );
 };
 
@@ -120,7 +154,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: 'white',
-    padding: 20,
+    paddingVertical: 20,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     alignItems: 'center',
@@ -151,5 +185,22 @@ const styles = StyleSheet.create({
   closeButtonText: {
     color: 'white',
     fontSize: 16
+  },
+  menuButton: {
+    paddingHorizontal: 12,
+    borderRadius: 8,
+    paddingVertical: 10,
+    width: '100%',
+    alignItems: 'center'
+  },
+  menuButtonText: {
+    color: 'black',
+    fontSize: 16,
+    fontWeight: 'bold'
+  },
+  lineseperator: {
+    height: 1,
+    width: '100%',
+    backgroundColor: 'gray'
   }
 });
