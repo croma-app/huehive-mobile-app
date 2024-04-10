@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   View,
   Modal,
-  TouchableWithoutFeedback, Animated
+  TouchableWithoutFeedback,
+  Animated
 } from 'react-native';
 import { notifyMessage } from '../libs/Helpers';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -75,17 +76,22 @@ export const SingleColorView = ({ color, onColorChange, drag, onRemove, onAdd })
         </Text>
         <View style={styles.actionArea}>
           <TouchableOpacity
-            style={styles.actionAreaItem}
+            style={[styles.actionAreaItem, styles.lockActionAreaItem]}
             onPress={() => {
               onColorChange({ ...color, color: color.color, locked: !color.locked });
             }}>
             <FontAwesome5
-              style={[styles.icon, { color: textColor }]}
+              style={[styles.icon, styles.lockIcon, { color: textColor }]}
               name={color.locked ? 'lock' : 'unlock'}
             />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.actionAreaItem} onPressIn={drag}>
-            <MaterialIcons style={[styles.icon, { color: textColor }]} name="drag-indicator" />
+          <TouchableOpacity
+            style={[styles.actionAreaItem, styles.dragActionAreaItem]}
+            onPressIn={drag}>
+            <MaterialIcons
+              style={[styles.icon, styles.dragIcon, { color: textColor }]}
+              name="drag-indicator"
+            />
           </TouchableOpacity>
         </View>
 
@@ -136,16 +142,28 @@ const styles = StyleSheet.create({
   actionArea: {
     position: 'absolute',
     right: 0,
-    padding: 8,
     flex: 1,
     flexDirection: 'row'
   },
   icon: {
+    paddingHorizontal: 8
+  },
+  lockIcon: {
+    fontSize: 16,
+    opacity: 0.6
+  },
+  dragIcon: {
     fontSize: 24
   },
   actionAreaItem: {
-    marginRight: 8,
     marginLeft: 8
+  },
+  dragActionAreaItem: {
+    padding: 8
+  },
+  lockActionAreaItem: {
+    padding: 8,
+    marginVertical: 4
   },
   modalContainer: {
     flex: 1,
@@ -171,20 +189,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 4,
     marginBottom: 10
-  },
-  copyButtonText: {
-    color: 'white',
-    fontSize: 16
-  },
-  closeButton: {
-    backgroundColor: 'gray',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 4
-  },
-  closeButtonText: {
-    color: 'white',
-    fontSize: 16
   },
   menuButton: {
     paddingHorizontal: 12,
