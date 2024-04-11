@@ -1,5 +1,5 @@
 import React from 'react';
-import { NativeModules } from 'react-native';
+import { NativeModules, Modal, TouchableWithoutFeedback, View } from 'react-native';
 import Color from 'pigment/full';
 import RNColorThief from 'react-native-color-thief';
 import { notifyMessage } from '../libs/Helpers';
@@ -13,18 +13,15 @@ import { launchImageLibrary } from 'react-native-image-picker';
 import { CromaContext } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import ColorPickerModal from './ColorPickerModal';
 
 const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   const { t } = useTranslation();
+  const [isColorPickerVisible, setIsColorPickerVisible] = React.useState(false);
 
-  const {
-    isPro,
-    setPurchase,
-    setColorList,
-    setColorPickerCallback,
-    setDetailedColor,
-    clearPalette
-  } = React.useContext(CromaContext);
+  const { isPro, setPurchase, setColorList, setDetailedColor, clearPalette } =
+    React.useContext(CromaContext);
+
   const pickImageResult = async () => {
     const result = await launchImageLibrary({
       mediaType: 'photo',
@@ -32,133 +29,151 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
     });
     return result;
   };
+
+  const handleColorSelected = (color) => {
+    clearPalette();
+    setDetailedColor(color);
+    setIsColorPickerVisible(false);
+    navigation.navigate('Palettes');
+  };
   return (
-    <ActionButtonContainer
-      config={[
-        [
-          {
-            icon: <MaterialCommunityIcons name="camera" size={20} color={Colors.fabPrimary} />,
-            text1: 'Pick colors',
-            text2: 'using camera',
-            onPress: async () => {
-              const pickedColors = await NativeModules.CromaModule.navigateToColorPicker();
-              logEvent('hm_pick_text_colors_from_camera', {
-                length: pickedColors.length
-              });
-              clearPalette();
-              setColorList(JSON.parse(pickedColors)?.colors);
-              navigation.navigate('ColorList');
-            }
-          },
-          {
-            icon: <Ionicons name="md-image" color={Colors.fabPrimary} size={20} />,
-            text1: t('Get palette'),
-            text2: t('from image'),
-            onPress: async () => {
-              try {
-                setPickImageLoading(true);
-                const image = await pickImageResult();
-                logEvent('get_palette_from_image');
-                // get dominant color object { r, g, b }
-                const pickedColors = await RNColorThief.getPalette(
-                  image.assets[0].uri,
-                  6,
-                  10,
-                  false
-                );
-                clearPalette();
-                setColorList(
-                  pickedColors.map((colorThiefColor) => {
-                    const hex = new Color(
-                      'rgb(' +
-                        colorThiefColor.r +
-                        ', ' +
-                        colorThiefColor.g +
-                        ', ' +
-                        colorThiefColor.b +
-                        ')'
-                    ).tohex();
-                    return { color: hex };
-                  })
-                );
-                navigation.navigate('ColorList');
-              } catch (error) {
-                notifyMessage(t('Error while extracting colors - ') + error);
-              } finally {
-                setPickImageLoading(false);
-              }
-            }
-          },
-          {
-            icon: (
-              <MaterialCommunityIcons name="palette-swatch" color={Colors.fabPrimary} size={20} />
-            ),
-            text1: t('Get palette'),
-            text2: t('from color'),
-            onPress: () => {
-              logEvent('get_palette_from_color');
-              clearPalette();
-              setColorPickerCallback(({ color }) => {
-                clearPalette();
-                setDetailedColor(color);
-                navigation.navigate('Palettes');
-              });
-              navigation.navigate('ColorPicker');
-            }
-          }
-        ],
-        [
-          {
-            icon: <MaterialCommunityIcons name="image" size={20} color={Colors.fabPrimary} />,
-            text1: t('Pick color'),
-            text2: t('from image'),
-            onPress: async () => {
-              const imageResult = await pickImageResult();
-              if (!imageResult.didCancel) {
-                const pickedColors = await NativeModules.CromaModule.navigateToImageColorPicker(
-                  imageResult.assets[0].uri
-                );
-                logEvent('hm_pick_colors_from_img', {
+    <>
+      <ActionButtonContainer
+        config={[
+          [
+            {
+              icon: <MaterialCommunityIcons name="camera" size={20} color={Colors.fabPrimary} />,
+              text1: 'Pick colors',
+              text2: 'using camera',
+              onPress: async () => {
+                const pickedColors = await NativeModules.CromaModule.navigateToColorPicker();
+                logEvent('hm_pick_text_colors_from_camera', {
                   length: pickedColors.length
                 });
                 clearPalette();
                 setColorList(JSON.parse(pickedColors)?.colors);
                 navigation.navigate('ColorList');
               }
-            }
-          },
-          {
-            icon: <FontAwesome5 name="magic" size={20} color={Colors.fabPrimary} />,
-            text1: t('Create using'),
-            text2: t('HueHive AI'),
-            onPress: async () => {
-              logEvent('chat_session_action_button');
-              navigation.navigate('ChatSession');
-            }
-          },
-          isPro
-            ? {
-                icon: <Ionicons name="md-color-filter" color={Colors.fabPrimary} size={20} />,
-                text1: t('Create New'),
-                text2: t('Palette'),
-                onPress: () => {
-                  try {
-                    logEvent('create_new_palette');
-                    clearPalette();
-                    navigation.navigate('AddPaletteManually');
-                  } catch (error) {
-                    notifyMessage(t('Error  - ') + error);
-                  }
+            },
+            {
+              icon: <Ionicons name="md-image" color={Colors.fabPrimary} size={20} />,
+              text1: t('Get palette'),
+              text2: t('from image'),
+              onPress: async () => {
+                try {
+                  setPickImageLoading(true);
+                  const image = await pickImageResult();
+                  logEvent('get_palette_from_image');
+                  // get dominant color object { r, g, b }
+                  const pickedColors = await RNColorThief.getPalette(
+                    image.assets[0].uri,
+                    6,
+                    10,
+                    false
+                  );
+                  clearPalette();
+                  setColorList(
+                    pickedColors.map((colorThiefColor) => {
+                      const hex = new Color(
+                        'rgb(' +
+                          colorThiefColor.r +
+                          ', ' +
+                          colorThiefColor.g +
+                          ', ' +
+                          colorThiefColor.b +
+                          ')'
+                      ).tohex();
+                      return { color: hex };
+                    })
+                  );
+                  navigation.navigate('ColorList');
+                } catch (error) {
+                  notifyMessage(t('Error while extracting colors - ') + error);
+                } finally {
+                  setPickImageLoading(false);
                 }
               }
-            : {
-                icon: <FontAwesome5 size={20} color={Colors.fabPrimary} name="unlock" />,
-                text1: t('Unlock'),
-                text2: t('pro'),
-                onPress: () => purchase(setPurchase)
+            },
+            {
+              icon: (
+                <MaterialCommunityIcons name="palette-swatch" color={Colors.fabPrimary} size={20} />
+              ),
+              text1: t('Get palette'),
+              text2: t('from color'),
+              onPress: () => {
+                logEvent('get_palette_from_color');
+                setIsColorPickerVisible(true);
               }
-        ]
-      ]}></ActionButtonContainer>
+            }
+          ],
+          [
+            {
+              icon: <MaterialCommunityIcons name="image" size={20} color={Colors.fabPrimary} />,
+              text1: t('Pick color'),
+              text2: t('from image'),
+              onPress: async () => {
+                const imageResult = await pickImageResult();
+                if (!imageResult.didCancel) {
+                  const pickedColors = await NativeModules.CromaModule.navigateToImageColorPicker(
+                    imageResult.assets[0].uri
+                  );
+                  logEvent('hm_pick_colors_from_img', {
+                    length: pickedColors.length
+                  });
+                  clearPalette();
+                  setColorList(JSON.parse(pickedColors)?.colors);
+                  navigation.navigate('ColorList');
+                }
+              }
+            },
+            {
+              icon: <FontAwesome5 name="magic" size={20} color={Colors.fabPrimary} />,
+              text1: t('Create using'),
+              text2: t('HueHive AI'),
+              onPress: async () => {
+                logEvent('chat_session_action_button');
+                navigation.navigate('ChatSession');
+              }
+            },
+            isPro
+              ? {
+                  icon: <Ionicons name="md-color-filter" color={Colors.fabPrimary} size={20} />,
+                  text1: t('Create New'),
+                  text2: t('Palette'),
+                  onPress: () => {
+                    try {
+                      logEvent('create_new_palette');
+                      clearPalette();
+                      navigation.navigate('AddPaletteManually');
+                    } catch (error) {
+                      notifyMessage(t('Error  - ') + error);
+                    }
+                  }
+                }
+              : {
+                  icon: <FontAwesome5 size={20} color={Colors.fabPrimary} name="unlock" />,
+                  text1: t('Unlock'),
+                  text2: t('pro'),
+                  onPress: () => purchase(setPurchase)
+                }
+          ]
+        ]}></ActionButtonContainer>
+      <Modal
+        visible={isColorPickerVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setIsColorPickerVisible(false)}>
+        <TouchableWithoutFeedback onPress={() => setIsColorPickerVisible(false)}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
+        <View style={styles.modalContent}>
+          <ColorPickerModal
+            onColorSelected={handleColorSelected}
+            onClose={() => setIsColorPickerVisible(false)}
+          />
+        </View>
+      </Modal>
+    </>
   );
 };
 
@@ -168,3 +183,14 @@ GridActionButtonAndroid.propTypes = {
 };
 
 export default GridActionButtonAndroid;
+
+const styles = {
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)'
+  },
+  modalContent: {
+    flex: 1,
+    justifyContent: 'flex-end'
+  }
+};
