@@ -28,10 +28,6 @@ export default function AIColorPicker({ color, setColor }) {
       <CromaButton onPress={generateColorFromQuery} disabled={loading}>
         {loading ? <ActivityIndicator size="small" color="#ffffff" /> : 'Generate Color'}
       </CromaButton>
-      <View style={styles.selectedColorView}>
-        <TextInput style={styles.input} value={color} onChangeText={(color) => setColor(color)} />
-        <View style={[styles.selectedColor, { backgroundColor: color }]}></View>
-      </View>
     </View>
   );
 }
@@ -48,14 +44,5 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 100,
     marginTop: 16
-  },
-  selectedColorView: {
-    marginTop: 10,
-    flexDirection: 'row',
-    flex: 2,
-    padding: 10
-  },
-  selectedColor: {
-    width: '50%'
   }
 });

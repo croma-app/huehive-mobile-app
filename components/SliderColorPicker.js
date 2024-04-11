@@ -74,10 +74,6 @@ export default function SliderColorPicker(props) {
           style={{ height: 12, borderRadius: 6, backgroundColor: 'black' }}
         />
       </View>
-      <View style={styles.selectedColorView}>
-        <TextInput style={styles.input} value={color} onChangeText={(color) => setColor(color)} />
-        <View style={[styles.selectedColor, { backgroundColor: color }]}></View>
-      </View>
     </View>
   );
 }
@@ -100,19 +96,5 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 2,
     shadowOpacity: 0.35
-  },
-  input: {
-    width: '50%',
-    borderBottomColor: 'black',
-    borderBottomWidth: 1
-  },
-  selectedColorView: {
-    marginTop: 10,
-    flexDirection: 'row',
-    flex: 2,
-    padding: 10
-  },
-  selectedColor: {
-    width: '50%'
   }
 });
