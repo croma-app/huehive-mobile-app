@@ -1,5 +1,4 @@
 import React, { useCallback, useContext, useEffect, useLayoutEffect, useState } from 'react';
-
 import SingleColorCard from '../components/SingleColorCard';
 import {
   Dimensions,
@@ -8,7 +7,9 @@ import {
   Text,
   TextInput,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  Modal,
+  TouchableWithoutFeedback
 } from 'react-native';
 import { CromaContext } from '../store/store';
 import ActionButton from 'react-native-action-button';
@@ -20,6 +21,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { notifyMessage } from '../libs/Helpers';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import PropTypes from 'prop-types';
+import ColorPickerModal from '../components/ColorPickerModal';
 
 export default function PaletteScreen({ navigation }) {
   const {
@@ -29,9 +31,10 @@ export default function PaletteScreen({ navigation }) {
     deleteColorFromPalette,
     addNewColorToPalette,
     setDetailedColor,
-    currentPalette,
-    setColorPickerCallback
+    currentPalette
   } = useContext(CromaContext);
+
+  const [isColorPickerVisible, setIsColorPickerVisible] = useState(false);
 
   const paletteName = currentPalette?.name ?? '';
 
@@ -50,6 +53,7 @@ export default function PaletteScreen({ navigation }) {
   useLayoutEffect(() => {
     setNavigationOptions({ navigation, paletteName });
   }, [navigation, paletteName]);
+
   const renderItem = React.useCallback(
     (renderItemParams) => {
       return (
@@ -68,6 +72,7 @@ export default function PaletteScreen({ navigation }) {
     },
     [navigation, onColorDelete, setDetailedColor]
   );
+
   const keyExtractor = useCallback((item) => {
     return item.id;
   }, []);
@@ -76,6 +81,11 @@ export default function PaletteScreen({ navigation }) {
     () => colors?.slice(0, isPro ? colors.length : 4),
     [colors, isPro]
   );
+
+  const handleColorSelected = (color) => {
+    addNewColorToPalette(palette.id, { hex: color });
+    setIsColorPickerVisible(false);
+  };
 
   return (
     <>
@@ -86,7 +96,6 @@ export default function PaletteScreen({ navigation }) {
           keyExtractor={keyExtractor}
           style={styles.listview}
           onDragEnd={({ data: reorderedColors }) => {
-            //notifyMessage(JSON.stringify(reorderedColors));
             updatePalette(palette.id, { ...palette, colors: reorderedColors });
           }}
         />
@@ -106,15 +115,27 @@ export default function PaletteScreen({ navigation }) {
               notifyMessage('Unlock pro to add more than 4 colors!');
               navigation.navigate('ProVersion');
             } else {
-              setColorPickerCallback((color) => {
-                addNewColorToPalette(palette.id, { hex: color.color });
-              });
-              navigation.navigate('ColorPicker');
+              setIsColorPickerVisible(true);
             }
           }}
           style={styles.actionButton}
         />
       </View>
+      <Modal
+        visible={isColorPickerVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setIsColorPickerVisible(false)}>
+        <TouchableWithoutFeedback onPress={() => setIsColorPickerVisible(false)}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
+        <View style={styles.modalContent}>
+          <ColorPickerModal
+            onColorSelected={handleColorSelected}
+            onClose={() => setIsColorPickerVisible(false)}
+          />
+        </View>
+      </Modal>
     </>
   );
 }
@@ -134,7 +155,6 @@ const CustomHeader = ({ currentPaletteName }) => {
 
   const onDone = () => {
     renamePalette(currentPaletteName, paletteName);
-    //setting new name in query params
     setCurrentPalette({ ...currentPalette, name: paletteName });
     setIsEditingPaletteName(false);
   };
@@ -143,14 +163,9 @@ const CustomHeader = ({ currentPaletteName }) => {
     logEvent('edit_palette_name');
     setIsEditingPaletteName(true);
   };
+
   return (
-    <View
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '90%'
-      }}>
+    <View style={styles.headerContainer}>
       {isEditingPaletteName ? (
         <>
           <TextInput
@@ -161,17 +176,13 @@ const CustomHeader = ({ currentPaletteName }) => {
               setPaletteName(name);
             }}
           />
-          <TouchableOpacity onPress={onDone} style={{ marginTop: 12 }}>
+          <TouchableOpacity onPress={onDone} style={styles.doneButton}>
             <MaterialIcons name="done" size={24} color="white" />
           </TouchableOpacity>
         </>
       ) : (
         <>
-          <Text
-            style={{
-              color: '#ffffff',
-              fontSize: 16
-            }}>
+          <Text style={styles.headerTitle}>
             {paletteName.substring(0, 30) + (paletteName.length > 30 ? '...' : '')}
           </Text>
           <TouchableOpacity onPress={onEdit}>
@@ -199,9 +210,35 @@ const styles = StyleSheet.create({
     margin: 8
   },
   actionButton: {},
+  headerContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '90%'
+  },
+  headerTitle: {
+    color: '#ffffff',
+    fontSize: 16
+  },
+  doneButton: {
+    marginTop: 12
+  },
   input: {
     color: '#ffffff',
     fontSize: 18,
     maxWidth: '80%'
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    height: '50%',
+    width: '100%',
+    position: 'absolute',
+    bottom: 0
   }
 });

@@ -1978,6 +1978,11 @@
   dependencies:
     merge-options "^3.0.4"
 
+"@react-native-clipboard/clipboard@^1.14.0":
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/@react-native-clipboard/clipboard/-/clipboard-1.14.0.tgz#ae3b7b59f51b1da1fc6a362244c18ddec113d1f6"
+  integrity sha512-kDLfA6HzP4T+kfGTEGdbsc2r4q0xQALshRQp8Ph/5YD5qT4CZdgkQM3oloKHIdh+AVks+QjtVHK1cZ1xb0Or7w==
+
 "@react-native-community/cli-debugger-ui@^6.0.0-rc.0":
   version "6.0.0-rc.0"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-6.0.0-rc.0.tgz#774378626e4b70f5e1e2e54910472dcbaffa1536"
@@ -3546,14 +3551,6 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4, create-hmac@^1.1.7:
     ripemd160 "^2.0.0"
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
-
-croma-color-picker@^1.1.5:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/croma-color-picker/-/croma-color-picker-1.1.5.tgz#687d5ee1b9838317aadb61b9075bba2f9decceae"
-  integrity sha512-RvOSAEmNeBrssDu6VRoExrccwE1MR+Q6q/ft6qLCN2XlCyNTr+VRIz4TMMKZj+jcWXo0mB2nReS5SM392D3h2A==
-  dependencies:
-    pigment "^0.1.0"
-    react-native-platform-touchable "^1.1.1"
 
 cross-spawn@^6.0.0:
   version "6.0.5"
@@ -7437,11 +7434,6 @@ react-native-material-menu@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/react-native-material-menu/-/react-native-material-menu-2.0.0.tgz#139f407a52fbc0d47e5351d50ac769e05812da5c"
   integrity sha512-SmO9PLE3E469EPbVWZqvdu6JGPPZIm7YjqDcWs2PPoY0k7w2V9tFo3BmmLXNzNZDCVCAi+PPSsL7h/5WkfHcSg==
-
-react-native-platform-touchable@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/react-native-platform-touchable/-/react-native-platform-touchable-1.1.1.tgz#fde4acc65eea585d28b164d0c3716a42129a68e4"
-  integrity sha1-/eSsxl7qWF0osWTQw3FqQhKaaOQ=
 
 react-native-randombytes@^3.5.1:
   version "3.6.1"

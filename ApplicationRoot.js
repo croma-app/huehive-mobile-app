@@ -3,7 +3,6 @@ import { ActivityIndicator, StatusBar, StyleSheet, View, TouchableOpacity } from
 import AboutUsScreen from './screens/AboutUsScreen';
 import ChatSessionScreen from './screens/ChatSessionScreen';
 import ChatSessionHistoriesScreen from './screens/ChatSessionHistoriesScreen';
-import ColorPickerScreen from './screens/ColorPickerScreen';
 import HomeScreen from './screens/HomeScreen';
 import Colors from './constants/Colors';
 import useApplicationHook, { CromaContext } from './store/store';
@@ -98,11 +97,6 @@ export default function App() {
                       };
                     }}
                     component={HomeScreen}
-                  />
-                  <Stack.Screen
-                    name="ColorPicker"
-                    options={{ title: t('Color picker') }}
-                    component={ColorPickerScreen}
                   />
                   <Stack.Screen
                     name={'AboutUs'}

@@ -31,9 +31,8 @@ export default function ColorListScreen({ navigation }) {
     return (
       <SingleColorView
         onColorChange={(updatedColor) => {
-          const index = colors.findIndex((color) => color.color === updatedColor.color);
           const updatedColors = [...colors];
-          updatedColors[index] = updatedColor;
+          updatedColors[item.index] = updatedColor;
           setColorList(updatedColors);
         }}
         opacity={opecity}
@@ -42,23 +41,22 @@ export default function ColorListScreen({ navigation }) {
         drag={drag}
         onAdd={() => {
           logEvent('add_color_to_palette');
-          const index = colors.findIndex((color) => color.color === item.color);
-          const currentColor = new Color(colors[index].color);
+          const currentColor = new Color(colors[item.index].color);
           const newColor = {
             color: currentColor.darken(0.1).tohex(),
             locked: false,
             opacity: new Animated.Value(0)
           };
           const updatedColors = [
-            ...colors.slice(0, index + 1),
+            ...colors.slice(0, item.index + 1),
             newColor,
-            ...colors.slice(index + 1)
+            ...colors.slice(item.index + 1)
           ];
 
           setColorList(updatedColors);
 
           // Find the opacity value of the newly added color
-          const newColorOpacity = updatedColors[index + 1].opacity;
+          const newColorOpacity = updatedColors[item.index + 1].opacity;
           newColorOpacity.setValue(0);
           Animated.timing(newColorOpacity, {
             toValue: 1,
@@ -135,11 +133,12 @@ export default function ColorListScreen({ navigation }) {
 function uniqueColors(colors) {
   let set = new Set();
   let uniqueColors = [];
-  colors.forEach((color) => {
+  colors.forEach((color, index) => {
     if (!set.has(color.color)) {
       if (color.locked === undefined) {
         color.locked = true;
       }
+      color.index = index;
       uniqueColors.push(color);
     }
     set.add(color.color);

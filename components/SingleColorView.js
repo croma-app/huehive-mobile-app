@@ -3,16 +3,18 @@ import {
   Platform,
   StyleSheet,
   Text,
-  Clipboard,
   TouchableOpacity,
   View,
   Modal,
   TouchableWithoutFeedback,
   Animated
 } from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
 import { notifyMessage } from '../libs/Helpers';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { logEvent } from '../libs/Helpers';
+import ColorPickerModal from './ColorPickerModal';
 
 function getContrastColor(bgColor) {
   var color = bgColor.charAt(0) === '#' ? bgColor.substring(1, 7) : bgColor;
@@ -32,7 +34,7 @@ function getContrastColor(bgColor) {
 
 export const SingleColorView = ({ color, onColorChange, drag, onRemove, onAdd }) => {
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [isColorPickerVisible, setIsColorPickerVisible] = React.useState(false);
   const openModal = () => {
     setModalVisible(true);
   };
@@ -57,11 +59,19 @@ export const SingleColorView = ({ color, onColorChange, drag, onRemove, onAdd })
     onAdd();
     closeModal();
   };
-
+  const handleEditColor = () => {
+    logEvent('handle_edit_color');
+    setIsColorPickerVisible(true);
+    closeModal();
+  };
+  const handleColorSelected = (hexCode) => {
+    //notifyMessage('Color selected: ' + hexCode);
+    onColorChange({ ...color, color: hexCode });
+  };
   const textColor = getContrastColor(color.color);
   const menuItems = [
     { label: 'Copy Color', onPress: handleCopyColor },
-    //{ label: 'Edit Color', onPress: handleEditColor },
+    { label: 'Edit Color', onPress: handleEditColor },
     { label: 'Add Color', onPress: handleAddColor },
     { label: 'Remove Color', onPress: handleRmoveColor }
   ];
@@ -120,6 +130,27 @@ export const SingleColorView = ({ color, onColorChange, drag, onRemove, onAdd })
               </TouchableWithoutFeedback>
             </View>
           </TouchableWithoutFeedback>
+        </Modal>
+
+        <Modal
+          visible={isColorPickerVisible}
+          animationType="slide"
+          transparent={true}
+          onRequestClose={() => setIsColorPickerVisible(false)}>
+          <View style={styles.colorPickerModalContainer}>
+            <TouchableWithoutFeedback onPress={() => setIsColorPickerVisible(false)}>
+              <View style={styles.colorPickerModalOverlay} />
+            </TouchableWithoutFeedback>
+            <View style={styles.colorPickerModalContent}>
+              {/* TODO: make this color selection real time by adding onColorChangeCallback. This requires handling revert on close etc. */}
+              <ColorPickerModal
+                onColorSelected={handleColorSelected}
+                onClose={() => {
+                  setIsColorPickerVisible(false);
+                }}
+              />
+            </View>
+          </View>
         </Modal>
       </TouchableOpacity>
     </Animated.View>
@@ -206,5 +237,19 @@ const styles = StyleSheet.create({
     height: 1,
     width: '100%',
     backgroundColor: 'gray'
+  },
+  colorPickerModalContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  colorPickerModalOverlay: {
+    flex: 1
+  },
+  colorPickerModalContent: {
+    height: '50%',
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20
   }
 });
