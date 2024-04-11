@@ -27,7 +27,6 @@ const HexKeyboard = ({ onKeyPress }) => {
 
 const styles = StyleSheet.create({
   keyboard: {
-    backgroundColor: '#F5FCFF',
     paddingHorizontal: 16,
     paddingVertical: 8
   },
