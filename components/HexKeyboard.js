@@ -3,12 +3,11 @@ import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
 const HexKeyboard = ({ onKeyPress }) => {
   const keys = [
-    ['1', '2', '3'],
-    ['4', '5', '6'],
-    ['7', '8', '9'],
-    ['A', 'B', 'C'],
-    ['D', 'E', 'F'],
-    ['#', '0', 'del']
+    ['0', '1', '2', '3'],
+    ['4', '5', '6', '7'],
+    ['8', '9', 'A', 'B'],
+    ['C', 'D', 'E', 'F'],
+    ['del', 'clear', 'copy', 'paste']
   ];
 
   return (
@@ -28,23 +27,28 @@ const HexKeyboard = ({ onKeyPress }) => {
 
 const styles = StyleSheet.create({
   keyboard: {
-    backgroundColor: '#F5FCFF'
+    backgroundColor: '#F5FCFF',
+    paddingHorizontal: 16,
+    paddingVertical: 8
   },
   row: {
     flexDirection: 'row',
-    justifyContent: 'space-around'
+    justifyContent: 'space-between',
+    marginBottom: 8
   },
   key: {
-    width: 50,
-    height: 50,
+    flex: 1,
+    height: 44,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white',
     borderWidth: 1,
-    borderColor: 'gray'
+    borderColor: 'gray',
+    borderRadius: 8,
+    marginHorizontal: 4
   },
   keyText: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 'bold'
   }
 });

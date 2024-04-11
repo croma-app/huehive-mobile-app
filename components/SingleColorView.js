@@ -3,13 +3,13 @@ import {
   Platform,
   StyleSheet,
   Text,
-  Clipboard,
   TouchableOpacity,
   View,
   Modal,
   TouchableWithoutFeedback,
   Animated
 } from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
 import { notifyMessage } from '../libs/Helpers';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';

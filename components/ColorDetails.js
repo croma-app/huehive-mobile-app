@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Clipboard, Platform, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Platform, TouchableOpacity } from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { notifyMessage } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';

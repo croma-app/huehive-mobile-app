@@ -1,15 +1,72 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, View, StyleSheet, TouchableOpacity, Text, TextInput } from 'react-native';
-import { logEvent } from '../libs/Helpers';
+import Clipboard from '@react-native-clipboard/clipboard';
+import { logEvent, notifyMessage } from '../libs/Helpers';
 import SliderColorPicker from './SliderColorPicker';
 import AIColorPicker from './AIColorPicker';
 import Colors from '../constants/Colors';
 import { CromaColorPicker } from './CromaColorPicker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import HexKeyboard from './HexKeyboard';
 
 export default function ColorPickerModal({ initialColor, onColorSelected, onClose }) {
   const [color, setColor] = useState(initialColor || '#db0a5b');
   const [activeTab, setActiveTab] = useState('basic');
+  const handleHexKeyPress = async (key) => {
+    if (key == 'clear') {
+      setColor('#');
+    } else if (key == 'copy') {
+      Clipboard.setString(color);
+      notifyMessage('Color copied to clipboard');
+    } else if (key == 'paste') {
+      const pastedText = await Clipboard.getString();
+      if (pastedText.match(/^#[0-9A-Fa-f]{6}$/)) {
+        setColor(pastedText);
+      } else {
+        notifyMessage('Invalid color code');
+      }
+    } else if (key === 'del') {
+      if (color.length > 1) {
+        setColor((prevColor) => prevColor.slice(0, -1));
+      }
+    } else {
+      setColor((prevColor) => (prevColor + key).slice(0, 7));
+    }
+  };
+  const tabs = [
+    {
+      key: 'basic',
+      title: 'Standard',
+      component: (
+        <CromaColorPicker
+          onChangeColor={(color) => {
+            setColor(color);
+          }}
+          style={[{ height: 250 }]}
+        />
+      )
+    },
+    {
+      key: 'HSB',
+      title: 'HSB',
+      component: <SliderColorPicker color={`${color}`} setColor={setColor} />
+    },
+    {
+      key: 'AI',
+      title: 'AI Color Picker',
+      component: <AIColorPicker color={color} setColor={setColor} />,
+      hidden: true
+    },
+    {
+      key: 'hex',
+      title: 'Hex',
+      component: (
+        <View style={styles.hexPickerContainer}>
+          <HexKeyboard onKeyPress={handleHexKeyPress} />
+        </View>
+      )
+    }
+  ];
 
   useEffect(() => {
     logEvent('color_picker_model_' + activeTab);
@@ -18,49 +75,38 @@ export default function ColorPickerModal({ initialColor, onColorSelected, onClos
   return (
     <View style={styles.container}>
       <View style={styles.tabContainer}>
-        <TouchableOpacity
-          style={[styles.tab, activeTab === 'basic' && styles.activeTab]}
-          onPress={() => setActiveTab('basic')}>
-          <Text style={styles.tabText}>Standard</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, activeTab === 'HSB' && styles.activeTab]}
-          onPress={() => setActiveTab('HSB')}>
-          <Text style={styles.tabText}>HSB</Text>
-        </TouchableOpacity>
-        {/* AI Color Picker is under development */}
-        <TouchableOpacity
-          style={[styles.tab, activeTab === 'AI' && styles.activeTab, { display: 'none' }]}
-          onPress={() => setActiveTab('AI')}>
-          <Text style={styles.tabText}>AI Color Picker</Text>
-        </TouchableOpacity>
+        {tabs
+          .filter((tab) => !tab.hidden)
+          .map((tab) => (
+            <TouchableOpacity
+              key={tab.key}
+              style={[styles.tab, activeTab === tab.key && styles.activeTab]}
+              onPress={() => setActiveTab(tab.key)}>
+              <Text style={styles.tabText}>{tab.title}</Text>
+            </TouchableOpacity>
+          ))}
       </View>
       <ScrollView
         contentContainerStyle={styles.scrollViewContent}
         showsVerticalScrollIndicator={false}>
         <View style={styles.colorPickerContainer}>
-          {activeTab === 'basic' ? (
-            <CromaColorPicker
-              onChangeColor={(color) => {
-                setColor(color);
-              }}
-              style={[{ height: 250 }]}
-            />
-          ) : activeTab === 'HSB' ? (
-            <SliderColorPicker color={`${color}`} setColor={setColor} />
-          ) : (
-            <AIColorPicker color={color} setColor={setColor} />
-          )}
+          {tabs.find((tab) => tab.key === activeTab)?.component}
         </View>
       </ScrollView>
       <View style={styles.bottomContainer}>
         <View style={styles.selectedColorView}>
-          <TextInput
-            style={styles.input}
-            value={color}
-            onChangeText={(color) => setColor(color)}
-            editable={false}
-          />
+          <TouchableOpacity
+            style={styles.inputTouchArea}
+            onPress={() => {
+              setActiveTab('hex');
+            }}>
+            <TextInput
+              style={styles.input}
+              value={color.toUpperCase()}
+              onChangeText={(color) => setColor(color)}
+              editable={false}
+            />
+          </TouchableOpacity>
         </View>
         <View style={styles.bottomContainerPreviewArea}>
           <View style={[styles.selectedColor, { backgroundColor: color }]}></View>
@@ -132,9 +178,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  input: {
+  inputTouchArea: {
     flex: 1,
-    marginRight: 16,
+    marginRight: 16
+  },
+  input: {
     fontSize: 24
   },
   bottomContainerPreviewArea: {
