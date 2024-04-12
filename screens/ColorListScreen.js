@@ -1,16 +1,42 @@
 import React, { useLayoutEffect } from 'react';
 import { SingleColorView } from '../components/SingleColorView';
-import { StyleSheet, View, Text, Platform, Animated } from 'react-native';
-import CromaButton from '../components/CromaButton';
-import { logEvent } from '../libs/Helpers';
+import { StyleSheet, View, Text, Platform, Animated, TouchableOpacity, Modal } from 'react-native';
+import { logEvent, notifyMessage } from '../libs/Helpers';
 import { CromaContext } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import Color from 'pigment/full';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Colors from '../constants/Colors';
+
+const GenerateInfoModal = ({ toggleGenerateInfo, showGenerateInfo }) => {
+  const { t } = useTranslation();
+
+  return (
+    <Modal visible={showGenerateInfo} transparent animationType="fade">
+      <TouchableOpacity style={styles.modalBackground} onPress={toggleGenerateInfo}>
+        <View style={styles.modalContent}>
+          <Text style={styles.modalText}>
+            {t(
+              'The "Generate" button creates new color variations for the unlocked colors in the list. It helps you explore different color combinations and discover new palettes.'
+            )}
+          </Text>
+          <TouchableOpacity style={styles.modalCloseButton} onPress={toggleGenerateInfo}>
+            <Text style={styles.modalCloseButtonText}>{t('Close')}</Text>
+          </TouchableOpacity>
+        </View>
+      </TouchableOpacity>
+    </Modal>
+  );
+};
 
 export default function ColorListScreen({ navigation }) {
   const { t } = useTranslation();
-  const [helpMessage, setHelpMessage] = React.useState('Generate new colors for unlocked colors');
+  const [showGenerateInfo, setShowGenerateInfo] = React.useState(false);
+  const toggleGenerateInfo = () => {
+    setShowGenerateInfo(!showGenerateInfo);
+  };
 
   const { colorList, setColorList } = React.useContext(CromaContext);
   const colors = uniqueColors(colorList).map((color) => ({
@@ -85,7 +111,7 @@ export default function ColorListScreen({ navigation }) {
   const regenerateUnlockedColors = () => {
     logEvent('regenerate_unlocked_colors', colors.filter((color) => !color.locked).length);
     if (colors.filter((color) => !color.locked).length == 0) {
-      setHelpMessage('Please unlock some colors or add colors to generate new colors');
+      notifyMessage('Please unlock some colors or add colors to generate new colors');
     } else {
       // TODO: improve this algorithm.
       const newColors = colors.map((color) => {
@@ -101,8 +127,7 @@ export default function ColorListScreen({ navigation }) {
   logEvent('color_list_screen');
   return (
     <View style={styles.container}>
-      {/* this is to make sure scrolling works */}
-      <View style={{ flex: 1 }}>
+      <View style={styles.colorListContainer}>
         <DraggableFlatList
           data={colors}
           renderItem={renderItem}
@@ -111,22 +136,44 @@ export default function ColorListScreen({ navigation }) {
           autoscrollThreshold={100}
         />
       </View>
-      <Text style={styles.hintText}>{helpMessage}</Text>
-      <CromaButton
-        style={styles.button}
-        onPress={() => {
-          regenerateUnlockedColors();
-        }}>
-        {t('Generate new colors')}
-      </CromaButton>
-      <View style={styles.separator} />
-      <CromaButton
-        style={styles.button}
-        onPress={() => {
-          navigation.navigate('SavePalette');
-        }}>
-        {t('SAVE AS NEW PALETTE')}
-      </CromaButton>
+      <View style={styles.bottomActionArea}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            regenerateUnlockedColors();
+          }}>
+          <View style={styles.buttonContent}>
+            <Icon name="refresh" size={20} color={Colors.fabPrimary} />
+            <Text style={styles.buttonText}>{t('Generate')}</Text>
+            <TouchableOpacity
+              style={styles.infoIconContainer}
+              onPress={() => {
+                toggleGenerateInfo();
+              }}>
+              <MaterialCommunityIcons
+                name="information-outline"
+                size={20}
+                color={Colors.grey}
+                style={styles.infoIcon}
+              />
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            navigation.navigate('SavePalette');
+          }}>
+          <View style={styles.buttonContent}>
+            <Icon name="save" size={20} color={Colors.fabPrimary} />
+            <Text style={styles.buttonText}>{t('Save')}</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <GenerateInfoModal
+        toggleGenerateInfo={toggleGenerateInfo}
+        showGenerateInfo={showGenerateInfo}
+      />
     </View>
   );
 }
@@ -174,21 +221,62 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 8
   },
-  hintText: {
-    fontSize: 12,
-    color: '#888',
-    marginTop: 8,
-    marginBottom: 4,
-    textAlign: 'center'
+  colorListContainer: {
+    flex: 1
   },
-  separator: {
-    height: 1,
-    backgroundColor: '#ccc',
-    marginVertical: 16,
-    marginHorizontal: 8
+  bottomActionArea: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingVertical: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#ccc'
   },
   button: {
-    marginLeft: 32,
-    marginRight: 32
+    flex: 1,
+    marginHorizontal: 16,
+    backgroundColor: 'white',
+    paddingVertical: 12,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  buttonContent: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  buttonText: {
+    color: Colors.fabPrimary,
+    marginLeft: 8,
+    fontSize: 18
+  },
+  infoIcon: {},
+  infoIconContainer: {
+    paddingHorizontal: 8
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 16,
+    borderRadius: 8,
+    width: '80%'
+  },
+  modalText: {
+    fontSize: 16,
+    marginBottom: 16
+  },
+  modalCloseButton: {
+    alignSelf: 'flex-end',
+    paddingVertical: 8,
+    paddingHorizontal: 16
+  },
+  modalCloseButtonText: {
+    fontSize: 16,
+    color: '#007AFF'
   }
 });
