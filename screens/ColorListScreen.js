@@ -116,7 +116,7 @@ export default function ColorListScreen({ navigation }) {
       // TODO: improve this algorithm.
       const newColors = colors.map((color) => {
         if (!color.locked) {
-          color.color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+          color.color = Color.random().tohex();
         }
         return color;
       });
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     backgroundColor: 'white',
     paddingVertical: 12,
-    borderRadius: 8,
+    borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center'
   },
