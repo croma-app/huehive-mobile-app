@@ -1,5 +1,13 @@
 import React from 'react';
-import { NativeModules, Modal, TouchableWithoutFeedback, View } from 'react-native';
+import {
+  NativeModules,
+  Modal,
+  TouchableWithoutFeedback,
+  View,
+  Text,
+  Image,
+  TouchableOpacity
+} from 'react-native';
 import Color from 'pigment/full';
 import RNColorThief from 'react-native-color-thief';
 import { notifyMessage } from '../libs/Helpers';
@@ -18,6 +26,9 @@ import ColorPickerModal from './ColorPickerModal';
 const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   const { t } = useTranslation();
   const [isColorPickerVisible, setIsColorPickerVisible] = React.useState(false);
+  const [isImagePickerModalVisible, setIsImagePickerModalVisible] = React.useState(false);
+  const [selectedImage, setSelectedImage] = React.useState(null);
+  const [automaticColors, setAutomaticColors] = React.useState([]);
 
   const { isPro, setPurchase, setColorList, setDetailedColor, clearPalette } =
     React.useContext(CromaContext);
@@ -36,6 +47,58 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
     setIsColorPickerVisible(false);
     navigation.navigate('Palettes');
   };
+
+  const handleImagePicker = async () => {
+    logEvent('pick_colors_from_image');
+    const imageResult = await pickImageResult();
+    if (!imageResult.didCancel) {
+      setSelectedImage(imageResult.assets[0]);
+      setIsImagePickerModalVisible(true);
+      try {
+        const pickedColors = await RNColorThief.getPalette(imageResult.assets[0].uri, 6, 10, false);
+        setAutomaticColors(
+          pickedColors.map((colorThiefColor) => {
+            const hex = new Color(
+              'rgb(' + colorThiefColor.r + ', ' + colorThiefColor.g + ', ' + colorThiefColor.b + ')'
+            ).tohex();
+            return hex;
+          })
+        );
+      } catch (error) {
+        notifyMessage(t('Error while extracting colors - ') + error);
+      }
+    }
+  };
+
+  const handlePickColors = async () => {
+    const pickedColors = await NativeModules.CromaModule.navigateToImageColorPicker(
+      selectedImage.uri
+    );
+    logEvent('hm_pick_colors_from_img', {
+      length: pickedColors.length
+    });
+    setColorList(JSON.parse(pickedColors)?.colors);
+    navigation.navigate('ColorList');
+    //setPickedColors(JSON.parse(pickedColors)?.colors);
+    setIsImagePickerModalVisible(false);
+  };
+
+  const handleNext = () => {
+    clearPalette();
+    setColorList(automaticColors.map((color) => ({ color })));
+    navigation.navigate('ColorList');
+    setSelectedImage(null);
+    setAutomaticColors([]);
+  };
+
+  const handleAutomaticColors = () => {
+    clearPalette();
+    setColorList(automaticColors.map((color) => ({ color })));
+    navigation.navigate('ColorList');
+    setSelectedImage(null);
+    setAutomaticColors([]);
+  };
+
   return (
     <>
       <ActionButtonContainer
@@ -44,7 +107,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
             {
               icon: <MaterialCommunityIcons name="camera" size={20} color={Colors.fabPrimary} />,
               text1: 'Pick colors',
-              text2: 'using camera',
+              text2: 'from camera',
               onPress: async () => {
                 const pickedColors = await NativeModules.CromaModule.navigateToColorPicker();
                 logEvent('hm_pick_text_colors_from_camera', {
@@ -57,49 +120,16 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
             },
             {
               icon: <Ionicons name="md-image" color={Colors.fabPrimary} size={20} />,
-              text1: t('Get palette'),
-              text2: t('from image'),
-              onPress: async () => {
-                try {
-                  setPickImageLoading(true);
-                  const image = await pickImageResult();
-                  logEvent('get_palette_from_image');
-                  // get dominant color object { r, g, b }
-                  const pickedColors = await RNColorThief.getPalette(
-                    image.assets[0].uri,
-                    6,
-                    10,
-                    false
-                  );
-                  clearPalette();
-                  setColorList(
-                    pickedColors.map((colorThiefColor) => {
-                      const hex = new Color(
-                        'rgb(' +
-                          colorThiefColor.r +
-                          ', ' +
-                          colorThiefColor.g +
-                          ', ' +
-                          colorThiefColor.b +
-                          ')'
-                      ).tohex();
-                      return { color: hex };
-                    })
-                  );
-                  navigation.navigate('ColorList');
-                } catch (error) {
-                  notifyMessage(t('Error while extracting colors - ') + error);
-                } finally {
-                  setPickImageLoading(false);
-                }
-              }
+              text1: t('Pick colors'),
+              text2: t('from Image'),
+              onPress: handleImagePicker
             },
             {
               icon: (
                 <MaterialCommunityIcons name="palette-swatch" color={Colors.fabPrimary} size={20} />
               ),
-              text1: t('Get palette'),
-              text2: t('from color'),
+              text1: t('Get Palette'),
+              text2: t('from Color'),
               onPress: () => {
                 logEvent('get_palette_from_color');
                 setIsColorPickerVisible(true);
@@ -108,27 +138,8 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
           ],
           [
             {
-              icon: <MaterialCommunityIcons name="image" size={20} color={Colors.fabPrimary} />,
-              text1: t('Pick color'),
-              text2: t('from image'),
-              onPress: async () => {
-                const imageResult = await pickImageResult();
-                if (!imageResult.didCancel) {
-                  const pickedColors = await NativeModules.CromaModule.navigateToImageColorPicker(
-                    imageResult.assets[0].uri
-                  );
-                  logEvent('hm_pick_colors_from_img', {
-                    length: pickedColors.length
-                  });
-                  clearPalette();
-                  setColorList(JSON.parse(pickedColors)?.colors);
-                  navigation.navigate('ColorList');
-                }
-              }
-            },
-            {
               icon: <FontAwesome5 name="magic" size={20} color={Colors.fabPrimary} />,
-              text1: t('Create using'),
+              text1: t('Create with'),
               text2: t('HueHive AI'),
               onPress: async () => {
                 logEvent('chat_session_action_button');
@@ -153,7 +164,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
               : {
                   icon: <FontAwesome5 size={20} color={Colors.fabPrimary} name="unlock" />,
                   text1: t('Unlock'),
-                  text2: t('pro'),
+                  text2: t('Pro'),
                   onPress: () => purchase(setPurchase)
                 }
           ]
@@ -173,6 +184,52 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
           />
         </View>
       </Modal>
+      <Modal
+        visible={isImagePickerModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => {
+          setIsImagePickerModalVisible(false);
+          setSelectedImage(null);
+          setAutomaticColors([]);
+        }}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            setIsImagePickerModalVisible(false);
+            setSelectedImage(null);
+            setAutomaticColors([]);
+          }}>
+          <View style={styles.modalOverlay}>
+            <TouchableWithoutFeedback>
+              <View style={styles.modalContent}>
+                {selectedImage && (
+                  <Image source={{ uri: selectedImage.uri }} style={styles.previewImage} />
+                )}
+                <View style={styles.colorPreviewContainer}>
+                  {automaticColors.length > 0 && (
+                    <TouchableOpacity
+                      style={styles.automaticColorsContainer}
+                      onPress={handleAutomaticColors}>
+                      {automaticColors.map((color, index) => (
+                        <View
+                          key={index}
+                          style={[styles.colorPreview, { backgroundColor: color }]}
+                        />
+                      ))}
+                    </TouchableOpacity>
+                  )}
+                  <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
+                    <Ionicons name="arrow-forward" size={24} color={Colors.fabPrimary} />
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity style={styles.pickColorsButton} onPress={handlePickColors}>
+                  <Text style={styles.pickColorsButtonText}>Pick Colors Manually</Text>
+                </TouchableOpacity>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </>
   );
 };
@@ -187,10 +244,57 @@ export default GridActionButtonAndroid;
 const styles = {
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)'
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'flex-end'
   },
   modalContent: {
-    flex: 1,
-    justifyContent: 'flex-end'
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 20
+  },
+  previewImage: {
+    width: '100%',
+    height: 200,
+    resizeMode: 'cover',
+    marginBottom: 20
+  },
+  colorPreviewContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20
+  },
+  automaticColorsContainer: {
+    flexDirection: 'row',
+    marginRight: 10
+  },
+  colorPreview: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    margin: 5
+  },
+  pickColorsButton: {
+    backgroundColor: 'white',
+    paddingVertical: 15,
+    borderRadius: 10,
+    alignItems: 'center'
+  },
+  pickColorsButtonText: {
+    fontSize: 18,
+    color: Colors.fabPrimary
+  },
+  nextButton: {
+    backgroundColor: 'white',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 5,
+    marginLeft: 10,
+    borderWidth: 1,
+    borderColor: Colors.fabPrimary
+  },
+  nextButtonText: {
+    fontSize: 16,
+    color: Colors.fabPrimary
   }
 };
