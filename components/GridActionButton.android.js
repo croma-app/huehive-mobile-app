@@ -99,6 +99,15 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
     setAutomaticColors([]);
   };
 
+  const handleRandomColors = () => {
+    const randomColors = Array.from({ length: 6 }, () => {
+      const randomColor = Color.random().tohex();
+      return { color: randomColor, locked: false };
+    });
+    clearPalette();
+    setColorList(randomColors);
+    navigation.navigate('ColorList');
+  };
   return (
     <>
       <ActionButtonContainer
@@ -137,6 +146,15 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
             }
           ],
           [
+            {
+              icon: <Ionicons name="md-color-palette" color={Colors.fabPrimary} size={20} />,
+              text1: t('Create quick'),
+              text2: t('Palette'),
+              onPress: () => {
+                logEvent('generate_random_colors');
+                handleRandomColors();
+              }
+            },
             {
               icon: <FontAwesome5 name="magic" size={20} color={Colors.fabPrimary} />,
               text1: t('Create with'),

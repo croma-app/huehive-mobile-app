@@ -116,7 +116,7 @@ export default function ColorListScreen({ navigation }) {
       // TODO: improve this algorithm.
       const newColors = colors.map((color) => {
         if (!color.locked) {
-          color.color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+          color.color = Color.random().tohex();
         }
         return color;
       });
