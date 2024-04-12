@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import Color from 'pigment/full';
 import RNColorThief from 'react-native-color-thief';
-import { notifyMessage } from '../libs/Helpers';
+import { notifyMessage, sendClientError } from '../libs/Helpers';
 import Colors from '../constants/Colors';
 import ActionButtonContainer from './ActionButton';
 import { logEvent, purchase } from '../libs/Helpers';
@@ -34,6 +34,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
     React.useContext(CromaContext);
 
   const pickImageResult = async () => {
+    setPickImageLoading(true);
     const result = await launchImageLibrary({
       mediaType: 'photo',
       quality: 1
@@ -50,23 +51,39 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
 
   const handleImagePicker = async () => {
     logEvent('pick_colors_from_image');
-    const imageResult = await pickImageResult();
-    if (!imageResult.didCancel) {
-      setSelectedImage(imageResult.assets[0]);
-      setIsImagePickerModalVisible(true);
-      try {
-        const pickedColors = await RNColorThief.getPalette(imageResult.assets[0].uri, 6, 10, false);
-        setAutomaticColors(
-          pickedColors.map((colorThiefColor) => {
-            const hex = new Color(
-              'rgb(' + colorThiefColor.r + ', ' + colorThiefColor.g + ', ' + colorThiefColor.b + ')'
-            ).tohex();
-            return hex;
-          })
-        );
-      } catch (error) {
-        notifyMessage(t('Error while extracting colors - ') + error);
+    try {
+      const imageResult = await pickImageResult();
+      if (!imageResult.didCancel) {
+        setSelectedImage(imageResult.assets[0]);
+        setIsImagePickerModalVisible(true);
+        try {
+          const pickedColors = await RNColorThief.getPalette(
+            imageResult.assets[0].uri,
+            6,
+            10,
+            false
+          );
+          setAutomaticColors(
+            pickedColors.map((colorThiefColor) => {
+              const hex = new Color(
+                'rgb(' +
+                  colorThiefColor.r +
+                  ', ' +
+                  colorThiefColor.g +
+                  ', ' +
+                  colorThiefColor.b +
+                  ')'
+              ).tohex();
+              return hex;
+            })
+          );
+        } catch (error) {
+          notifyMessage(t('Error while extracting colors - ') + error);
+          sendClientError('error_extracting_colors', error.message);
+        }
       }
+    } finally {
+      setPickImageLoading(false);
     }
   };
 
@@ -170,13 +187,9 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                   text1: t('Create New'),
                   text2: t('Palette'),
                   onPress: () => {
-                    try {
-                      logEvent('create_new_palette');
-                      clearPalette();
-                      navigation.navigate('AddPaletteManually');
-                    } catch (error) {
-                      notifyMessage(t('Error  - ') + error);
-                    }
+                    logEvent('create_new_palette');
+                    clearPalette();
+                    navigation.navigate('AddPaletteManually');
                   }
                 }
               : {
