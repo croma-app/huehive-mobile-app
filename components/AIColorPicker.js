@@ -12,7 +12,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Colors from '../constants/Colors';
 import { generateAIColorSuggestions } from '../network/colors';
 import { pickTextColorBasedOnBgColor } from '../libs/ColorHelper';
-import { logEvent } from '../libs/Helpers';
+import { logEvent, notifyMessage, sendClientError } from '../libs/Helpers';
 
 export default function AIColorPicker({ setColor }) {
   const [query, setQuery] = useState('');
@@ -29,6 +29,8 @@ export default function AIColorPicker({ setColor }) {
       setSuggestions(colors);
     } catch (error) {
       console.error('Error generating AI color suggestions:', error);
+      sendClientError('ai_color_picker_query_submitted', error.message);
+      notifyMessage('Failed to generate suggestion: ' + error.message + ', please try again.');
     }
     setLoading(false);
   };
