@@ -60,9 +60,8 @@ export default function ColorPickerModal({ initialColor, onColorSelected, onClos
     },
     {
       key: 'AI',
-      title: 'AI Color Picker',
-      component: <AIColorPicker color={color} setColor={setColor} />,
-      hidden: true
+      title: 'AI',
+      component: <AIColorPicker color={color} setColor={setColor} />
     },
     {
       key: 'hex',
@@ -82,16 +81,14 @@ export default function ColorPickerModal({ initialColor, onColorSelected, onClos
   return (
     <View style={styles.container}>
       <View style={styles.tabContainer}>
-        {tabs
-          .filter((tab) => !tab.hidden)
-          .map((tab) => (
-            <TouchableOpacity
-              key={tab.key}
-              style={[styles.tab, activeTab === tab.key && styles.activeTab]}
-              onPress={() => setActiveTab(tab.key)}>
-              <Text style={styles.tabText}>{tab.title}</Text>
-            </TouchableOpacity>
-          ))}
+        {tabs.map((tab) => (
+          <TouchableOpacity
+            key={tab.key}
+            style={[styles.tab, activeTab === tab.key && styles.activeTab]}
+            onPress={() => setActiveTab(tab.key)}>
+            <Text style={styles.tabText}>{tab.title}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
       <ScrollView
         contentContainerStyle={styles.scrollViewContent}

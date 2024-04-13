@@ -4,7 +4,7 @@ import {
   SliderSaturationPicker,
   SliderValuePicker
 } from 'react-native-slider-color-picker';
-import { Dimensions, StyleSheet, View, Text, TextInput } from 'react-native';
+import { Dimensions, StyleSheet, View, Text } from 'react-native';
 
 import tinycolor from 'tinycolor2'; // TODO: change tinycolor to pigment
 import { logEvent } from '../libs/Helpers';
