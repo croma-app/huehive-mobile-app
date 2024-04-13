@@ -30,7 +30,14 @@ export default function ColorPickerModal({ initialColor, onColorSelected, onClos
         setColor((prevColor) => prevColor.slice(0, -1));
       }
     } else {
-      setColor((prevColor) => (prevColor + key).slice(0, 7));
+      if (color.length < 7) {
+        setColor((prevColor) => {
+          return prevColor + key;
+        });
+      } else {
+        // excluding # character
+        notifyMessage('Hex code max 6 chars. Clear/delete to change');
+      }
     }
   };
   const tabs = [

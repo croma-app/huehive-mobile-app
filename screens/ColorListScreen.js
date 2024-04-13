@@ -78,9 +78,7 @@ export default function ColorListScreen({ navigation }) {
             newColor,
             ...colors.slice(item.index + 1)
           ];
-
           setColorList(updatedColors);
-
           // Find the opacity value of the newly added color
           const newColorOpacity = updatedColors[item.index + 1].opacity;
           newColorOpacity.setValue(0);

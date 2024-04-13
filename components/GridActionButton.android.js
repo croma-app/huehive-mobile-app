@@ -208,7 +208,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
         <TouchableWithoutFeedback onPress={() => setIsColorPickerVisible(false)}>
           <View style={styles.modalOverlay} />
         </TouchableWithoutFeedback>
-        <View style={styles.modalContent}>
+        <View style={styles.colorPickerModalContent}>
           <ColorPickerModal
             onColorSelected={handleColorSelected}
             onClose={() => setIsColorPickerVisible(false)}
@@ -283,6 +283,10 @@ const styles = {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 20
+  },
+  colorPickerModalContent: {
+    flex: 1,
+    justifyContent: 'flex-end'
   },
   previewImage: {
     width: '100%',
