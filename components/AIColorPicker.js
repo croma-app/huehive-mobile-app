@@ -11,15 +11,19 @@ import {
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Colors from '../constants/Colors';
 import { generateAIColorSuggestions } from '../network/colors';
+import { pickTextColorBasedOnBgColor } from '../libs/ColorHelper';
+import { logEvent } from '../libs/Helpers';
 
 export default function AIColorPicker({ setColor }) {
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
+  const [selectedColor, setSelectedColor] = useState(null);
 
   const generateColorFromQuery = async () => {
     setLoading(true);
     try {
+      logEvent('ai_color_picker_query_submitted');
       const response = await generateAIColorSuggestions(query);
       const colors = response.data.colors;
       setSuggestions(colors);
@@ -30,7 +34,9 @@ export default function AIColorPicker({ setColor }) {
   };
 
   const handleColorSelect = (hex) => {
+    logEvent('ai_color_picker_color_selected');
     setColor(hex);
+    setSelectedColor(hex);
   };
 
   return (
@@ -58,9 +64,19 @@ export default function AIColorPicker({ setColor }) {
           suggestions.map(({ name, hex }) => (
             <TouchableOpacity
               key={hex}
-              style={[styles.colorPreview, { backgroundColor: hex }]}
-              onPress={() => handleColorSelect(hex)}
-            />
+              style={[
+                styles.colorPreview,
+                { backgroundColor: hex },
+                selectedColor === hex && styles.selectedColor
+              ]}
+              onPress={() => handleColorSelect(hex)}>
+              <Text style={[styles.colorName, { color: pickTextColorBasedOnBgColor(hex) }]}>
+                {name}
+              </Text>
+              <Text style={[styles.colorHex, { color: pickTextColorBasedOnBgColor(hex) }]}>
+                {hex}
+              </Text>
+            </TouchableOpacity>
           ))
         ) : (
           <Text style={styles.placeholderText}>Your AI-generated colors will appear here</Text>
@@ -99,10 +115,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   colorPreview: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    margin: 5
+    width: 80,
+    height: 80,
+    borderRadius: 10,
+    margin: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: 'gray'
+  },
+  selectedColor: {
+    borderWidth: 2,
+    borderColor: Colors.fabPrimary
+  },
+  colorName: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    marginBottom: 4
+  },
+  colorHex: {
+    fontSize: 10
   },
   placeholderText: {
     color: 'gray',
