@@ -19,6 +19,7 @@ import useUserData from '../hooks/getUserData';
 import CromaButton from '../components/CromaButton';
 import { CromaContext } from '../store/store';
 import useChatSession from '../hooks/useChatSession';
+import loginHoc from '../components/hoc/LoginHoc';
 
 // eslint-disable-next-line no-undef
 const bgImage = require('../assets/images/colorful_background.jpg');
@@ -101,16 +102,6 @@ const ChatSessionScreen = (props) => {
       <View style={styles.container}>
         <ActivityIndicator animating={true} size="large" color="#ff7875" />
       </View>
-    );
-  }
-
-  if (!userData) {
-    return (
-      <LoginScreen
-        {...props}
-        signupMessage="Please sign in or sign up to use HueHive AI"
-        hideWelcomeMessage={true}
-        reloadScreen={getUserData}></LoginScreen>
     );
   }
 
@@ -339,4 +330,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ChatSessionScreen;
+export default loginHoc(ChatSessionScreen);

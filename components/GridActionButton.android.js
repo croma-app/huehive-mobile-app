@@ -201,9 +201,10 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
           ]
         ]}></ActionButtonContainer>
       <Modal
+        style={{ height: 400 }}
         visible={isColorPickerVisible}
         animationType="slide"
-        transparent={true}
+        // transparent={true}
         onRequestClose={() => setIsColorPickerVisible(false)}>
         <TouchableWithoutFeedback onPress={() => setIsColorPickerVisible(false)}>
           <View style={styles.modalOverlay} />
