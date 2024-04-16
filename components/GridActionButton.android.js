@@ -11,6 +11,7 @@ import {
 import Color from 'pigment/full';
 import RNColorThief from 'react-native-color-thief';
 import { notifyMessage, sendClientError } from '../libs/Helpers';
+import { generateRandomColorPalette } from '../libs/ColorHelper';
 import Colors from '../constants/Colors';
 import ActionButtonContainer from './ActionButton';
 import { logEvent, purchase } from '../libs/Helpers';
@@ -117,9 +118,9 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   };
 
   const handleRandomColors = () => {
-    const randomColors = Array.from({ length: 6 }, () => {
-      const randomColor = Color.random().tohex();
-      return { color: randomColor, locked: false };
+    const colorsHex = generateRandomColorPalette(6);
+    const randomColors = colorsHex.map((colorHex) => {
+      return { color: colorHex, locked: false };
     });
     clearPalette();
     setColorList(randomColors);

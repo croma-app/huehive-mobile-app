@@ -9,6 +9,7 @@ import Color from 'pigment/full';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from '../constants/Colors';
+import { generateRandomColorPaletteWithLockedColors } from '../libs/ColorHelper';
 
 const GenerateInfoModal = ({ toggleGenerateInfo, showGenerateInfo }) => {
   const { t } = useTranslation();
@@ -111,13 +112,7 @@ export default function ColorListScreen({ navigation }) {
     if (colors.filter((color) => !color.locked).length == 0) {
       notifyMessage('Please unlock some colors or add colors to generate new colors');
     } else {
-      // TODO: improve this algorithm.
-      const newColors = colors.map((color) => {
-        if (!color.locked) {
-          color.color = Color.random().tohex();
-        }
-        return color;
-      });
+      const newColors = generateRandomColorPaletteWithLockedColors([...colors]);
       setColorList(newColors);
     }
   };
