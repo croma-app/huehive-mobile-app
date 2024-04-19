@@ -107,14 +107,11 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
     navigation.navigate('ColorList');
     setSelectedImage(null);
     setAutomaticColors([]);
+    setIsImagePickerModalVisible(false);
   };
 
   const handleAutomaticColors = () => {
-    clearPalette();
-    setColorList(automaticColors.map((color) => ({ color })));
-    navigation.navigate('ColorList');
-    setSelectedImage(null);
-    setAutomaticColors([]);
+    handleNext();
   };
 
   const handleRandomColors = () => {
