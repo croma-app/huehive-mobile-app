@@ -1,8 +1,7 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { SingleColorView } from '../components/SingleColorView';
 import { StyleSheet, View, Text, Platform, Animated, TouchableOpacity, Modal } from 'react-native';
 import { logEvent, notifyMessage } from '../libs/Helpers';
-import { CromaContext } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import Color from 'pigment/full';
@@ -10,6 +9,22 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from '../constants/Colors';
 import { generateRandomColorPaletteWithLockedColors } from '../libs/ColorHelper';
+
+function uniqueColors(colors) {
+  let set = new Set();
+  let uniqueColors = [];
+  colors.forEach((color, index) => {
+    if (!set.has(color.color)) {
+      if (color.locked === undefined) {
+        color.locked = true;
+      }
+      color.index = index;
+      uniqueColors.push(color);
+    }
+    set.add(color.color);
+  });
+  return uniqueColors;
+}
 
 const GenerateInfoModal = ({ toggleGenerateInfo, showGenerateInfo }) => {
   const { t } = useTranslation();
@@ -32,14 +47,13 @@ const GenerateInfoModal = ({ toggleGenerateInfo, showGenerateInfo }) => {
   );
 };
 
-export default function ColorListScreen({ navigation }) {
+export default function ColorListScreen({ navigation, route }) {
   const { t } = useTranslation();
-  const [showGenerateInfo, setShowGenerateInfo] = React.useState(false);
+  const [showGenerateInfo, setShowGenerateInfo] = useState(false);
   const toggleGenerateInfo = () => {
     setShowGenerateInfo(!showGenerateInfo);
   };
-
-  const { colorList, setColorList } = React.useContext(CromaContext);
+  const [colorList, setColorList] = useState(route.params?.colors || []);
   const colors = uniqueColors(colorList).map((color) => ({
     ...color,
     opacity: color.opacity || new Animated.Value(1)
@@ -169,21 +183,6 @@ export default function ColorListScreen({ navigation }) {
       />
     </View>
   );
-}
-function uniqueColors(colors) {
-  let set = new Set();
-  let uniqueColors = [];
-  colors.forEach((color, index) => {
-    if (!set.has(color.color)) {
-      if (color.locked === undefined) {
-        color.locked = true;
-      }
-      color.index = index;
-      uniqueColors.push(color);
-    }
-    set.add(color.color);
-  });
-  return uniqueColors;
 }
 
 const CustomHeader = () => {

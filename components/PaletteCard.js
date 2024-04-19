@@ -179,6 +179,29 @@ export const PaletteCard = (props) => {
                     <Text style={styles.actionButtonText}>Delete</Text>
                   </View>
                 </MenuItem>
+                <MenuItem
+                  onPress={() => {
+                    logEvent('home_screen_open_in_generator');
+                    props.navigation.navigate('ColorList', { colors: props.colors });
+                  }}
+                  style={styles.actionButton}>
+                  <View style={styles.actionButtonContainer}>
+                    <FontAwesome name="code-fork" size={20} style={styles.actionButtonIcon} />
+                    <Text style={styles.actionButtonText}>Fork</Text>
+                  </View>
+                </MenuItem>
+                <MenuItem
+                  onPress={() => {
+                    logEvent('home_screen_edit');
+                    setCurrentPalette({ name: props.name });
+                    props.navigation.navigate('Palette');
+                  }}
+                  style={styles.actionButton}>
+                  <View style={styles.actionButtonContainer}>
+                    <FontAwesome name="edit" size={20} style={styles.actionButtonIcon} />
+                    <Text style={styles.actionButtonText}>Edit</Text>
+                  </View>
+                </MenuItem>
               </Menu>
             </View>
           </View>
