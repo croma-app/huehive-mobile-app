@@ -118,21 +118,9 @@ export default function useApplicationHook() {
     });
   };
 
-  const setColorList = (colorList) => {
-    setState((state) => {
-      return { ...state, colorList };
-    });
-  };
-
   const setDetailedColor = (detailedColor) => {
     setState((state) => {
       return { ...state, detailedColor };
-    });
-  };
-
-  const setColorPickerCallback = (colorPickerCallback) => {
-    setState((state) => {
-      return { ...state, colorPickerCallback };
     });
   };
 
@@ -142,30 +130,19 @@ export default function useApplicationHook() {
     });
   };
 
-  const setSuggestedName = (suggestedName) => {
-    setState((state) => {
-      return { ...state, suggestedName };
-    });
-  };
-
   const clearPalette = () => {
-    setSuggestedName('');
     setCurrentPalette({});
-    setColorList([]);
   };
 
   const [state, setState] = useState({
     ...{
       allPalettes: {},
       currentPalette: {},
-      colorList: [],
       deletedPalettes: {},
-      suggestedName: '',
       isLoading: false,
       isPro: false,
       user: {},
-      isStoreLoaded: false,
-      colorPickerCallback: () => {}
+      isStoreLoaded: false
     },
     loadInitPaletteFromStore,
     deleteColorFromPalette,
@@ -178,10 +155,7 @@ export default function useApplicationHook() {
     setStoreLoaded,
     setCurrentPalette,
     setDetailedColor,
-    setColorList,
-    setColorPickerCallback,
     setCommonPalettes,
-    setSuggestedName,
     clearPalette
   });
   return state;

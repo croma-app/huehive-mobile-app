@@ -31,8 +31,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   const [selectedImage, setSelectedImage] = React.useState(null);
   const [automaticColors, setAutomaticColors] = React.useState([]);
 
-  const { isPro, setPurchase, setColorList, setDetailedColor, clearPalette } =
-    React.useContext(CromaContext);
+  const { isPro, setPurchase, setDetailedColor, clearPalette } = React.useContext(CromaContext);
 
   const pickImageResult = async () => {
     setPickImageLoading(true);
@@ -95,16 +94,14 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
     logEvent('hm_pick_colors_from_img', {
       length: pickedColors.length
     });
-    setColorList(JSON.parse(pickedColors)?.colors);
-    navigation.navigate('ColorList');
+    navigation.navigate('ColorList', { colors: JSON.parse(pickedColors)?.colors });
     //setPickedColors(JSON.parse(pickedColors)?.colors);
     setIsImagePickerModalVisible(false);
   };
 
   const handleNext = () => {
     clearPalette();
-    setColorList(automaticColors.map((color) => ({ color })));
-    navigation.navigate('ColorList');
+    navigation.navigate('ColorList', { colors: automaticColors.map((color) => ({ color })) });
     setSelectedImage(null);
     setAutomaticColors([]);
     setIsImagePickerModalVisible(false);
@@ -120,8 +117,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
       return { color: colorHex, locked: false };
     });
     clearPalette();
-    setColorList(randomColors);
-    navigation.navigate('ColorList');
+    navigation.navigate('ColorList', { colors: randomColors });
   };
   return (
     <>
@@ -138,8 +134,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                   length: pickedColors.length
                 });
                 clearPalette();
-                setColorList(JSON.parse(pickedColors)?.colors);
-                navigation.navigate('ColorList');
+                navigation.navigate('ColorList', { colors: JSON.parse(pickedColors)?.colors });
               }
             },
             {
@@ -187,7 +182,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                   onPress: () => {
                     logEvent('create_new_palette');
                     clearPalette();
-                    navigation.navigate('AddPaletteManually');
+                    navigation.navigate('SavePalette');
                   }
                 }
               : {

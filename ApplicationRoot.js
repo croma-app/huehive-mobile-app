@@ -11,7 +11,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ColorDetailsScreen from './screens/ColorDetailScreen';
 import PalettesScreen from './screens/PalettesScreen';
 import SavePaletteScreen from './screens/SavePaletteScreen';
-import AddPaletteManuallyScreen from './screens/AddPaletteManuallyScreen';
 import ColorListScreen from './screens/ColorListScreen';
 import PaletteScreen from './screens/PaletteScreen';
 import ProVersionScreen from './screens/ProVersionScreen';
@@ -124,7 +123,6 @@ export default function App() {
                     options={{ title: t('Save palette') }}
                     component={SavePaletteScreen}
                   />
-                  <Stack.Screen name="AddPaletteManually" component={AddPaletteManuallyScreen} />
                   <Stack.Screen name="Palette" component={PaletteScreen} />
                   <Stack.Screen
                     name="ProVersion"

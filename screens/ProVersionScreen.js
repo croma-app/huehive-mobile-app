@@ -7,15 +7,18 @@ import { purchase, logEvent, readRemoteConfig } from '../libs/Helpers';
 import { material } from 'react-native-typography';
 import { initPurchase } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
+import Colors from '../constants/Colors';
 
 export default function ProScreen() {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const { isPro, setPurchase } = React.useContext(CromaContext);
   const [aiBehindFF, setAiBehindFF] = useState();
+
   const purchaseDevelopment = () => {
     purchase(setPurchase, 'support_development');
   };
+
   useEffect(() => {
     const fetchData = async () => {
       setAiBehindFF(await readRemoteConfig('ai_behind_pro_version'));
@@ -23,6 +26,7 @@ export default function ProScreen() {
     };
     fetchData();
   }, []);
+
   const purchasePro = async () => {
     if (await purchase(setPurchase)) {
       logEvent('pro_version_screen_pur_pro_success');
@@ -30,40 +34,63 @@ export default function ProScreen() {
       logEvent('pro_version_screen_pur_pro_failed');
     }
   };
+
   logEvent('pro_version_screen');
+
   return loading ? (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <ActivityIndicator size="large" color="#ff5c59" />
+      <ActivityIndicator size="large" color={Colors.primary} />
     </View>
   ) : (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View>
-        <Text style={styles.title}>{t('Pro benefits')}</Text>
+        <Text style={styles.title}>{t('Unlock Pro Benefits')}</Text>
         {aiBehindFF && (
-          <Text style={[styles.line]}>
-            {t('• Use HiveHive AI assistant to create, explain and modify color palettes')}
-          </Text>
+          <View style={styles.benefit}>
+            <Text style={styles.bulletPoint}>•</Text>
+            <Text style={styles.benefitText}>
+              {t(
+                'Use HiveHive AI assistant to create, explain, and modify color palettes with ease'
+              )}
+            </Text>
+          </View>
         )}
-        <Text style={[styles.line]}>{t('• Add more than 4 colors in a palette 🎨')}</Text>
-        <Text style={[styles.line]}>{t('• Lifetime access to all current set of features')}</Text>
-        <CromaButton
-          style={{ backgroundColor: '#ff5c59' }}
-          textStyle={{ color: '#fff' }}
-          onPress={purchasePro}>
-          {isPro ? t('You are a pro user! Enjoy the app') : t('Unlock pro for lifetime access')}
+        <View style={styles.benefit}>
+          <Text style={styles.bulletPoint}>•</Text>
+          <Text style={styles.benefitText}>
+            {t('Add unlimited colors to your palettes for greater flexibility and creativity 🎨')}
+          </Text>
+        </View>
+        <View style={styles.benefit}>
+          <Text style={styles.bulletPoint}>•</Text>
+          <Text style={styles.benefitText}>
+            {t('Enjoy lifetime access to all current and future pro features')}
+          </Text>
+        </View>
+        <CromaButton style={styles.proButton} textStyle={{ color: '#fff' }} onPress={purchasePro}>
+          {isPro ? t('You are a pro user! Enjoy the app') : t('Unlock Pro for Lifetime Access')}
         </CromaButton>
-        <Text style={styles.line}>
-          {t(
-            '• Support the development efforts to keep the app awesome and simple without any ads and annoying notifications 😊'
-          )}
-        </Text>
-        <Text style={styles.line}>{t('• Help us keep the app open source')}</Text>
-        <CromaButton onPress={purchaseDevelopment}>{t('Support development')}</CromaButton>
+        <View style={styles.benefit}>
+          <Text style={styles.bulletPoint}>•</Text>
+          <Text style={styles.benefitText}>
+            {t(
+              'Support the development efforts to keep the app awesome and simple without any ads or annoying notifications 😊'
+            )}
+          </Text>
+        </View>
+        <View style={styles.benefit}>
+          <Text style={styles.bulletPoint}>•</Text>
+          <Text style={styles.benefitText}>{t('Help us keep the app open source')}</Text>
+        </View>
+        <CromaButton style={styles.devButton} onPress={purchaseDevelopment}>
+          {t('Support Development')}
+        </CromaButton>
 
         {!isPro && (
           <View>
-            <Text style={[styles.title]}>{t('Restore purchase')}</Text>
+            <Text style={styles.title}>{t('Restore Purchase')}</Text>
             <CromaButton
+              style={styles.restoreButton}
               onPress={async () => {
                 await initPurchase(setPurchase);
               }}>
@@ -78,18 +105,47 @@ export default function ProScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingLeft: 12,
-    paddingRight: 12
+    paddingHorizontal: 16,
+    paddingTop: 24
   },
   title: {
-    paddingTop: 12,
-    paddingBottom: 12,
-    fontSize: 20,
-    fontWeight: 'bold'
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    color: Colors.darkGrey
   },
-  line: {
+  benefit: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 12
+  },
+  bulletPoint: {
+    fontSize: 16,
+    marginRight: 8,
+    color: Colors.darkGrey
+  },
+  benefitText: {
     ...material.body1,
-    paddingBottom: 4,
-    fontSize: 15
+    flex: 1,
+    fontSize: 16,
+    color: Colors.darkGrey
+  },
+  proButton: {
+    backgroundColor: Colors.primary,
+    borderRadius: 8,
+    paddingVertical: 12,
+    marginTop: 24,
+    marginBottom: 32
+  },
+  devButton: {
+    borderRadius: 8,
+    paddingVertical: 12,
+    marginTop: 16,
+    marginBottom: 32
+  },
+  restoreButton: {
+    borderRadius: 8,
+    paddingVertical: 12,
+    marginBottom: 16
   }
 });

@@ -19,6 +19,17 @@ import RNFetchBlob from 'rn-fetch-blob';
 import PropTypes from 'prop-types';
 import { Menu, MenuItem } from 'react-native-material-menu';
 
+const MenuItemWrapper = ({ onPress, icon, label }) => (
+  <MenuItem onPress={onPress}>
+    <View style={styles.menuItemContainer}>
+      <View style={styles.menuItemIconContainer}>
+        <FontAwesome size={20} name={icon} />
+      </View>
+      <Text style={styles.menuItemText}>{label}</Text>
+    </View>
+  </MenuItem>
+);
+
 const MenuAnchor = ({ onPress }) => (
   <TouchableOpacity style={styles.menuAnchorContainer} onPress={onPress}>
     <FontAwesome style={styles.actionButton} size={20} name="ellipsis-v" />
@@ -153,19 +164,9 @@ export const PaletteCard = (props) => {
                 visible={visible}
                 anchor={<MenuAnchor onPress={showMenu} />}
                 onRequestClose={hideMenu}>
-                <MenuItem onPress={onShare} style={styles.actionButton}>
-                  <View style={styles.actionButtonContainer}>
-                    <FontAwesome size={20} name="share" />
-                    <Text style={styles.actionButtonText}>Share</Text>
-                  </View>
-                </MenuItem>
-                <MenuItem onPress={onDownload} style={styles.actionButton}>
-                  <View style={styles.actionButtonContainer}>
-                    <FontAwesome size={20} name="download" />
-                    <Text style={styles.actionButtonText}>Export</Text>
-                  </View>
-                </MenuItem>
-                <MenuItem
+                <MenuItemWrapper onPress={onShare} icon="share" label="Share" />
+                <MenuItemWrapper onPress={onDownload} icon="download" label="Export" />
+                <MenuItemWrapper
                   onPress={() => {
                     logEvent('home_screen_palette_card_delete');
                     setAnimationType('fadeOutRightBig');
@@ -173,12 +174,26 @@ export const PaletteCard = (props) => {
                       deletePaletteLocal();
                     }, 500);
                   }}
-                  style={styles.actionButton}>
-                  <View style={styles.actionButtonContainer}>
-                    <FontAwesome size={20} name="trash" />
-                    <Text style={styles.actionButtonText}>Delete</Text>
-                  </View>
-                </MenuItem>
+                  icon="trash"
+                  label="Delete"
+                />
+                <MenuItemWrapper
+                  onPress={() => {
+                    logEvent('home_screen_open_in_generator');
+                    props.navigation.navigate('ColorList', { colors: props.colors });
+                  }}
+                  icon="code-fork"
+                  label="Fork"
+                />
+                <MenuItemWrapper
+                  onPress={() => {
+                    logEvent('home_screen_edit');
+                    setCurrentPalette({ name: props.name });
+                    props.navigation.navigate('Palette');
+                  }}
+                  icon="edit"
+                  label="Edit"
+                />
               </Menu>
             </View>
           </View>
@@ -236,6 +251,22 @@ const styles = StyleSheet.create({
   },
   actionButtonText: {
     fontSize: 16,
-    marginStart: 8
+    marginStart: 8,
+    flex: 1,
+    textAlign: 'center'
+  },
+  menuItemContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 8
+  },
+  menuItemIconContainer: {
+    width: 24,
+    alignItems: 'flex-start'
+  },
+  menuItemText: {
+    fontSize: 16,
+    marginLeft: 8
   }
 });
