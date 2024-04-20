@@ -182,7 +182,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                   onPress: () => {
                     logEvent('create_new_palette');
                     clearPalette();
-                    navigation.navigate('AddPaletteManually');
+                    navigation.navigate('SavePalette');
                   }
                 }
               : {
