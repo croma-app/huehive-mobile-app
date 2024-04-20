@@ -32,6 +32,8 @@ const SignUp = function ({ setScreenLogin, setScreenForgetPassword }) {
   const [email, setEmail] = useState('');
   const [fullname, setFullname] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [errors, setErrors] = useState({});
   const { t } = useTranslation();
   const { loadUserData } = useUserData();
   const [isLoginInProgress, setIsLoginInProgress] = useState(false);
@@ -57,7 +59,36 @@ const SignUp = function ({ setScreenLogin, setScreenForgetPassword }) {
     }
   };
 
+  const validateInputs = () => {
+    const newErrors = {};
+    if (!fullname) {
+      newErrors.fullname = 'Fullname is required';
+    }
+    if (!email) {
+      newErrors.email = 'Email address is required';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = 'Email address is invalid';
+    }
+    if (!password) {
+      newErrors.password = 'Password is required';
+    } else if (password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters long';
+    }
+    if (!confirmPassword) {
+      newErrors.confirmPassword = 'Confirm password is required';
+    } else if (confirmPassword !== password) {
+      newErrors.confirmPassword = 'Passwords do not match';
+    }
+    return newErrors;
+  };
+
   const onLogin = async () => {
+    const validationErrors = validateInputs();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
     setIsLoginInProgress(true);
     try {
       const res = await signUp(fullname, email, password);
@@ -88,15 +119,18 @@ const SignUp = function ({ setScreenLogin, setScreenForgetPassword }) {
       <TextInput
         style={styles.input}
         onChangeText={setFullname}
-        placeholder={'Fullname '}
+        placeholder={'Fullname'}
         value={fullname}
       />
+      {errors.fullname && <Text style={styles.errorText}>{errors.fullname}</Text>}
       <TextInput
         style={styles.input}
         onChangeText={setEmail}
         placeholder={'Email address'}
         value={email}
+        keyboardType="email-address"
       />
+      {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
       <TextInput
         placeholder="Password"
         style={styles.input}
@@ -105,6 +139,16 @@ const SignUp = function ({ setScreenLogin, setScreenForgetPassword }) {
         secureTextEntry={true}
         password={true}
       />
+      {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
+      <TextInput
+        placeholder="Confirm Password"
+        style={styles.input}
+        onChangeText={setConfirmPassword}
+        value={confirmPassword}
+        secureTextEntry={true}
+        password={true}
+      />
+      {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
       <View>
         <View style={styles.buttonsContainer}>
           <CromaButton style={styles.buttonLeft} onPress={onLogin}>
@@ -161,6 +205,10 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     marginRight: 50,
     textAlign: 'center'
+  },
+  errorText: {
+    color: 'red',
+    marginTop: 5
   }
 });
 

@@ -34,6 +34,22 @@ const Login = function ({ setScreenSignup }) {
   const { t } = useTranslation();
   const { loadUserData } = useUserData();
   const [isLoginInProgress, setIsLoginInProgress] = useState(false);
+  const [emailError, setEmailError] = useState('');
+
+  const validateEmail = (email) => {
+    // Simple email validation regex
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  };
+
+  const handleEmailChange = (email) => {
+    setEmail(email);
+    if (!validateEmail(email)) {
+      setEmailError('Please enter a valid email address');
+    } else {
+      setEmailError('');
+    }
+  };
 
   const googleSignIn = async () => {
     try {
@@ -55,6 +71,11 @@ const Login = function ({ setScreenSignup }) {
   };
 
   const onLogin = async () => {
+    if (!validateEmail(email)) {
+      setEmailError('Please enter a valid email address');
+      return;
+    }
+
     setIsLoginInProgress(true);
     try {
       const res = await login(email, password);
@@ -85,10 +106,13 @@ const Login = function ({ setScreenSignup }) {
 
       <TextInput
         style={styles.input}
-        onChangeText={setEmail}
+        onChangeText={handleEmailChange}
         placeholder={'Email address'}
         value={email}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
+      {emailError !== '' && <Text style={styles.errorText}>{emailError}</Text>}
       <TextInput
         placeholder="Password"
         style={styles.input}
@@ -159,6 +183,10 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     marginRight: 50,
     textAlign: 'center'
+  },
+  errorText: {
+    color: 'red',
+    marginBottom: 10
   }
 });
 
