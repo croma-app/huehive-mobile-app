@@ -14,12 +14,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { material } from 'react-native-typography';
 import { logEvent, readRemoteConfig } from '../libs/Helpers';
 import ChatCard from '../components/ChatCard';
-import LoginScreen from './LoginScreen';
-import useUserData from '../hooks/getUserData';
+// import LoginScreen from './LoginScreen';
+// import useUserData from '../hooks/getUserData';
 import CromaButton from '../components/CromaButton';
 import { CromaContext } from '../store/store';
 import useChatSession from '../hooks/useChatSession';
-import loginHoc from '../components/hoc/LoginHoc';
+import LoginWrapper from '../components/LoginWrapper';
+import useUserDataZ from '../hooks/getUserDataZustand';
 
 // eslint-disable-next-line no-undef
 const bgImage = require('../assets/images/colorful_background.jpg');
@@ -46,7 +47,7 @@ const ChatSessionScreen = (props) => {
   const { messages, isLoading, isCreatingSession, error, createSession, followUpSession } =
     useChatSession(route.params?.messages);
 
-  const { userData, isUserDataLoading, getUserData } = useUserData();
+  const { userData, isLoading: isUserDataLoading } = useUserDataZ();
   const [canUserCreateChat, setCanUserCreateChat] = useState();
 
   useEffect(() => {
@@ -106,91 +107,93 @@ const ChatSessionScreen = (props) => {
   }
 
   return (
-    <View style={styles.container}>
-      <ImageBackground source={bgImage} style={styles.backgroundImage}>
-        <View style={styles.bgImageOpecity}>
-          {isCreatingSession ? (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator animating={true} size="large" color="#ff7875" />
-              <Text style={styles.loadingText}>Creating chat session...</Text>
-            </View>
-          ) : (
-            <>
-              <ScrollView
-                ref={scrollViewRef}
-                style={styles.chat_container}
-                showsVerticalScrollIndicator={false}>
-                {messages.length === 0 ? (
-                  <View style={styles.emptyChat}>
-                    <Text style={styles.emptyChatText}>
-                      Welcome to HueHive AI! Start a conversation to create color palettes for your
-                      next project
-                    </Text>
-                    <Text style={styles.emptyChatSubtext}>Here are few examples</Text>
-                    <View style={styles.examplePhrasesContainer}>
-                      {EXAMPLE_PHRASES.map((phrase, index) => (
-                        <ExamplePhrase key={index} phrase={phrase} onPress={setInputText} />
-                      ))}
+    <LoginWrapper userData={userData}>
+      <View style={styles.container}>
+        <ImageBackground source={bgImage} style={styles.backgroundImage}>
+          <View style={styles.bgImageOpecity}>
+            {isCreatingSession ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator animating={true} size="large" color="#ff7875" />
+                <Text style={styles.loadingText}>Creating chat session...</Text>
+              </View>
+            ) : (
+              <>
+                <ScrollView
+                  ref={scrollViewRef}
+                  style={styles.chat_container}
+                  showsVerticalScrollIndicator={false}>
+                  {messages.length === 0 ? (
+                    <View style={styles.emptyChat}>
+                      <Text style={styles.emptyChatText}>
+                        Welcome to HueHive AI! Start a conversation to create color palettes for
+                        your next project
+                      </Text>
+                      <Text style={styles.emptyChatSubtext}>Here are few examples</Text>
+                      <View style={styles.examplePhrasesContainer}>
+                        {EXAMPLE_PHRASES.map((phrase, index) => (
+                          <ExamplePhrase key={index} phrase={phrase} onPress={setInputText} />
+                        ))}
+                      </View>
                     </View>
+                  ) : (
+                    messages.map((message, index) => (
+                      <ChatCard
+                        sender={message.sender_type}
+                        message={message.message}
+                        key={index}
+                        index={index}
+                        navigation={navigation}
+                      />
+                    ))
+                  )}
+                </ScrollView>
+                {error && (
+                  <View style={styles.errorMessageContainer}>
+                    <Text style={styles.errorMessageTitle}>Error: </Text>
+                    <Text style={styles.errorMessageText}>{error}</Text>
+                  </View>
+                )}
+                <ActivityIndicator animating={isLoading} size="large" color="#ff7875" />
+                {canUserCreateChat ? (
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      style={styles.input}
+                      value={inputText}
+                      onChangeText={setInputText}
+                      placeholder={
+                        messages.length == 0
+                          ? 'Ex: create a color palette for kids website'
+                          : 'follow up message to change the color palette'
+                      }
+                    />
+                    <TouchableOpacity
+                      disabled={isLoading || inputText.trim() === ''}
+                      onPress={handleSendMessage}
+                      style={
+                        isLoading || inputText.trim() === ''
+                          ? styles.disableSendButton
+                          : styles.sendButton
+                      }>
+                      <Text style={styles.textSend}> Send </Text>
+                    </TouchableOpacity>
                   </View>
                 ) : (
-                  messages.map((message, index) => (
-                    <ChatCard
-                      sender={message.sender_type}
-                      message={message.message}
-                      key={index}
-                      index={index}
-                      navigation={navigation}
-                    />
-                  ))
+                  <CromaButton
+                    style={{ backgroundColor: '#ff5c59', margin: 10 }}
+                    textStyle={{ color: '#fff' }}
+                    onPress={() => {
+                      logEvent('chat_session_pro_button');
+                      navigation.navigate('ProVersion');
+                    }}>
+                    Unlock pro to use this feature
+                  </CromaButton>
                 )}
-              </ScrollView>
-              {error && (
-                <View style={styles.errorMessageContainer}>
-                  <Text style={styles.errorMessageTitle}>Error: </Text>
-                  <Text style={styles.errorMessageText}>{error}</Text>
-                </View>
-              )}
-              <ActivityIndicator animating={isLoading} size="large" color="#ff7875" />
-              {canUserCreateChat ? (
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.input}
-                    value={inputText}
-                    onChangeText={setInputText}
-                    placeholder={
-                      messages.length == 0
-                        ? 'Ex: create a color palette for kids website'
-                        : 'follow up message to change the color palette'
-                    }
-                  />
-                  <TouchableOpacity
-                    disabled={isLoading || inputText.trim() === ''}
-                    onPress={handleSendMessage}
-                    style={
-                      isLoading || inputText.trim() === ''
-                        ? styles.disableSendButton
-                        : styles.sendButton
-                    }>
-                    <Text style={styles.textSend}> Send </Text>
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <CromaButton
-                  style={{ backgroundColor: '#ff5c59', margin: 10 }}
-                  textStyle={{ color: '#fff' }}
-                  onPress={() => {
-                    logEvent('chat_session_pro_button');
-                    navigation.navigate('ProVersion');
-                  }}>
-                  Unlock pro to use this feature
-                </CromaButton>
-              )}
-            </>
-          )}
-        </View>
-      </ImageBackground>
-    </View>
+              </>
+            )}
+          </View>
+        </ImageBackground>
+      </View>
+    </LoginWrapper>
   );
 };
 
@@ -330,4 +333,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default loginHoc(ChatSessionScreen);
+export default ChatSessionScreen;

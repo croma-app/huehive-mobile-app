@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ActivityIndicator } from 'react-native';
 import LoginOverlayScreen from './components/LoginOverlayScreen';
 import ApplicationRoot from './ApplicationRoot';
 import Storage from './libs/Storage';
 import { withIAPContext } from 'react-native-iap';
+import getUserDataZ from './hooks/getUserDataZustand';
 
 const App = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [isLoginOverlayStepDone, setIsLoginOverlayStepDone] = React.useState(true);
+  const { loadUserData } = getUserDataZ();
   React.useEffect(() => {
     Storage.isLoginOverlayStepDone().then((value) => {
       if (value === 'yes') {
@@ -16,6 +18,10 @@ const App = () => {
       setIsLoading(true);
     });
   }, []);
+
+  useEffect(() => {
+    loadUserData();
+  }, [loadUserData]);
 
   const markLoginStepDone = () => {
     setIsLoginOverlayStepDone(false);

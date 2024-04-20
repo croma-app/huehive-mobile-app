@@ -8,26 +8,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { googleLogin } from '../network/login-and-signup';
 import { storeUserSession } from '../libs/EncryptedStoreage';
 import CromaButton from './CromaButton';
-
-const googleSignIn = async () => {
-  try {
-    await GoogleSignin.hasPlayServices();
-    const userInfo = await GoogleSignin.signIn();
-    // this.setState({ userInfo });
-    const res = await googleLogin(userInfo);
-    await storeUserSession(
-      res.data.user.full_name,
-      res.data.user.email,
-      res.data.userToken,
-      res.data.user.avatar_url
-    );
-    // user.loggedIn = true;
-    // setUser(user);
-    // naviagteAfterLogin();
-  } catch (error) {
-    // setError(error.message);
-  }
-};
+import getUserDataZ from '../hooks/getUserDataZustand';
 
 const LOGIN_AND_SIGNUP_TEXT = {
   LOGIN: {
@@ -50,6 +31,29 @@ const Login = function () {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { t } = useTranslation();
+  const { loadUserData } = getUserDataZ();
+
+  const googleSignIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      // this.setState({ userInfo });
+      const res = await googleLogin(userInfo);
+      await storeUserSession(
+        res.data.user.full_name,
+        res.data.user.email,
+        res.data.userToken,
+        res.data.user.avatar_url
+      );
+
+      loadUserData();
+      // user.loggedIn = true;
+      // setUser(user);
+      // naviagteAfterLogin();
+    } catch (error) {
+      // setError(error.message);
+    }
+  };
 
   return (
     <View style={[styles.container]}>
@@ -78,16 +82,10 @@ const Login = function () {
       <View>
         <Text style={styles.forgotPassword}>{t('Forgot password?')}</Text>
         <View style={styles.buttonsContainer}>
-          <CromaButton
-            style={styles.buttonLeft}
-            // onPress={onSubmit}
-          >
+          <CromaButton style={styles.buttonLeft} onPress={onSubmit}>
             {t(LOGIN_AND_SIGNUP_TEXT['LOGIN'].buttonText)}
           </CromaButton>
-          <CromaButton
-            style={styles.buttonRight}
-            // onPress={onSubmit}
-          >
+          <CromaButton style={styles.buttonRight} onPress={onSubmit}>
             {t(LOGIN_AND_SIGNUP_TEXT['SIGN_UP'].buttonText)}
           </CromaButton>
         </View>
