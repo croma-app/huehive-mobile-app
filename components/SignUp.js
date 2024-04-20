@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
 import GoogleButton from './GoogleButton';
 import { useTranslation } from 'react-i18next';
 import { signUp } from '../network/login-and-signup';
@@ -151,10 +151,13 @@ const SignUp = function ({ setScreenLogin, setScreenForgetPassword }) {
       {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
       <View>
         <View style={styles.buttonsContainer}>
-          <CromaButton style={styles.buttonLeft} onPress={onLogin}>
+          <CromaButton textStyle={{ color: '#fff' }} style={styles.buttonLeft} onPress={onLogin}>
             {isLoginInProgress ? 'loading...' : t(LOGIN_AND_SIGNUP_TEXT['SIGN_UP'].buttonText)}
           </CromaButton>
-          <CromaButton style={styles.buttonRight} onPress={setScreenLogin}>
+          <CromaButton
+            textStyle={{ color: '#ff5c59' }}
+            style={styles.buttonRight}
+            onPress={setScreenLogin}>
             {t(LOGIN_AND_SIGNUP_TEXT['LOGIN'].buttonText)}
           </CromaButton>
         </View>

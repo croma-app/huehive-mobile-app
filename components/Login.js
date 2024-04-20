@@ -129,10 +129,13 @@ const Login = function ({ setScreenSignup }) {
           <Text style={styles.forgotPassword}>{t('Forgot password?')}</Text>
         </TouchableOpacity>
         <View style={styles.buttonsContainer}>
-          <CromaButton style={styles.buttonLeft} onPress={onLogin}>
+          <CromaButton style={styles.buttonLeft} textStyle={{ color: '#fff' }} onPress={onLogin}>
             {isLoginInProgress ? 'loading...' : t(LOGIN_AND_SIGNUP_TEXT['LOGIN'].buttonText)}
           </CromaButton>
-          <CromaButton style={styles.buttonRight} onPress={setScreenSignup}>
+          <CromaButton
+            textStyle={{ color: '#ff5c59' }}
+            style={styles.buttonRight}
+            onPress={setScreenSignup}>
             {t(LOGIN_AND_SIGNUP_TEXT['SIGN_UP'].buttonText)}
           </CromaButton>
         </View>
