@@ -21,6 +21,10 @@ export default function AIColorPicker({ setColor }) {
   const [selectedColor, setSelectedColor] = useState(null);
 
   const generateColorFromQuery = async () => {
+    if (query.trim().length === 0) {
+      notifyMessage('Please enter a query to generate color suggestions');
+      return;
+    }
     setLoading(true);
     try {
       logEvent('ai_color_picker_query_submitted');
