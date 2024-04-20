@@ -6,7 +6,8 @@ import {
   View,
   Text,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  Dimensions
 } from 'react-native';
 import Color from 'pigment/full';
 import RNColorThief from 'react-native-color-thief';
@@ -194,7 +195,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
           ]
         ]}></ActionButtonContainer>
       <Modal
-        style={{ height: 400 }}
+        style={styles.modalStyle}
         visible={isColorPickerVisible}
         animationType="slide"
         // transparent={true}
@@ -325,5 +326,8 @@ const styles = {
   nextButtonText: {
     fontSize: 16,
     color: Colors.fabPrimary
+  },
+  modalStyle: {
+    height: Dimensions.get('window').height / 2
   }
 };
