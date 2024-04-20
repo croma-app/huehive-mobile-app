@@ -109,9 +109,6 @@ const SignUp = function ({ setScreenLogin, setScreenForgetPassword }) {
         password={true}
       />
       <View>
-        <TouchableOpacity onPress={setScreenForgetPassword}>
-          <Text style={styles.forgotPassword}>{t('Forgot password?')}</Text>
-        </TouchableOpacity>
         <View style={styles.buttonsContainer}>
           <CromaButton style={styles.buttonLeft} onPress={onLogin}>
             {isLoginInProgress ? 'loading...' : t(LOGIN_AND_SIGNUP_TEXT['SIGN_UP'].buttonText)}

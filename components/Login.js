@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 import GoogleButton from './GoogleButton';
 import { useTranslation } from 'react-i18next';
 import { login } from '../network/login-and-signup';
@@ -28,7 +28,7 @@ const LOGIN_AND_SIGNUP_TEXT = {
   }
 };
 
-const Login = function ({ setScreenSignup, setScreenForgetPassword }) {
+const Login = function ({ setScreenSignup }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { t } = useTranslation();
@@ -101,7 +101,10 @@ const Login = function ({ setScreenSignup, setScreenForgetPassword }) {
         password={true}
       />
       <View>
-        <TouchableOpacity onPress={setScreenForgetPassword}>
+        <TouchableOpacity
+          onPress={() => {
+            Linking.openURL('https://huehive.co/users/password/new');
+          }}>
           <Text style={styles.forgotPassword}>{t('Forgot password?')}</Text>
         </TouchableOpacity>
         <View style={styles.buttonsContainer}>

@@ -105,7 +105,7 @@ const ChatSessionScreen = (props) => {
   }
 
   return (
-    <LoginWrapper userData={userData}>
+    <LoginWrapper userData={userData} navigation={navigation}>
       <View style={styles.container}>
         <ImageBackground source={bgImage} style={styles.backgroundImage}>
           <View style={styles.bgImageOpecity}>

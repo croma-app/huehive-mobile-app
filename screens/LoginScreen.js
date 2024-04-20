@@ -1,10 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  Linking
+} from 'react-native';
 import { View } from 'react-native-animatable';
 import CromaButton from '../components/CromaButton';
 import { material } from 'react-native-typography';
 import { useTranslation } from 'react-i18next';
-import { CromaContext } from '../store/store';
 import { login, signUp, googleLogin } from '../network/login-and-signup';
 import PropTypes from 'prop-types';
 import useUserData from '../hooks/useUserData';
@@ -70,11 +77,10 @@ function LoginScreen(props) {
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
   const [error, setError] = useState();
-  const { userData, loadUserData: setUserData } = useUserData();
+  const { userData, loadUserData } = useUserData();
   const [validationErrors, setValidationErrors] = useState(undefined);
   const [screenType, setScreenType] = useState(SIGN_UP);
   const { t } = useTranslation();
-  const { user, setUser } = React.useContext(CromaContext);
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -100,9 +106,6 @@ function LoginScreen(props) {
 
   const onLogout = useCallback(async () => {
     await removeUserSession();
-    setUserData(undefined);
-    user.loggedIn = false;
-    setUser(user);
     try {
       await GoogleSignin.revokeAccess();
     } catch (error) {
@@ -110,7 +113,7 @@ function LoginScreen(props) {
     }
     // Google Account disconnected from your app.
     // Perform clean-up actions, such as deleting data associated with the disconnected account.
-  }, [setUser, user]);
+  }, []);
 
   const onSubmit = useCallback(async () => {
     if (screenType === LOGIN) {
@@ -123,8 +126,7 @@ function LoginScreen(props) {
           res.data.userToken,
           res.data.user.avatar_url
         );
-        user.loggedIn = true;
-        setUser(user);
+        loadUserData();
         naviagteAfterLogin();
       } catch (error) {
         setError(error.message);
@@ -150,8 +152,7 @@ function LoginScreen(props) {
           res.data.userToken,
           res.data.user.avatar_url
         );
-        user.loggedIn = true;
-        setUser(user);
+        loadUserData();
         naviagteAfterLogin();
       } catch (error) {
         if (error.response.data.error) {
@@ -161,7 +162,7 @@ function LoginScreen(props) {
         }
       }
     }
-  }, [confirmPassword, email, fullName, naviagteAfterLogin, password, screenType, setUser, user]);
+  }, [confirmPassword, email, fullName, loadUserData, naviagteAfterLogin, password, screenType]);
 
   const googleSignIn = async () => {
     try {
@@ -274,7 +275,14 @@ function LoginScreen(props) {
             password={true}
           />
         )}
-        {screenType === LOGIN && <Text style={styles.forgotPassword}>{t('Forgot password?')}</Text>}
+        {screenType === LOGIN && (
+          <TouchableOpacity
+            onPress={() => {
+              Linking.openURL('https://huehive.co/users/password/new');
+            }}>
+            <Text style={styles.forgotPassword}>{t('Forgot password?')}</Text>
+          </TouchableOpacity>
+        )}
         <CromaButton
           style={{ backgroundColor: '#ff5c59' }}
           textStyle={{ color: '#fff' }}

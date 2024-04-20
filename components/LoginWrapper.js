@@ -5,12 +5,10 @@ import { StyleSheet, Dimensions, Modal, TouchableWithoutFeedback } from 'react-n
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import Login from './Login';
 import SignUp from './SignUp';
-import ForgetPassword from './ForgetPassword';
 
 const SCREEN_TYPES = {
   LOGIN: 'LOGIN',
-  SIGN_UP: 'SIGN_UP',
-  FORGET_PASSWORD: 'FORGET_PASSWORD'
+  SIGN_UP: 'SIGN_UP'
 };
 
 function checkValidEmail(email) {
@@ -43,7 +41,7 @@ function signUpValidations({ fullName, email, password, confirmPassword }) {
   return Object.keys(errors).length > 0 ? errors : {};
 }
 
-const LoginWrapper = function ({ children, userData }) {
+const LoginWrapper = function ({ children, userData, navigation }) {
   useEffect(() => {
     GoogleSignin.configure({
       webClientId: '865618605576-j2tb9toevqc7tonmbp01dim1ddvod7r0.apps.googleusercontent.com',
@@ -70,7 +68,11 @@ const LoginWrapper = function ({ children, userData }) {
     return (
       <>
         <Modal transparent visible animationType="slide">
-          <TouchableWithoutFeedback>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              console.log('it is not working ', navigation);
+              navigation?.goBack();
+            }}>
             <View style={styles.modal}>
               <View style={styles.modalContent}>
                 <Image
@@ -84,14 +86,8 @@ const LoginWrapper = function ({ children, userData }) {
                     setScreenForgetPassword={setScreenForgetPassword}
                     setScreenSignup={setScreenSignup}
                   />
-                ) : screenType === SCREEN_TYPES.SIGN_UP ? (
-                  <SignUp
-                    setScreenLogin={setScreenLogin}
-                    setScreenForgetPassword={setScreenForgetPassword}
-                    setScreenSignup={setScreenSignup}
-                  />
                 ) : (
-                  <ForgetPassword
+                  <SignUp
                     setScreenLogin={setScreenLogin}
                     setScreenForgetPassword={setScreenForgetPassword}
                     setScreenSignup={setScreenSignup}
