@@ -169,7 +169,12 @@ export default function ColorListScreen({ navigation, route }) {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            navigation.navigate('SavePalette');
+            navigation.navigate('SavePalette', {
+              colors: colors.map((color) => {
+                return { color: color.color, name: color.name };
+              }),
+              suggestedName: route.params?.suggestedName
+            });
           }}>
           <View style={styles.buttonContent}>
             <Icon name="save" size={20} color={Colors.fabPrimary} />

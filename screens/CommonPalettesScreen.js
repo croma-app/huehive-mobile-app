@@ -7,7 +7,7 @@ import { CromaContext } from '../store/store';
 
 export default function CommonPalettesScreen({ navigation }) {
   logEvent('common_palettes_screen');
-  const { commonPalettes, setColorList, setSuggestedName } = useContext(CromaContext);
+  const { commonPalettes } = useContext(CromaContext);
   const { palettes, name } = commonPalettes;
 
   useLayoutEffect(() => {
@@ -20,9 +20,10 @@ export default function CommonPalettesScreen({ navigation }) {
         <PalettePreviewCard
           key={palette?.name ?? index}
           onPress={() => {
-            setColorList(palette.colors);
-            setSuggestedName(name + ' - ' + palette.name);
-            navigation.navigate('ColorList');
+            navigation.navigate('ColorList', {
+              colors: palette.colors,
+              suggestedName: name + ' - ' + palette.name
+            });
           }}
           colors={palette.colors}
           name={palette.name}

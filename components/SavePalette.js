@@ -14,38 +14,23 @@ export const SavePalette = (props) => {
   const { title, navigationPath, navigation } = props;
   const { t } = useTranslation();
 
-  const {
-    addPalette,
-    allPalettes,
-    isPro,
-    colorList,
-    setColorList,
-    setCurrentPalette,
-    suggestedName,
-    setSuggestedName
-  } = React.useContext(CromaContext);
+  const { addPalette, allPalettes, isPro, setCurrentPalette } = React.useContext(CromaContext);
 
   const [finalColors, setFinalColors] = useState([]);
   const [isPaletteNameExist, setIsPaletteNameExist] = React.useState(false);
   const [isUnlockProNotification, setIsUnlockProNotification] = useState(false);
 
   useEffect(() => {
-    let colorsFromParams = colorList;
-    if (typeof colorsFromParams === 'string') {
-      colorsFromParams = JSON.parse(colorsFromParams);
-    }
+    let colorsFromParams = props.route.params?.colors;
     const colors = [...new Set(colorsFromParams || [])];
     setIsUnlockProNotification(!isPro && colors.length > 4);
     setFinalColors(colors);
     setTimeout(() => {
       setIsUnlockProNotification(false);
     }, 5000);
-  }, [colorList, isPro]);
+  }, [isPro]);
 
-  const [paletteName, setPaletteName] = useState(suggestedName ?? '');
-  useEffect(() => {
-    setPaletteName(suggestedName ?? '');
-  }, [suggestedName]);
+  const [paletteName, setPaletteName] = useState(props.route.params?.suggestedName ?? '');
 
   return (
     <ScrollView style={{ margin: 8 }} showsVerticalScrollIndicator={false}>
@@ -73,10 +58,7 @@ export const SavePalette = (props) => {
           }
           const palette = { name: paletteName, colors: finalColors };
           addPalette(palette);
-          setSuggestedName('');
           setPaletteName(undefined);
-          setColorList([]);
-
           navigationPath === 'Palette' ? setCurrentPalette(palette) : setCurrentPalette({});
           Platform.OS === 'android' || Platform.OS === 'ios'
             ? navigation.dispatch(StackActions.popToTop())

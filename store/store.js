@@ -130,14 +130,7 @@ export default function useApplicationHook() {
     });
   };
 
-  const setSuggestedName = (suggestedName) => {
-    setState((state) => {
-      return { ...state, suggestedName };
-    });
-  };
-
   const clearPalette = () => {
-    setSuggestedName('');
     setCurrentPalette({});
   };
 
@@ -146,7 +139,6 @@ export default function useApplicationHook() {
       allPalettes: {},
       currentPalette: {},
       deletedPalettes: {},
-      suggestedName: '',
       isLoading: false,
       isPro: false,
       user: {},
@@ -164,7 +156,6 @@ export default function useApplicationHook() {
     setCurrentPalette,
     setDetailedColor,
     setCommonPalettes,
-    setSuggestedName,
     clearPalette
   });
   return state;

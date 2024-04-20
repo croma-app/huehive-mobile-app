@@ -1,12 +1,10 @@
 /* eslint-disable react/prop-types */
-import React, { useContext } from 'react';
+import React from 'react';
 import { View, Text, Image } from 'react-native';
 import { extractHexColors } from '../libs/Helpers';
 import { PalettePreviewCard } from './PalettePreviewCard';
-import { CromaContext } from '../store/store';
 
 const ChatCard = ({ sender, message, navigation }) => {
-  const { setSuggestedName } = useContext(CromaContext);
   const colors = extractHexColors(message);
   const tokens = message.split(/(```[\s\S]+?```)|(\n)/g);
 
@@ -55,7 +53,6 @@ const ChatCard = ({ sender, message, navigation }) => {
                   </View>
                   <PalettePreviewCard
                     onPress={() => {
-                      setSuggestedName('');
                       navigation.navigate('ColorList', { colors });
                     }}
                     name="Click to save"
