@@ -11,11 +11,13 @@ import { notifyMessage } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
 import { t } from 'i18next';
 import RNFetchBlob from 'rn-fetch-blob';
+import useUserData from '../hooks/useUserData';
 
 export default function SyncPalettesScreen(props) {
   const { t } = useTranslation();
   const navigation = props.navigation;
-  const { user, allPalettes, addPalette } = React.useContext(CromaContext);
+  const { allPalettes, addPalette } = React.useContext(CromaContext);
+  const { userData } = useUserData();
   const importFromFile = async () => {
     try {
       const palettesFromFile = await importPalettes();
@@ -28,7 +30,7 @@ export default function SyncPalettesScreen(props) {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/*TODO: update if required */}
-      {user.loggedIn ? (
+      {userData ? (
         <View>
           <Text>Your palettes are safely stored in our servers</Text>
         </View>
