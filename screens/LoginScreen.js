@@ -176,8 +176,6 @@ function LoginScreen(props) {
         res.data.userToken,
         res.data.user.avatar_url
       );
-      user.loggedIn = true;
-      setUser(user);
       naviagteAfterLogin();
     } catch (error) {
       setError(error.message);

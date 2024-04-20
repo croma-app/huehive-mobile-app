@@ -49,9 +49,6 @@ const Login = function ({ setScreenSignup }) {
       );
 
       loadUserData();
-      // user.loggedIn = true;
-      // setUser(user);
-      // naviagteAfterLogin();
     } catch (error) {
       // setError(error.message);
     }

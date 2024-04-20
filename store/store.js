@@ -51,12 +51,6 @@ export default function useApplicationHook() {
     });
   };
 
-  const setUser = (user) => {
-    setState((state) => {
-      return { ...state, user: user };
-    });
-  };
-
   const updatePalette = async (id, _palette) => {
     try {
       setState((state) => {
@@ -163,7 +157,6 @@ export default function useApplicationHook() {
       suggestedName: '',
       isLoading: false,
       isPro: false,
-      user: {},
       isStoreLoaded: false,
       colorPickerCallback: () => {}
     },
@@ -174,7 +167,6 @@ export default function useApplicationHook() {
     addPalette,
     updatePalette,
     setPurchase,
-    setUser,
     setStoreLoaded,
     setCurrentPalette,
     setDetailedColor,

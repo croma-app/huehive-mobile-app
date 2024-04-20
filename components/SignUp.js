@@ -52,9 +52,6 @@ const SignUp = function ({ setScreenLogin, setScreenForgetPassword }) {
       );
 
       loadUserData();
-      // user.loggedIn = true;
-      // setUser(user);
-      // naviagteAfterLogin();
     } catch (error) {
       // setError(error.message);
     }
