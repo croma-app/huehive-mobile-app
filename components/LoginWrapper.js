@@ -1,32 +1,21 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, Image } from 'react-native-animatable';
-import {
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity,
-  ScrollView,
-  TextInput,
-  Modal,
-  TouchableWithoutFeedback
-} from 'react-native';
+import { View, Image } from 'react-native-animatable';
+import { StyleSheet, Dimensions, Modal, TouchableWithoutFeedback } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import Icon from 'react-native-vector-icons/AntDesign';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { CromaContext } from '../store/store';
-import CromaButton from './CromaButton';
-import Notification from './Notification';
-import GoogleButton from './GoogleButton';
-import { login, signUp, googleLogin } from '../network/login-and-signup';
+import { login, signUp } from '../network/login-and-signup';
 import Login from './Login';
-import {
-  retrieveUserSession,
-  storeUserSession,
-  removeUserSession
-} from '../libs/EncryptedStoreage';
+import SignUp from './SignUp';
+import ForgetPassword from './ForgetPassword';
+import { storeUserSession, removeUserSession } from '../libs/EncryptedStoreage';
 
-const LOGIN = 'LOGIN';
-const SIGN_UP = 'SIGN_UP';
+const SCREEN_TYPES = {
+  LOGIN: 'LOGIN',
+  SIGN_UP: 'SIGN_UP',
+  FORGET_PASSWORD: 'FORGET_PASSWORD'
+};
 
 function checkValidEmail(email) {
   return String(email)
@@ -74,9 +63,21 @@ const LoginWrapper = function ({ children, userData }) {
   const [error, setError] = useState();
   // const [userData, setUserData] = useState();
   const [validationErrors, setValidationErrors] = useState(undefined);
-  const [screenType, setScreenType] = useState(SIGN_UP);
+  const [screenType, setScreenType] = useState(SCREEN_TYPES.SIGN_UP);
   const { t } = useTranslation();
   const { user, setUser } = React.useContext(CromaContext);
+
+  const setScreenLogin = () => {
+    setScreenType(SCREEN_TYPES.LOGIN);
+  };
+
+  const setScreenSignup = () => {
+    setScreenType(SCREEN_TYPES.SIGN_UP);
+  };
+
+  const setScreenForgetPassword = () => {
+    setScreenType(SCREEN_TYPES.FORGET_PASSWORD);
+  };
 
   const onLogout = useCallback(async () => {
     await removeUserSession();
@@ -168,7 +169,25 @@ const LoginWrapper = function ({ children, userData }) {
                   // eslint-disable-next-line no-undef
                   source={require('../assets/images/icon.png')}
                 />
-                <Login />
+                {screenType === SCREEN_TYPES.LOGIN ? (
+                  <Login
+                    setScreenLogin={setScreenLogin}
+                    setScreenForgetPassword={setScreenForgetPassword}
+                    setScreenSignup={setScreenSignup}
+                  />
+                ) : screenType === SCREEN_TYPES.SIGN_UP ? (
+                  <SignUp
+                    setScreenLogin={setScreenLogin}
+                    setScreenForgetPassword={setScreenForgetPassword}
+                    setScreenSignup={setScreenSignup}
+                  />
+                ) : (
+                  <ForgetPassword
+                    setScreenLogin={setScreenLogin}
+                    setScreenForgetPassword={setScreenForgetPassword}
+                    setScreenSignup={setScreenSignup}
+                  />
+                )}
               </View>
             </View>
           </TouchableWithoutFeedback>

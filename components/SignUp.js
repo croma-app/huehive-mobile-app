@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import GoogleButton from './GoogleButton';
 import { useTranslation } from 'react-i18next';
-import { login } from '../network/login-and-signup';
+import { signUp } from '../network/login-and-signup';
 
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { googleLogin } from '../network/login-and-signup';
@@ -28,14 +28,17 @@ const LOGIN_AND_SIGNUP_TEXT = {
   }
 };
 
-const Login = function ({ setScreenSignup, setScreenForgetPassword }) {
+const SignUp = function ({ setScreenLogin, setScreenForgetPassword }) {
   const [email, setEmail] = useState('');
+  const [fullname, setFullname] = useState('');
   const [password, setPassword] = useState('');
   const { t } = useTranslation();
   const { loadUserData } = getUserDataZ();
   const [isLoginInProgress, setIsLoginInProgress] = useState(false);
 
-  const googleSignIn = async () => {
+  console.log({ setScreenForgetPassword, setScreenLogin });
+
+  const googleSignUp = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
@@ -60,7 +63,7 @@ const Login = function ({ setScreenSignup, setScreenForgetPassword }) {
   const onLogin = async () => {
     setIsLoginInProgress(true);
     try {
-      const res = await login(email, password);
+      const res = await signUp(fullname, email, password);
       await storeUserSession(
         res.data.user.full_name,
         res.data.user.email,
@@ -79,13 +82,18 @@ const Login = function ({ setScreenSignup, setScreenForgetPassword }) {
   return (
     <View style={[styles.container]}>
       {/* {error && <Notification message={error} onPress={() => setError(undefined)}></Notification>} */}
-      <GoogleButton buttonType="LOGIN" onPress={googleSignIn} />
+      <GoogleButton buttonType="LOGIN" onPress={googleSignUp} />
       <View style={styles.separator}>
         <View style={styles.separatorLine} />
         <Text style={styles.separatorText}>Or</Text>
         <View style={styles.separatorLine} />
       </View>
-
+      <TextInput
+        style={styles.input}
+        onChangeText={setFullname}
+        placeholder={'Fullname '}
+        value={fullname}
+      />
       <TextInput
         style={styles.input}
         onChangeText={setEmail}
@@ -106,10 +114,10 @@ const Login = function ({ setScreenSignup, setScreenForgetPassword }) {
         </TouchableOpacity>
         <View style={styles.buttonsContainer}>
           <CromaButton style={styles.buttonLeft} onPress={onLogin}>
-            {isLoginInProgress ? 'loading...' : t(LOGIN_AND_SIGNUP_TEXT['LOGIN'].buttonText)}
+            {isLoginInProgress ? 'loading...' : t(LOGIN_AND_SIGNUP_TEXT['SIGN_UP'].buttonText)}
           </CromaButton>
-          <CromaButton style={styles.buttonRight} onPress={setScreenSignup}>
-            {t(LOGIN_AND_SIGNUP_TEXT['SIGN_UP'].buttonText)}
+          <CromaButton style={styles.buttonRight} onPress={setScreenLogin}>
+            {t(LOGIN_AND_SIGNUP_TEXT['LOGIN'].buttonText)}
           </CromaButton>
         </View>
       </View>
@@ -162,4 +170,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Login;
+export default SignUp;
