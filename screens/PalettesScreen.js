@@ -5,7 +5,7 @@ import { PalettePreviewCard } from '../components/PalettePreviewCard';
 import { logEvent } from '../libs/Helpers';
 import { CromaContext } from '../store/store';
 export default function PalettesScreen({ navigation }) {
-  const { detailedColor, setColorList } = useContext(CromaContext);
+  const { detailedColor } = useContext(CromaContext);
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: detailedColor });
@@ -31,8 +31,7 @@ export default function PalettesScreen({ navigation }) {
       items.push(
         <PalettePreviewCard
           onPress={() => {
-            setColorList(colors);
-            navigation.navigate('ColorList');
+            navigation.navigate('ColorList', { colors: colors });
           }}
           key={i.toString()}
           colors={colors}

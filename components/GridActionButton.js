@@ -11,6 +11,7 @@ import {
 import Color from 'pigment/full';
 import RNColorThief from 'react-native-color-thief';
 import { notifyMessage, sendClientError } from '../libs/Helpers';
+import { generateRandomColorPalette } from '../libs/ColorHelper';
 import Colors from '../constants/Colors';
 import ActionButtonContainer from './ActionButton';
 import { logEvent, purchase } from '../libs/Helpers';
@@ -30,8 +31,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   const [selectedImage, setSelectedImage] = React.useState(null);
   const [automaticColors, setAutomaticColors] = React.useState([]);
 
-  const { isPro, setPurchase, setColorList, setDetailedColor, clearPalette } =
-    React.useContext(CromaContext);
+  const { isPro, setPurchase, setDetailedColor, clearPalette } = React.useContext(CromaContext);
 
   const pickImageResult = async () => {
     setPickImageLoading(true);
@@ -94,36 +94,30 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
     logEvent('hm_pick_colors_from_img', {
       length: pickedColors.length
     });
-    setColorList(JSON.parse(pickedColors)?.colors);
-    navigation.navigate('ColorList');
+    navigation.navigate('ColorList', { colors: JSON.parse(pickedColors)?.colors });
     //setPickedColors(JSON.parse(pickedColors)?.colors);
     setIsImagePickerModalVisible(false);
   };
 
   const handleNext = () => {
     clearPalette();
-    setColorList(automaticColors.map((color) => ({ color })));
-    navigation.navigate('ColorList');
+    navigation.navigate('ColorList', { colors: automaticColors.map((color) => ({ color })) });
     setSelectedImage(null);
     setAutomaticColors([]);
+    setIsImagePickerModalVisible(false);
   };
 
   const handleAutomaticColors = () => {
-    clearPalette();
-    setColorList(automaticColors.map((color) => ({ color })));
-    navigation.navigate('ColorList');
-    setSelectedImage(null);
-    setAutomaticColors([]);
+    handleNext();
   };
 
   const handleRandomColors = () => {
-    const randomColors = Array.from({ length: 6 }, () => {
-      const randomColor = Color.random().tohex();
-      return { color: randomColor, locked: false };
+    const colorsHex = generateRandomColorPalette(6);
+    const randomColors = colorsHex.map((colorHex) => {
+      return { color: colorHex, locked: false };
     });
     clearPalette();
-    setColorList(randomColors);
-    navigation.navigate('ColorList');
+    navigation.navigate('ColorList', { colors: randomColors });
   };
   return (
     <>
@@ -140,8 +134,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                   length: pickedColors.length
                 });
                 clearPalette();
-                setColorList(JSON.parse(pickedColors)?.colors);
-                navigation.navigate('ColorList');
+                navigation.navigate('ColorList', { colors: JSON.parse(pickedColors)?.colors });
               }
             },
             {
@@ -189,7 +182,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                   onPress: () => {
                     logEvent('create_new_palette');
                     clearPalette();
-                    navigation.navigate('AddPaletteManually');
+                    navigation.navigate('SavePalette');
                   }
                 }
               : {
@@ -209,7 +202,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
         <TouchableWithoutFeedback onPress={() => setIsColorPickerVisible(false)}>
           <View style={styles.modalOverlay} />
         </TouchableWithoutFeedback>
-        <View style={styles.modalContent}>
+        <View style={styles.colorPickerModalContent}>
           <ColorPickerModal
             onColorSelected={handleColorSelected}
             onClose={() => setIsColorPickerVisible(false)}
@@ -284,6 +277,10 @@ const styles = {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     padding: 20
+  },
+  colorPickerModalContent: {
+    flex: 1,
+    justifyContent: 'flex-end'
   },
   previewImage: {
     width: '100%',

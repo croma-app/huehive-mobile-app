@@ -20,8 +20,7 @@ import { material } from 'react-native-typography';
 import Spacer from '../components/Spacer';
 
 const HomeScreen = function ({ navigation, route }) {
-  const { isLoading, allPalettes, isPro, setColorList, setSuggestedName, clearPalette } =
-    React.useContext(CromaContext);
+  const { isLoading, allPalettes, isPro, clearPalette } = React.useContext(CromaContext);
   const [pickImageLoading, setPickImageLoading] = useState(false);
   const getPermissionAsync = async () => {
     if (Platform?.OS === 'ios') {
@@ -49,9 +48,10 @@ const HomeScreen = function ({ navigation, route }) {
               result[item[0]] = decodeURIComponent(item[1]);
             });
           clearPalette();
-          setColorList([...new Set(JSON.parse(result['colors']) || [])]);
-          setSuggestedName(result['name']);
-          navigation.navigate('SavePalette');
+          navigation.navigate('SavePalette', {
+            colors: [...new Set(JSON.parse(result['colors']) || [])],
+            suggestedName: result['name']
+          });
         }
       });
 
@@ -63,8 +63,7 @@ const HomeScreen = function ({ navigation, route }) {
             colors[i] = { color: colors[i].tohex().toLowerCase() };
           }
           clearPalette();
-          setColorList(colors);
-          navigation.navigate('SavePalette');
+          navigation.navigate('SavePalette', { colors });
         }
       });
     }

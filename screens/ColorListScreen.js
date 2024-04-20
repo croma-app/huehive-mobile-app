@@ -1,14 +1,30 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { SingleColorView } from '../components/SingleColorView';
 import { StyleSheet, View, Text, Platform, Animated, TouchableOpacity, Modal } from 'react-native';
 import { logEvent, notifyMessage } from '../libs/Helpers';
-import { CromaContext } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import Color from 'pigment/full';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from '../constants/Colors';
+import { generateRandomColorPaletteWithLockedColors } from '../libs/ColorHelper';
+
+function uniqueColors(colors) {
+  let set = new Set();
+  let uniqueColors = [];
+  colors.forEach((color, index) => {
+    if (!set.has(color.color)) {
+      if (color.locked === undefined) {
+        color.locked = true;
+      }
+      color.index = index;
+      uniqueColors.push(color);
+    }
+    set.add(color.color);
+  });
+  return uniqueColors;
+}
 
 const GenerateInfoModal = ({ toggleGenerateInfo, showGenerateInfo }) => {
   const { t } = useTranslation();
@@ -31,14 +47,13 @@ const GenerateInfoModal = ({ toggleGenerateInfo, showGenerateInfo }) => {
   );
 };
 
-export default function ColorListScreen({ navigation }) {
+export default function ColorListScreen({ navigation, route }) {
   const { t } = useTranslation();
-  const [showGenerateInfo, setShowGenerateInfo] = React.useState(false);
+  const [showGenerateInfo, setShowGenerateInfo] = useState(false);
   const toggleGenerateInfo = () => {
     setShowGenerateInfo(!showGenerateInfo);
   };
-
-  const { colorList, setColorList } = React.useContext(CromaContext);
+  const [colorList, setColorList] = useState(route.params?.colors || []);
   const colors = uniqueColors(colorList).map((color) => ({
     ...color,
     opacity: color.opacity || new Animated.Value(1)
@@ -78,9 +93,7 @@ export default function ColorListScreen({ navigation }) {
             newColor,
             ...colors.slice(item.index + 1)
           ];
-
           setColorList(updatedColors);
-
           // Find the opacity value of the newly added color
           const newColorOpacity = updatedColors[item.index + 1].opacity;
           newColorOpacity.setValue(0);
@@ -113,13 +126,7 @@ export default function ColorListScreen({ navigation }) {
     if (colors.filter((color) => !color.locked).length == 0) {
       notifyMessage('Please unlock some colors or add colors to generate new colors');
     } else {
-      // TODO: improve this algorithm.
-      const newColors = colors.map((color) => {
-        if (!color.locked) {
-          color.color = Color.random().tohex();
-        }
-        return color;
-      });
+      const newColors = generateRandomColorPaletteWithLockedColors([...colors]);
       setColorList(newColors);
     }
   };
@@ -162,7 +169,12 @@ export default function ColorListScreen({ navigation }) {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            navigation.navigate('SavePalette');
+            navigation.navigate('SavePalette', {
+              colors: colors.map((color) => {
+                return { color: color.color, name: color.name };
+              }),
+              suggestedName: route.params?.suggestedName
+            });
           }}>
           <View style={styles.buttonContent}>
             <Icon name="save" size={20} color={Colors.fabPrimary} />
@@ -176,21 +188,6 @@ export default function ColorListScreen({ navigation }) {
       />
     </View>
   );
-}
-function uniqueColors(colors) {
-  let set = new Set();
-  let uniqueColors = [];
-  colors.forEach((color, index) => {
-    if (!set.has(color.color)) {
-      if (color.locked === undefined) {
-        color.locked = true;
-      }
-      color.index = index;
-      uniqueColors.push(color);
-    }
-    set.add(color.color);
-  });
-  return uniqueColors;
 }
 
 const CustomHeader = () => {
