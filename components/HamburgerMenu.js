@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Image,
   Linking,
@@ -18,19 +18,11 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { CromaContext } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
-import { retrieveUserSession } from '../libs/EncryptedStoreage';
+import useUserData from '../hooks/useUserData';
 
 const HamburgerMenu = (props) => {
   const { t } = useTranslation();
-  const [userData, setUserData] = useState();
-
-  useEffect(() => {
-    // check if already logged in
-    (async () => {
-      const userData = await retrieveUserSession();
-      setUserData(userData);
-    })();
-  }, [props]);
+  const { userData } = useUserData();
 
   const { clearPalette } = React.useContext(CromaContext);
   const navigate = function (screen) {

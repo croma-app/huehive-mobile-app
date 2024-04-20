@@ -7,11 +7,8 @@ import { useTranslation } from 'react-i18next';
 import { CromaContext } from '../store/store';
 import { login, signUp, googleLogin } from '../network/login-and-signup';
 import PropTypes from 'prop-types';
-import {
-  retrieveUserSession,
-  storeUserSession,
-  removeUserSession
-} from '../libs/EncryptedStoreage';
+import useUserData from '../hooks/useUserData';
+import { storeUserSession, removeUserSession } from '../libs/EncryptedStoreage';
 import Notification from '../components/Notification';
 import GoogleButton from '../components/GoogleButton';
 
@@ -73,7 +70,7 @@ function LoginScreen(props) {
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
   const [error, setError] = useState();
-  const [userData, setUserData] = useState();
+  const { userData, loadUserData: setUserData } = useUserData();
   const [validationErrors, setValidationErrors] = useState(undefined);
   const [screenType, setScreenType] = useState(SIGN_UP);
   const { t } = useTranslation();
@@ -86,17 +83,6 @@ function LoginScreen(props) {
       offlineAccess: false
     });
   }, []);
-
-  useEffect(() => {
-    // check if already logged in
-    (async () => {
-      const userData = await retrieveUserSession();
-      if (userData) {
-        setUserData(userData);
-        // props.navigation.goBack();
-      }
-    })();
-  }, [props.navigation]);
 
   useEffect(() => {
     props.navigation.setOptions({

@@ -9,7 +9,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { googleLogin } from '../network/login-and-signup';
 import { storeUserSession } from '../libs/EncryptedStoreage';
 import CromaButton from './CromaButton';
-import getUserDataZ from '../hooks/getUserDataZustand';
+import useUserData from '../hooks/useUserData';
 
 const LOGIN_AND_SIGNUP_TEXT = {
   LOGIN: {
@@ -32,7 +32,7 @@ const Login = function ({ setScreenSignup, setScreenForgetPassword }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { t } = useTranslation();
-  const { loadUserData } = getUserDataZ();
+  const { loadUserData } = useUserData();
   const [isLoginInProgress, setIsLoginInProgress] = useState(false);
 
   const googleSignIn = async () => {

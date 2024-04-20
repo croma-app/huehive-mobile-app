@@ -14,13 +14,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { material } from 'react-native-typography';
 import { logEvent, readRemoteConfig } from '../libs/Helpers';
 import ChatCard from '../components/ChatCard';
-// import LoginScreen from './LoginScreen';
-// import useUserData from '../hooks/getUserData';
 import CromaButton from '../components/CromaButton';
 import { CromaContext } from '../store/store';
 import useChatSession from '../hooks/useChatSession';
 import LoginWrapper from '../components/LoginWrapper';
-import useUserDataZ from '../hooks/getUserDataZustand';
+import useUserData from '../hooks/useUserData';
 
 // eslint-disable-next-line no-undef
 const bgImage = require('../assets/images/colorful_background.jpg');
@@ -47,7 +45,7 @@ const ChatSessionScreen = (props) => {
   const { messages, isLoading, isCreatingSession, error, createSession, followUpSession } =
     useChatSession(route.params?.messages);
 
-  const { userData, isLoading: isUserDataLoading } = useUserDataZ();
+  const { userData, isLoading: isUserDataLoading } = useUserData();
   const [canUserCreateChat, setCanUserCreateChat] = useState();
 
   useEffect(() => {

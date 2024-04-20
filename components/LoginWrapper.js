@@ -1,15 +1,11 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Image } from 'react-native-animatable';
 import { StyleSheet, Dimensions, Modal, TouchableWithoutFeedback } from 'react-native';
-import { useTranslation } from 'react-i18next';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { CromaContext } from '../store/store';
-import { login, signUp } from '../network/login-and-signup';
 import Login from './Login';
 import SignUp from './SignUp';
 import ForgetPassword from './ForgetPassword';
-import { storeUserSession, removeUserSession } from '../libs/EncryptedStoreage';
 
 const SCREEN_TYPES = {
   LOGIN: 'LOGIN',
@@ -56,16 +52,7 @@ const LoginWrapper = function ({ children, userData }) {
     });
   }, []);
 
-  const [email, setEmail] = useState();
-  const [fullName, setFullName] = useState();
-  const [password, setPassword] = useState();
-  const [confirmPassword, setConfirmPassword] = useState();
-  const [error, setError] = useState();
-  // const [userData, setUserData] = useState();
-  const [validationErrors, setValidationErrors] = useState(undefined);
   const [screenType, setScreenType] = useState(SCREEN_TYPES.SIGN_UP);
-  const { t } = useTranslation();
-  const { user, setUser } = React.useContext(CromaContext);
 
   const setScreenLogin = () => {
     setScreenType(SCREEN_TYPES.LOGIN);
@@ -78,84 +65,6 @@ const LoginWrapper = function ({ children, userData }) {
   const setScreenForgetPassword = () => {
     setScreenType(SCREEN_TYPES.FORGET_PASSWORD);
   };
-
-  const onLogout = useCallback(async () => {
-    await removeUserSession();
-    setUserData(undefined);
-    user.loggedIn = false;
-    setUser(user);
-    try {
-      await GoogleSignin.revokeAccess();
-    } catch (error) {
-      console.error(error);
-    }
-    // Google Account disconnected from your app.
-    // Perform clean-up actions, such as deleting data associated with the disconnected account.
-  }, [setUser, user]);
-
-  const onSubmit = useCallback(async () => {
-    if (screenType === LOGIN) {
-      // to handle login
-      try {
-        const res = await login(email, password);
-        await storeUserSession(
-          res.data.user.full_name,
-          res.data.user.email,
-          res.data.userToken,
-          res.data.user.avatar_url
-        );
-        user.loggedIn = true;
-        setUser(user);
-        // naviagteAfterLogin();
-      } catch (error) {
-        setError(error.message);
-      }
-    } else {
-      // to handle sign up
-      const validationErrors = signUpValidations({
-        fullName,
-        email,
-        password,
-        confirmPassword
-      });
-      setValidationErrors(validationErrors);
-      if (validationErrors) {
-        return;
-      }
-
-      try {
-        const res = await signUp(fullName, email, password);
-        await storeUserSession(
-          res.data.user.full_name,
-          res.data.user.email,
-          res.data.userToken,
-          res.data.user.avatar_url
-        );
-        user.loggedIn = true;
-        setUser(user);
-        // naviagteAfterLogin();
-      } catch (error) {
-        if (error.response.data.error) {
-          setError(error.response.data.error);
-        } else {
-          setError(error.message);
-        }
-      }
-    }
-  }, [
-    confirmPassword,
-    email,
-    fullName,
-    // naviagteAfterLogin,
-    password,
-    screenType,
-    setUser,
-    user
-  ]);
-
-  const onChangeText = useCallback((text) => {
-    setEmail(text);
-  }, []);
 
   if (!userData) {
     return (
