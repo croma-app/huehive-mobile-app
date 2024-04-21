@@ -4,31 +4,23 @@ import { View, Text, TextInput, StyleSheet } from 'react-native';
 import GoogleButton from './GoogleButton';
 import { useTranslation } from 'react-i18next';
 import { signUp } from '../network/login-and-signup';
-
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { googleLogin } from '../network/login-and-signup';
 import { storeUserSession } from '../libs/EncryptedStoreage';
 import CromaButton from './CromaButton';
 import useUserData from '../hooks/useUserData';
+import { notifyMessage, sendClientError } from '../libs/Helpers';
 
 const LOGIN_AND_SIGNUP_TEXT = {
   LOGIN: {
-    title: 'Login',
-    orText: 'Or Login with',
-    linkTitle: "Don't have an account?",
-    linkText: ' Sign Up Now',
     buttonText: 'Login'
   },
   SIGN_UP: {
-    title: 'Signup',
-    orText: 'Or Sign Up with',
-    linkTitle: 'Already have an account?',
-    linkText: ' Login Now',
     buttonText: ' Sign up'
   }
 };
 
-const SignUp = function ({ setScreenLogin, setScreenForgetPassword }) {
+const SignUp = function ({ setScreenLogin }) {
   const [email, setEmail] = useState('');
   const [fullname, setFullname] = useState('');
   const [password, setPassword] = useState('');
@@ -38,13 +30,10 @@ const SignUp = function ({ setScreenLogin, setScreenForgetPassword }) {
   const { loadUserData } = useUserData();
   const [isLoginInProgress, setIsLoginInProgress] = useState(false);
 
-  console.log({ setScreenForgetPassword, setScreenLogin });
-
   const googleSignUp = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      // this.setState({ userInfo });
       const res = await googleLogin(userInfo);
       await storeUserSession(
         res.data.user.full_name,
@@ -55,7 +44,8 @@ const SignUp = function ({ setScreenLogin, setScreenForgetPassword }) {
 
       loadUserData();
     } catch (error) {
-      // setError(error.message);
+      sendClientError('google_signup_failed', error?.message || '', error);
+      notifyMessage(t('Google sign up failed!'));
     }
   };
 
@@ -82,7 +72,7 @@ const SignUp = function ({ setScreenLogin, setScreenForgetPassword }) {
     return newErrors;
   };
 
-  const onLogin = async () => {
+  const onSignup = async () => {
     const validationErrors = validateInputs();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -101,19 +91,19 @@ const SignUp = function ({ setScreenLogin, setScreenForgetPassword }) {
       loadUserData();
     } catch (error) {
       console.log(error);
-      // TODO - Need to add a generic error screen
+      sendClientError('signup_failed', error?.message || '', error);
+      notifyMessage(t('Signup failed'));
     } finally {
       setIsLoginInProgress(false);
     }
   };
 
   return (
-    <View style={[styles.container]}>
-      {/* {error && <Notification message={error} onPress={() => setError(undefined)}></Notification>} */}
-      <GoogleButton buttonType="LOGIN" onPress={googleSignUp} />
+    <View style={styles.container}>
+      <GoogleButton onPress={googleSignUp} />
       <View style={styles.separator}>
         <View style={styles.separatorLine} />
-        <Text style={styles.separatorText}>Or</Text>
+        <Text style={styles.separatorText}>OR</Text>
         <View style={styles.separatorLine} />
       </View>
       <TextInput
@@ -137,7 +127,6 @@ const SignUp = function ({ setScreenLogin, setScreenForgetPassword }) {
         onChangeText={setPassword}
         value={password}
         secureTextEntry={true}
-        password={true}
       />
       {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
       <TextInput
@@ -146,21 +135,18 @@ const SignUp = function ({ setScreenLogin, setScreenForgetPassword }) {
         onChangeText={setConfirmPassword}
         value={confirmPassword}
         secureTextEntry={true}
-        password={true}
       />
       {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
-      <View>
-        <View style={styles.buttonsContainer}>
-          <CromaButton textStyle={{ color: '#fff' }} style={styles.buttonLeft} onPress={onLogin}>
-            {isLoginInProgress ? 'loading...' : t(LOGIN_AND_SIGNUP_TEXT['SIGN_UP'].buttonText)}
-          </CromaButton>
-          <CromaButton
-            textStyle={{ color: '#ff5c59' }}
-            style={styles.buttonRight}
-            onPress={setScreenLogin}>
-            {t(LOGIN_AND_SIGNUP_TEXT['LOGIN'].buttonText)}
-          </CromaButton>
-        </View>
+      <View style={styles.buttonsContainer}>
+        <CromaButton textStyle={{ color: '#fff' }} style={styles.buttonLeft} onPress={onSignup}>
+          {isLoginInProgress ? 'loading...' : t(LOGIN_AND_SIGNUP_TEXT['SIGN_UP'].buttonText)}
+        </CromaButton>
+        <CromaButton
+          textStyle={{ color: '#ff5c59' }}
+          style={styles.buttonRight}
+          onPress={setScreenLogin}>
+          {t(LOGIN_AND_SIGNUP_TEXT['LOGIN'].buttonText)}
+        </CromaButton>
       </View>
     </View>
   );
@@ -189,9 +175,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 10
   },
-  forgotPassword: {
-    marginLeft: 'auto'
-  },
   separator: {
     display: 'flex',
     flexDirection: 'row',
@@ -200,14 +183,15 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   separatorLine: {
-    width: 100,
+    width: 120,
     height: 1,
     backgroundColor: '#000'
   },
   separatorText: {
-    marginLeft: 50,
-    marginRight: 50,
-    textAlign: 'center'
+    marginLeft: 20,
+    marginRight: 20,
+    textAlign: 'center',
+    fontSize: 12
   },
   errorText: {
     color: 'red',

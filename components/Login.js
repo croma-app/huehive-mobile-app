@@ -4,26 +4,18 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity, Linking } from 're
 import GoogleButton from './GoogleButton';
 import { useTranslation } from 'react-i18next';
 import { login } from '../network/login-and-signup';
-
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { googleLogin } from '../network/login-and-signup';
 import { storeUserSession } from '../libs/EncryptedStoreage';
 import CromaButton from './CromaButton';
 import useUserData from '../hooks/useUserData';
+import { notifyMessage, sendClientError } from '../libs/Helpers';
 
 const LOGIN_AND_SIGNUP_TEXT = {
   LOGIN: {
-    title: 'Login',
-    orText: 'Or Login with',
-    linkTitle: "Don't have an account?",
-    linkText: ' Sign Up Now',
     buttonText: 'Login'
   },
   SIGN_UP: {
-    title: 'Signup',
-    orText: 'Or Sign Up with',
-    linkTitle: 'Already have an account?',
-    linkText: ' Login Now',
     buttonText: ' Sign up'
   }
 };
@@ -37,7 +29,6 @@ const Login = function ({ setScreenSignup }) {
   const [emailError, setEmailError] = useState('');
 
   const validateEmail = (email) => {
-    // Simple email validation regex
     const re = /\S+@\S+\.\S+/;
     return re.test(email);
   };
@@ -55,7 +46,6 @@ const Login = function ({ setScreenSignup }) {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      // this.setState({ userInfo });
       const res = await googleLogin(userInfo);
       await storeUserSession(
         res.data.user.full_name,
@@ -66,7 +56,8 @@ const Login = function ({ setScreenSignup }) {
 
       loadUserData();
     } catch (error) {
-      // setError(error.message);
+      sendClientError('google_sign_in', error?.message || '', error);
+      notifyMessage(t('Google login failed!'));
     }
   };
 
@@ -87,20 +78,19 @@ const Login = function ({ setScreenSignup }) {
       );
       loadUserData();
     } catch (error) {
-      console.log(error);
-      // TODO - Need to add a generic error screen
+      sendClientError('login_failed', error?.message || '', error);
+      notifyMessage(t('Login failed!'));
     } finally {
       setIsLoginInProgress(false);
     }
   };
 
   return (
-    <View style={[styles.container]}>
-      {/* {error && <Notification message={error} onPress={() => setError(undefined)}></Notification>} */}
+    <View style={styles.container}>
       <GoogleButton buttonType="LOGIN" onPress={googleSignIn} />
       <View style={styles.separator}>
         <View style={styles.separatorLine} />
-        <Text style={styles.separatorText}>Or</Text>
+        <Text style={styles.separatorText}>OR</Text>
         <View style={styles.separatorLine} />
       </View>
 
@@ -119,7 +109,6 @@ const Login = function ({ setScreenSignup }) {
         onChangeText={setPassword}
         value={password}
         secureTextEntry={true}
-        password={true}
       />
       <View>
         <TouchableOpacity
@@ -168,7 +157,8 @@ const styles = StyleSheet.create({
     marginLeft: 10
   },
   forgotPassword: {
-    marginLeft: 'auto'
+    marginLeft: 'auto',
+    marginTop: 10
   },
   separator: {
     display: 'flex',
@@ -178,14 +168,15 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   separatorLine: {
-    width: 100,
+    width: 120,
     height: 1,
     backgroundColor: '#000'
   },
   separatorText: {
-    marginLeft: 50,
-    marginRight: 50,
-    textAlign: 'center'
+    marginLeft: 20,
+    marginRight: 20,
+    textAlign: 'center',
+    fontSize: 12
   },
   errorText: {
     color: 'red',
