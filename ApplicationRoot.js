@@ -17,7 +17,6 @@ import ProVersionScreen from './screens/ProVersionScreen';
 import SyncPalettesScreen from './screens/SyncPalettesScreen';
 import CommonPalettesScreen from './screens/CommonPalettesScreen';
 import PaletteLibraryScreen from './screens/PaletteLibraryScreen';
-import LoginScreen from './screens/LoginScreen';
 import HamburgerMenu from './components/HamburgerMenu';
 import SideMenu from 'react-native-side-menu';
 import { HEADER_HEIGHT } from './constants/Layout';
@@ -25,6 +24,10 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import { t } from 'i18next';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import useIAPConnection from './hooks/useIAPConnection.ts';
+import { ROUTE_NAMES } from './libs/contants.js';
+import LoginWrapper from './components/LoginWrapper.js';
+import UserProfile from './screens/UserProfileScreen.js';
+
 const Stack = createNativeStackNavigator();
 
 /*import { LogBox } from 'react-native'; // enabled for recording demos
@@ -78,79 +81,81 @@ export default function App() {
               style={[{ flex: 1, backgroundColor: 'transparent' }]}
               className={'navigation-workplace'}>
               <NavigationContainer ref={navigationRef}>
-                <Stack.Navigator
-                  screenOptions={{
-                    ...screenOptions,
-                    headerStyle: {
-                      ...screenOptions.headerStyle,
-                      height: HEADER_HEIGHT
-                    }
-                  }}>
-                  <Stack.Screen
-                    name="Home"
-                    options={() => {
-                      return {
-                        title: t('HueHive'),
-                        headerLeft: () => hamburgerMenuIcon(),
-                        headerTitleContainerStyle: { left: 40 }
-                      };
-                    }}
-                    component={HomeScreen}
-                  />
-                  <Stack.Screen
-                    name={'AboutUs'}
-                    options={{ title: t('About us') }}
-                    component={AboutUsScreen}
-                  />
-                  <Stack.Screen
-                    name={'ChatSession'}
-                    options={{ title: t('HueHive AI assistant') }}
-                    component={ChatSessionScreen}
-                  />
-                  <Stack.Screen
-                    name={'ChatSessionHistories'}
-                    options={{ title: t('Your chats') }}
-                    component={ChatSessionHistoriesScreen}
-                  />
-                  <Stack.Screen
-                    name="ColorDetails"
-                    options={{ title: t('Color details') }}
-                    component={ColorDetailsScreen}
-                  />
-                  <Stack.Screen name="Palettes" component={PalettesScreen} />
-                  <Stack.Screen
-                    name="SavePalette"
-                    options={{ title: t('Save palette') }}
-                    component={SavePaletteScreen}
-                  />
-                  <Stack.Screen name="Palette" component={PaletteScreen} />
-                  <Stack.Screen
-                    name="ProVersion"
-                    options={{ title: t('Pro benefits') }}
-                    component={ProVersionScreen}
-                  />
-                  <Stack.Screen
-                    name="SyncPalettes"
-                    options={{ title: t('Import/Export your palettes') }}
-                    component={SyncPalettesScreen}
-                  />
-                  <Stack.Screen name="CommonPalettes" component={CommonPalettesScreen} />
-                  <Stack.Screen
-                    name="PaletteLibrary"
-                    options={{ title: t('Palette library') }}
-                    component={PaletteLibraryScreen}
-                  />
-                  <Stack.Screen
-                    name="ColorList"
-                    options={{ title: t('New palette') }}
-                    component={ColorListScreen}
-                  />
-                  <Stack.Screen
-                    name="Login"
-                    options={{ title: t('Login') }}
-                    component={LoginScreen}
-                  />
-                </Stack.Navigator>
+                <LoginWrapper>
+                  <Stack.Navigator
+                    screenOptions={{
+                      ...screenOptions,
+                      headerStyle: {
+                        ...screenOptions.headerStyle,
+                        height: HEADER_HEIGHT
+                      }
+                    }}>
+                    <Stack.Screen
+                      name={ROUTE_NAMES.HOME}
+                      options={() => {
+                        return {
+                          title: t('HueHive'),
+                          headerLeft: () => hamburgerMenuIcon(),
+                          headerTitleContainerStyle: { left: 40 }
+                        };
+                      }}
+                      component={HomeScreen}
+                    />
+                    <Stack.Screen
+                      name={ROUTE_NAMES.ABOUT_US}
+                      options={{ title: t('About us') }}
+                      component={AboutUsScreen}
+                    />
+                    <Stack.Screen
+                      name={ROUTE_NAMES.CHAT_SESSION}
+                      options={{ title: t('HueHive AI assistant') }}
+                      component={ChatSessionScreen}
+                    />
+                    <Stack.Screen
+                      name={ROUTE_NAMES.CHAT_SESSION_HISTORIES}
+                      options={{ title: t('Your chats') }}
+                      component={ChatSessionHistoriesScreen}
+                    />
+                    <Stack.Screen
+                      name={ROUTE_NAMES.COLOR_DETAILS}
+                      options={{ title: t('Color details') }}
+                      component={ColorDetailsScreen}
+                    />
+                    <Stack.Screen name={ROUTE_NAMES.PALETTES} component={PalettesScreen} />
+                    <Stack.Screen
+                      name={ROUTE_NAMES.SAVE_PALETTE}
+                      options={{ title: t('Save palette') }}
+                      component={SavePaletteScreen}
+                    />
+                    <Stack.Screen name="Palette" component={PaletteScreen} />
+                    <Stack.Screen
+                      name={ROUTE_NAMES.PRO_VERSION}
+                      options={{ title: t('Pro benefits') }}
+                      component={ProVersionScreen}
+                    />
+                    <Stack.Screen
+                      name={ROUTE_NAMES.SYNC_PALETTES}
+                      options={{ title: t('Import/Export your palettes') }}
+                      component={SyncPalettesScreen}
+                    />
+                    <Stack.Screen name="CommonPalettes" component={CommonPalettesScreen} />
+                    <Stack.Screen
+                      name={ROUTE_NAMES.PALETTE_LIBRARY}
+                      options={{ title: t('Palette library') }}
+                      component={PaletteLibraryScreen}
+                    />
+                    <Stack.Screen
+                      name={ROUTE_NAMES.COLOR_LIST}
+                      options={{ title: t('New palette') }}
+                      component={ColorListScreen}
+                    />
+                    <Stack.Screen
+                      name={ROUTE_NAMES.USER_PROFILE}
+                      options={{ title: t('Profile') }}
+                      component={UserProfile}
+                    />
+                  </Stack.Navigator>
+                </LoginWrapper>
               </NavigationContainer>
             </View>
           </View>

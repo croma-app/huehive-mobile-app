@@ -19,10 +19,12 @@ import { CromaContext } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import useUserData from '../hooks/useUserData';
+import useLoginOverlay from '../hooks/useLoginOverlay';
 
 const HamburgerMenu = (props) => {
   const { t } = useTranslation();
   const { userData } = useUserData();
+  const { openLoginOverlay } = useLoginOverlay();
 
   const { clearPalette } = React.useContext(CromaContext);
   const navigate = function (screen) {
@@ -33,8 +35,9 @@ const HamburgerMenu = (props) => {
     <SafeAreaView style={[styles.container]}>
       <TouchableOpacity
         onPress={() => {
-          logEvent('hm_home_screen');
-          userData ? navigate('Login') : navigate('Home');
+          if (userData) {
+            navigate('UserProfile');
+          }
         }}>
         <View style={[styles.titleArea, { height: props.navigation.headerHeight }]}>
           <Image
@@ -136,7 +139,7 @@ const HamburgerMenu = (props) => {
               style={styles.menuItem}
               onPress={async () => {
                 logEvent('hm_login');
-                navigate('Login');
+                openLoginOverlay();
               }}>
               <View style={styles.menuItemView}>
                 <View style={{ ...styles.menuIcon, paddingLeft: 4 }}>

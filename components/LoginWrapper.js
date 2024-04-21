@@ -5,43 +5,27 @@ import { StyleSheet, Dimensions, Modal, TouchableWithoutFeedback } from 'react-n
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import Login from './Login';
 import SignUp from './SignUp';
+import useLoginOverlay from '../hooks/useLoginOverlay';
+import useUserData from '../hooks/useUserData';
+import { useNavigation } from '@react-navigation/native';
+import { PRIVATE_ROUTES } from '../libs/contants';
 
 const SCREEN_TYPES = {
   LOGIN: 'LOGIN',
   SIGN_UP: 'SIGN_UP'
 };
 
-function checkValidEmail(email) {
-  return String(email)
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
-}
-
-function signUpValidations({ fullName, email, password, confirmPassword }) {
-  const errors = {};
-
-  if (!fullName || fullName.length === 0) {
-    errors.fullName = 'Full name required.';
-  }
-
-  if (!email || !checkValidEmail(email)) {
-    errors.email = 'Please enter a valid email.';
-  }
-
-  if (!password || password.length < 6) {
-    errors.password = 'Minimum 6 characters required in password.';
-  }
-
-  if (password !== confirmPassword) {
-    errors.password = 'Confirm password did not match.';
-  }
-
-  return Object.keys(errors).length > 0 ? errors : {};
-}
-
-const LoginWrapper = function ({ children, userData, navigation }) {
+const LoginOverlay = function () {
+  const navigation = useNavigation();
+  const { closeLoginOverlay } = useLoginOverlay();
+  console.log({ route: navigation.getCurrentRoute() });
+  const onPress = () => {
+    const currentRoute = navigation.getCurrentRoute();
+    if (PRIVATE_ROUTES.has(currentRoute.name)) {
+      navigation.goBack();
+    }
+    closeLoginOverlay();
+  };
   useEffect(() => {
     GoogleSignin.configure({
       webClientId: '865618605576-j2tb9toevqc7tonmbp01dim1ddvod7r0.apps.googleusercontent.com',
@@ -64,44 +48,45 @@ const LoginWrapper = function ({ children, userData, navigation }) {
     setScreenType(SCREEN_TYPES.FORGET_PASSWORD);
   };
 
-  if (!userData) {
-    return (
-      <>
-        <Modal transparent visible animationType="slide">
-          <TouchableWithoutFeedback
-            onPress={() => {
-              console.log('it is not working ', navigation);
-              navigation?.goBack();
-            }}>
-            <View style={styles.modal}>
-              <View style={styles.modalContent}>
-                <Image
-                  style={styles.logo_image}
-                  // eslint-disable-next-line no-undef
-                  source={require('../assets/images/icon.png')}
-                />
-                {screenType === SCREEN_TYPES.LOGIN ? (
-                  <Login
-                    setScreenLogin={setScreenLogin}
-                    setScreenForgetPassword={setScreenForgetPassword}
-                    setScreenSignup={setScreenSignup}
-                  />
-                ) : (
-                  <SignUp
-                    setScreenLogin={setScreenLogin}
-                    setScreenForgetPassword={setScreenForgetPassword}
-                    setScreenSignup={setScreenSignup}
-                  />
-                )}
-              </View>
-            </View>
-          </TouchableWithoutFeedback>
-        </Modal>
-        {children}
-      </>
-    );
-  }
-  return children;
+  return (
+    <Modal transparent visible animationType="slide">
+      <TouchableWithoutFeedback onPress={onPress}>
+        <View style={styles.modal}>
+          <View style={styles.modalContent}>
+            <Image
+              style={styles.logo_image}
+              // eslint-disable-next-line no-undef
+              source={require('../assets/images/icon.png')}
+            />
+            {screenType === SCREEN_TYPES.LOGIN ? (
+              <Login
+                setScreenLogin={setScreenLogin}
+                setScreenForgetPassword={setScreenForgetPassword}
+                setScreenSignup={setScreenSignup}
+              />
+            ) : (
+              <SignUp
+                setScreenLogin={setScreenLogin}
+                setScreenForgetPassword={setScreenForgetPassword}
+                setScreenSignup={setScreenSignup}
+              />
+            )}
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
+    </Modal>
+  );
+};
+
+const LoginWrapper = function ({ children }) {
+  const { isLoginOverlayActive } = useLoginOverlay();
+  const { userData } = useUserData();
+  return (
+    <>
+      {isLoginOverlayActive && !userData && <LoginOverlay />}
+      {children}
+    </>
+  );
 };
 
 const styles = StyleSheet.create({

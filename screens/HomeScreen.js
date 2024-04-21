@@ -76,32 +76,30 @@ const HomeScreen = function ({ navigation, route }) {
       length: allPalettes.length
     });
     return (
-      <>
-        <View style={styles.container}>
-          {pickImageLoading ? <ActivityIndicator /> : <View />}
-          <ScrollView showsVerticalScrollIndicator={false}>
-            {allPalettes.length == 0 && (
-              <Text style={styles.noColorPaletteMessage}>
-                No color palettes found. Tap the + button below to create a new one.
-              </Text>
-            )}
-            {allPalettes.map((palette) => {
-              return (
-                <PaletteCard
-                  key={palette.name}
-                  colors={palette.colors.slice(0, isPro ? palette.colors.length : 4)}
-                  name={palette.name}
-                  navigation={navigation}
-                  route={route}
-                  paletteId={palette.id}
-                />
-              );
-            })}
-            <Spacer />
-          </ScrollView>
-          <GridActionButton navigation={navigation} setPickImageLoading={setPickImageLoading} />
-        </View>
-      </>
+      <View style={styles.container}>
+        {pickImageLoading ? <ActivityIndicator /> : <View />}
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {allPalettes.length == 0 && (
+            <Text style={styles.noColorPaletteMessage}>
+              No color palettes found. Tap the + button below to create a new one.
+            </Text>
+          )}
+          {allPalettes.map((palette) => {
+            return (
+              <PaletteCard
+                key={palette.name}
+                colors={palette.colors.slice(0, isPro ? palette.colors.length : 4)}
+                name={palette.name}
+                navigation={navigation}
+                route={route}
+                paletteId={palette.id}
+              />
+            );
+          })}
+          <Spacer />
+        </ScrollView>
+        <GridActionButton navigation={navigation} setPickImageLoading={setPickImageLoading} />
+      </View>
     );
   }
 };
