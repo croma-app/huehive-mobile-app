@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import { View, Image } from 'react-native-animatable';
-import { StyleSheet, Dimensions, Modal, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Dimensions, Modal, TouchableWithoutFeedback, Text } from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import Login from './Login';
 import SignUp from './SignUp';
@@ -9,6 +9,11 @@ import useLoginOverlay from '../hooks/useLoginOverlay';
 import useUserData from '../hooks/useUserData';
 import { useNavigation } from '@react-navigation/native';
 import { PRIVATE_ROUTES } from '../libs/contants';
+import GoogleButton from './GoogleButton';
+import { storeUserSession } from '../libs/EncryptedStoreage';
+import { notifyMessage, sendClientError } from '../libs/Helpers';
+import { useTranslation } from 'react-i18next';
+import { googleLogin } from '../network/login-and-signup';
 
 const SCREEN_TYPES = {
   LOGIN: 'LOGIN',
@@ -18,7 +23,8 @@ const SCREEN_TYPES = {
 const LoginOverlay = function () {
   const navigation = useNavigation();
   const { closeLoginOverlay } = useLoginOverlay();
-  console.log({ route: navigation.getCurrentRoute() });
+  const { t } = useTranslation();
+  const { loadUserData } = useUserData();
   const onPress = () => {
     const currentRoute = navigation.getCurrentRoute();
     if (PRIVATE_ROUTES.has(currentRoute.name)) {
@@ -48,6 +54,25 @@ const LoginOverlay = function () {
     setScreenType(SCREEN_TYPES.FORGET_PASSWORD);
   };
 
+  const googleSignIn = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      const res = await googleLogin(userInfo);
+      await storeUserSession(
+        res.data.user.full_name,
+        res.data.user.email,
+        res.data.userToken,
+        res.data.user.avatar_url
+      );
+
+      loadUserData();
+    } catch (error) {
+      sendClientError('google_sign_in', error?.message || '', error);
+      notifyMessage(t('Google login failed!'));
+    }
+  };
+
   return (
     <Modal transparent visible animationType="slide">
       <TouchableWithoutFeedback onPress={onPress}>
@@ -58,19 +83,27 @@ const LoginOverlay = function () {
               // eslint-disable-next-line no-undef
               source={require('../assets/images/icon.png')}
             />
-            {screenType === SCREEN_TYPES.LOGIN ? (
-              <Login
-                setScreenLogin={setScreenLogin}
-                setScreenForgetPassword={setScreenForgetPassword}
-                setScreenSignup={setScreenSignup}
-              />
-            ) : (
-              <SignUp
-                setScreenLogin={setScreenLogin}
-                setScreenForgetPassword={setScreenForgetPassword}
-                setScreenSignup={setScreenSignup}
-              />
-            )}
+            <View style={styles.form_container}>
+              <GoogleButton buttonType={screenType} onPress={googleSignIn} />
+              <View style={styles.separator}>
+                <View style={styles.separatorLine} />
+                <Text style={styles.separatorText}>OR</Text>
+                <View style={styles.separatorLine} />
+              </View>
+              {screenType === SCREEN_TYPES.LOGIN ? (
+                <Login
+                  setScreenLogin={setScreenLogin}
+                  setScreenForgetPassword={setScreenForgetPassword}
+                  setScreenSignup={setScreenSignup}
+                />
+              ) : (
+                <SignUp
+                  setScreenLogin={setScreenLogin}
+                  setScreenForgetPassword={setScreenForgetPassword}
+                  setScreenSignup={setScreenSignup}
+                />
+              )}
+            </View>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -135,6 +168,28 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: '#fff',
     paddingTop: 20
+  },
+  form_container: {
+    display: 'flex',
+    padding: 10
+  },
+  separator: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20
+  },
+  separatorLine: {
+    width: 120,
+    height: 1,
+    backgroundColor: '#000'
+  },
+  separatorText: {
+    marginLeft: 20,
+    marginRight: 20,
+    textAlign: 'center',
+    fontSize: 12
   }
 });
 

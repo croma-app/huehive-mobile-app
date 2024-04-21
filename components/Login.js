@@ -1,11 +1,8 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Linking } from 'react-native';
-import GoogleButton from './GoogleButton';
 import { useTranslation } from 'react-i18next';
 import { login } from '../network/login-and-signup';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { googleLogin } from '../network/login-and-signup';
 import { storeUserSession } from '../libs/EncryptedStoreage';
 import CromaButton from './CromaButton';
 import useUserData from '../hooks/useUserData';
@@ -42,25 +39,6 @@ const Login = function ({ setScreenSignup }) {
     }
   };
 
-  const googleSignIn = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-      const res = await googleLogin(userInfo);
-      await storeUserSession(
-        res.data.user.full_name,
-        res.data.user.email,
-        res.data.userToken,
-        res.data.user.avatar_url
-      );
-
-      loadUserData();
-    } catch (error) {
-      sendClientError('google_sign_in', error?.message || '', error);
-      notifyMessage(t('Google login failed!'));
-    }
-  };
-
   const onLogin = async () => {
     if (!validateEmail(email)) {
       setEmailError('Please enter a valid email address');
@@ -79,21 +57,14 @@ const Login = function ({ setScreenSignup }) {
       loadUserData();
     } catch (error) {
       sendClientError('login_failed', error?.message || '', error);
-      notifyMessage(t('Login failed!'));
+      notifyMessage(t('Login failed: ' + error?.message));
     } finally {
       setIsLoginInProgress(false);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <GoogleButton buttonType="LOGIN" onPress={googleSignIn} />
-      <View style={styles.separator}>
-        <View style={styles.separatorLine} />
-        <Text style={styles.separatorText}>OR</Text>
-        <View style={styles.separatorLine} />
-      </View>
-
+    <>
       <TextInput
         style={styles.input}
         onChangeText={handleEmailChange}
@@ -129,15 +100,11 @@ const Login = function ({ setScreenSignup }) {
           </CromaButton>
         </View>
       </View>
-    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    padding: 10
-  },
   buttonsContainer: {
     display: 'flex',
     flexDirection: 'row'
@@ -159,24 +126,6 @@ const styles = StyleSheet.create({
   forgotPassword: {
     marginLeft: 'auto',
     marginTop: 10
-  },
-  separator: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20
-  },
-  separatorLine: {
-    width: 120,
-    height: 1,
-    backgroundColor: '#000'
-  },
-  separatorText: {
-    marginLeft: 20,
-    marginRight: 20,
-    textAlign: 'center',
-    fontSize: 12
   },
   errorText: {
     color: 'red',

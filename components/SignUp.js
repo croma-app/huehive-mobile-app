@@ -1,11 +1,8 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
-import GoogleButton from './GoogleButton';
 import { useTranslation } from 'react-i18next';
 import { signUp } from '../network/login-and-signup';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { googleLogin } from '../network/login-and-signup';
 import { storeUserSession } from '../libs/EncryptedStoreage';
 import CromaButton from './CromaButton';
 import useUserData from '../hooks/useUserData';
@@ -29,25 +26,6 @@ const SignUp = function ({ setScreenLogin }) {
   const { t } = useTranslation();
   const { loadUserData } = useUserData();
   const [isLoginInProgress, setIsLoginInProgress] = useState(false);
-
-  const googleSignUp = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-      const res = await googleLogin(userInfo);
-      await storeUserSession(
-        res.data.user.full_name,
-        res.data.user.email,
-        res.data.userToken,
-        res.data.user.avatar_url
-      );
-
-      loadUserData();
-    } catch (error) {
-      sendClientError('google_signup_failed', error?.message || '', error);
-      notifyMessage(t('Google sign up failed!'));
-    }
-  };
 
   const validateInputs = () => {
     const newErrors = {};
@@ -92,20 +70,14 @@ const SignUp = function ({ setScreenLogin }) {
     } catch (error) {
       console.log(error);
       sendClientError('signup_failed', error?.message || '', error);
-      notifyMessage(t('Signup failed'));
+      notifyMessage(t('Signup failed: ' + error?.message));
     } finally {
       setIsLoginInProgress(false);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <GoogleButton onPress={googleSignUp} />
-      <View style={styles.separator}>
-        <View style={styles.separatorLine} />
-        <Text style={styles.separatorText}>OR</Text>
-        <View style={styles.separatorLine} />
-      </View>
+    <>
       <TextInput
         style={styles.input}
         onChangeText={setFullname}
@@ -148,15 +120,11 @@ const SignUp = function ({ setScreenLogin }) {
           {t(LOGIN_AND_SIGNUP_TEXT['LOGIN'].buttonText)}
         </CromaButton>
       </View>
-    </View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    padding: 10
-  },
   buttonsContainer: {
     display: 'flex',
     flexDirection: 'row'
@@ -174,24 +142,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flex: 1,
     marginLeft: 10
-  },
-  separator: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20
-  },
-  separatorLine: {
-    width: 120,
-    height: 1,
-    backgroundColor: '#000'
-  },
-  separatorText: {
-    marginLeft: 20,
-    marginRight: 20,
-    textAlign: 'center',
-    fontSize: 12
   },
   errorText: {
     color: 'red',
