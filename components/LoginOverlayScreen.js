@@ -8,6 +8,7 @@ import Storage from '../libs/Storage';
 import { PropTypes } from 'prop-types';
 import { AuthForm } from './AppAuthProvider';
 import useUserData from '../hooks/useUserData';
+import { ScrollView } from 'react-native-gesture-handler';
 
 function LoginOverlayScreen({ markLoginStepDone }) {
   const { t } = useTranslation();
@@ -23,7 +24,7 @@ function LoginOverlayScreen({ markLoginStepDone }) {
   }, [authStepMarkDone, userData]);
 
   return (
-    <View style={styles.rootContainer} showsVerticalScrollIndicator={true}>
+    <ScrollView style={styles.rootContainer} showsVerticalScrollIndicator={true}>
       <View style={[styles.container]}>
         <Text style={styles.title}>{t('Welcome to HueHive,')}</Text>
       </View>
@@ -33,7 +34,7 @@ function LoginOverlayScreen({ markLoginStepDone }) {
           {t('Skip')}
         </CromaButton>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
