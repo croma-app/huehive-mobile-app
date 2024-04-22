@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { ActivityIndicator } from 'react-native';
-import LoginOverlayScreen from './components/LoginOverlayScreen';
+import AuthOnboardingScreen from './components/AuthOnboardingScreen';
 import ApplicationRoot from './ApplicationRoot';
 import Storage from './libs/Storage';
 import { withIAPContext } from 'react-native-iap';
@@ -29,7 +29,7 @@ const App = () => {
 
   return isLoading ? (
     isLoginOverlayStepDone ? (
-      <LoginOverlayScreen markLoginStepDone={markLoginStepDone} />
+      <AuthOnboardingScreen markLoginStepDone={markLoginStepDone} />
     ) : (
       <ApplicationRoot />
     )

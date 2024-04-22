@@ -1,13 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const GoogleButton = ({ buttonType, onPress }) => {
+  const [disabled, setDisabled] = useState(false);
+
   const buttonText = buttonType === 'LOGIN' ? 'Sign In with Google' : 'Sign Up with Google';
 
+  const handlePress = () => {
+    setDisabled(true);
+    onPress();
+  };
+
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
+    <TouchableOpacity
+      style={[styles.button, disabled && styles.disabledButton]}
+      onPress={handlePress}
+      disabled={disabled}>
       <View style={styles.iconAndText}>
         <Icon name="google" size={20} color="#FFFFFF" style={styles.icon} />
         <Text style={styles.buttonText}>{buttonText}</Text>
@@ -29,6 +39,9 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  disabledButton: {
+    opacity: 0.6
   },
   buttonText: {
     color: '#FFFFFF',

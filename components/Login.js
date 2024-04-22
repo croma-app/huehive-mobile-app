@@ -10,10 +10,10 @@ import { notifyMessage, sendClientError } from '../libs/Helpers';
 
 const LOGIN_AND_SIGNUP_TEXT = {
   LOGIN: {
-    buttonText: 'Login'
+    buttonText: 'Sign In'
   },
   SIGN_UP: {
-    buttonText: ' Sign up'
+    buttonText: ' Sign Up'
   }
 };
 

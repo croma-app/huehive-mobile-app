@@ -10,10 +10,10 @@ import { notifyMessage, sendClientError } from '../libs/Helpers';
 
 const LOGIN_AND_SIGNUP_TEXT = {
   LOGIN: {
-    buttonText: 'Login'
+    buttonText: 'Sign In'
   },
   SIGN_UP: {
-    buttonText: ' Sign up'
+    buttonText: ' Sign Up'
   }
 };
 
@@ -81,7 +81,7 @@ const SignUp = function ({ setScreenLogin }) {
       <TextInput
         style={styles.input}
         onChangeText={setFullname}
-        placeholder={'Fullname'}
+        placeholder={'Full name'}
         value={fullname}
       />
       {errors.fullname && <Text style={styles.errorText}>{errors.fullname}</Text>}
@@ -102,7 +102,7 @@ const SignUp = function ({ setScreenLogin }) {
       />
       {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
       <TextInput
-        placeholder="Confirm Password"
+        placeholder="Confirm password"
         style={styles.input}
         onChangeText={setConfirmPassword}
         value={confirmPassword}
