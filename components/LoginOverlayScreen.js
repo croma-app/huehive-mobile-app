@@ -1,252 +1,39 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, Dimensions } from 'react-native';
+/* eslint-disable react/prop-types */
+import React, { useCallback, useEffect } from 'react';
+import { StyleSheet, Text } from 'react-native';
 import { View } from 'react-native-animatable';
 import CromaButton from '../components/CromaButton';
-import { material } from 'react-native-typography';
 import { useTranslation } from 'react-i18next';
-import { login, signUp, googleLogin } from '../network/login-and-signup';
-import { storeUserSession } from '../libs/EncryptedStoreage';
-import Notification from '../components/Notification';
 import Storage from '../libs/Storage';
 import { PropTypes } from 'prop-types';
-
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import GoogleButton from '../components/GoogleButton';
+import { AuthForm } from './AppAuthProvider';
+import useUserData from '../hooks/useUserData';
 import { ScrollView } from 'react-native-gesture-handler';
 
-const LOGIN = 'LOGIN';
-const SIGN_UP = 'SIGN_UP';
-
-const LOGIN_AND_SIGNUP_TEXT = {
-  LOGIN: {
-    title: 'Login',
-    orText: 'Or sign in with',
-    linkTitle: "Don't have an account?",
-    linkText: ' Sign up now',
-    buttonText: 'Login'
-  },
-  SIGN_UP: {
-    title: 'Signup',
-    orText: 'Or Sign up with',
-    linkTitle: 'Already have and account?',
-    linkText: ' Login now',
-    buttonText: ' Sign up'
-  }
-};
-
-function checkValidEmail(email) {
-  return String(email)
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
-}
-
-function signUpValidations({ fullName, email, password, confirmPassword }) {
-  let fullNameError, emailError, passwordError;
-
-  if (!fullName || fullName.length === 0) {
-    fullNameError = 'Full name required.';
-  }
-
-  if (!email || !checkValidEmail(email)) {
-    emailError = 'Please enter valid email.';
-  }
-
-  if (!password || password.length < 6) {
-    passwordError = 'Minimum 6 characters required in password.';
-  }
-
-  if (password !== confirmPassword) {
-    passwordError = 'Confirm password did not match.';
-  }
-  if (!fullNameError && !emailError && !passwordError) {
-    return undefined;
-  }
-  return {
-    fullName: fullNameError,
-    email: emailError,
-    password: passwordError
-  };
-}
-
 function LoginOverlayScreen({ markLoginStepDone }) {
-  const [email, setEmail] = useState();
-  const [fullName, setFullName] = useState();
-  const [password, setPassword] = useState();
-  const [confirmPassword, setConfirmPassword] = useState();
-  const [error, setError] = useState();
-  const [validationErrors, setValidationErrors] = useState(undefined);
-  const [screenType, setScreenType] = useState(SIGN_UP);
   const { t } = useTranslation();
-  useEffect(() => {
-    GoogleSignin.configure({
-      webClientId: '865618605576-j2tb9toevqc7tonmbp01dim1ddvod7r0.apps.googleusercontent.com',
-      forceCodeForRefreshToken: true,
-      offlineAccess: false
-    });
-  }, []);
-
-  const _markLoginStepDone = useCallback(() => {
+  const { userData } = useUserData();
+  const authStepMarkDone = useCallback(() => {
     Storage.markOverflowStepDone();
-    markLoginStepDone();
+    markLoginStepDone(true);
   }, [markLoginStepDone]);
-
-  const onSubmit = useCallback(async () => {
-    if (screenType === LOGIN) {
-      // to handle login
-      try {
-        const res = await login(email, password);
-        await storeUserSession(
-          res.data.user.full_name,
-          res.data.user.email,
-          res.data.userToken,
-          res.data.user.avatar_url
-        );
-        _markLoginStepDone();
-      } catch (error) {
-        setError(error.message);
-      }
-    } else {
-      // to handle sign up
-      const validationErrors = signUpValidations({
-        fullName,
-        email,
-        password,
-        confirmPassword
-      });
-      setValidationErrors(validationErrors);
-      if (validationErrors) {
-        return;
-      }
-
-      try {
-        const res = await signUp(fullName, email, password);
-        await storeUserSession(
-          res.data.user.full_name,
-          res.data.user.email,
-          res.data.userToken,
-          res.data.user.avatar_url
-        );
-        _markLoginStepDone();
-      } catch (error) {
-        if (error.response.data.error) {
-          setError(error.response.data.error);
-        } else {
-          setError(error.message);
-        }
-      }
+  useEffect(() => {
+    if (userData) {
+      authStepMarkDone();
     }
-  }, [_markLoginStepDone, confirmPassword, email, fullName, password, screenType]);
-
-  const signIn = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-      // this.setState({ userInfo });
-      const res = await googleLogin(userInfo);
-      await storeUserSession(
-        res.data.user.full_name,
-        res.data.user.email,
-        res.data.userToken,
-        res.data.user.avatar_url
-      );
-      _markLoginStepDone();
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
-  const onChangeText = useCallback((text) => {
-    setEmail(text);
-  }, []);
+  }, [authStepMarkDone, userData]);
 
   return (
     <ScrollView style={styles.rootContainer} showsVerticalScrollIndicator={true}>
       <View style={[styles.container]}>
         <Text style={styles.title}>{t('Welcome to HueHive,')}</Text>
-        <Text style={styles.intro}>
-          {t(`Please ${screenType === LOGIN ? 'sign in' : 'sign up'} to continue.`)}
-        </Text>
-        {error && <Notification message={error} onPress={() => setError(undefined)}></Notification>}
-        <GoogleButton buttonType={screenType} onPress={signIn} />
-        <View style={styles.separator}>
-          <View style={styles.separatorLine} />
-          <Text style={styles.separatorText}>or</Text>
-          <View style={styles.separatorLine} />
-        </View>
-        <View style={[styles.separator]}>
-          <Text>{screenType === LOGIN ? 'Sign in' : 'Sign up'} your email and password</Text>
-        </View>
-        {screenType === SIGN_UP && (
-          <>
-            {validationErrors && validationErrors.fullName && (
-              <Text style={styles.fieldError}>{validationErrors.fullName}</Text>
-            )}
-            <TextInput
-              style={styles.input}
-              onChangeText={setFullName}
-              placeholder={'Full name'}
-              value={fullName}
-            />
-          </>
-        )}
-        {validationErrors && validationErrors.email && (
-          <Text style={styles.fieldError}>{validationErrors.email}</Text>
-        )}
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeText}
-          placeholder={'Email address'}
-          value={email}
-        />
-        {validationErrors && validationErrors.password && (
-          <Text style={styles.fieldError}>{validationErrors.password}</Text>
-        )}
-        <TextInput
-          placeholder="Password"
-          style={styles.input}
-          onChangeText={setPassword}
-          value={password}
-          secureTextEntry={true}
-          password={true}
-        />
-        {screenType === SIGN_UP && (
-          <TextInput
-            placeholder="Confirm Password"
-            style={[
-              styles.input,
-              password !== confirmPassword ? { color: 'red' } : { color: 'black' }
-            ]}
-            onChangeText={setConfirmPassword}
-            value={confirmPassword}
-            secureTextEntry={true}
-            password={true}
-          />
-        )}
-        {screenType === LOGIN && (
-          <Text style={styles.forgotPassword}>{t('Forgot password ?')}</Text>
-        )}
-        <CromaButton
-          style={{ backgroundColor: '#ff5c59' }}
-          textStyle={{ color: '#fff' }}
-          onPress={onSubmit}>
-          {t(LOGIN_AND_SIGNUP_TEXT[screenType].buttonText)}
+      </View>
+      <View style={styles.alignSelfEnd}>
+        <AuthForm></AuthForm>
+        <CromaButton style={[styles.skip]} onPress={authStepMarkDone}>
+          {t('Skip')}
         </CromaButton>
       </View>
-      <TouchableOpacity
-        onPress={() => {
-          setScreenType(screenType === LOGIN ? SIGN_UP : LOGIN);
-          setValidationErrors(undefined);
-        }}>
-        <View style={styles.changePage}>
-          <Text>{t(LOGIN_AND_SIGNUP_TEXT[screenType].linkTitle)}</Text>
-          <Text style={styles.bold}>{t(LOGIN_AND_SIGNUP_TEXT[screenType].linkText)}</Text>
-        </View>
-      </TouchableOpacity>
-      <CromaButton style={[styles.skip]} onPress={_markLoginStepDone}>
-        {t('Skip')}
-      </CromaButton>
     </ScrollView>
   );
 }
@@ -257,9 +44,11 @@ LoginOverlayScreen.propTypes = {
 
 const styles = StyleSheet.create({
   rootContainer: {
+    display: 'flex',
     paddingLeft: 12,
     paddingRight: 12,
-    minHeight: Dimensions.get('window').height
+    flex: 1,
+    flexDirection: 'column'
   },
   container: {
     display: 'flex',
@@ -270,92 +59,13 @@ const styles = StyleSheet.create({
     paddingTop: 12,
     paddingBottom: 12,
     fontSize: 20,
-    fontWeight: 'bold'
-  },
-  intro: {
-    paddingTop: 12,
-    paddingBottom: 12,
-    fontSize: 16
-  },
-  line: {
-    ...material.body1,
-    paddingBottom: 4,
-    fontSize: 15
-  },
-  forgotPassword: {
-    marginLeft: 'auto',
-    fontSize: 13
-  },
-  orSignUp: {
-    padding: 10,
-    fontSize: 13
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#000',
-    borderRadius: 5,
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 10,
-    marginTop: 10
-  },
-  orSignUpContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  changePage: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 200
-  },
-  leftLine: {
-    height: 1,
-    width: '25%',
-    backgroundColor: '#000'
-  },
-  rightLine: {
-    height: 1,
-    width: '25%',
-    backgroundColor: '#000'
-  },
-  bold: {
-    fontWeight: 'bold'
-  },
-  fieldError: {
-    fontSize: 16,
-    color: 'red'
-  },
-  logoutContainer: {
-    display: 'flex',
-    alignItems: 'center'
-  },
-  logo: {
-    borderColor: '#000',
-    height: 50,
-    width: 50,
-    marginTop: 30,
-    padding: 3
-  },
-  separator: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 10
-  },
-  separatorLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: '#ccc'
-  },
-  separatorText: {
-    marginHorizontal: 10,
-    fontSize: 16
+    textAlign: 'center'
   },
   skip: {
     marginBottom: 20
+  },
+  alignSelfEnd: {
+    marginTop: 'auto'
   }
 });
 

@@ -14,11 +14,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { material } from 'react-native-typography';
 import { logEvent, readRemoteConfig } from '../libs/Helpers';
 import ChatCard from '../components/ChatCard';
-import LoginScreen from './LoginScreen';
-import useUserData from '../hooks/getUserData';
 import CromaButton from '../components/CromaButton';
 import { CromaContext } from '../store/store';
 import useChatSession from '../hooks/useChatSession';
+import useUserData from '../hooks/useUserData';
+import useAuth from '../hooks/useAuth';
 
 // eslint-disable-next-line no-undef
 const bgImage = require('../assets/images/colorful_background.jpg');
@@ -45,7 +45,8 @@ const ChatSessionScreen = (props) => {
   const { messages, isLoading, isCreatingSession, error, createSession, followUpSession } =
     useChatSession(route.params?.messages);
 
-  const { userData, isUserDataLoading, getUserData } = useUserData();
+  const { userData, isLoading: isUserDataLoading } = useUserData();
+  const { openAuthOverlay } = useAuth();
   const [canUserCreateChat, setCanUserCreateChat] = useState();
 
   useEffect(() => {
@@ -61,6 +62,12 @@ const ChatSessionScreen = (props) => {
     };
     fetchData();
   }, [canUserCreateChat, isPro, isUserDataLoading, userData]);
+
+  useEffect(() => {
+    if (!userData) {
+      openAuthOverlay();
+    }
+  }, [openAuthOverlay, userData]);
 
   useEffect(() => {
     logEvent('chat_session_screen');
@@ -101,16 +108,6 @@ const ChatSessionScreen = (props) => {
       <View style={styles.container}>
         <ActivityIndicator animating={true} size="large" color="#ff7875" />
       </View>
-    );
-  }
-
-  if (!userData) {
-    return (
-      <LoginScreen
-        {...props}
-        signupMessage="Please sign in or sign up to use HueHive AI"
-        hideWelcomeMessage={true}
-        reloadScreen={getUserData}></LoginScreen>
     );
   }
 

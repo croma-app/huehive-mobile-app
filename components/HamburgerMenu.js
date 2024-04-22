@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Image,
   Linking,
@@ -18,19 +18,13 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { CromaContext } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
-import { retrieveUserSession } from '../libs/EncryptedStoreage';
+import useUserData from '../hooks/useUserData';
+import useAuth from '../hooks/useAuth';
 
 const HamburgerMenu = (props) => {
   const { t } = useTranslation();
-  const [userData, setUserData] = useState();
-
-  useEffect(() => {
-    // check if already logged in
-    (async () => {
-      const userData = await retrieveUserSession();
-      setUserData(userData);
-    })();
-  }, [props]);
+  const { userData } = useUserData();
+  const { openAuthOverlay } = useAuth();
 
   const { clearPalette } = React.useContext(CromaContext);
   const navigate = function (screen) {
@@ -41,8 +35,9 @@ const HamburgerMenu = (props) => {
     <SafeAreaView style={[styles.container]}>
       <TouchableOpacity
         onPress={() => {
-          logEvent('hm_home_screen');
-          userData ? navigate('Login') : navigate('Home');
+          if (userData) {
+            navigate('UserProfile');
+          }
         }}>
         <View style={[styles.titleArea, { height: props.navigation.headerHeight }]}>
           <Image
@@ -144,7 +139,7 @@ const HamburgerMenu = (props) => {
               style={styles.menuItem}
               onPress={async () => {
                 logEvent('hm_login');
-                navigate('Login');
+                openAuthOverlay();
               }}>
               <View style={styles.menuItemView}>
                 <View style={{ ...styles.menuIcon, paddingLeft: 4 }}>
