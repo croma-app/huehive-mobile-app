@@ -22,7 +22,7 @@ const SCREEN_TYPES = {
 
 const AuthOverlay = function () {
   const navigation = useNavigation();
-  const { closeLoginOverlay } = useAuth();
+  const { closeAuthOverlay } = useAuth();
   const { t } = useTranslation();
   const { loadUserData } = useUserData();
   const onPress = () => {
@@ -30,7 +30,7 @@ const AuthOverlay = function () {
     if (PRIVATE_ROUTES.has(currentRoute.name)) {
       navigation.goBack();
     }
-    closeLoginOverlay();
+    closeAuthOverlay();
   };
   useEffect(() => {
     GoogleSignin.configure({
