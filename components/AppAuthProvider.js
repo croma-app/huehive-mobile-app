@@ -24,7 +24,13 @@ export const AuthForm = function () {
   const { t } = useTranslation();
   const { loadUserData } = useUserData();
   const [screenType, setScreenType] = useState(SCREEN_TYPES.SIGN_UP);
-
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: '865618605576-j2tb9toevqc7tonmbp01dim1ddvod7r0.apps.googleusercontent.com',
+      forceCodeForRefreshToken: true,
+      offlineAccess: false
+    });
+  }, []);
   const setScreenLogin = () => {
     setScreenType(SCREEN_TYPES.LOGIN);
   };
@@ -52,7 +58,7 @@ export const AuthForm = function () {
       loadUserData();
     } catch (error) {
       sendClientError('google_sign_in', error?.message || '', error);
-      notifyMessage(t('Google login failed!'));
+      notifyMessage(t('Google login failed!' + error?.message || ''));
     }
   };
 
@@ -92,13 +98,6 @@ const AuthOverlay = function () {
     }
     closeAuthOverlay();
   };
-  useEffect(() => {
-    GoogleSignin.configure({
-      webClientId: '865618605576-j2tb9toevqc7tonmbp01dim1ddvod7r0.apps.googleusercontent.com',
-      forceCodeForRefreshToken: true,
-      offlineAccess: false
-    });
-  }, []);
 
   return (
     <Modal transparent visible animationType="slide">
