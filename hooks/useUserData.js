@@ -6,14 +6,9 @@ const useUserData = create((set) => ({
   isLoading: false,
   loadUserData: async () => {
     set({ isLoading: true });
-    try {
-      const userData = await retrieveUserSession();
-      set({ userData });
-    } catch (error) {
-      console.log('Error: Failed to load userData');
-    } finally {
-      set({ isLoading: false });
-    }
+    const userData = await retrieveUserSession();
+    set({ userData });
+    set({ isLoading: false });
   }
 }));
 

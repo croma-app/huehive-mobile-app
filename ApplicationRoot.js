@@ -25,7 +25,7 @@ import { t } from 'i18next';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import useIAPConnection from './hooks/useIAPConnection.ts';
 import { ROUTE_NAMES } from './libs/contants.js';
-import LoginWrapper from './components/LoginWrapper.js';
+import AppAuthProvider from './components/AppAuthProvider.js';
 import UserProfile from './screens/UserProfileScreen.js';
 
 const Stack = createNativeStackNavigator();
@@ -81,7 +81,7 @@ export default function App() {
               style={[{ flex: 1, backgroundColor: 'transparent' }]}
               className={'navigation-workplace'}>
               <NavigationContainer ref={navigationRef}>
-                <LoginWrapper>
+                <AppAuthProvider>
                   <Stack.Navigator
                     screenOptions={{
                       ...screenOptions,
@@ -155,7 +155,7 @@ export default function App() {
                       component={UserProfile}
                     />
                   </Stack.Navigator>
-                </LoginWrapper>
+                </AppAuthProvider>
               </NavigationContainer>
             </View>
           </View>

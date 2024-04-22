@@ -19,12 +19,12 @@ import { CromaContext } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import useUserData from '../hooks/useUserData';
-import useLoginOverlay from '../hooks/useLoginOverlay';
+import useAuth from '../hooks/useAuth';
 
 const HamburgerMenu = (props) => {
   const { t } = useTranslation();
   const { userData } = useUserData();
-  const { openLoginOverlay } = useLoginOverlay();
+  const { openAuthOverlay } = useAuth();
 
   const { clearPalette } = React.useContext(CromaContext);
   const navigate = function (screen) {
@@ -139,7 +139,7 @@ const HamburgerMenu = (props) => {
               style={styles.menuItem}
               onPress={async () => {
                 logEvent('hm_login');
-                openLoginOverlay();
+                openAuthOverlay();
               }}>
               <View style={styles.menuItemView}>
                 <View style={{ ...styles.menuIcon, paddingLeft: 4 }}>

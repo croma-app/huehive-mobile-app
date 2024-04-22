@@ -18,7 +18,7 @@ import CromaButton from '../components/CromaButton';
 import { CromaContext } from '../store/store';
 import useChatSession from '../hooks/useChatSession';
 import useUserData from '../hooks/useUserData';
-import useLoginOverlay from '../hooks/useLoginOverlay';
+import useAuth from '../hooks/useAuth';
 
 // eslint-disable-next-line no-undef
 const bgImage = require('../assets/images/colorful_background.jpg');
@@ -46,7 +46,7 @@ const ChatSessionScreen = (props) => {
     useChatSession(route.params?.messages);
 
   const { userData, isLoading: isUserDataLoading } = useUserData();
-  const { openLoginOverlay } = useLoginOverlay();
+  const { openAuthOverlay } = useAuth();
   const [canUserCreateChat, setCanUserCreateChat] = useState();
 
   useEffect(() => {
@@ -65,9 +65,9 @@ const ChatSessionScreen = (props) => {
 
   useEffect(() => {
     if (!userData) {
-      openLoginOverlay();
+      openAuthOverlay();
     }
-  }, [openLoginOverlay, userData]);
+  }, [openAuthOverlay, userData]);
 
   useEffect(() => {
     logEvent('chat_session_screen');

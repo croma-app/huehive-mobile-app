@@ -5,7 +5,7 @@ import { StyleSheet, Dimensions, Modal, TouchableWithoutFeedback, Text } from 'r
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import Login from './Login';
 import SignUp from './SignUp';
-import useLoginOverlay from '../hooks/useLoginOverlay';
+import useAuth from '../hooks/useAuth';
 import useUserData from '../hooks/useUserData';
 import { useNavigation } from '@react-navigation/native';
 import { PRIVATE_ROUTES } from '../libs/contants';
@@ -20,9 +20,9 @@ const SCREEN_TYPES = {
   SIGN_UP: 'SIGN_UP'
 };
 
-const LoginOverlay = function () {
+const AuthOverlay = function () {
   const navigation = useNavigation();
-  const { closeLoginOverlay } = useLoginOverlay();
+  const { closeLoginOverlay } = useAuth();
   const { t } = useTranslation();
   const { loadUserData } = useUserData();
   const onPress = () => {
@@ -111,45 +111,18 @@ const LoginOverlay = function () {
   );
 };
 
-const LoginWrapper = function ({ children }) {
-  const { isLoginOverlayActive } = useLoginOverlay();
+const AppAuthProvider = function ({ children }) {
+  const { isAuthOverlayActive } = useAuth();
   const { userData } = useUserData();
   return (
     <>
-      {isLoginOverlayActive && !userData && <LoginOverlay />}
+      {isAuthOverlayActive && !userData && <AuthOverlay />}
       {children}
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  login_overlay: {
-    position: 'absolute',
-    top: 0,
-    height: Dimensions.get('window').height,
-    width: Dimensions.get('window').width,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    zIndex: 10,
-    elevation: 3
-  },
-  login_container: {
-    position: 'relative',
-    height: Dimensions.get('window').height / 2,
-    width: Dimensions.get('window').width,
-    backgroundColor: '#ffffff',
-    color: 'green',
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  close: {
-    justifyContent: 'flex-end',
-    marginLeft: 'auto',
-    padding: 8
-  },
   logo_image: {
     position: 'absolute',
     left: Dimensions.get('window').width / 2 - 24,
@@ -193,4 +166,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default LoginWrapper;
+export default AppAuthProvider;
