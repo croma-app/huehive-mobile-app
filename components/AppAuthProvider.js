@@ -20,26 +20,9 @@ const SCREEN_TYPES = {
   SIGN_UP: 'SIGN_UP'
 };
 
-const AuthOverlay = function () {
-  const navigation = useNavigation();
-  const { closeAuthOverlay } = useAuth();
+export const AuthForm = function () {
   const { t } = useTranslation();
   const { loadUserData } = useUserData();
-  const onPress = () => {
-    const currentRoute = navigation.getCurrentRoute();
-    if (PRIVATE_ROUTES.has(currentRoute.name)) {
-      navigation.goBack();
-    }
-    closeAuthOverlay();
-  };
-  useEffect(() => {
-    GoogleSignin.configure({
-      webClientId: '865618605576-j2tb9toevqc7tonmbp01dim1ddvod7r0.apps.googleusercontent.com',
-      forceCodeForRefreshToken: true,
-      offlineAccess: false
-    });
-  }, []);
-
   const [screenType, setScreenType] = useState(SCREEN_TYPES.SIGN_UP);
 
   const setScreenLogin = () => {
@@ -74,6 +57,50 @@ const AuthOverlay = function () {
   };
 
   return (
+    <View style={styles.form_container}>
+      <GoogleButton buttonType={screenType} onPress={googleSignIn} />
+      <View style={styles.separator}>
+        <View style={styles.separatorLine} />
+        <Text style={styles.separatorText}>OR</Text>
+        <View style={styles.separatorLine} />
+      </View>
+      {screenType === SCREEN_TYPES.LOGIN ? (
+        <Login
+          setScreenLogin={setScreenLogin}
+          setScreenForgetPassword={setScreenForgetPassword}
+          setScreenSignup={setScreenSignup}
+        />
+      ) : (
+        <SignUp
+          setScreenLogin={setScreenLogin}
+          setScreenForgetPassword={setScreenForgetPassword}
+          setScreenSignup={setScreenSignup}
+        />
+      )}
+    </View>
+  );
+};
+
+const AuthOverlay = function () {
+  const navigation = useNavigation();
+  const { closeAuthOverlay } = useAuth();
+
+  const onPress = () => {
+    const currentRoute = navigation.getCurrentRoute();
+    if (PRIVATE_ROUTES.has(currentRoute.name)) {
+      navigation.goBack();
+    }
+    closeAuthOverlay();
+  };
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: '865618605576-j2tb9toevqc7tonmbp01dim1ddvod7r0.apps.googleusercontent.com',
+      forceCodeForRefreshToken: true,
+      offlineAccess: false
+    });
+  }, []);
+
+  return (
     <Modal transparent visible animationType="slide">
       <TouchableWithoutFeedback onPress={onPress}>
         <View style={styles.modal}>
@@ -83,27 +110,7 @@ const AuthOverlay = function () {
               // eslint-disable-next-line no-undef
               source={require('../assets/images/icon.png')}
             />
-            <View style={styles.form_container}>
-              <GoogleButton buttonType={screenType} onPress={googleSignIn} />
-              <View style={styles.separator}>
-                <View style={styles.separatorLine} />
-                <Text style={styles.separatorText}>OR</Text>
-                <View style={styles.separatorLine} />
-              </View>
-              {screenType === SCREEN_TYPES.LOGIN ? (
-                <Login
-                  setScreenLogin={setScreenLogin}
-                  setScreenForgetPassword={setScreenForgetPassword}
-                  setScreenSignup={setScreenSignup}
-                />
-              ) : (
-                <SignUp
-                  setScreenLogin={setScreenLogin}
-                  setScreenForgetPassword={setScreenForgetPassword}
-                  setScreenSignup={setScreenSignup}
-                />
-              )}
-            </View>
+            <AuthForm />
           </View>
         </View>
       </TouchableWithoutFeedback>
