@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, StatusBar, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Text, StyleSheet, View, TouchableOpacity } from 'react-native';
 import AboutUsScreen from './screens/AboutUsScreen';
 import ChatSessionScreen from './screens/ChatSessionScreen';
 import ChatSessionHistoriesScreen from './screens/ChatSessionHistoriesScreen';
@@ -46,8 +46,11 @@ export default function App() {
   }, []);
 
   const spinner = (
-    <View style={{ flex: 1, marginTop: '20%' }}>
-      <ActivityIndicator size="large" color="#ef635f" animating={true} />
+    <View style={styles.loadingContainer}>
+      <View>
+        <ActivityIndicator size="large" color={Colors.accent} />
+        <Text style={styles.loadingText}>Retriving your stunning color palettes...</Text>
+      </View>
     </View>
   );
   const hamburgerMenuIcon = () => (
@@ -66,17 +69,6 @@ export default function App() {
           isOpen={isMenuOpen}
           onChange={(isOpen) => setMenu(isOpen)}>
           <View style={[styles.container]}>
-            <StatusBar
-              barStyle="light-content"
-              // dark-content, light-content and default
-              hidden={false}
-              //To hide statusBar
-              backgroundColor={Colors.primaryDark}
-              //Background color of statusBar only works for Android
-              translucent={false}
-              //allowing light, but not detailed shapes
-              networkActivityIndicatorVisible={true}
-            />
             <View
               style={[{ flex: 1, backgroundColor: 'transparent' }]}
               className={'navigation-workplace'}>
@@ -179,6 +171,19 @@ const styles = StyleSheet.create({
     height: 25,
     color: 'white',
     paddingRight: 4
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20
+  },
+  loadingText: {
+    color: Colors.text,
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 20
   }
 });
 const screenOptions = {

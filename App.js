@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, StatusBar } from 'react-native';
 import AuthOnboardingScreen from './components/AuthOnboardingScreen';
 import ApplicationRoot from './ApplicationRoot';
 import Storage from './libs/Storage';
 import { withIAPContext } from 'react-native-iap';
 import useUserData from './hooks/useUserData';
+import Colors from './constants/Colors';
 
 const App = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -27,14 +28,25 @@ const App = () => {
     setIsLoginOverlayStepDone(false);
   };
 
-  return isLoading ? (
-    isLoginOverlayStepDone ? (
-      <AuthOnboardingScreen markLoginStepDone={markLoginStepDone} />
-    ) : (
-      <ApplicationRoot />
-    )
-  ) : (
-    <ActivityIndicator />
+  return (
+    <>
+      <StatusBar
+        barStyle="light-content"
+        hidden={false}
+        backgroundColor={Colors.primaryDark}
+        translucent={false}
+        networkActivityIndicatorVisible={true}
+      />
+      {isLoading ? (
+        isLoginOverlayStepDone ? (
+          <AuthOnboardingScreen markLoginStepDone={markLoginStepDone} />
+        ) : (
+          <ApplicationRoot />
+        )
+      ) : (
+        <ActivityIndicator />
+      )}
+    </>
   );
 };
 

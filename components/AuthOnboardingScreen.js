@@ -26,9 +26,7 @@ function AuthOnboardingScreen({ markLoginStepDone }) {
 
   return (
     <ScrollView style={styles.rootContainer} showsVerticalScrollIndicator={true}>
-      <LinearGradient
-        colors={['#FF6B6B', '#FFE66D', '#4ECDC4', '#1A535C']}
-        style={styles.backgroundGradient}>
+      <LinearGradient colors={['#f36a64', '#f89f9b', '#fcd8d6']} style={styles.backgroundGradient}>
         <View style={[styles.container]}>
           <Text style={styles.title}>{t('Welcome to HueHive!')}</Text>
           <Text style={styles.description}>
