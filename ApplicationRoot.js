@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Text, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import AboutUsScreen from './screens/AboutUsScreen';
 import ChatSessionScreen from './screens/ChatSessionScreen';
 import ChatSessionHistoriesScreen from './screens/ChatSessionHistoriesScreen';
@@ -33,33 +33,21 @@ const Stack = createNativeStackNavigator();
 /*import { LogBox } from 'react-native'; // enabled for recording demos
 LogBox.ignoreAllLogs();//Ignore all log notifications*/
 export default function App() {
-  const [isPalettesLoaded, setIsPalettesLoaded] = useState(false);
   const applicationState = useApplicationHook();
   const [isMenuOpen, setMenu] = useState(false);
   const navigationRef = useNavigationContainerRef();
   useIAPConnection();
   useEffect(() => {
-    (async () => {
-      await applicationState.loadInitPaletteFromStore();
-      setIsPalettesLoaded(true);
-    })();
+    applicationState.loadInitPaletteFromStore();
   }, []);
 
-  const spinner = (
-    <View style={styles.loadingContainer}>
-      <View>
-        <ActivityIndicator size="large" color={Colors.accent} />
-        <Text style={styles.loadingText}>Retriving your stunning color palettes...</Text>
-      </View>
-    </View>
-  );
   const hamburgerMenuIcon = () => (
     <TouchableOpacity style={{ marginLeft: 8 }} onPress={() => setMenu(!isMenuOpen)}>
       <Entypo name="menu" style={styles.sideMenuIcon} />
     </TouchableOpacity>
   );
 
-  const MainContent = (
+  return (
     <CromaContext.Provider value={applicationState}>
       <GestureHandlerRootView style={{ flex: 1 }}>
         <SideMenu
@@ -155,8 +143,6 @@ export default function App() {
       </GestureHandlerRootView>
     </CromaContext.Provider>
   );
-
-  return !isPalettesLoaded ? spinner : MainContent;
 }
 
 const styles = StyleSheet.create({
@@ -171,19 +157,6 @@ const styles = StyleSheet.create({
     height: 25,
     color: 'white',
     paddingRight: 4
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20
-  },
-  loadingText: {
-    color: Colors.text,
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginTop: 20
   }
 });
 const screenOptions = {

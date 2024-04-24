@@ -130,7 +130,7 @@ export default function useApplicationHook() {
 
   const [state, setState] = useState({
     ...{
-      allPalettes: {},
+      allPalettes: [],
       currentPalette: {},
       deletedPalettes: {},
       isLoading: false,

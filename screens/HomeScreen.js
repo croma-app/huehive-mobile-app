@@ -18,6 +18,7 @@ import { logEvent } from '../libs/Helpers';
 import PropTypes from 'prop-types';
 import { material } from 'react-native-typography';
 import Spacer from '../components/Spacer';
+import Colors from '../constants/Colors';
 
 const HomeScreen = function ({ navigation, route }) {
   const { isLoading, allPalettes, isPro, clearPalette } = React.useContext(CromaContext);
@@ -70,7 +71,14 @@ const HomeScreen = function ({ navigation, route }) {
   }, []);
 
   if (isLoading) {
-    return <ActivityIndicator />;
+    return (
+      <View style={styles.loadingContainer}>
+        <View>
+          <ActivityIndicator size="large" color={Colors.accent} />
+          <Text style={styles.loadingText}>Retriving your stunning color palettes...</Text>
+        </View>
+      </View>
+    );
   } else {
     logEvent('home_screen', {
       length: allPalettes.length
@@ -124,5 +132,19 @@ const styles = StyleSheet.create({
     ...material.headline,
     textAlign: 'center',
     marginTop: 100
+  },
+  loadingContainer: {
+    display: 'flex',
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 30
+  },
+  loadingText: {
+    color: Colors.black,
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 20
   }
 });
