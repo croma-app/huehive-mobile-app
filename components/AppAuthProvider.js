@@ -14,6 +14,7 @@ import { storeUserSession } from '../libs/EncryptedStoreage';
 import { notifyMessage, sendClientError } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
 import { googleLogin } from '../network/login-and-signup';
+import useApplicationStore from '../hooks/useApplicationStore';
 
 const SCREEN_TYPES = {
   LOGIN: 'LOGIN',
@@ -21,6 +22,8 @@ const SCREEN_TYPES = {
 };
 
 export const AuthForm = function () {
+  const applicationState = useApplicationStore();
+  const { loadInitPaletteFromStore } = applicationState;
   const { t } = useTranslation();
   const { loadUserData } = useUserData();
   const [screenType, setScreenType] = useState(SCREEN_TYPES.SIGN_UP);
@@ -55,7 +58,8 @@ export const AuthForm = function () {
         res.data.user.avatar_url
       );
 
-      loadUserData();
+      await loadUserData();
+      loadInitPaletteFromStore();
     } catch (error) {
       sendClientError('google_sign_in', error?.message || '', error);
       notifyMessage(t('Google login failed!' + error?.message || ''));

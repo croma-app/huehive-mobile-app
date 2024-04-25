@@ -2,7 +2,6 @@ import React from 'react';
 import { ScrollView, StyleSheet, Text, PermissionsAndroid, Platform } from 'react-native';
 import { View } from 'react-native-animatable';
 import CromaButton from '../components/CromaButton';
-import { CromaContext } from '../store/store';
 import { logEvent } from '../libs/Helpers';
 import DocumentPicker from 'react-native-document-picker';
 import { material } from 'react-native-typography';
@@ -12,11 +11,12 @@ import { useTranslation } from 'react-i18next';
 import { t } from 'i18next';
 import RNFetchBlob from 'rn-fetch-blob';
 import useUserData from '../hooks/useUserData';
+import useApplicationStore from '../hooks/useApplicationStore';
 
 export default function SyncPalettesScreen(props) {
   const { t } = useTranslation();
   const navigation = props.navigation;
-  const { allPalettes, addPalette } = React.useContext(CromaContext);
+  const { allPalettes, addPalette } = useApplicationStore();
   const { userData } = useUserData();
   const importFromFile = async () => {
     try {

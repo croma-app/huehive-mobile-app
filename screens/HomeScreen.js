@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import { PaletteCard } from '../components/PaletteCard';
 import GridActionButton from '../components/GridActionButton';
-import { CromaContext } from '../store/store';
 import * as Permissions from 'expo-permissions';
 import ShareMenu from '../libs/ShareMenu';
 import { logEvent } from '../libs/Helpers';
@@ -19,9 +18,11 @@ import PropTypes from 'prop-types';
 import { material } from 'react-native-typography';
 import Spacer from '../components/Spacer';
 import Colors from '../constants/Colors';
+import useApplicationStore from '../hooks/useApplicationStore';
 
 const HomeScreen = function ({ navigation, route }) {
-  const { isLoading, allPalettes, isPro, clearPalette } = React.useContext(CromaContext);
+  const { isLoading, allPalettes, isPro, clearPalette } = useApplicationStore();
+  console.log('all palettes at home ', allPalettes);
   const [pickImageLoading, setPickImageLoading] = useState(false);
   const getPermissionAsync = async () => {
     if (Platform?.OS === 'ios') {
