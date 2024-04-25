@@ -53,7 +53,10 @@ export default function ColorListScreen({ navigation, route }) {
   const toggleGenerateInfo = () => {
     setShowGenerateInfo(!showGenerateInfo);
   };
-  const [colorList, setColorList] = useState(route.params?.colors || []);
+  const [colorListHistory, setColorListHistory] = useState([route.params?.colors || []]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const colorList = colorListHistory[currentIndex];
   const colors = uniqueColors(colorList).map((color) => ({
     ...color,
     opacity: color.opacity || new Animated.Value(1)
@@ -74,7 +77,7 @@ export default function ColorListScreen({ navigation, route }) {
         onColorChange={(updatedColor) => {
           const updatedColors = [...colors];
           updatedColors[item.index] = updatedColor;
-          setColorList(updatedColors);
+          updateColorList(updatedColors);
         }}
         opacity={opecity}
         key={item.color + '-' + item.locked}
@@ -93,7 +96,7 @@ export default function ColorListScreen({ navigation, route }) {
             newColor,
             ...colors.slice(item.index + 1)
           ];
-          setColorList(updatedColors);
+          updateColorList(updatedColors);
           // Find the opacity value of the newly added color
           const newColorOpacity = updatedColors[item.index + 1].opacity;
           newColorOpacity.setValue(0);
@@ -110,7 +113,7 @@ export default function ColorListScreen({ navigation, route }) {
             useNativeDriver: true
           }).start(() => {
             logEvent('remove_color_from_palette');
-            setColorList(colors.filter((color) => color.color !== item.color));
+            updateColorList(colors.filter((color) => color.color !== item.color));
           });
         }}
       />
@@ -119,7 +122,7 @@ export default function ColorListScreen({ navigation, route }) {
 
   const onDragEnd = ({ data }) => {
     logEvent('drag_end_event_color_list');
-    setColorList(data);
+    updateColorList(data);
   };
   const regenerateUnlockedColors = () => {
     logEvent('regenerate_unlocked_colors', colors.filter((color) => !color.locked).length);
@@ -127,10 +130,24 @@ export default function ColorListScreen({ navigation, route }) {
       notifyMessage('Please unlock some colors or add colors to generate new colors');
     } else {
       const newColors = generateRandomColorPaletteWithLockedColors([...colors]);
-      setColorList(newColors);
+      updateColorList(newColors);
+    }
+  };
+  const undo = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
     }
   };
 
+  const redo = () => {
+    if (currentIndex < colorListHistory.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+  const updateColorList = (updatedColors) => {
+    setColorListHistory([...colorListHistory.slice(0, currentIndex + 1), updatedColors]);
+    setCurrentIndex(currentIndex + 1);
+  };
   logEvent('color_list_screen');
   return (
     <View style={styles.container}>
@@ -179,6 +196,19 @@ export default function ColorListScreen({ navigation, route }) {
           <View style={styles.buttonContent}>
             <Icon name="save" size={20} color={Colors.fabPrimary} />
             <Text style={styles.buttonText}>{t('Save')}</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={undo} disabled={currentIndex === 0}>
+          <View style={styles.buttonContent}>
+            <Icon name="undo" size={20} color={Colors.fabPrimary} />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={redo}
+          disabled={currentIndex === colorListHistory.length - 1}>
+          <View style={styles.buttonContent}>
+            <Icon name="repeat" size={20} color={Colors.fabPrimary} />
           </View>
         </TouchableOpacity>
       </View>
@@ -231,9 +261,9 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    marginHorizontal: 16,
+    marginHorizontal: 8,
     backgroundColor: 'white',
-    paddingVertical: 12,
+    paddingVertical: 8,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center'
