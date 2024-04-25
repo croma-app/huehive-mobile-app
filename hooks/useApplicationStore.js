@@ -93,7 +93,6 @@ const useApplicationStore = create((set) => ({
         /* showMessage=*/ !isUserAlreadyExits
       ));
     const allPalettes = await useApplicationStore.getState().loadPalettes();
-    console.log({ allPalettes });
     set({ allPalettes, isLoading: false });
   },
 
