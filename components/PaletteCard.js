@@ -7,7 +7,6 @@ import { Share, PermissionsAndroid } from 'react-native';
 
 import MultiColorView from './MultiColorView';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { CromaContext } from '../store/store';
 import { logEvent, notifyMessage, sendClientError } from '../libs/Helpers';
 import ViewShot from 'react-native-view-shot';
 import { UndoDialog } from '../components/CommonDialogs';
@@ -18,6 +17,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 
 import PropTypes from 'prop-types';
 import { Menu, MenuItem } from 'react-native-material-menu';
+import useApplicationStore from '../hooks/useApplicationStore';
 
 const MenuItemWrapper = ({ onPress, icon, label }) => (
   <MenuItem onPress={onPress}>
@@ -40,7 +40,7 @@ const MenuAnchor = ({ onPress }) => (
 export const PaletteCard = (props) => {
   const [animationType, setAnimationType] = React.useState('fadeInLeftBig');
   const viewShotRef = React.useRef();
-  const { deletePalette, setCurrentPalette } = React.useContext(CromaContext);
+  const { deletePalette, setCurrentPalette } = useApplicationStore();
   const [isDeleteActive, setIsDeleteActive] = React.useState(false);
   const [visible, setVisible] = useState(false);
 

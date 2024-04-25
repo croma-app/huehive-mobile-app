@@ -15,18 +15,17 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { logEvent } from '../libs/Helpers';
 import { ScrollView } from 'react-native-gesture-handler';
-import { CromaContext } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import useUserData from '../hooks/useUserData';
 import useAuth from '../hooks/useAuth';
+import useApplicationStore from '../hooks/useApplicationStore';
 
 const HamburgerMenu = (props) => {
   const { t } = useTranslation();
   const { userData } = useUserData();
   const { openAuthOverlay } = useAuth();
-
-  const { clearPalette } = React.useContext(CromaContext);
+  const { clearPalette } = useApplicationStore();
   const navigate = function (screen) {
     props.toggleSideMenu();
     props.navigation.navigate(screen);
@@ -140,6 +139,7 @@ const HamburgerMenu = (props) => {
               onPress={async () => {
                 logEvent('hm_login');
                 openAuthOverlay();
+                props.toggleSideMenu();
               }}>
               <View style={styles.menuItemView}>
                 <View style={{ ...styles.menuIcon, paddingLeft: 4 }}>

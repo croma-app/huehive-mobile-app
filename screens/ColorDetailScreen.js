@@ -3,11 +3,11 @@ import { ScrollView, StyleSheet } from 'react-native';
 import { ColorDetail } from '../components/ColorDetails';
 import CromaButton from '../components/CromaButton';
 import { logEvent } from '../libs/Helpers';
-import { CromaContext } from '../store/store';
 import { useTranslation } from 'react-i18next';
+import useApplicationStore from '../hooks/useApplicationStore';
 
 export default function ColorDetailScreen({ navigation }) {
-  const { detailedColor, setDetailedColor } = React.useContext(CromaContext);
+  const { detailedColor, setDetailedColor } = useApplicationStore();
   const { t } = useTranslation();
 
   useLayoutEffect(() => {

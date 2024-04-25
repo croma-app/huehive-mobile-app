@@ -1,11 +1,11 @@
-import React, { useContext, useLayoutEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import Color from 'pigment/full';
 import { PalettePreviewCard } from '../components/PalettePreviewCard';
 import { logEvent } from '../libs/Helpers';
-import { CromaContext } from '../store/store';
+import useApplicationStore from '../hooks/useApplicationStore';
 export default function PalettesScreen({ navigation }) {
-  const { detailedColor } = useContext(CromaContext);
+  const { detailedColor } = useApplicationStore();
 
   useLayoutEffect(() => {
     navigation.setOptions({ title: detailedColor });

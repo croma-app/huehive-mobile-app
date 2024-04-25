@@ -8,8 +8,11 @@ import useUserData from '../hooks/useUserData';
 import { removeUserSession } from '../libs/EncryptedStoreage';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { ROUTE_NAMES } from '../libs/contants';
+import useApplicationStore from '../hooks/useApplicationStore';
 
 function UserProfile(props) {
+  const applicationState = useApplicationStore();
+  const { loadInitPaletteFromStore } = applicationState;
   const { userData, loadUserData } = useUserData();
 
   const { t } = useTranslation();
@@ -23,7 +26,8 @@ function UserProfile(props) {
 
   const onLogout = useCallback(async () => {
     await removeUserSession();
-    loadUserData();
+    await loadUserData();
+    loadInitPaletteFromStore();
     props.navigation.navigate(ROUTE_NAMES.HOME);
     try {
       await GoogleSignin.revokeAccess();
@@ -32,19 +36,19 @@ function UserProfile(props) {
     }
     // Google Account disconnected from your app.
     // Perform clean-up actions, such as deleting data associated with the disconnected account.
-  }, [loadUserData, props.navigation]);
+  }, [loadInitPaletteFromStore, loadUserData, props.navigation]);
 
   return (
     <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
       <View style={[styles.logoutContainer]}>
-        <Image style={styles.logo} source={{ uri: userData.avatar_url }} />
+        <Image style={styles.logo} source={{ uri: userData?.avatar_url }} />
         <Text style={styles.intro}>
           {t('Name: ')}
-          {userData.fullName}
+          {userData?.fullName}
         </Text>
         <Text style={styles.intro}>
           {t('Email: ')}
-          {userData.email}
+          {userData?.email}
         </Text>
         <CromaButton
           style={{ backgroundColor: '#ff5c59', width: '100%' }}
