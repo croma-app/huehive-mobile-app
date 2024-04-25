@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useLayoutEffect, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import SingleColorCard from '../components/SingleColorCard';
 import {
   Dimensions,
@@ -11,7 +11,6 @@ import {
   Modal,
   TouchableWithoutFeedback
 } from 'react-native';
-import { CromaContext } from '../store/store';
 import ActionButton from 'react-native-action-button';
 import Colors from '../constants/Colors';
 import { useHeaderHeight } from '@react-navigation/elements';
@@ -22,6 +21,7 @@ import { notifyMessage } from '../libs/Helpers';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import PropTypes from 'prop-types';
 import ColorPickerModal from '../components/ColorPickerModal';
+import useApplicationStore from '../hooks/useApplicationStore';
 
 export default function PaletteScreen({ navigation }) {
   const {
@@ -32,7 +32,7 @@ export default function PaletteScreen({ navigation }) {
     addNewColorToPalette,
     setDetailedColor,
     currentPalette
-  } = useContext(CromaContext);
+  } = useApplicationStore();
 
   const [isColorPickerVisible, setIsColorPickerVisible] = useState(false);
 
@@ -146,7 +146,7 @@ PaletteScreen.propTypes = {
 
 const CustomHeader = ({ currentPaletteName }) => {
   const [paletteName, setPaletteName] = useState(currentPaletteName);
-  const { renamePalette, currentPalette, setCurrentPalette } = useContext(CromaContext);
+  const { renamePalette, currentPalette, setCurrentPalette } = useApplicationStore();
   const [isEditingPaletteName, setIsEditingPaletteName] = useState(false);
 
   useEffect(() => {

@@ -15,10 +15,10 @@ import { material } from 'react-native-typography';
 import { logEvent, readRemoteConfig } from '../libs/Helpers';
 import ChatCard from '../components/ChatCard';
 import CromaButton from '../components/CromaButton';
-import { CromaContext } from '../store/store';
 import useChatSession from '../hooks/useChatSession';
 import useUserData from '../hooks/useUserData';
 import useAuth from '../hooks/useAuth';
+import useApplicationStore from '../hooks/useApplicationStore';
 
 // eslint-disable-next-line no-undef
 const bgImage = require('../assets/images/colorful_background.jpg');
@@ -41,7 +41,7 @@ const ChatSessionScreen = (props) => {
   const [inputText, setInputText] = useState('');
   const scrollViewRef = useRef();
 
-  const { isPro } = React.useContext(CromaContext);
+  const { isPro } = useApplicationStore();
   const { messages, isLoading, isCreatingSession, error, createSession, followUpSession } =
     useChatSession(route.params?.messages);
 

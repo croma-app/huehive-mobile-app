@@ -3,17 +3,17 @@ import { Text, View, StyleSheet, TextInput, Platform, ScrollView } from 'react-n
 import { PalettePreviewCard } from '../components/PalettePreviewCard';
 import Colors from '../constants/Colors';
 import CromaButton from '../components/CromaButton';
-import { CromaContext } from '../store/store';
 import { TextDialog } from '../components/CommonDialogs';
 import { StackActions } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { logEvent } from '../libs/Helpers';
+import useApplicationStore from '../hooks/useApplicationStore';
 
 export default function SavePaletteScreen({ navigation, route }) {
   logEvent('save_palette_screen');
 
   const { t } = useTranslation();
-  const { addPalette, allPalettes, isPro, setCurrentPalette } = React.useContext(CromaContext);
+  const { addPalette, allPalettes, isPro, setCurrentPalette } = useApplicationStore();
 
   const [finalColors, setFinalColors] = useState([]);
   const [isPaletteNameExist, setIsPaletteNameExist] = React.useState(false);

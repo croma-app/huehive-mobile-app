@@ -20,10 +20,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { launchImageLibrary } from 'react-native-image-picker';
-import { CromaContext } from '../store/store';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import ColorPickerModal from './ColorPickerModal';
+import useApplicationStore from '../hooks/useApplicationStore';
 
 const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   const { t } = useTranslation();
@@ -32,7 +32,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   const [selectedImage, setSelectedImage] = React.useState(null);
   const [automaticColors, setAutomaticColors] = React.useState([]);
 
-  const { isPro, setPurchase, setDetailedColor, clearPalette } = React.useContext(CromaContext);
+  const { isPro, setPurchase, setDetailedColor, clearPalette } = useApplicationStore();
 
   const pickImageResult = async () => {
     setPickImageLoading(true);

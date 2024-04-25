@@ -1,13 +1,13 @@
-import React, { useLayoutEffect, useContext } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 
 import { logEvent } from '../libs/Helpers';
 import { PalettePreviewCard } from '../components/PalettePreviewCard';
-import { CromaContext } from '../store/store';
+import useApplicationStore from '../hooks/useApplicationStore';
 
 export default function CommonPalettesScreen({ navigation }) {
   logEvent('common_palettes_screen');
-  const { commonPalettes } = useContext(CromaContext);
+  const { commonPalettes } = useApplicationStore();
   const { palettes, name } = commonPalettes;
 
   useLayoutEffect(() => {

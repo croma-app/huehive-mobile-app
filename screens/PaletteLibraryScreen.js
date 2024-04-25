@@ -1,15 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { logEvent } from '../libs/Helpers';
 import { material } from 'react-native-typography';
 import Colors from '../constants/Colors';
-import { CromaContext } from '../store/store';
+import useApplicationStore from '../hooks/useApplicationStore';
 const allPalettes = require('../constants/palettes/palettes').default;
 
 export default function PaletteLibraryScreen({ navigation }) {
   logEvent('palette_library_screen');
 
-  const { setCommonPalettes } = useContext(CromaContext);
+  const { setCommonPalettes } = useApplicationStore();
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>

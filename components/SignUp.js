@@ -7,6 +7,7 @@ import { storeUserSession } from '../libs/EncryptedStoreage';
 import CromaButton from './CromaButton';
 import useUserData from '../hooks/useUserData';
 import { notifyMessage, sendClientError } from '../libs/Helpers';
+import useApplicationStore from '../hooks/useApplicationStore';
 
 const LOGIN_AND_SIGNUP_TEXT = {
   LOGIN: {
@@ -18,6 +19,8 @@ const LOGIN_AND_SIGNUP_TEXT = {
 };
 
 const SignUp = function ({ setScreenLogin }) {
+  const applicationState = useApplicationStore();
+  const { loadInitPaletteFromStore } = applicationState;
   const [email, setEmail] = useState('');
   const [fullname, setFullname] = useState('');
   const [password, setPassword] = useState('');
@@ -66,7 +69,8 @@ const SignUp = function ({ setScreenLogin }) {
         res.data.userToken,
         res.data.user.avatar_url
       );
-      loadUserData();
+      await loadUserData();
+      loadInitPaletteFromStore();
     } catch (error) {
       console.log(error);
       sendClientError('signup_failed', error?.message || '', error);

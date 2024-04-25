@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, ActivityIndicator } from 'react-native';
 import { View } from 'react-native-animatable';
 import CromaButton from '../components/CromaButton';
-import { CromaContext } from '../store/store';
 import { purchase, logEvent, readRemoteConfig } from '../libs/Helpers';
 import { material } from 'react-native-typography';
 import { initPurchase } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
 import Colors from '../constants/Colors';
+import useApplicationStore from '../hooks/useApplicationStore';
 
 export default function ProScreen() {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
-  const { isPro, setPurchase } = React.useContext(CromaContext);
+  const { isPro, setPurchase } = useApplicationStore();
   const [aiBehindFF, setAiBehindFF] = useState();
 
   const purchaseDevelopment = () => {
