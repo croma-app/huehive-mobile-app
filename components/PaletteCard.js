@@ -7,6 +7,7 @@ import { Share, PermissionsAndroid } from 'react-native';
 
 import MultiColorView from './MultiColorView';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Feather from 'react-native-vector-icons/Feather';
 import { logEvent, notifyMessage, sendClientError } from '../libs/Helpers';
 import ViewShot from 'react-native-view-shot';
 import { UndoDialog } from '../components/CommonDialogs';
@@ -32,8 +33,7 @@ const MenuItemWrapper = ({ onPress, icon, label }) => (
 
 const MenuAnchor = ({ onPress }) => (
   <TouchableOpacity style={styles.menuAnchorContainer} onPress={onPress}>
-    <FontAwesome style={styles.actionButton} size={20} name="ellipsis-v" />
-    <View style={styles.menuAnchor} />
+    <Feather style={styles.actionButton} size={18} name="more-horizontal" />
   </TouchableOpacity>
 );
 
@@ -154,7 +154,7 @@ export const PaletteCard = (props) => {
             options={{ fileName: props.name + '.png', format: 'png', quality: 0.9 }}>
             <MultiColorView {...props}></MultiColorView>
           </ViewShot>
-          <View style={styles.bottom}>
+          <View style={styles.info}>
             <Text style={styles.label}>
               {props.name.substring(0, 50) + (props.name.length > 50 ? '...' : '')}
             </Text>
@@ -215,22 +215,21 @@ PaletteCard.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  bottom: {
+  info: {
+    display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
-    padding: 4,
-    height: 54
+    alignItems: 'center'
   },
   actionButtonsView: {
     flexDirection: 'row',
     alignItems: 'flex-end'
   },
   actionButton: {
-    padding: 8
+    padding: 4
   },
   label: {
     flex: 1,
-    marginHorizontal: 16,
+    marginHorizontal: 8,
     color: Colors.darkGrey
   },
   menuAnchorContainer: {

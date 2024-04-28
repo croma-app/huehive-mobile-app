@@ -31,19 +31,22 @@ const styles = StyleSheet.create({
   palette: {
     alignItems: 'stretch',
     flexDirection: 'row',
-    height: 112,
-    overflow: 'hidden'
+    height: 45,
+    overflow: 'hidden',
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4
   },
   color: {
     flex: 1,
     marginStart: -1
   },
   emptyContainer: {
-    height: 112,
+    height: 45,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5F5F5',
-    borderRadius: 8,
+    borderTopLeftRadius: 4,
+    borderTopRightRadius: 4,
     paddingHorizontal: 16
   },
   emptyTitle: {
