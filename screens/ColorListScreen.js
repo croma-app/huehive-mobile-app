@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import Color from 'pigment/full';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Colors from '../constants/Colors';
 import { generateRandomColorPaletteWithLockedColors } from '../libs/ColorHelper';
@@ -150,7 +151,7 @@ export default function ColorListScreen({ navigation, route }) {
             regenerateUnlockedColors();
           }}>
           <View style={styles.buttonContent}>
-            <Icon name="refresh" size={20} color={Colors.fabPrimary} />
+            <Ionicons name="shuffle" size={20} color={Colors.fabPrimary} />
             <Text style={styles.buttonText}>{t('Generate')}</Text>
             <TouchableOpacity
               style={styles.infoIconContainer}
