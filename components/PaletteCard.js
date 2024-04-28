@@ -38,7 +38,7 @@ const MenuAnchor = ({ onPress }) => (
 );
 
 export const PaletteCard = (props) => {
-  const [animationType, setAnimationType] = React.useState('fadeInLeftBig');
+  const [animationType, setAnimationType] = React.useState('fadeInUpBig');
   const viewShotRef = React.useRef();
   const { deletePalette, setCurrentPalette } = useApplicationStore();
   const [isDeleteActive, setIsDeleteActive] = React.useState(false);
