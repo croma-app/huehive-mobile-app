@@ -46,10 +46,7 @@ const HamburgerMenu = (props) => {
         </TouchableOpacity>
       ) : (
         <View>
-          <View style={[styles.titleArea, { height: props.navigation.headerHeight }]}>
-            <Image style={styles.logo} source={require('../assets/images/icon.png')} />
-            <Text style={styles.headerText}>{t('Huehive (Color palette app)')}</Text>
-          </View>
+          <Text style={[styles.titleArea, styles.headerText]}>{t('HueHive ')}</Text>
           <View style={styles.horizontalLine}></View>
         </View>
       )}
@@ -104,7 +101,7 @@ const HamburgerMenu = (props) => {
               navigate('ProVersion');
             }}>
             <View style={styles.menuItemView}>
-              <View style={[styles.menuIcon, { paddingLeft: 4 }]}>
+              <View style={[styles.menuIcon]}>
                 <Feather name="unlock" style={styles.icon} />
               </View>
               <Text style={styles.textAreaMenuItem}>{t('Pro benefits')}</Text>
@@ -120,7 +117,7 @@ const HamburgerMenu = (props) => {
               <View style={styles.menuIcon}>
                 <MaterialIcons name="import-export" style={styles.icon} />
               </View>
-              <Text style={styles.textAreaMenuItem}>{t('import/export palettes')}</Text>
+              <Text style={styles.textAreaMenuItem}>{t('Import/Export palettes')}</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -130,7 +127,7 @@ const HamburgerMenu = (props) => {
               navigate('AboutUs');
             }}>
             <View style={styles.menuItemView}>
-              <View style={{ ...styles.menuIcon, paddingLeft: 4 }}>
+              <View style={{ ...styles.menuIcon }}>
                 <MaterialCommunityIcons name="information-outline" style={styles.icon} />
               </View>
               <Text style={[styles.textAreaMenuItem]}>{t('About us')}</Text>
@@ -145,7 +142,7 @@ const HamburgerMenu = (props) => {
                 props.toggleSideMenu();
               }}>
               <View style={styles.menuItemView}>
-                <View style={{ ...styles.menuIcon, paddingLeft: 4 }}>
+                <View style={{ ...styles.menuIcon }}>
                   <Feather name="user" style={styles.icon} />
                 </View>
                 <Text style={[styles.textAreaMenuItem]}>{t('Login/Signup')}</Text>
@@ -186,7 +183,7 @@ MenuLink.propTypes = {
   children: PropTypes.children
 };
 
-const menuHeight = 70;
+const menuHeight = 60;
 const padding = 10;
 const styles = StyleSheet.create({
   container: {
@@ -217,21 +214,23 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch'
   },
   menuItem: {
-    height: menuHeight
+    height: menuHeight,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    width: '100%'
   },
   menuItemView: {
     flex: 1,
     flexDirection: 'row',
     display: 'flex',
-    alignItems: 'center',
-    gap: 10
+    alignItems: 'center'
   },
   textAreaMenuItem: {
     fontWeight: '500',
     fontSize: 16
   },
   icon: {
-    fontSize: (menuHeight - 2 * padding) * (4 / 10),
+    fontSize: (menuHeight - 2 * padding) * (6 / 10),
     padding: padding,
     color: '#434343'
   },
@@ -239,6 +238,7 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   horizontalLine: {
+    marginTop: 3,
     height: 1,
     width: '100%',
     backgroundColor: '#ccc'

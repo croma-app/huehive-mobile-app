@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import Color from 'pigment/full';
 import RNColorThief from 'react-native-color-thief';
+import Feather from 'react-native-vector-icons/Feather';
 import { notifyMessage, sendClientError } from '../libs/Helpers';
 import { generateRandomColorPalette } from '../libs/ColorHelper';
 import Colors from '../constants/Colors';
@@ -126,7 +127,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
         config={[
           [
             {
-              icon: <Evillcon name="camera" size={18} />,
+              icon: <Evillcon name="camera" size={20} />,
               text1: 'Palette',
               text2: 'using camera',
               onPress: async () => {
@@ -139,13 +140,13 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
               }
             },
             {
-              icon: <Evillcon name="image" size={18} />,
+              icon: <Evillcon name="image" size={20} />,
               text1: t('Palette'),
               text2: t('using image'),
               onPress: handleImagePicker
             },
             {
-              icon: <Ionicons name="color-palette-outline" size={18} />,
+              icon: <Ionicons name="color-palette-outline" size={20} />,
               text1: t('Palette'),
               text2: t('using color'),
               onPress: () => {
@@ -156,7 +157,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
           ],
           [
             {
-              icon: <Ionicons name="md-shuffle" size={18} />,
+              icon: <Ionicons name="md-shuffle" size={20} />,
               text1: t('Quick'),
               text2: t('palette'),
               onPress: () => {
@@ -165,7 +166,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
               }
             },
             {
-              icon: <FontAwesome5 name="magic" size={18} />,
+              icon: <FontAwesome5 name="magic" size={20} />,
               text1: t('Palette using'),
               text2: t('HueHive ai'),
               onPress: async () => {
@@ -175,7 +176,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
             },
             isPro
               ? {
-                  icon: <Ionicons name="md-color-filter" size={18} />,
+                  icon: <Ionicons name="md-color-filter" size={20} />,
                   text1: t('Manully create'),
                   text2: t('Palette'),
                   onPress: () => {
@@ -185,7 +186,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                   }
                 }
               : {
-                  icon: <FontAwesome5 name="unlock" size={18} />,
+                  icon: <Feather name="unlock" size={20} />,
                   text1: t('Unlock'),
                   text2: t('Pro'),
                   onPress: () => purchase(setPurchase)
