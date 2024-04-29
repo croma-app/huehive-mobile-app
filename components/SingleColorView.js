@@ -76,7 +76,11 @@ export const SingleColorView = ({ color, onColorChange, drag, onRemove, onAdd })
               onColorChange({ ...color, color: color.color, locked: !color.locked });
             }}>
             <FontAwesome5
-              style={[styles.icon, styles.lockIcon, { color: textColor }]}
+              style={[
+                styles.icon,
+                color.locked ? styles.lockIcon : styles.unlockIcon,
+                { color: textColor }
+              ]}
               name={color.locked ? 'lock' : 'unlock'}
             />
           </TouchableOpacity>
@@ -165,8 +169,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8
   },
   lockIcon: {
+    fontSize: 16
+  },
+  unlockIcon: {
     fontSize: 16,
-    opacity: 0.6
+    opacity: 0.5
   },
   dragIcon: {
     fontSize: 24

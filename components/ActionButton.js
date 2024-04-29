@@ -33,20 +33,17 @@ const ActionButtonContainer = function (props) {
   const headerHeight = useHeaderHeight();
   const rows = config;
   return active ? (
-    <View
+    <TouchableOpacity
       style={[
         styles.actionButtonContainer,
         { height: Dimensions.get('window').height - headerHeight }
-      ]}>
-      <TouchableOpacity
-        onPress={() => {
-          setActive(false);
-        }}
-        style={[styles.actionButton, styles.actionButtonClose]}>
+      ]}
+      onPress={() => setActive(false)}>
+      <View style={[styles.actionButton, styles.actionButtonClose]}>
         <Animatable.View duration={300} animation={rotateAnimation}>
           <AntDesign name="plus" color={'#fff'} size={24} />
         </Animatable.View>
-      </TouchableOpacity>
+      </View>
       <Animatable.View
         duration={300}
         animation="slideInUp"
@@ -80,7 +77,7 @@ const ActionButtonContainer = function (props) {
           );
         })}
       </Animatable.View>
-    </View>
+    </TouchableOpacity>
   ) : (
     <TouchableOpacity
       onPress={() => {

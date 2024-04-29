@@ -22,7 +22,6 @@ import useApplicationStore from '../hooks/useApplicationStore';
 
 const HomeScreen = function ({ navigation, route }) {
   const { isLoading, allPalettes, isPro, clearPalette } = useApplicationStore();
-  console.log('all palettes at home ', allPalettes);
   const [pickImageLoading, setPickImageLoading] = useState(false);
   const getPermissionAsync = async () => {
     if (Platform?.OS === 'ios') {
@@ -69,7 +68,7 @@ const HomeScreen = function ({ navigation, route }) {
         }
       });
     }
-  }, []);
+  }, [clearPalette, navigation]);
 
   if (isLoading) {
     return (
@@ -96,7 +95,7 @@ const HomeScreen = function ({ navigation, route }) {
           {allPalettes.map((palette) => {
             return (
               <PaletteCard
-                key={palette.name}
+                key={palette.id}
                 colors={palette.colors.slice(0, isPro ? palette.colors.length : 4)}
                 name={palette.name}
                 navigation={navigation}

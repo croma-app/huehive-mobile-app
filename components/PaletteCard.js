@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import * as React from 'react';
 import { useState } from 'react';
 import { StyleSheet, View, Text, Platform, TouchableOpacity } from 'react-native';
@@ -7,6 +8,7 @@ import { Share, PermissionsAndroid } from 'react-native';
 
 import MultiColorView from './MultiColorView';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Feather from 'react-native-vector-icons/Feather';
 import { logEvent, notifyMessage, sendClientError } from '../libs/Helpers';
 import ViewShot from 'react-native-view-shot';
 import { UndoDialog } from '../components/CommonDialogs';
@@ -32,13 +34,13 @@ const MenuItemWrapper = ({ onPress, icon, label }) => (
 
 const MenuAnchor = ({ onPress }) => (
   <TouchableOpacity style={styles.menuAnchorContainer} onPress={onPress}>
-    <FontAwesome style={styles.actionButton} size={20} name="ellipsis-v" />
-    <View style={styles.menuAnchor} />
+    <Feather style={styles.actionButton} size={18} name="more-horizontal" />
   </TouchableOpacity>
 );
 
-export const PaletteCard = (props) => {
-  const [animationType, setAnimationType] = React.useState('fadeInLeftBig');
+export const PaletteCard = (propsdata) => {
+  const { colors, name, navigation, paletteId } = propsdata;
+  const [animationType, setAnimationType] = React.useState('fadeInUpBig');
   const viewShotRef = React.useRef();
   const { deletePalette, setCurrentPalette } = useApplicationStore();
   const [isDeleteActive, setIsDeleteActive] = React.useState(false);
@@ -53,9 +55,9 @@ export const PaletteCard = (props) => {
     hideMenu();
     setIsDeleteActive(true);
     timer.current = setTimeout(() => {
-      deletePalette(props.paletteId);
+      deletePalette(paletteId);
     }, 2000);
-  }, [deletePalette, props.paletteId]);
+  }, [deletePalette, paletteId]);
 
   const undoDeletion = React.useCallback(() => {
     setIsDeleteActive(false);
@@ -64,7 +66,7 @@ export const PaletteCard = (props) => {
   }, []);
 
   const onDownload = async () => {
-    logEvent('home_screen_palette_card_download', props.colors.length + '');
+    logEvent('home_screen_palette_card_download', colors.length + '');
     try {
       const uri = await viewShotRef.current.capture();
       let granted = Platform.OS == 'ios';
@@ -81,16 +83,16 @@ export const PaletteCard = (props) => {
       const downloadPath =
         Platform.OS === 'ios' ? RNFS.DocumentDirectoryPath : RNFS.DownloadDirectoryPath;
 
-      let path = downloadPath + '/' + props.name + '.png';
+      let path = downloadPath + '/' + name + '.png';
       const isFileExists = await RNFS.exists(path);
       if (isFileExists) {
-        path = downloadPath + '/' + props.name + Math.floor(Math.random() * 100000) + '.png';
+        path = downloadPath + '/' + name + Math.floor(Math.random() * 100000) + '.png';
       }
       // write a new file
       await RNFS.copyFile(uri, path);
       if (Platform.OS == 'android') {
         RNFetchBlob.android.addCompleteDownload({
-          title: props.name,
+          title: name,
           description: t('Download complete'),
           mime: 'image/png',
           path: path,
@@ -113,16 +115,16 @@ export const PaletteCard = (props) => {
 
   const onShare = async () => {
     try {
-      logEvent('home_screen_palette_card_share', props.colors.length + '');
+      logEvent('home_screen_palette_card_share', colors.length + '');
       // https://huehive.co/color_palettes/f8a6a1-dcdcdc-f2b3ad-e0e0e0-aec6cf-c4c4c4
       const result = await Share.share({
-        message: `HueHive - Palette Manager\nColors:\n${props.colors
+        message: `HueHive - Palette Manager\nColors:\n${colors
           .map((colorObj) => colorObj.color)
           .join('\n')}
 
           https://huehive.co/color_palettes/${props.colors
             .map((colorObj) => colorObj.color.replace('#', '').toLowerCase())
-            .join('-')}?name=${encodeURIComponent(props.name)}`
+            .join('-')}?name=${encodeURIComponent(name)}`
       });
 
       if (result.action === Share.sharedAction) {
@@ -143,20 +145,20 @@ export const PaletteCard = (props) => {
     <>
       {!isDeleteActive ? (
         <Card
-          {...props}
+          {...propsdata}
           onPress={() => {
-            setCurrentPalette({ name: props.name });
-            props.navigation.navigate('Palette');
+            setCurrentPalette({ name: name });
+            navigation.navigate('Palette');
           }}
           animationType={animationType}>
           <ViewShot
             ref={viewShotRef}
-            options={{ fileName: props.name + '.png', format: 'png', quality: 0.9 }}>
-            <MultiColorView {...props}></MultiColorView>
+            options={{ fileName: name + '.png', format: 'png', quality: 0.9 }}>
+            <MultiColorView {...propsdata}></MultiColorView>
           </ViewShot>
-          <View style={styles.bottom}>
+          <View style={styles.info}>
             <Text style={styles.label}>
-              {props.name.substring(0, 50) + (props.name.length > 50 ? '...' : '')}
+              {name.substring(0, 50) + (name.length > 50 ? '...' : '')}
             </Text>
             <View style={styles.actionButtonsView}>
               <Menu
@@ -180,7 +182,7 @@ export const PaletteCard = (props) => {
                 <MenuItemWrapper
                   onPress={() => {
                     logEvent('home_screen_open_in_generator');
-                    props.navigation.navigate('ColorList', { colors: props.colors });
+                    navigation.navigate('ColorList', { colors: colors });
                   }}
                   icon="code-fork"
                   label="Fork"
@@ -188,8 +190,8 @@ export const PaletteCard = (props) => {
                 <MenuItemWrapper
                   onPress={() => {
                     logEvent('home_screen_edit');
-                    setCurrentPalette({ name: props.name });
-                    props.navigation.navigate('Palette');
+                    setCurrentPalette({ name: name });
+                    navigation.navigate('Palette');
                   }}
                   icon="edit"
                   label="Edit"
@@ -199,7 +201,7 @@ export const PaletteCard = (props) => {
           </View>
         </Card>
       ) : (
-        <UndoDialog key={props.name} name={props.name} undoDeletion={undoDeletion} />
+        <UndoDialog key={name} name={name} undoDeletion={undoDeletion} />
       )}
     </>
   );
@@ -215,22 +217,21 @@ PaletteCard.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  bottom: {
+  info: {
+    display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
-    padding: 4,
-    height: 54
+    alignItems: 'center'
   },
   actionButtonsView: {
     flexDirection: 'row',
     alignItems: 'flex-end'
   },
   actionButton: {
-    padding: 8
+    padding: 4
   },
   label: {
     flex: 1,
-    marginHorizontal: 16,
+    marginHorizontal: 8,
     color: Colors.darkGrey
   },
   menuAnchorContainer: {
