@@ -32,25 +32,29 @@ const HamburgerMenu = (props) => {
   };
   return (
     <SafeAreaView style={[styles.container]}>
-      <TouchableOpacity
-        onPress={() => {
-          if (userData) {
-            navigate('UserProfile');
-          }
-        }}>
-        <View style={[styles.titleArea, { height: props.navigation.headerHeight }]}>
-          <Image
-            style={styles.logo}
-            source={
-              userData
-                ? { uri: userData.avatar_url }
-                : // eslint-disable-next-line no-undef
-                  require('../assets/images/icon.png')
+      {userData ? (
+        <TouchableOpacity
+          onPress={() => {
+            if (userData) {
+              navigate('UserProfile');
             }
-          />
-          <Text style={styles.headerText}>{userData ? userData.fullName : t('HueHive')}</Text>
+          }}>
+          <View style={[styles.titleArea, { height: props.navigation.headerHeight }]}>
+            <Image style={styles.logo} source={{ uri: userData.avatar_url }} />
+            <Text style={styles.headerText}>{userData.fullName}</Text>
+          </View>
+          <View style={styles.horizontalLine}></View>
+        </TouchableOpacity>
+      ) : (
+        <View>
+          <View style={[styles.titleArea, { height: props.navigation.headerHeight }]}>
+            <Image style={styles.logo} source={require('../assets/images/icon.png')} />
+            <Text style={styles.headerText}>{t('Huehive (Color palette app)')}</Text>
+          </View>
+          <View style={styles.horizontalLine}></View>
         </View>
-      </TouchableOpacity>
+      )}
+
       <ScrollView>
         {userData && (
           <TouchableOpacity
@@ -63,7 +67,7 @@ const HamburgerMenu = (props) => {
               <View style={styles.menuIcon}>
                 <MaterialCommunityIcons name="history" style={styles.icon} />
               </View>
-              <Text style={styles.textAreaMenuItem}>{t('Your AI Chats')}</Text>
+              <Text style={styles.textAreaMenuItem}>{t('Huehive AI chat history')}</Text>
             </View>
           </TouchableOpacity>
         )}
@@ -79,7 +83,7 @@ const HamburgerMenu = (props) => {
               <View style={styles.menuIcon}>
                 <MaterialCommunityIcons name="palette-swatch" style={styles.icon} />
               </View>
-              <Text style={styles.textAreaMenuItem}>{t('Palette library')}</Text>
+              <Text style={styles.textAreaMenuItem}>{t('Explore palettes')}</Text>
             </View>
           </TouchableOpacity>
           {
@@ -90,8 +94,8 @@ const HamburgerMenu = (props) => {
                   ? 'market://details?id=app.croma'
                   : 'https://apps.apple.com/app/id1596763657?action=write-review'
               }
-              icon={<MaterialIcons name="rate-review" style={styles.icon} />}>
-              {t('Like the App? Please rate us')}
+              icon={<MaterialIcons name="star" style={styles.icon} />}>
+              {t('Rate us on playstore')}
             </MenuLink>
           }
           <TouchableOpacity
@@ -145,7 +149,7 @@ const HamburgerMenu = (props) => {
                 <View style={{ ...styles.menuIcon, paddingLeft: 4 }}>
                   <MaterialCommunityIcons name="login" style={styles.icon} />
                 </View>
-                <Text style={[styles.title, styles.textAreaMenuItem]}>{t('Login/Signup')}</Text>
+                <Text style={[styles.textAreaMenuItem]}>{t('Login/Signup')}</Text>
               </View>
             </TouchableOpacity>
           )}
@@ -169,7 +173,7 @@ function MenuLink(props) {
         Linking.openURL(props.link);
       }}>
       <View style={styles.menuItemView}>
-        <View style={styles.menuIcon}>{props.icon}</View>
+        <View>{props.icon}</View>
         <Text style={styles.textAreaMenuItem}>{props.children}</Text>
       </View>
     </TouchableOpacity>
@@ -182,7 +186,8 @@ MenuLink.propTypes = {
   icon: PropTypes.icon,
   children: PropTypes.children
 };
-const menuHeight = 50;
+
+const menuHeight = 70;
 const padding = 10;
 const styles = StyleSheet.create({
   container: {
@@ -191,7 +196,7 @@ const styles = StyleSheet.create({
     marginTop: -4
   },
   titleArea: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
     padding: padding
   },
@@ -199,7 +204,8 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     padding: padding,
-    borderRadius: 24
+    borderRadius: 24,
+    marginBottom: 10
   },
   title: {
     color: 'black'
@@ -216,22 +222,27 @@ const styles = StyleSheet.create({
   },
   menuItemView: {
     flex: 1,
-    flexDirection: 'row'
+    flexDirection: 'row',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 10
   },
   textAreaMenuItem: {
     fontWeight: '500',
-    textAlignVertical: 'center',
-    padding: padding,
-    alignItems: 'flex-start'
+    fontSize: 16
   },
-  menuIcon: {},
   icon: {
-    fontSize: menuHeight - 2 * padding,
+    fontSize: (menuHeight - 2 * padding) * (6 / 10),
     padding: padding,
-    color: 'black'
+    color: '#434343'
   },
   headerText: {
-    paddingLeft: 5
+    fontSize: 18
+  },
+  horizontalLine: {
+    height: 1,
+    width: '100%',
+    backgroundColor: '#ccc'
   }
 });
 
