@@ -11,7 +11,6 @@ const useApplicationStore = create((set) => ({
   deletedPalettes: {},
   isLoading: false,
   isPro: false,
-  isStoreLoaded: false,
   purchaseDetails: null,
   detailedColor: null,
   commonPalettes: [],
@@ -98,10 +97,6 @@ const useApplicationStore = create((set) => ({
 
   setPurchase: (details) => {
     set({ isPro: true, purchaseDetails: details });
-  },
-
-  setStoreLoaded: (isStoreLoaded) => {
-    set({ isStoreLoaded });
   },
 
   setCurrentPalette: (currentPalette) => {

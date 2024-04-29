@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Text, View, StyleSheet, TextInput, Platform, ScrollView } from 'react-native';
 import { PalettePreviewCard } from '../components/PalettePreviewCard';
 import Colors from '../constants/Colors';
@@ -24,6 +24,14 @@ export default function SavePaletteScreen({ navigation, route }) {
     setFinalColors(colors);
   }, []);
 
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+
   const [paletteName, setPaletteName] = useState(route.params?.suggestedName ?? '');
 
   const handleUnlockPro = () => {
@@ -37,11 +45,12 @@ export default function SavePaletteScreen({ navigation, route }) {
         name={paletteName}
       />
       <View style={styles.card}>
-        <Text style={[styles.label, styles.title]}>ADD NEW PALETTE</Text>
         <View style={styles.inputContainer}>
           <TextInput
+            ref={inputRef}
             style={styles.input}
             value={paletteName}
+            autoFocus
             placeholder={t('Enter a name for the palette')}
             onChangeText={(name) => setPaletteName(name)}
           />

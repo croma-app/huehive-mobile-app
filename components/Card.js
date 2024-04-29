@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import * as Animatable from 'react-native-animatable';
 import { StyleSheet, View, TouchableOpacity, Animated } from 'react-native';
-import Colors from '../constants/Colors';
 import PropTypes from 'prop-types';
 
 const Card = ({ animationType, onLongPress, onPress, children }) => {
@@ -34,8 +33,7 @@ const Card = ({ animationType, onLongPress, onPress, children }) => {
         onLongPress={onLongPress}
         onPress={onPress}
         onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
-        style={styles.touchable}>
+        onPressOut={handlePressOut}>
         <Animated.View style={[styles.inner, scaleStyle]}>
           <View>{children}</View>
         </Animated.View>
@@ -52,15 +50,19 @@ Card.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  touchable: {
-    borderRadius: 8
-  },
   inner: {
-    backgroundColor: Colors.white,
     marginVertical: 8,
-    elevation: 1,
-    overflow: 'hidden',
-    borderRadius: 8
+
+    // Shadow properties for iOS
+    shadowColor: '#ccc',
+    shadowOffset: {
+      width: 1,
+      height: 1
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    // Elevation property for Android
+    elevation: 2
   }
 });
 

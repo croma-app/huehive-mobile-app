@@ -146,15 +146,17 @@ PaletteScreen.propTypes = {
 
 const CustomHeader = ({ currentPaletteName }) => {
   const [paletteName, setPaletteName] = useState(currentPaletteName);
-  const { renamePalette, currentPalette, setCurrentPalette } = useApplicationStore();
+  const { updatePalette, currentPalette, setCurrentPalette } = useApplicationStore();
   const [isEditingPaletteName, setIsEditingPaletteName] = useState(false);
+
+  console.log({ currentPalette });
 
   useEffect(() => {
     setPaletteName(currentPaletteName);
   }, [currentPaletteName]);
 
   const onDone = () => {
-    renamePalette(currentPaletteName, paletteName);
+    updatePalette(currentPalette.id, { ...currentPalette, name: paletteName });
     setCurrentPalette({ ...currentPalette, name: paletteName });
     setIsEditingPaletteName(false);
   };

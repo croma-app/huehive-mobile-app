@@ -11,14 +11,15 @@ import {
 } from 'react-native';
 import Color from 'pigment/full';
 import RNColorThief from 'react-native-color-thief';
+import Feather from 'react-native-vector-icons/Feather';
 import { notifyMessage, sendClientError } from '../libs/Helpers';
 import { generateRandomColorPalette } from '../libs/ColorHelper';
 import Colors from '../constants/Colors';
 import ActionButtonContainer from './ActionButton';
 import { logEvent, purchase } from '../libs/Helpers';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Evillcon from 'react-native-vector-icons/EvilIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
@@ -126,9 +127,9 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
         config={[
           [
             {
-              icon: <MaterialCommunityIcons name="camera" size={20} color={Colors.fabPrimary} />,
-              text1: 'Pick colors',
-              text2: 'from camera',
+              icon: <Evillcon name="camera" size={20} />,
+              text1: 'Palette',
+              text2: 'using camera',
               onPress: async () => {
                 const pickedColors = await NativeModules.CromaModule.navigateToColorPicker();
                 logEvent('hm_pick_text_colors_from_camera', {
@@ -139,17 +140,15 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
               }
             },
             {
-              icon: <Ionicons name="md-image" color={Colors.fabPrimary} size={20} />,
-              text1: t('Pick colors'),
-              text2: t('from Image'),
+              icon: <Evillcon name="image" size={20} />,
+              text1: t('Palette'),
+              text2: t('using image'),
               onPress: handleImagePicker
             },
             {
-              icon: (
-                <MaterialCommunityIcons name="palette-swatch" color={Colors.fabPrimary} size={20} />
-              ),
-              text1: t('Get Palette'),
-              text2: t('from Color'),
+              icon: <Ionicons name="color-palette-outline" size={20} />,
+              text1: t('Palette'),
+              text2: t('using color'),
               onPress: () => {
                 logEvent('get_palette_from_color');
                 setIsColorPickerVisible(true);
@@ -158,18 +157,18 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
           ],
           [
             {
-              icon: <Ionicons name="md-color-palette" color={Colors.fabPrimary} size={20} />,
-              text1: t('Create quick'),
-              text2: t('Palette'),
+              icon: <Ionicons name="md-shuffle" size={20} />,
+              text1: t('Quick'),
+              text2: t('palette'),
               onPress: () => {
                 logEvent('generate_random_colors');
                 handleRandomColors();
               }
             },
             {
-              icon: <FontAwesome5 name="magic" size={20} color={Colors.fabPrimary} />,
-              text1: t('Create with'),
-              text2: t('HueHive AI'),
+              icon: <FontAwesome5 name="magic" size={20} />,
+              text1: t('Palette using'),
+              text2: t('HueHive ai'),
               onPress: async () => {
                 logEvent('chat_session_action_button');
                 navigation.navigate('ChatSession');
@@ -177,8 +176,8 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
             },
             isPro
               ? {
-                  icon: <Ionicons name="md-color-filter" color={Colors.fabPrimary} size={20} />,
-                  text1: t('Create New'),
+                  icon: <Ionicons name="md-color-filter" size={20} />,
+                  text1: t('Manully create'),
                   text2: t('Palette'),
                   onPress: () => {
                     logEvent('create_new_palette');
@@ -187,7 +186,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                   }
                 }
               : {
-                  icon: <FontAwesome5 size={20} color={Colors.fabPrimary} name="unlock" />,
+                  icon: <Feather name="unlock" size={20} />,
                   text1: t('Unlock'),
                   text2: t('Pro'),
                   onPress: () => purchase(setPurchase)
@@ -245,7 +244,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                     </TouchableOpacity>
                   )}
                   <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
-                    <Ionicons name="arrow-forward" size={24} color={Colors.fabPrimary} />
+                    <Ionicons name="arrow-forward" size={24} color={Color.fabPrimary} />
                   </TouchableOpacity>
                 </View>
                 <TouchableOpacity style={styles.pickColorsButton} onPress={handlePickColors}>
