@@ -9,8 +9,7 @@ import {
   Platform,
   TouchableOpacity
 } from 'react-native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { logEvent } from '../libs/Helpers';
@@ -81,7 +80,7 @@ const HamburgerMenu = (props) => {
             }}>
             <View style={styles.menuItemView}>
               <View style={styles.menuIcon}>
-                <MaterialCommunityIcons name="palette-swatch" style={styles.icon} />
+                <MaterialCommunityIcons name="palette-swatch-outline" style={styles.icon} />
               </View>
               <Text style={styles.textAreaMenuItem}>{t('Explore palettes')}</Text>
             </View>
@@ -94,7 +93,7 @@ const HamburgerMenu = (props) => {
                   ? 'market://details?id=app.croma'
                   : 'https://apps.apple.com/app/id1596763657?action=write-review'
               }
-              icon={<MaterialIcons name="star" style={styles.icon} />}>
+              icon={<MaterialIcons name="star-outline" style={styles.icon} />}>
               {t('Rate us on playstore')}
             </MenuLink>
           }
@@ -106,7 +105,7 @@ const HamburgerMenu = (props) => {
             }}>
             <View style={styles.menuItemView}>
               <View style={[styles.menuIcon, { paddingLeft: 4 }]}>
-                <FontAwesome5 name="unlock" style={styles.icon} />
+                <Feather name="unlock" style={styles.icon} />
               </View>
               <Text style={styles.textAreaMenuItem}>{t('Pro benefits')}</Text>
             </View>
@@ -119,7 +118,7 @@ const HamburgerMenu = (props) => {
             }}>
             <View style={styles.menuItemView}>
               <View style={styles.menuIcon}>
-                <FontAwesome5 name="file-import" style={styles.icon} />
+                <MaterialIcons name="import-export" style={styles.icon} />
               </View>
               <Text style={styles.textAreaMenuItem}>{t('import/export palettes')}</Text>
             </View>
@@ -132,7 +131,7 @@ const HamburgerMenu = (props) => {
             }}>
             <View style={styles.menuItemView}>
               <View style={{ ...styles.menuIcon, paddingLeft: 4 }}>
-                <Ionicons name="information-circle" style={styles.icon} />
+                <MaterialCommunityIcons name="information-outline" style={styles.icon} />
               </View>
               <Text style={[styles.textAreaMenuItem]}>{t('About us')}</Text>
             </View>
@@ -147,7 +146,7 @@ const HamburgerMenu = (props) => {
               }}>
               <View style={styles.menuItemView}>
                 <View style={{ ...styles.menuIcon, paddingLeft: 4 }}>
-                  <MaterialCommunityIcons name="login" style={styles.icon} />
+                  <Feather name="user" style={styles.icon} />
                 </View>
                 <Text style={[styles.textAreaMenuItem]}>{t('Login/Signup')}</Text>
               </View>
@@ -232,7 +231,7 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   icon: {
-    fontSize: (menuHeight - 2 * padding) * (6 / 10),
+    fontSize: (menuHeight - 2 * padding) * (4 / 10),
     padding: padding,
     color: '#434343'
   },
