@@ -52,6 +52,7 @@ Card.propTypes = {
 const styles = StyleSheet.create({
   inner: {
     marginVertical: 8,
+    backgroundColor: '#fff', // Set a background color
 
     // Shadow properties for iOS
     shadowColor: '#ccc',
@@ -61,8 +62,9 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+
     // Elevation property for Android
-    elevation: 2
+    elevation: 1
   }
 });
 
