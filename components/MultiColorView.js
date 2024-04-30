@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   palette: {
     alignItems: 'stretch',
     flexDirection: 'row',
-    height: 45,
+    height: 60,
     overflow: 'hidden',
     borderTopLeftRadius: 4,
     borderTopRightRadius: 4
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     marginStart: -1
   },
   emptyContainer: {
-    height: 45,
+    height: 60,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5F5F5',

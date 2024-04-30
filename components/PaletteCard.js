@@ -34,7 +34,7 @@ const MenuItemWrapper = ({ onPress, icon, label }) => (
 
 const MenuAnchor = ({ onPress }) => (
   <TouchableOpacity style={styles.menuAnchorContainer} onPress={onPress}>
-    <Feather style={styles.actionButton} size={18} name="more-horizontal" />
+    <Feather style={styles.actionButton} size={20} name="more-horizontal" />
   </TouchableOpacity>
 );
 

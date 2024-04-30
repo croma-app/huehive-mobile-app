@@ -176,9 +176,9 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
             },
             isPro
               ? {
-                  icon: <Ionicons name="md-color-filter" size={20} />,
-                  text1: t('Manully create'),
-                  text2: t('Palette'),
+                  icon: <Ionicons name="md-color-filter-outline" size={20} />,
+                  text1: t('Create palette'),
+                  text2: t(' manully'),
                   onPress: () => {
                     logEvent('create_new_palette');
                     clearPalette();
