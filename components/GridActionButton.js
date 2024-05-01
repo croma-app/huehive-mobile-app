@@ -33,7 +33,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   const [selectedImage, setSelectedImage] = React.useState(null);
   const [automaticColors, setAutomaticColors] = React.useState([]);
 
-  const { isPro, setPurchase, setDetailedColor, clearPalette } = useApplicationStore();
+  const { isPro, setPurchase, setDetailedColor } = useApplicationStore();
 
   const pickImageResult = async () => {
     setPickImageLoading(true);
@@ -45,7 +45,6 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   };
 
   const handleColorSelected = (color) => {
-    clearPalette();
     setDetailedColor(color);
     setIsColorPickerVisible(false);
     navigation.navigate('Palettes');
@@ -102,7 +101,6 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   };
 
   const handleNext = () => {
-    clearPalette();
     navigation.navigate('ColorList', { colors: automaticColors.map((color) => ({ color })) });
     setSelectedImage(null);
     setAutomaticColors([]);
@@ -118,7 +116,6 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
     const randomColors = colorsHex.map((colorHex) => {
       return { color: colorHex, locked: false };
     });
-    clearPalette();
     navigation.navigate('ColorList', { colors: randomColors });
   };
   return (
@@ -135,7 +132,6 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                 logEvent('hm_pick_text_colors_from_camera', {
                   length: pickedColors.length
                 });
-                clearPalette();
                 navigation.navigate('ColorList', { colors: JSON.parse(pickedColors)?.colors });
               }
             },
@@ -181,7 +177,6 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                   text2: t(' manully'),
                   onPress: () => {
                     logEvent('create_new_palette');
-                    clearPalette();
                     navigation.navigate('SavePalette');
                   }
                 }
