@@ -18,13 +18,11 @@ import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import useUserData from '../hooks/useUserData';
 import useAuth from '../hooks/useAuth';
-import useApplicationStore from '../hooks/useApplicationStore';
 
 const HamburgerMenu = (props) => {
   const { t } = useTranslation();
   const { userData } = useUserData();
   const { openAuthOverlay } = useAuth();
-  const { clearPalette } = useApplicationStore();
   const navigate = function (screen) {
     props.toggleSideMenu();
     props.navigation.navigate(screen);
@@ -72,7 +70,6 @@ const HamburgerMenu = (props) => {
             style={styles.menuItem}
             onPress={async () => {
               logEvent('hm_palette_library');
-              clearPalette();
               navigate('PaletteLibrary');
             }}>
             <View style={styles.menuItemView}>
