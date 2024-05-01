@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+/* eslint-disable react/prop-types */
+import React, { useCallback, useLayoutEffect, useState } from 'react';
 import SingleColorCard from '../components/SingleColorCard';
 import {
   Dimensions,
@@ -15,7 +16,7 @@ import ActionButton from 'react-native-action-button';
 import Colors from '../constants/Colors';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { logEvent } from '../libs/Helpers';
-import Feather from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { notifyMessage } from '../libs/Helpers';
 import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
@@ -23,23 +24,22 @@ import PropTypes from 'prop-types';
 import ColorPickerModal from '../components/ColorPickerModal';
 import useApplicationStore from '../hooks/useApplicationStore';
 
-export default function PaletteScreen({ navigation }) {
+export default function PaletteScreen({ navigation, route }) {
   const {
     isPro,
     allPalettes,
     updatePalette,
     deleteColorFromPalette,
     addNewColorToPalette,
-    setDetailedColor,
-    currentPalette
+    setDetailedColor
   } = useApplicationStore();
+
+  const paletteId = route.params.paletteId;
 
   const [isColorPickerVisible, setIsColorPickerVisible] = useState(false);
 
-  const paletteName = currentPalette?.name ?? '';
-
   const { height } = Dimensions.get('window');
-  const palette = allPalettes.find((palette) => palette.name === paletteName);
+  const palette = allPalettes.find((palette) => palette.id === paletteId);
   const colors = palette?.colors;
   const onColorDelete = React.useCallback(
     (hex) => {
@@ -51,8 +51,8 @@ export default function PaletteScreen({ navigation }) {
   logEvent('palette_screen');
 
   useLayoutEffect(() => {
-    setNavigationOptions({ navigation, paletteName });
-  }, [navigation, paletteName]);
+    setNavigationOptions({ navigation, paletteId: palette.id });
+  }, [navigation, palette.id]);
 
   const renderItem = React.useCallback(
     (renderItemParams) => {
@@ -144,20 +144,14 @@ PaletteScreen.propTypes = {
   navigation: PropTypes.any
 };
 
-const CustomHeader = ({ currentPaletteName }) => {
-  const [paletteName, setPaletteName] = useState(currentPaletteName);
-  const { updatePalette, currentPalette, setCurrentPalette } = useApplicationStore();
+const CustomHeader = ({ paletteId }) => {
+  const { updatePalette, allPalettes } = useApplicationStore();
+  const palette = allPalettes.find((p) => p.id === paletteId);
+  const [paletteName, setPaletteName] = useState(palette.name);
   const [isEditingPaletteName, setIsEditingPaletteName] = useState(false);
 
-  console.log({ currentPalette });
-
-  useEffect(() => {
-    setPaletteName(currentPaletteName);
-  }, [currentPaletteName]);
-
   const onDone = () => {
-    updatePalette(currentPalette.id, { ...currentPalette, name: paletteName });
-    setCurrentPalette({ ...currentPalette, name: paletteName });
+    updatePalette(palette.id, { ...palette, name: paletteName });
     setIsEditingPaletteName(false);
   };
 
@@ -178,17 +172,17 @@ const CustomHeader = ({ currentPaletteName }) => {
               setPaletteName(name);
             }}
           />
-          <TouchableOpacity onPress={onDone} style={styles.doneButton}>
+          <TouchableOpacity onPress={onDone} style={styles.marginTop}>
             <MaterialIcons name="done" size={24} color="white" />
           </TouchableOpacity>
         </>
       ) : (
         <>
           <Text style={styles.headerTitle}>
-            {paletteName.substring(0, 30) + (paletteName.length > 30 ? '...' : '')}
+            {paletteName.substring(0, 25) + (paletteName.length > 25 ? '...' : '')}
           </Text>
-          <TouchableOpacity onPress={onEdit}>
-            <Feather name="edit" size={24} color="white" />
+          <TouchableOpacity onPress={onEdit} style={styles.marginTop}>
+            <AntDesign name="edit" size={20} color="white" />
           </TouchableOpacity>
         </>
       )}
@@ -196,11 +190,12 @@ const CustomHeader = ({ currentPaletteName }) => {
   );
 };
 
-CustomHeader.propTypes = { currentPaletteName: PropTypes.string };
+CustomHeader.propTypes = { paletteId: PropTypes.string };
 
-const setNavigationOptions = ({ navigation, paletteName }) => {
+const setNavigationOptions = (props) => {
+  const { navigation, paletteId } = props;
   navigation.setOptions({
-    headerTitle: () => <CustomHeader currentPaletteName={paletteName} />
+    headerTitle: () => <CustomHeader paletteId={paletteId} />
   });
 };
 
@@ -211,28 +206,28 @@ const styles = StyleSheet.create({
   listview: {
     margin: 8
   },
-  actionButton: {},
   headerContainer: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     width: '90%'
   },
   headerTitle: {
     color: '#ffffff',
-    fontSize: 16
-  },
-  doneButton: {
-    marginTop: 12
+    fontSize: 20
   },
   input: {
     color: '#ffffff',
-    fontSize: 18,
+    fontSize: 20,
     maxWidth: '80%'
   },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  marginTop: {
+    marginTop: 4
   },
   modalContent: {
     backgroundColor: 'white',
