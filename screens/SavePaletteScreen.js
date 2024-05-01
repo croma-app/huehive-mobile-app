@@ -1,10 +1,10 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, StyleSheet, TextInput, Platform, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, TextInput, ScrollView } from 'react-native';
 import { PalettePreviewCard } from '../components/PalettePreviewCard';
 import Colors from '../constants/Colors';
 import CromaButton from '../components/CromaButton';
 import { TextDialog } from '../components/CommonDialogs';
-import { StackActions } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
 import { logEvent } from '../libs/Helpers';
 import useApplicationStore from '../hooks/useApplicationStore';
@@ -13,7 +13,7 @@ export default function SavePaletteScreen({ navigation, route }) {
   logEvent('save_palette_screen');
 
   const { t } = useTranslation();
-  const { addPalette, allPalettes, isPro, setCurrentPalette } = useApplicationStore();
+  const { addPalette, allPalettes, isPro } = useApplicationStore();
 
   const [finalColors, setFinalColors] = useState([]);
   const [isPaletteNameExist, setIsPaletteNameExist] = React.useState(false);
@@ -22,7 +22,7 @@ export default function SavePaletteScreen({ navigation, route }) {
     let colorsFromParams = route.params?.colors;
     const colors = [...new Set(colorsFromParams || [])];
     setFinalColors(colors);
-  }, []);
+  }, [route.params?.colors]);
 
   const inputRef = useRef(null);
 
@@ -70,11 +70,7 @@ export default function SavePaletteScreen({ navigation, route }) {
                 colors: finalColors.slice(0, isPro ? finalColors.length : 4)
               };
               addPalette(palette);
-              setPaletteName(undefined);
-              navigation.path === 'Palette' ? setCurrentPalette(palette) : setCurrentPalette({});
-              Platform.OS === 'android' || Platform.OS === 'ios'
-                ? navigation.dispatch(StackActions.popToTop())
-                : navigation.replace('Home');
+              navigation.popToTop();
             }}>
             {t('Save')}
           </CromaButton>

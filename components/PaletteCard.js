@@ -42,7 +42,7 @@ export const PaletteCard = (propsdata) => {
   const { colors, name, navigation, paletteId } = propsdata;
   const [animationType, setAnimationType] = React.useState('fadeInUpBig');
   const viewShotRef = React.useRef();
-  const { deletePalette, setCurrentPalette } = useApplicationStore();
+  const { deletePalette } = useApplicationStore();
   const [isDeleteActive, setIsDeleteActive] = React.useState(false);
   const [visible, setVisible] = useState(false);
 
@@ -147,8 +147,9 @@ export const PaletteCard = (propsdata) => {
         <Card
           {...propsdata}
           onPress={() => {
-            setCurrentPalette({ name: name });
-            navigation.navigate('Palette');
+            navigation.navigate('Palette', {
+              paletteId
+            });
           }}
           animationType={animationType}>
           <ViewShot
@@ -190,8 +191,7 @@ export const PaletteCard = (propsdata) => {
                 <MenuItemWrapper
                   onPress={() => {
                     logEvent('home_screen_edit');
-                    setCurrentPalette({ name: name });
-                    navigation.navigate('Palette');
+                    navigation.navigate('Palette', { paletteId });
                   }}
                   icon="edit"
                   label="Edit"
