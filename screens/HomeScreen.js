@@ -21,7 +21,7 @@ import Colors from '../constants/Colors';
 import useApplicationStore from '../hooks/useApplicationStore';
 
 const HomeScreen = function ({ navigation, route }) {
-  const { isLoading, allPalettes, isPro, clearPalette } = useApplicationStore();
+  const { isLoading, allPalettes, isPro } = useApplicationStore();
   const [pickImageLoading, setPickImageLoading] = useState(false);
   const getPermissionAsync = async () => {
     if (Platform?.OS === 'ios') {
@@ -48,7 +48,6 @@ const HomeScreen = function ({ navigation, route }) {
               var item = part.split('=');
               result[item[0]] = decodeURIComponent(item[1]);
             });
-          clearPalette();
           navigation.navigate('SavePalette', {
             colors: [...new Set(JSON.parse(result['colors']) || [])],
             suggestedName: result['name']
@@ -63,12 +62,11 @@ const HomeScreen = function ({ navigation, route }) {
           for (var i = 0, l = colors.length; i < l; i++) {
             colors[i] = { color: colors[i].tohex().toLowerCase() };
           }
-          clearPalette();
           navigation.navigate('SavePalette', { colors });
         }
       });
     }
-  }, [clearPalette, navigation]);
+  }, [navigation]);
 
   if (isLoading) {
     return (
