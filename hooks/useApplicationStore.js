@@ -7,7 +7,6 @@ import network from '../network';
 
 const useApplicationStore = create((set) => ({
   allPalettes: [],
-  currentPalette: {},
   deletedPalettes: {},
   isLoading: false,
   isPro: false,
@@ -99,20 +98,12 @@ const useApplicationStore = create((set) => ({
     set({ isPro: true, purchaseDetails: details });
   },
 
-  setCurrentPalette: (currentPalette) => {
-    set({ currentPalette });
-  },
-
   setDetailedColor: (detailedColor) => {
     set({ detailedColor });
   },
 
   setCommonPalettes: (commonPalettes) => {
     set({ commonPalettes });
-  },
-
-  clearPalette: () => {
-    set({ currentPalette: {} });
   }
 }));
 
