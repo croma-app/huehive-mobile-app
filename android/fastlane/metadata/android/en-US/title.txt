@@ -1,1 +1,1 @@
-HueHive - Palette Manager
+HueHive: Color Palette Manager
