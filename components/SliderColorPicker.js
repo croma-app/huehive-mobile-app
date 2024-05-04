@@ -5,6 +5,7 @@ import {
   SliderValuePicker
 } from 'react-native-slider-color-picker';
 import { Dimensions, StyleSheet, View, Text } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import tinycolor from 'tinycolor2'; // TODO: change tinycolor to pigment
 import { logEvent } from '../libs/Helpers';
@@ -25,7 +26,7 @@ export default function SliderColorPicker(props) {
     }
   };
   return (
-    <View style={styles.container}>
+    <GestureHandlerRootView style={styles.container}>
       <View
         style={{
           marginHorizontal: 24,
@@ -74,7 +75,7 @@ export default function SliderColorPicker(props) {
           style={{ height: 12, borderRadius: 6, backgroundColor: 'black' }}
         />
       </View>
-    </View>
+    </GestureHandlerRootView>
   );
 }
 
