@@ -58,6 +58,7 @@ const ActionButtonContainer = function (props) {
                   return (
                     <>
                       <TouchableOpacity
+                        key={index}
                         onPress={() => {
                           setActive(false);
                           onPress();
