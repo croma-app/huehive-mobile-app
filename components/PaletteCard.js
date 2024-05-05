@@ -38,8 +38,8 @@ const MenuAnchor = ({ onPress }) => (
   </TouchableOpacity>
 );
 
-export const PaletteCard = (propsdata) => {
-  const { colors, name, navigation, paletteId } = propsdata;
+export const PaletteCard = (props) => {
+  const { colors, name, navigation, paletteId } = props;
   const [animationType, setAnimationType] = React.useState('fadeInUpBig');
   const viewShotRef = React.useRef();
   const { deletePalette } = useApplicationStore();
@@ -122,7 +122,7 @@ export const PaletteCard = (propsdata) => {
           .map((colorObj) => colorObj.color)
           .join('\n')}
 
-          https://huehive.co/color_palettes/${props.colors
+          https://huehive.co/color_palettes/${colors
             .map((colorObj) => colorObj.color.replace('#', '').toLowerCase())
             .join('-')}?name=${encodeURIComponent(name)}`
       });
@@ -145,7 +145,7 @@ export const PaletteCard = (propsdata) => {
     <>
       {!isDeleteActive ? (
         <Card
-          {...propsdata}
+          {...props}
           onPress={() => {
             navigation.navigate('Palette', {
               paletteId
@@ -155,7 +155,7 @@ export const PaletteCard = (propsdata) => {
           <ViewShot
             ref={viewShotRef}
             options={{ fileName: name + '.png', format: 'png', quality: 0.9 }}>
-            <MultiColorView {...propsdata}></MultiColorView>
+            <MultiColorView {...props}></MultiColorView>
           </ViewShot>
           <View style={styles.info}>
             <Text style={styles.label}>
