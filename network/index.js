@@ -5,7 +5,8 @@ import {
   deletePalette,
   patchPalette,
   addNewColorToPalette,
-  deleteColorFromPalette
+  deleteColorFromPalette,
+  getExplorePalettes
 } from './palettes';
 const network = {
   login: login,
@@ -15,6 +16,7 @@ const network = {
   deletePalette: deletePalette,
   patchPalette: patchPalette,
   addNewColorToPalette: addNewColorToPalette,
-  deleteColorFromPalette: deleteColorFromPalette
+  deleteColorFromPalette: deleteColorFromPalette,
+  getExplorePalettes: getExplorePalettes
 };
 export default network;
