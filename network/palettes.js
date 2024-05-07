@@ -44,3 +44,8 @@ export const deleteColorFromPalette = async (paletteId, colorId) => {
   const axiosClient = await getAxiosClient();
   return axiosClient.delete(`color_palettes/${paletteId}/colors/${colorId}.json`);
 };
+
+export const getExplorePalettes = async (page = 1, query = '') => {
+  const axiosClient = await getAxiosClient();
+  return axiosClient.get(`color_palettes/explore.json?page=${page}&query=${query}`);
+};
