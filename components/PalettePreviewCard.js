@@ -11,7 +11,9 @@ export class PalettePreviewCard extends React.Component {
         <View>
           <MultiColorView {...this.props}></MultiColorView>
           <View style={styles.bottom}>
-            <Text style={styles.label}>{this.props.name}</Text>
+            <Text style={styles.label}>
+              {this.props.name.substring(0, 55) + (this.props.name.length > 55 ? '...' : '')}
+            </Text>
           </View>
         </View>
       </Card>
@@ -23,12 +25,13 @@ const styles = StyleSheet.create({
   bottom: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 48
+    minHeight: 35
   },
   label: {
     flex: 1,
     fontWeight: '500',
-    marginHorizontal: 16,
+    fontSize: 12,
+    marginHorizontal: 8,
     color: Colors.darkGrey
   }
 });
