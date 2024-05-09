@@ -8,6 +8,7 @@ import {
   ActivityIndicator
 } from 'react-native';
 import { capitalizeFirstLetter, logEvent } from '../libs/Helpers';
+
 import { material } from 'react-native-typography';
 import Colors from '../constants/Colors';
 import network from '../network';
