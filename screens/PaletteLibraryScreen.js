@@ -71,7 +71,7 @@ export default function PaletteLibraryScreen({ navigation }) {
             onPress={() => {
               navigation.navigate('ColorList', {
                 colors: palette.colors,
-                suggestedName: name + ' - ' + palette.name
+                suggestedName: palette.name
               });
             }}
             colors={palette.colors}
