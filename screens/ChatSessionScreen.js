@@ -12,7 +12,7 @@ import {
 import Colors from '../constants/Colors';
 import React, { useState, useEffect, useRef } from 'react';
 import { material } from 'react-native-typography';
-import { logEvent, readRemoteConfig } from '../libs/Helpers';
+import { logEvent } from '../libs/Helpers';
 import ChatCard from '../components/ChatCard';
 import CromaButton from '../components/CromaButton';
 import useChatSession from '../hooks/useChatSession';
@@ -47,21 +47,6 @@ const ChatSessionScreen = (props) => {
 
   const { userData, isLoading: isUserDataLoading } = useUserData();
   const { openAuthOverlay } = useAuth();
-  const [canUserCreateChat, setCanUserCreateChat] = useState();
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!canUserCreateChat && !isUserDataLoading) {
-        if (userData && !isPro) {
-          setCanUserCreateChat(await readRemoteConfig('ai_behind_pro_version'));
-        }
-        if (isPro && userData) {
-          setCanUserCreateChat(true);
-        }
-      }
-    };
-    fetchData();
-  }, [canUserCreateChat, isPro, isUserDataLoading, userData]);
 
   useEffect(() => {
     if (!userData) {
@@ -158,7 +143,7 @@ const ChatSessionScreen = (props) => {
                 </View>
               )}
               <ActivityIndicator animating={isLoading} size="large" color="#ff7875" />
-              {canUserCreateChat ? (
+              {isPro ? (
                 <View style={styles.inputContainer}>
                   <TextInput
                     style={styles.input}

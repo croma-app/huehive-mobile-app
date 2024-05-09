@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, ActivityIndicator } from 'react-native';
+import React from 'react';
+import { ScrollView, StyleSheet, Text } from 'react-native';
 import { View } from 'react-native-animatable';
 import CromaButton from '../components/CromaButton';
-import { purchase, logEvent, readRemoteConfig } from '../libs/Helpers';
+import { purchase, logEvent } from '../libs/Helpers';
 import { material } from 'react-native-typography';
 import { initPurchase } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
@@ -11,21 +11,11 @@ import useApplicationStore from '../hooks/useApplicationStore';
 
 export default function ProScreen() {
   const { t } = useTranslation();
-  const [loading, setLoading] = useState(true);
   const { isPro, setPurchase } = useApplicationStore();
-  const [aiBehindFF, setAiBehindFF] = useState();
 
   const purchaseDevelopment = () => {
     purchase(setPurchase, 'support_development');
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setAiBehindFF(await readRemoteConfig('ai_behind_pro_version'));
-      setLoading(false);
-    };
-    fetchData();
-  }, []);
 
   const purchasePro = async () => {
     if (await purchase(setPurchase)) {
@@ -37,24 +27,17 @@ export default function ProScreen() {
 
   logEvent('pro_version_screen');
 
-  return loading ? (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <ActivityIndicator size="large" color={Colors.primary} />
-    </View>
-  ) : (
+  return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View>
         <Text style={styles.title}>{t('Unlock Pro Benefits')}</Text>
-        {aiBehindFF && (
-          <View style={styles.benefit}>
-            <Text style={styles.bulletPoint}>•</Text>
-            <Text style={styles.benefitText}>
-              {t(
-                'Use HiveHive AI assistant to create, explain, and modify color palettes with ease'
-              )}
-            </Text>
-          </View>
-        )}
+
+        <View style={styles.benefit}>
+          <Text style={styles.bulletPoint}>•</Text>
+          <Text style={styles.benefitText}>
+            {t('Use HiveHive AI assistant to create, explain, and modify color palettes with ease')}
+          </Text>
+        </View>
         <View style={styles.benefit}>
           <Text style={styles.bulletPoint}>•</Text>
           <Text style={styles.benefitText}>
