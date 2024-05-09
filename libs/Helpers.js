@@ -177,4 +177,8 @@ export function extractHexColors(text) {
   return Object.values(combinedHexMap);
 }
 
+export function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 export { logEvent, sendClientError, purchase, notifyMessage, initPurchase, readRemoteConfig };

@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   ActivityIndicator
 } from 'react-native';
-import { logEvent } from '../libs/Helpers';
+import { capitalizeFirstLetter, logEvent } from '../libs/Helpers';
+
 import { material } from 'react-native-typography';
 import Colors from '../constants/Colors';
 import network from '../network';
@@ -15,6 +16,7 @@ import useApplicationStore from '../hooks/useApplicationStore';
 import { PalettePreviewCard } from '../components/PalettePreviewCard';
 import { TextInput } from 'react-native-gesture-handler';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useTranslation } from 'react-i18next';
 const allPalettes = require('../constants/palettes/palettes').default;
 
 export default function PaletteLibraryScreen({ navigation }) {
@@ -22,6 +24,7 @@ export default function PaletteLibraryScreen({ navigation }) {
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const { setCommonPalettes } = useApplicationStore();
+  const { t } = useTranslation();
   useEffect(() => {
     logEvent('palette_library_screen');
   }, []);
@@ -31,7 +34,7 @@ export default function PaletteLibraryScreen({ navigation }) {
     const res = await network.getExplorePalettes(1, query);
     const palettes = res.data.search_results.map((p) => {
       return {
-        name: p.user_query,
+        name: p.user_query ? capitalizeFirstLetter(p.user_query) : p.user_query,
         colors: p.colors.map((color) => ({
           id: color.id,
           name: color.name,
@@ -71,7 +74,7 @@ export default function PaletteLibraryScreen({ navigation }) {
             onPress={() => {
               navigation.navigate('ColorList', {
                 colors: palette.colors,
-                suggestedName: name + ' - ' + palette.name
+                suggestedName: palette.name
               });
             }}
             colors={palette.colors}
@@ -79,6 +82,9 @@ export default function PaletteLibraryScreen({ navigation }) {
           />
         ))
       )}
+      <Text style={[styles.title, styles.popularTitle]}>
+        {t(' Explore popular palette libraries ')}
+      </Text>
       {allPalettes.map((palettes, index) => {
         return (
           <TouchableOpacity
@@ -107,7 +113,8 @@ export default function PaletteLibraryScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     paddingLeft: 12,
-    paddingRight: 12
+    paddingRight: 12,
+    marginBottom: 20
   },
   row: {
     backgroundColor: Colors.white,
@@ -123,7 +130,12 @@ const styles = StyleSheet.create({
   desc: {
     ...material.body1
   },
-  searchContainer: { flexDirection: 'row', alignItems: 'center', marginTop: 10 },
+  searchContainer: {
+    position: 'relative',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10
+  },
   searchText: {
     flex: 1,
     borderColor: Colors.grey,
@@ -134,6 +146,14 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     fontSize: 14
   },
-  searchIcon: { marginLeft: 10 },
+  searchIcon: {
+    marginLeft: 10,
+    position: 'absolute',
+    right: 10
+  },
+  popularTitle: {
+    textAlign: 'center',
+    marginBottom: 15
+  },
   loader: { margin: 20 }
 });
