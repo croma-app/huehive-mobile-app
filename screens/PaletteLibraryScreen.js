@@ -123,7 +123,12 @@ const styles = StyleSheet.create({
   desc: {
     ...material.body1
   },
-  searchContainer: { flexDirection: 'row', alignItems: 'center', marginTop: 10 },
+  searchContainer: {
+    position: 'relative',
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10
+  },
   searchText: {
     flex: 1,
     borderColor: Colors.grey,
@@ -134,6 +139,10 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     fontSize: 14
   },
-  searchIcon: { marginLeft: 10 },
+  searchIcon: {
+    marginLeft: 10,
+    position: 'absolute',
+    right: 10
+  },
   loader: { margin: 20 }
 });
