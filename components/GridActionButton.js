@@ -184,7 +184,10 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                   icon: <Feather name="unlock" size={20} />,
                   text1: t('Unlock'),
                   text2: t('Pro'),
-                  onPress: () => purchase(setPurchase)
+                  onPress: () => {
+                    logEvent('home_screen_pro_button');
+                    navigation.navigate('ProVersion');
+                  }
                 }
           ]
         ]}></ActionButtonContainer>

@@ -58,7 +58,7 @@ export default function ProScreen() {
         <View style={styles.benefit}>
           <Text style={styles.bulletPoint}>•</Text>
           <Text style={styles.benefitText}>
-            {t('Add unlimited colors to your palettes for greater flexibility and creativity 🎨')}
+            {t('Add more than 4 colors into your color palette')}
           </Text>
         </View>
         <View style={styles.benefit}>
