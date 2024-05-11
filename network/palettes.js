@@ -1,13 +1,11 @@
-import getAxiosClient from './axios.client';
+import axiosInstance from './axios.client';
 
 export const getAllPalettes = async () => {
-  const axiosClient = await getAxiosClient();
-  return axiosClient.get('color_palettes');
+  return axiosInstance.get('color_palettes');
 };
 
 export const createPalette = async (palette) => {
-  const axiosClient = await getAxiosClient();
-  return axiosClient.post(
+  return axiosInstance.post(
     'color_palettes.json',
     JSON.stringify({
       color_palette: palette
@@ -16,13 +14,11 @@ export const createPalette = async (palette) => {
 };
 
 export const deletePalette = async (paletteId) => {
-  const axiosClient = await getAxiosClient();
-  return axiosClient.delete(`color_palettes/${paletteId}.json`);
+  return axiosInstance.delete(`color_palettes/${paletteId}.json`);
 };
 
 export const patchPalette = async (paletteId, palette) => {
-  const axiosClient = await getAxiosClient();
-  return axiosClient.put(
+  return axiosInstance.put(
     `color_palettes/${paletteId}.json`,
     JSON.stringify({
       color_palette: palette
@@ -31,8 +27,7 @@ export const patchPalette = async (paletteId, palette) => {
 };
 
 export const addNewColorToPalette = async (paletteId, color) => {
-  const axiosClient = await getAxiosClient();
-  return axiosClient.post(
+  return axiosInstance.post(
     `color_palettes/${paletteId}/colors.json`,
     JSON.stringify({
       color: color
@@ -41,11 +36,9 @@ export const addNewColorToPalette = async (paletteId, color) => {
 };
 
 export const deleteColorFromPalette = async (paletteId, colorId) => {
-  const axiosClient = await getAxiosClient();
-  return axiosClient.delete(`color_palettes/${paletteId}/colors/${colorId}.json`);
+  return axiosInstance.delete(`color_palettes/${paletteId}/colors/${colorId}.json`);
 };
 
 export const getExplorePalettes = async (page = 1, query = '') => {
-  const axiosClient = await getAxiosClient();
-  return axiosClient.get(`color_palettes/explore.json?page=${page}&query=${query}`);
+  return axiosInstance.get(`color_palettes/explore.json?page=${page}&query=${query}`);
 };

@@ -1,6 +1,5 @@
-import getAxiosClient from './axios.client';
+import axiosInstance from './axios.client';
 
 export const generateAIColorSuggestions = async (query) => {
-  const axiosClient = await getAxiosClient();
-  return axiosClient.get('colors/generate_suggestions?query=' + query);
+  return axiosInstance.get('colors/generate_suggestions?query=' + query);
 };
