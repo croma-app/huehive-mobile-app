@@ -16,7 +16,7 @@ import { notifyMessage, sendClientError } from '../libs/Helpers';
 import { generateRandomColorPalette } from '../libs/ColorHelper';
 import Colors from '../constants/Colors';
 import ActionButtonContainer from './ActionButton';
-import { logEvent, purchase } from '../libs/Helpers';
+import { logEvent } from '../libs/Helpers';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Evillcon from 'react-native-vector-icons/EvilIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -33,7 +33,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   const [selectedImage, setSelectedImage] = React.useState(null);
   const [automaticColors, setAutomaticColors] = React.useState([]);
 
-  const { isPro, setPurchase, setDetailedColor } = useApplicationStore();
+  const { isPro, setDetailedColor } = useApplicationStore();
 
   const pickImageResult = async () => {
     setPickImageLoading(true);
