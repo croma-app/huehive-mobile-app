@@ -10,7 +10,8 @@ export const ROUTE_NAMES = {
   SYNC_PALETTES: 'SyncPalettes',
   PALETTE_LIBRARY: 'PaletteLibrary',
   COLOR_LIST: 'ColorList',
-  USER_PROFILE: 'UserProfile'
+  USER_PROFILE: 'UserProfile',
+  EXPLORE_PALETTE: 'ExplorePalette'
 };
 
 export const PRIVATE_ROUTES = new Set([

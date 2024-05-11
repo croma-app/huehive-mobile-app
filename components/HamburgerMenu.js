@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import useUserData from '../hooks/useUserData';
 import useAuth from '../hooks/useAuth';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 const HamburgerMenu = (props) => {
   const { t } = useTranslation();
@@ -44,28 +45,42 @@ const HamburgerMenu = (props) => {
         </TouchableOpacity>
       ) : (
         <View>
-          <Text style={[styles.titleArea, styles.headerText]}>{t('HueHive ')}</Text>
+          <View style={[styles.titleArea, { height: props.navigation.headerHeight }]}>
+            <Image style={styles.logo} source={require('./../assets/images/icon.png')} />
+            <Text style={styles.headerText}>{t('Color palette manager')}</Text>
+          </View>
           <View style={styles.horizontalLine}></View>
         </View>
       )}
 
       <ScrollView>
-        {userData && (
+        <TouchableOpacity
+          style={styles.menuItem}
+          onPress={async () => {
+            logEvent('hm_chat_session_histories');
+            navigate('ChatSessionHistories');
+          }}>
+          <View style={styles.menuItemView}>
+            <View style={styles.menuIcon}>
+              <MaterialCommunityIcons name="history" style={styles.icon} />
+            </View>
+            <Text style={styles.textAreaMenuItem}>{t('Huehive AI chat history')}</Text>
+          </View>
+        </TouchableOpacity>
+        <View style={styles.menu}>
           <TouchableOpacity
             style={styles.menuItem}
             onPress={async () => {
-              logEvent('hm_chat_session_histories');
-              navigate('ChatSessionHistories');
+              logEvent('hm_explore_palette');
+              navigate('ExplorePalette');
             }}>
             <View style={styles.menuItemView}>
               <View style={styles.menuIcon}>
-                <MaterialCommunityIcons name="history" style={styles.icon} />
+                <FontAwesome5Icon name="wpexplorer" style={styles.icon} />
               </View>
-              <Text style={styles.textAreaMenuItem}>{t('Huehive AI chat history')}</Text>
+              <Text style={styles.textAreaMenuItem}>{t('Explore palettes')}</Text>
             </View>
           </TouchableOpacity>
-        )}
-        <View style={styles.menu}>
           <TouchableOpacity
             style={styles.menuItem}
             onPress={async () => {
@@ -76,7 +91,7 @@ const HamburgerMenu = (props) => {
               <View style={styles.menuIcon}>
                 <MaterialCommunityIcons name="palette-swatch-outline" style={styles.icon} />
               </View>
-              <Text style={styles.textAreaMenuItem}>{t('Explore palettes')}</Text>
+              <Text style={styles.textAreaMenuItem}>{t('Palette Library')}</Text>
             </View>
           </TouchableOpacity>
           {
