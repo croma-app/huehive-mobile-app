@@ -1,8 +1,8 @@
-import getAxiosClient from './axios.client';
+import axiosInstance from './axios.client';
 
 export const login = async (email, password) => {
-  const axiosClient = await getAxiosClient();
-  return axiosClient.post(
+  console.log({ email, password });
+  return axiosInstance.post(
     'users/sign_in',
     JSON.stringify({
       user: {
@@ -14,8 +14,7 @@ export const login = async (email, password) => {
 };
 
 export const signUp = async (full_name, email, password) => {
-  const axiosClient = await getAxiosClient();
-  return axiosClient.post('users', {
+  return axiosInstance.post('users', {
     user: {
       full_name,
       email: email,
@@ -25,6 +24,9 @@ export const signUp = async (full_name, email, password) => {
 };
 
 export const googleLogin = async (userInfo) => {
-  const axiosClient = await getAxiosClient();
-  return axiosClient.post('users/google_login', userInfo);
+  return axiosInstance.post('users/google_login', userInfo);
+};
+
+export const logout = async () => {
+  return axiosInstance.delete('users/sign_out');
 };

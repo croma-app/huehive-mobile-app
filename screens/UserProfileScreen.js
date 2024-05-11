@@ -9,6 +9,7 @@ import { removeUserSession } from '../libs/EncryptedStoreage';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { ROUTE_NAMES } from '../libs/contants';
 import useApplicationStore from '../hooks/useApplicationStore';
+import { logout } from '../network/login-and-signup';
 
 function UserProfile(props) {
   const applicationState = useApplicationStore();
@@ -25,6 +26,7 @@ function UserProfile(props) {
   }, []);
 
   const onLogout = useCallback(async () => {
+    await logout();
     await removeUserSession();
     await loadUserData();
     loadInitPaletteFromStore();
