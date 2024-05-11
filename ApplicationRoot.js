@@ -45,7 +45,7 @@ export default function App() {
   }, [loadInitPaletteFromStore]);
 
   const hamburgerMenuIcon = () => (
-    <TouchableOpacity style={{ marginLeft: 8 }} onPress={() => setMenu(!isMenuOpen)}>
+    <TouchableOpacity onPress={() => setMenu(!isMenuOpen)}>
       <Entypo name="menu" style={styles.sideMenuIcon} />
     </TouchableOpacity>
   );
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     height: 25,
     color: 'white',
-    paddingRight: 4
+    paddingRight: 15
   }
 });
 const screenOptions = {
