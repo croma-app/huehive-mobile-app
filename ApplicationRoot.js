@@ -27,6 +27,7 @@ import { ROUTE_NAMES } from './libs/contants.js';
 import AppAuthProvider from './components/AppAuthProvider.js';
 import UserProfile from './screens/UserProfileScreen.js';
 import useApplicationStore from './hooks/useApplicationStore.js';
+import ExplorePaletteScreen from './screens/ExplorePaletteScreen.js';
 
 const Stack = createNativeStackNavigator();
 
@@ -134,6 +135,11 @@ export default function App() {
                     name={ROUTE_NAMES.USER_PROFILE}
                     options={{ title: t('Profile') }}
                     component={UserProfile}
+                  />
+                  <Stack.Screen
+                    name={ROUTE_NAMES.EXPLORE_PALETTE}
+                    options={{ title: t('Explore palette') }}
+                    component={ExplorePaletteScreen}
                   />
                 </Stack.Navigator>
               </AppAuthProvider>
