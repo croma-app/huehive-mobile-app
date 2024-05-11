@@ -17,6 +17,8 @@ import Colors from '../constants/Colors';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Spacer from '../components/Spacer';
 import Color from 'pigment/full';
+import useAuth from '../hooks/useAuth';
+import useUserData from '../hooks/useUserData';
 
 function extractColorsFromChatSession(session) {
   if (session.messages) {
@@ -59,6 +61,14 @@ const ChatSessionHistoriesScreen = () => {
 
   const [chatSessions, setChatSessions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { openAuthOverlay } = useAuth();
+  const { userData } = useUserData();
+
+  useEffect(() => {
+    if (!userData) {
+      openAuthOverlay();
+    }
+  }, [openAuthOverlay, userData]);
 
   useEffect(() => {
     const fetchChatSessions = async () => {
@@ -69,6 +79,14 @@ const ChatSessionHistoriesScreen = () => {
 
     fetchChatSessions();
   }, []);
+
+  if (!userData) {
+    return (
+      <Text style={styles.noChatSessionMessage}>
+        No chat sessions yet. Start a new one by clicking the action button.
+      </Text>
+    );
+  }
 
   return (
     <>
