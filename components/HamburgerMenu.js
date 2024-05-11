@@ -54,19 +54,6 @@ const HamburgerMenu = (props) => {
       )}
 
       <ScrollView>
-        <TouchableOpacity
-          style={styles.menuItem}
-          onPress={async () => {
-            logEvent('hm_chat_session_histories');
-            navigate('ChatSessionHistories');
-          }}>
-          <View style={styles.menuItemView}>
-            <View style={styles.menuIcon}>
-              <MaterialCommunityIcons name="history" style={styles.icon} />
-            </View>
-            <Text style={styles.textAreaMenuItem}>{t('Huehive AI chat history')}</Text>
-          </View>
-        </TouchableOpacity>
         <View style={styles.menu}>
           <TouchableOpacity
             style={styles.menuItem}
@@ -122,6 +109,19 @@ const HamburgerMenu = (props) => {
           <TouchableOpacity
             style={styles.menuItem}
             onPress={async () => {
+              logEvent('hm_about_us');
+              navigate('AboutUs');
+            }}>
+            <View style={styles.menuItemView}>
+              <View style={{ ...styles.menuIcon }}>
+                <MaterialCommunityIcons name="information-outline" style={styles.icon} />
+              </View>
+              <Text style={[styles.textAreaMenuItem]}>{t('About us')}</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={async () => {
               logEvent('hm_sync_palettes');
               navigate('SyncPalettes');
             }}>
@@ -135,14 +135,14 @@ const HamburgerMenu = (props) => {
           <TouchableOpacity
             style={styles.menuItem}
             onPress={async () => {
-              logEvent('hm_about_us');
-              navigate('AboutUs');
+              logEvent('hm_chat_session_histories');
+              navigate('ChatSessionHistories');
             }}>
             <View style={styles.menuItemView}>
-              <View style={{ ...styles.menuIcon }}>
-                <MaterialCommunityIcons name="information-outline" style={styles.icon} />
+              <View style={styles.menuIcon}>
+                <MaterialCommunityIcons name="history" style={styles.icon} />
               </View>
-              <Text style={[styles.textAreaMenuItem]}>{t('About us')}</Text>
+              <Text style={styles.textAreaMenuItem}>{t('Huehive AI chat history')}</Text>
             </View>
           </TouchableOpacity>
           {!userData && (
