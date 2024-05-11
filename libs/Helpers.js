@@ -18,7 +18,7 @@ const productSku = function () {
   return Platform.OS === 'android' ? 'croma_pro' : 'app_croma';
 };
 const sendClientError = (event, errorMessage, stacktrace) => {
-  if (isProduction) {
+  if (isProduction()) {
     sendClientErrorAsync(event + ' -  ' + errorMessage, stacktrace || new Error().stack);
   } else {
     console.log('Client error', event, errorMessage, stacktrace);
@@ -27,7 +27,7 @@ const sendClientError = (event, errorMessage, stacktrace) => {
 
 const logEvent = (eventName, value) => {
   if (eventName.length > 40) {
-    throw 'eventName length should be smaller then equal to 40';
+    throw 'eventName length should be smaller than equal to 40';
   }
   if (Platform.OS === 'android') {
     NativeModules.CromaModule.logEvent(
