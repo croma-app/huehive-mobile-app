@@ -1,11 +1,10 @@
-import getAxiosClient from './axios.client';
+import axiosInstance from './axios.client';
 
 import { Platform } from 'react-native';
 
 export const sendClientErrorAsync = (errorMessage, backtrace) => {
   setTimeout(async () => {
     try {
-      const axiosClient = await getAxiosClient();
       const deviceInfo = {
         platform: Platform.OS,
         osVersion: Platform.Version,
@@ -21,7 +20,7 @@ export const sendClientErrorAsync = (errorMessage, backtrace) => {
       };
 
       try {
-        await axiosClient.post('errors', errorData);
+        await axiosInstance.post('errors', errorData);
       } catch (error) {
         // Ignore the error
         console.log('Error sending client error:', error);
