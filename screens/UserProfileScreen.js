@@ -53,7 +53,7 @@ function UserProfile(props) {
         <CromaButton
           style={{ backgroundColor: '#ff5c59', width: '100%' }}
           textStyle={{ color: '#fff' }}
-          onPress={onLogout}>
+          onPressWithLoader={onLogout}>
           {t('Logout')}
         </CromaButton>
       </View>
