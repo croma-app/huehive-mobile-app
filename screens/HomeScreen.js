@@ -13,7 +13,7 @@ import { PaletteCard } from '../components/PaletteCard';
 import GridActionButton from '../components/GridActionButton';
 import * as Permissions from 'expo-permissions';
 import ShareMenu from '../libs/ShareMenu';
-import { logEvent } from '../libs/Helpers';
+import { logEvent, notifyMessage } from '../libs/Helpers';
 import PropTypes from 'prop-types';
 import { material } from 'react-native-typography';
 import Spacer from '../components/Spacer';
@@ -37,21 +37,39 @@ const HomeScreen = function ({ navigation, route }) {
     if (Platform?.OS === 'android') {
       // Deep linking code
       // https://medium.com/react-native-training/deep-linking-your-react-native-app-d87c39a1ad5e
+      // https://huehive.co/color_palettes/f8a6a1-dcdcdc-f2b3ad-e0e0e0-aec6cf-c4c4c4?name=hello
       Linking.getInitialURL().then((url) => {
         if (url) {
           logEvent('deep_linking_open_link');
-          const result = {};
-          url
-            .split('?')[1]
-            .split('&')
-            .forEach(function (part) {
-              var item = part.split('=');
-              result[item[0]] = decodeURIComponent(item[1]);
+
+          try {
+            // Manually parse the URL
+            const urlParts = url.split('?');
+            const path = urlParts[0].split('/');
+            const colorsPart = path[path.length - 1];
+
+            // Split the colors part by `-` to get the color codes
+            const colors = colorsPart.split('-');
+
+            // Parse the query parameters
+            const queryParamsString = urlParts[1] || '';
+            const queryParams = {};
+            queryParamsString.split('&').forEach((param) => {
+              const [key, value] = param.split('=');
+              queryParams[key] = decodeURIComponent(value);
             });
-          navigation.navigate('SavePalette', {
-            colors: [...new Set(JSON.parse(result['colors']) || [])],
-            suggestedName: result['name']
-          });
+
+            const suggestedName = queryParams['name'];
+
+            // Navigate to the SavePalette screen with the extracted colors and name
+            navigation.navigate('SavePalette', {
+              colors: [...new Set(colors)], // Ensuring unique colors
+              suggestedName: suggestedName
+            });
+          } catch (error) {
+            notifyMessage('Error parsing url: ' + error.message);
+            navigation.navigate('Home');
+          }
         }
       });
 
