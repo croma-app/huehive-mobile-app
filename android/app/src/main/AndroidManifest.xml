@@ -27,7 +27,7 @@
               <category android:name="android.intent.category.BROWSABLE" />
 
               <data
-                      android:host="croma.app"
+                      android:host="huehive.co"
                       android:scheme="https" />
           </intent-filter>
           <intent-filter android:label="share">
