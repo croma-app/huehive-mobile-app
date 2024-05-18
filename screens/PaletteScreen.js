@@ -104,7 +104,7 @@ export default function PaletteScreen({ navigation, route }) {
           bgColor="rgba(68, 68, 68, 0.6)"
           hideShadow={Platform.OS === 'web' ? true : false}
           fixNativeFeedbackRadius={true}
-          buttonColor={Colors.fabPrimary}
+          buttonColor={Colors.primary}
           onPress={() => {
             logEvent('palette_screen_add_color');
             if (

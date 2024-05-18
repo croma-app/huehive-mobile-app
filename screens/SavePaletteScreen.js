@@ -158,6 +158,6 @@ const styles = StyleSheet.create({
     borderRadius: 8
   },
   saveButtonText: {
-    color: Colors.fabPrimary
+    color: Colors.primary
   }
 });

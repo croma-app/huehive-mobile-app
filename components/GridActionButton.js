@@ -253,7 +253,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                   </View>
                   <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
                     <Text style={styles.nextButtonText}>{t('Next')}</Text>
-                    <Ionicons name="arrow-forward" size={24} color={Color.fabPrimary} />
+                    <Ionicons name="arrow-forward" size={24} color={Color.primaryDark} />
                   </TouchableOpacity>
                   <View
                     style={{
@@ -322,7 +322,7 @@ const styles = {
   },
   pickColorsButtonText: {
     fontSize: 18,
-    color: Colors.fabPrimary
+    color: Colors.primary
   },
   nextButton: {
     display: 'flex',
@@ -335,7 +335,7 @@ const styles = {
     borderRadius: 5,
     marginLeft: 10,
     borderWidth: 1,
-    borderColor: Colors.fabPrimary
+    borderColor: Colors.primary
   },
   nextButtonText: {
     fontSize: 18

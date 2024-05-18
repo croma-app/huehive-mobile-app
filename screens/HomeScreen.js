@@ -90,7 +90,7 @@ const HomeScreen = function ({ navigation, route }) {
     return (
       <View style={styles.loadingContainer}>
         <View>
-          <ActivityIndicator size="large" color={Colors.accent} />
+          <ActivityIndicator size="large" color={Colors.primary} />
           <Text style={styles.loadingText}>Retriving your stunning color palettes...</Text>
         </View>
       </View>

@@ -59,9 +59,9 @@ export default function AIColorPicker({ setColor }) {
           onPress={generateColorFromQuery}
           disabled={loading}>
           {loading ? (
-            <ActivityIndicator size="small" color={Colors.fabPrimary} />
+            <ActivityIndicator size="small" color={Colors.primary} />
           ) : (
-            <FontAwesome5 name="magic" size={24} color={Colors.fabPrimary} />
+            <FontAwesome5 name="magic" size={24} color={Colors.primary} />
           )}
         </TouchableOpacity>
       </View>
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   },
   generateButton: {
     borderWidth: 1,
-    borderColor: Colors.fabPrimary,
+    borderColor: Colors.primary,
     borderRadius: 8,
     padding: 8
   },
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   selectedColor: {
     borderWidth: 2,
-    borderColor: Colors.fabPrimary
+    borderColor: Colors.primary
   },
   colorName: {
     fontSize: 12,
