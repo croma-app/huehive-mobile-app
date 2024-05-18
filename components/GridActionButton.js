@@ -101,14 +101,10 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   };
 
   const handleNext = () => {
-    navigation.navigate('ColorList', { colors: automaticColors.map((color) => ({ color })) });
+    navigation.navigate('ColorList', { colors: automaticColors });
     setSelectedImage(null);
     setAutomaticColors([]);
     setIsImagePickerModalVisible(false);
-  };
-
-  const handleAutomaticColors = () => {
-    handleNext();
   };
 
   const handleRandomColors = () => {
@@ -192,20 +188,20 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
           ]
         ]}></ActionButtonContainer>
       <Modal
-        style={styles.modalStyle}
         visible={isColorPickerVisible}
         animationType="slide"
         // transparent={true}
         onRequestClose={() => setIsColorPickerVisible(false)}>
         <TouchableWithoutFeedback onPress={() => setIsColorPickerVisible(false)}>
-          <View style={styles.modalOverlay} />
+          <View style={styles.modalOverlay}>
+            <View style={styles.colorPickerModalContent}>
+              <ColorPickerModal
+                onColorSelected={handleColorSelected}
+                onClose={() => setIsColorPickerVisible(false)}
+              />
+            </View>
+          </View>
         </TouchableWithoutFeedback>
-        <View style={styles.colorPickerModalContent}>
-          <ColorPickerModal
-            onColorSelected={handleColorSelected}
-            onClose={() => setIsColorPickerVisible(false)}
-          />
-        </View>
       </Modal>
       <Modal
         visible={isImagePickerModalVisible}
@@ -297,7 +293,7 @@ const styles = {
     padding: 20
   },
   colorPickerModalContent: {
-    flex: 1,
+    height: Dimensions.get('window').height / 2,
     justifyContent: 'flex-end'
   },
   previewImage: {
@@ -339,8 +335,5 @@ const styles = {
   },
   nextButtonText: {
     fontSize: 18
-  },
-  modalStyle: {
-    height: Dimensions.get('window').height / 2
   }
 };
