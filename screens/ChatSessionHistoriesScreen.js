@@ -129,7 +129,7 @@ const ChatSessionHistoriesScreen = () => {
         offsetY={76}
         bgColor="rgba(68, 68, 68, 0.6)"
         fixNativeFeedbackRadius={true}
-        buttonColor={Colors.fabPrimary}
+        buttonColor={Colors.primaryDark}
         onPress={() => {
           logEvent('add_chat_session_fab');
           navigation.navigate('ChatSession');

@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     bottom: 40,
     right: 30,
-    backgroundColor: Colors.fabPrimary,
+    backgroundColor: Colors.primary,
     zIndex: 2,
     elevation: 5,
     // ios shadow

@@ -168,7 +168,7 @@ export default function ColorListScreen({ navigation, route }) {
             regenerateUnlockedColors();
           }}>
           <View style={styles.buttonContent}>
-            <Ionicons name="shuffle" size={20} color={Colors.fabPrimary} />
+            <Ionicons name="shuffle" size={20} color={Colors.primary} />
             <Text style={styles.buttonText}>{t('Generate')}</Text>
             <TouchableOpacity
               style={styles.infoIconContainer}
@@ -178,7 +178,7 @@ export default function ColorListScreen({ navigation, route }) {
               <MaterialCommunityIcons
                 name="information-outline"
                 size={20}
-                color={Colors.grey}
+                color={Colors.lightGrey}
                 style={styles.infoIcon}
               />
             </TouchableOpacity>
@@ -195,7 +195,7 @@ export default function ColorListScreen({ navigation, route }) {
             });
           }}>
           <View style={styles.buttonContent}>
-            <Icon name="save" size={20} color={Colors.fabPrimary} />
+            <Icon name="save" size={20} color={Colors.primary} />
             <Text style={styles.buttonText}>{t('Save')}</Text>
           </View>
         </TouchableOpacity>
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   buttonText: {
-    color: Colors.fabPrimary,
+    color: Colors.primary,
     marginLeft: 8,
     fontSize: 18
   },
