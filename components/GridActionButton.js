@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import ColorPickerModal from './ColorPickerModal';
 import useApplicationStore from '../hooks/useApplicationStore';
+import MultiColorView from './MultiColorView';
 
 const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   const { t } = useTranslation();
@@ -74,7 +75,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                   colorThiefColor.b +
                   ')'
               ).tohex();
-              return hex;
+              return { color: hex };
             })
           );
         } catch (error) {
@@ -227,8 +228,16 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                 {selectedImage && (
                   <Image source={{ uri: selectedImage.uri }} style={styles.previewImage} />
                 )}
-                <View style={styles.colorPreviewContainer}>
-                  {automaticColors.length > 0 && (
+
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    height: 230
+                  }}>
+                  <View style={styles.colorPreviewContainer}>
+                    {/* {automaticColors.length > 0 && (
                     <TouchableOpacity
                       style={styles.automaticColorsContainer}
                       onPress={handleAutomaticColors}>
@@ -239,14 +248,26 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                         />
                       ))}
                     </TouchableOpacity>
-                  )}
+                  )} */}
+                    <MultiColorView colors={automaticColors}></MultiColorView>
+                  </View>
                   <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
+                    <Text style={styles.nextButtonText}>{t('Next')}</Text>
                     <Ionicons name="arrow-forward" size={24} color={Color.fabPrimary} />
                   </TouchableOpacity>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center'
+                    }}>
+                    <Text style={{ backgroundColor: '#ccc', height: 1, flex: 1 }}> </Text>
+                    <Text style={{ marginHorizontal: 10 }}> {t('OR')}</Text>
+                    <Text style={{ backgroundColor: '#ccc', height: 1, flex: 1 }}> </Text>
+                  </View>
+                  <TouchableOpacity style={styles.pickColorsButton} onPress={handlePickColors}>
+                    <Text style={styles.pickColorsButtonText}>{t('Pick colors Manually')}</Text>
+                  </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.pickColorsButton} onPress={handlePickColors}>
-                  <Text style={styles.pickColorsButtonText}>Pick Colors Manually</Text>
-                </TouchableOpacity>
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -265,7 +286,7 @@ export default GridActionButtonAndroid;
 
 const styles = {
   modalOverlay: {
-    flex: 1,
+    height: Dimensions.get('window').height,
     backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'flex-end'
   },
@@ -280,19 +301,15 @@ const styles = {
     justifyContent: 'flex-end'
   },
   previewImage: {
-    width: '100%',
     height: 200,
     resizeMode: 'contain',
     marginBottom: 20
   },
   colorPreviewContainer: {
-    flexDirection: 'row',
+    display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'space-between',
     marginBottom: 20
-  },
-  automaticColorsContainer: {
-    flexDirection: 'row',
-    marginRight: 10
   },
   colorPreview: {
     width: 30,
@@ -301,9 +318,6 @@ const styles = {
     margin: 5
   },
   pickColorsButton: {
-    backgroundColor: 'white',
-    paddingVertical: 15,
-    borderRadius: 10,
     alignItems: 'center'
   },
   pickColorsButtonText: {
@@ -311,6 +325,10 @@ const styles = {
     color: Colors.fabPrimary
   },
   nextButton: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: 'white',
     paddingHorizontal: 10,
     paddingVertical: 5,
@@ -320,8 +338,7 @@ const styles = {
     borderColor: Colors.fabPrimary
   },
   nextButtonText: {
-    fontSize: 16,
-    color: Colors.fabPrimary
+    fontSize: 18
   },
   modalStyle: {
     height: Dimensions.get('window').height / 2

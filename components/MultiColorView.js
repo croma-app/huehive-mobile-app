@@ -33,8 +33,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 60,
     overflow: 'hidden',
-    borderTopLeftRadius: 4,
-    borderTopRightRadius: 4
+    borderRadius: 4
   },
   color: {
     flex: 1,
