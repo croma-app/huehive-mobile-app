@@ -19,6 +19,7 @@ import ActionButtonContainer from './ActionButton';
 import { logEvent } from '../libs/Helpers';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Evillcon from 'react-native-vector-icons/EvilIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
@@ -158,7 +159,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
               }
             },
             {
-              icon: <Image source={require('./../assets/images/magic.png')}></Image>,
+              icon: <FontAwesome name="magic" size={20} />,
               text1: t('Palette using'),
               text2: t('HueHive ai'),
               onPress: async () => {
