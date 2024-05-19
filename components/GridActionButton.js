@@ -234,18 +234,6 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                     height: 230
                   }}>
                   <View style={styles.colorPreviewContainer}>
-                    {/* {automaticColors.length > 0 && (
-                    <TouchableOpacity
-                      style={styles.automaticColorsContainer}
-                      onPress={handleAutomaticColors}>
-                      {automaticColors.map((color, index) => (
-                        <View
-                          key={index}
-                          style={[styles.colorPreview, { backgroundColor: color }]}
-                        />
-                      ))}
-                    </TouchableOpacity>
-                  )} */}
                     <MultiColorView colors={automaticColors}></MultiColorView>
                   </View>
                   <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
