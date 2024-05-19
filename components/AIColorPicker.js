@@ -9,7 +9,7 @@ import {
   Text
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Colors from '../constants/Colors';
+import Colors from '../constants/Styles';
 import { generateAIColorSuggestions } from '../network/colors';
 import { pickTextColorBasedOnBgColor } from '../libs/ColorHelper';
 import { logEvent, notifyMessage, sendClientError } from '../libs/Helpers';

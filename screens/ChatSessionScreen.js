@@ -9,7 +9,7 @@ import {
   Text,
   ImageBackground
 } from 'react-native';
-import Colors from '../constants/Colors';
+import Colors from '../constants/Styles';
 import React, { useState, useEffect, useRef } from 'react';
 import { material } from 'react-native-typography';
 import { logEvent } from '../libs/Helpers';

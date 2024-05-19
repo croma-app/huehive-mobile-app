@@ -3,7 +3,7 @@ import { StatusBar } from 'react-native';
 import ApplicationRoot from './ApplicationRoot';
 import { withIAPContext } from 'react-native-iap';
 import useUserData from './hooks/useUserData';
-import Colors from './constants/Colors';
+import Colors from './constants/Styles';
 
 const App = () => {
   const { loadUserData } = useUserData();

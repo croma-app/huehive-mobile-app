@@ -13,7 +13,7 @@ import {
   TouchableWithoutFeedback
 } from 'react-native';
 import ActionButton from 'react-native-action-button';
-import Colors from '../constants/Colors';
+import Colors from '../constants/Styles';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { logEvent } from '../libs/Helpers';
 import AntDesign from 'react-native-vector-icons/AntDesign';

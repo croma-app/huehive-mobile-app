@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-nati
 import { logEvent } from '../libs/Helpers';
 
 import { material } from 'react-native-typography';
-import Colors from '../constants/Colors';
+import Colors from '../constants/Styles';
 import useApplicationStore from '../hooks/useApplicationStore';
 import { useTranslation } from 'react-i18next';
 const allPalettes = require('../constants/palettes/palettes').default;

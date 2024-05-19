@@ -14,7 +14,7 @@ import RNColorThief from 'react-native-color-thief';
 import Feather from 'react-native-vector-icons/Feather';
 import { notifyMessage, sendClientError } from '../libs/Helpers';
 import { generateRandomColorPalette } from '../libs/ColorHelper';
-import Colors from '../constants/Colors';
+import Colors from '../constants/Styles';
 import ActionButtonContainer from './ActionButton';
 import { logEvent } from '../libs/Helpers';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -121,6 +121,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
         config={[
           [
             {
+              id: 1,
               icon: <Evillcon name="camera" size={20} />,
               text1: 'Palette',
               text2: 'using camera',
@@ -133,12 +134,14 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
               }
             },
             {
+              id: 2,
               icon: <Evillcon name="image" size={20} />,
               text1: t('Palette'),
               text2: t('using image'),
               onPress: handleImagePicker
             },
             {
+              id: 3,
               icon: <Ionicons name="color-palette-outline" size={20} />,
               text1: t('Palette'),
               text2: t('using color'),
@@ -150,6 +153,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
           ],
           [
             {
+              id: 4,
               icon: <Ionicons name="md-shuffle" size={20} />,
               text1: t('Quick'),
               text2: t('palette'),
@@ -159,6 +163,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
               }
             },
             {
+              id: 5,
               icon: <FontAwesome name="magic" size={20} />,
               text1: t('Palette using'),
               text2: t('HueHive ai'),
@@ -169,6 +174,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
             },
             isPro
               ? {
+                  id: 6,
                   icon: <Ionicons name="md-color-filter-outline" size={20} />,
                   text1: t('Create palette'),
                   text2: t(' manully'),
@@ -178,6 +184,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                   }
                 }
               : {
+                  id: 7,
                   icon: <Feather name="unlock" size={20} />,
                   text1: t('Unlock'),
                   text2: t('Pro'),

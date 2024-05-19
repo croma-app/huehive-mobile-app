@@ -6,7 +6,7 @@ import { purchase, logEvent } from '../libs/Helpers';
 import { material } from 'react-native-typography';
 import { initPurchase } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
-import Colors from '../constants/Colors';
+import Colors from '../constants/Styles';
 import useApplicationStore from '../hooks/useApplicationStore';
 
 export default function ProScreen() {
