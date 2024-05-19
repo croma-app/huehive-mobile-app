@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Text, View, StyleSheet, TextInput, ScrollView } from 'react-native';
 import { PalettePreviewCard } from '../components/PalettePreviewCard';
-import Colors from '../constants/Colors';
+import Colors from '../constants/Styles';
 import CromaButton from '../components/CromaButton';
 import { TextDialog } from '../components/CommonDialogs';
 import { useTranslation } from 'react-i18next';

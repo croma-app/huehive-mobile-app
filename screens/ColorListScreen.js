@@ -8,7 +8,7 @@ import Color from 'pigment/full';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Colors from '../constants/Colors';
+import Colors from '../constants/Styles';
 import { generateRandomColorPaletteWithLockedColors } from '../libs/ColorHelper';
 
 function uniqueColors(colors) {

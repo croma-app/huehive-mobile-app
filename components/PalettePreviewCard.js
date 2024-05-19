@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import Card from './Card';
-import Colors from '../constants/Colors';
+import Colors from '../constants/Styles';
 import MultiColorView from './MultiColorView';
 
 export class PalettePreviewCard extends React.Component {

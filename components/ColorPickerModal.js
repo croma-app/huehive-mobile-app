@@ -4,7 +4,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import { logEvent, notifyMessage } from '../libs/Helpers';
 import SliderColorPicker from './SliderColorPicker';
 import AIColorPicker from './AIColorPicker';
-import Colors from '../constants/Colors';
+import Colors from '../constants/Styles';
 import { CromaColorPicker } from './CromaColorPicker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import HexKeyboard from './HexKeyboard';

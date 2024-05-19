@@ -13,7 +13,7 @@ import { getChatSessions } from '../network/chat_session';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 import ActionButton from 'react-native-action-button';
-import Colors from '../constants/Colors';
+import Colors from '../constants/Styles';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Spacer from '../components/Spacer';
 import Color from 'pigment/full';

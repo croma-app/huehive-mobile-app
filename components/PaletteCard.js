@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useState } from 'react';
 import { StyleSheet, View, Text, Platform, TouchableOpacity } from 'react-native';
 import Card from './Card';
-import Colors from '../constants/Colors';
+import Colors from '../constants/Styles';
 import { Share, PermissionsAndroid } from 'react-native';
 
 import MultiColorView from './MultiColorView';

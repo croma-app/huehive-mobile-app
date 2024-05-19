@@ -4,7 +4,7 @@ import AboutUsScreen from './screens/AboutUsScreen';
 import ChatSessionScreen from './screens/ChatSessionScreen';
 import ChatSessionHistoriesScreen from './screens/ChatSessionHistoriesScreen';
 import HomeScreen from './screens/HomeScreen';
-import Colors from './constants/Colors';
+import Colors from './constants/Styles';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ColorDetailsScreen from './screens/ColorDetailScreen';

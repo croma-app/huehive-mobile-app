@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { ScrollView, StyleSheet, View, ActivityIndicator } from 'react-native';
 import { capitalizeFirstLetter, logEvent } from '../libs/Helpers';
 
-import Colors from '../constants/Colors';
+import Colors from '../constants/Styles';
 import network from '../network';
 import { PalettePreviewCard } from '../components/PalettePreviewCard';
 import { TextInput } from 'react-native-gesture-handler';

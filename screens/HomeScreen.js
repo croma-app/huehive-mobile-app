@@ -17,7 +17,7 @@ import { logEvent, notifyMessage } from '../libs/Helpers';
 import PropTypes from 'prop-types';
 import { material } from 'react-native-typography';
 import Spacer from '../components/Spacer';
-import Colors from '../constants/Colors';
+import Colors from '../constants/Styles';
 import useApplicationStore from '../hooks/useApplicationStore';
 
 const HomeScreen = function ({ navigation, route }) {
