@@ -75,10 +75,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     justifyContent: 'flex-end',
     zIndex: 10,
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    backgroundColor: Colors.overlay,
     width: Dimensions.get('window').width
   },
-  slideUpContainer: { backgroundColor: Colors.white, padding: 10 },
+  slideUpContainer: { backgroundColor: Colors.backgroundColor, padding: Spacing.medium },
   row: { flexDirection: 'row', justifyContent: 'space-between' },
   flexBasis: { flex: 1 },
   horizontalLine: { height: 1, backgroundColor: Colors.lightGrey },

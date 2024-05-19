@@ -13,6 +13,7 @@ export default {
   darkGrey: '#333',
   white: '#fff',
   black: '#000',
-  backgroundColor: '#f2f2f2'
+  backgroundColor: '#f2f2f2',
+  overlay: 'rgba(0, 0, 0, 0.4)'
   // fabPrimary: '#ff6f00'
 };
