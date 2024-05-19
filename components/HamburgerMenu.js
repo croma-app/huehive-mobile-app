@@ -19,6 +19,7 @@ import PropTypes from 'prop-types';
 import useUserData from '../hooks/useUserData';
 import useAuth from '../hooks/useAuth';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import Colors from '../constants/Styles';
 
 const HamburgerMenu = (props) => {
   const { t } = useTranslation();
@@ -29,7 +30,7 @@ const HamburgerMenu = (props) => {
     props.navigation.navigate(screen);
   };
   return (
-    <SafeAreaView style={[styles.container]}>
+    <SafeAreaView style={styles.container}>
       {userData ? (
         <TouchableOpacity
           onPress={() => {
@@ -201,7 +202,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    marginTop: -4
+    marginTop: -4,
+    backgroundColor: Colors.backgroundColor
   },
   titleArea: {
     flexDirection: 'column',
