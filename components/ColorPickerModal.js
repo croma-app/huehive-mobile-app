@@ -5,9 +5,9 @@ import { logEvent, notifyMessage } from '../libs/Helpers';
 import SliderColorPicker from './SliderColorPicker';
 import AIColorPicker from './AIColorPicker';
 import Colors from '../constants/Styles';
-import { CromaColorPicker } from './CromaColorPicker';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import HexKeyboard from './HexKeyboard';
+import WheelColorPicker from './WheelColorPicker';
 
 export default function ColorPickerModal({ initialColor, onColorSelected, onClose }) {
   const [color, setColor] = useState(initialColor || '#db0a5b');
@@ -44,14 +44,7 @@ export default function ColorPickerModal({ initialColor, onColorSelected, onClos
     {
       key: 'basic',
       title: 'Standard',
-      component: (
-        <CromaColorPicker
-          onChangeColor={(color) => {
-            setColor(color);
-          }}
-          style={[{ height: 250 }]}
-        />
-      )
+      component: <WheelColorPicker color={color} onColorChange={(color) => setColor(color)} />
     },
     {
       key: 'HSB',
@@ -92,6 +85,7 @@ export default function ColorPickerModal({ initialColor, onColorSelected, onClos
       </View>
       <ScrollView
         contentContainerStyle={styles.scrollViewContent}
+        scrollEnabled={activeTab !== 'basic'}
         showsVerticalScrollIndicator={false}>
         <View style={styles.colorPickerContainer}>
           {tabs.find((tab) => tab.key === activeTab)?.component}
