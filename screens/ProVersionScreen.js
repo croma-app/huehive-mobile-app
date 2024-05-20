@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet, Text } from 'react-native';
 import { View } from 'react-native-animatable';
 import CromaButton from '../components/CromaButton';
@@ -25,7 +25,9 @@ export default function ProScreen() {
     }
   };
 
-  logEvent('pro_version_screen');
+  useEffect(() => {
+    logEvent('pro_version_screen');
+  }, []);
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>

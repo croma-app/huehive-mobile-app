@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useCallback, useLayoutEffect, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import SingleColorCard from '../components/SingleColorCard';
 import {
   Dimensions,
@@ -47,8 +47,9 @@ export default function PaletteScreen({ navigation, route }) {
     },
     [deleteColorFromPalette, palette.colors, palette.id]
   );
-
-  logEvent('palette_screen');
+  useEffect(() => {
+    logEvent('palette_screen');
+  });
 
   useLayoutEffect(() => {
     setNavigationOptions({ navigation, paletteId: palette.id });

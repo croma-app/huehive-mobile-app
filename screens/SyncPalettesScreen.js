@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, PermissionsAndroid, Platform } from 'react-native';
 import { View } from 'react-native-animatable';
 import CromaButton from '../components/CromaButton';
@@ -26,7 +26,10 @@ export default function SyncPalettesScreen(props) {
       notifyMessage('Error when importing colors: ' + error.toString());
     }
   };
-  logEvent('sync_palettes_screen');
+
+  useEffect(() => {
+    logEvent('sync_palettes_screen');
+  });
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/*TODO: update if required */}

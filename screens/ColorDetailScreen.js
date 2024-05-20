@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { ColorDetail } from '../components/ColorDetails';
 import CromaButton from '../components/CromaButton';
@@ -14,7 +14,10 @@ export default function ColorDetailScreen({ navigation }) {
     navigation.setOptions({ title: detailedColor });
   }, [detailedColor]);
 
-  logEvent('color_details_screen');
+  useEffect(() => {
+    logEvent('color_details_screen');
+  }, []);
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <ColorDetail color={detailedColor}>{detailedColor}</ColorDetail>

@@ -56,7 +56,6 @@ const ChatSessionColorPreview = ({ colors }) => {
 };
 
 const ChatSessionHistoriesScreen = () => {
-  logEvent('chat_session_histories_screen');
   const navigation = useNavigation();
 
   const [chatSessions, setChatSessions] = useState([]);
@@ -69,6 +68,10 @@ const ChatSessionHistoriesScreen = () => {
       openAuthOverlay();
     }
   }, [openAuthOverlay, userData]);
+
+  useEffect(() => {
+    logEvent('chat_session_histories_screen');
+  }, []);
 
   useEffect(() => {
     const fetchChatSessions = async () => {

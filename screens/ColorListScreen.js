@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { SingleColorView } from '../components/SingleColorView';
 import { StyleSheet, View, Text, Platform, Animated, TouchableOpacity, Modal } from 'react-native';
 import { logEvent, notifyMessage } from '../libs/Helpers';
@@ -131,8 +131,10 @@ export default function ColorListScreen({ navigation, route }) {
       setColorList(newColors);
     }
   };
+  useEffect(() => {
+    logEvent('color_list_screen');
+  }, []);
 
-  logEvent('color_list_screen');
   return (
     <View style={styles.container}>
       <View style={styles.colorListContainer}>
