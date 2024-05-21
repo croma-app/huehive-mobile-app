@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   },
   activeTab: {
     borderBottomWidth: 2,
-    borderBottomColor: Colors.brandColor
+    borderBottomColor: Colors.primary
   },
   tabText: {
     fontSize: 12,
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   doneButton: {
-    backgroundColor: Colors.brandColor,
+    backgroundColor: Colors.primary,
     borderRadius: 20,
     width: 40,
     height: 40,
