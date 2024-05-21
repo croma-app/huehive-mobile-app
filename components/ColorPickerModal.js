@@ -4,6 +4,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import { logEvent, notifyMessage } from '../libs/Helpers';
 import SliderColorPicker from './SliderColorPicker';
 import AIColorPicker from './AIColorPicker';
+import { CromaColorPicker } from './CromaColorPicker';
 import Colors from '../constants/Styles';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import HexKeyboard from './HexKeyboard';
@@ -44,6 +45,18 @@ export default function ColorPickerModal({ initialColor, onColorSelected, onClos
     {
       key: 'basic',
       title: 'Standard',
+      component: (
+        <CromaColorPicker
+          onChangeColor={(color) => {
+            setColor(color);
+          }}
+          style={[{ height: 250 }]}
+        />
+      )
+    },
+    {
+      key: 'wheel',
+      title: 'Color Wheel',
       component: <WheelColorPicker color={color} onColorChange={(color) => setColor(color)} />
     },
     {
@@ -85,7 +98,7 @@ export default function ColorPickerModal({ initialColor, onColorSelected, onClos
       </View>
       <ScrollView
         contentContainerStyle={styles.scrollViewContent}
-        scrollEnabled={activeTab !== 'basic'}
+        scrollEnabled={activeTab !== 'wheel'}
         showsVerticalScrollIndicator={false}>
         <View style={styles.colorPickerContainer}>
           {tabs.find((tab) => tab.key === activeTab)?.component}
