@@ -7,8 +7,7 @@ export const Spacing = {
 };
 
 export default {
-  brandColor: '#f1544d',
-  primary: '#c94740',
+  primary: '#f1544d',
   lightGrey: '#b0b0b0',
   darkGrey: '#333',
   white: '#fff',
