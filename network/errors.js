@@ -1,6 +1,6 @@
 import axiosInstance from './axios.client';
-
 import { Platform } from 'react-native';
+import { getLocales } from 'react-native-localize';
 
 export const sendClientErrorAsync = (errorMessage, backtrace) => {
   setTimeout(async () => {
@@ -13,8 +13,14 @@ export const sendClientErrorAsync = (errorMessage, backtrace) => {
         isTablet: Platform.isTV
       };
 
-      var errorData = {
-        message: JSON.stringify({ message: errorMessage, deviceInfo: deviceInfo }),
+      const locales = getLocales();
+
+      const errorData = {
+        message: JSON.stringify({
+          message: errorMessage,
+          deviceInfo: deviceInfo,
+          locales: locales
+        }),
         source: 'android-app',
         backtrace: backtrace
       };
