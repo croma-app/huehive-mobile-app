@@ -3,6 +3,7 @@ import { StatusBar } from 'react-native';
 import ApplicationRoot from './ApplicationRoot';
 import { withIAPContext } from 'react-native-iap';
 import useUserData from './hooks/useUserData';
+import Colors from './constants/Styles';
 
 const App = () => {
   const { loadUserData } = useUserData();
@@ -16,7 +17,7 @@ const App = () => {
       <StatusBar
         barStyle="light-content"
         hidden={false}
-        backgroundColor={'#c94740'}
+        backgroundColor={Colors.primaryDark}
         translucent={false}
         networkActivityIndicatorVisible={true}
       />
