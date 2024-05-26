@@ -13,7 +13,8 @@ export default {
   white: '#fff',
   black: '#000',
   backgroundColor: '#f2f2f2',
-  overlay: 'rgba(0, 0, 0, 0.4)',
-  primaryDark: '#C94740'
+  overlay: 'rgba(0, 0, 0, 0.5)',
+  primaryDark: '#C94740',
+  transparent: 'transparent'
   // fabPrimary: '#ff6f00'
 };
