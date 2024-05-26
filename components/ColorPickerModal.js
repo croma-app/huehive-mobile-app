@@ -100,9 +100,13 @@ export default function ColorPickerModal({ initialColor, onColorSelected, onClos
         contentContainerStyle={styles.scrollViewContent}
         scrollEnabled={activeTab !== 'wheel'} // TODO: find if there is some other way to solve this issue. - https://github.com/croma-app/huehive-mobile-app/pull/236/files#r1609216412
         showsVerticalScrollIndicator={false}>
-        <View style={styles.colorPickerContainer}>
+        <TouchableOpacity
+          onPress={(e) => {
+            e.stopPropagation();
+          }}
+          style={styles.colorPickerContainer}>
           {tabs.find((tab) => tab.key === activeTab)?.component}
-        </View>
+        </TouchableOpacity>
       </ScrollView>
       <View style={styles.bottomContainer}>
         <View style={styles.selectedColorView}>
