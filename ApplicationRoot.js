@@ -11,7 +11,7 @@ import ColorDetailsScreen from './screens/ColorDetailScreen';
 import PalettesScreen from './screens/PalettesScreen';
 import SavePaletteScreen from './screens/SavePaletteScreen';
 import ColorListScreen from './screens/ColorListScreen';
-import PaletteScreen from './screens/PaletteScreen';
+import PaletteScreen from './screens/PaletteScreenV1';
 import ProVersionScreen from './screens/ProVersionScreen';
 import SyncPalettesScreen from './screens/SyncPalettesScreen';
 import CommonPalettesScreen from './screens/CommonPalettesScreen';

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Platform, TouchableOpacity } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { notifyMessage } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
 
@@ -19,12 +19,14 @@ export const ColorDetail = ({ color }) => {
     },
     info: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
-      padding: 10
+      padding: 10,
+      alignItems: 'center'
     },
-    colorNameText: {
-      fontSize: 16,
-      fontWeight: '500'
+    colorNameKey: {
+      fontWeight: '400'
+    },
+    colorNameValue: {
+      fontSize: 18
     }
   });
   const fullColor = new Color(color);
@@ -97,9 +99,9 @@ export const ColorDetail = ({ color }) => {
         {items.map((item, index) => (
           <TouchableOpacity key={item.key} onPress={() => writeToClipboard(item.value, index)}>
             <View style={styles.info}>
-              <Text style={styles.colorNameText}>{item.key} : </Text>
+              <Text style={styles.colorNameKey}>{item.key} : </Text>
 
-              <Text>{item.value}</Text>
+              <Text style={styles.colorNameValue}>{item.value}</Text>
               {index === copyiedIndex && Platform.OS === 'web' && (
                 <Text
                   style={{
@@ -115,7 +117,7 @@ export const ColorDetail = ({ color }) => {
                   Copied!
                 </Text>
               )}
-              <FontAwesome name="copy" />
+              <MaterialIcons style={{ marginLeft: 'auto' }} name="content-copy" size={16} />
             </View>
           </TouchableOpacity>
         ))}
