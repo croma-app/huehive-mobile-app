@@ -1,22 +1,22 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { StyleSheet, Text, View, Modal, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import MultiColorView from '../components/MultiColorView';
 import { Spacing } from '../constants/Styles';
 import { logEvent } from '../libs/Helpers';
 import PropTypes from 'prop-types';
-import ColorPickerModal from '../components/ColorPickerModal';
 import useApplicationStore from '../hooks/useApplicationStore';
 import { ColorDetailItems } from '../components/ColorDetails';
 import Colors from '../constants/Styles';
+import CromaButton from '../components/CromaButton';
+import { useTranslation } from 'react-i18next';
 export default function PaletteViewScreen({ navigation, route }) {
-  const { isPro, allPalettes, addNewColorToPalette } = useApplicationStore();
+  const { isPro, allPalettes, setDetailedColor } = useApplicationStore();
+  const { t } = useTranslation();
 
   const [selectedColor, setSelectedColor] = useState(0);
 
   const paletteId = route.params.paletteId;
-
-  const [isColorPickerVisible, setIsColorPickerVisible] = useState(false);
   const palette = allPalettes.find((palette) => palette.id === paletteId);
   const colors = palette?.colors;
 
@@ -32,11 +32,6 @@ export default function PaletteViewScreen({ navigation, route }) {
     () => colors?.slice(0, isPro ? colors.length : 4),
     [colors, isPro]
   );
-
-  const handleColorSelected = (color) => {
-    addNewColorToPalette(palette.id, { hex: color });
-    setIsColorPickerVisible(false);
-  };
 
   const color = colorsToShow[selectedColor].color;
   const colorName = colorsToShow[selectedColor].name;
@@ -69,21 +64,27 @@ export default function PaletteViewScreen({ navigation, route }) {
           </View>
         </View>
       </View>
-      <Modal
-        visible={isColorPickerVisible}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={() => setIsColorPickerVisible(false)}>
-        <TouchableWithoutFeedback onPress={() => setIsColorPickerVisible(false)}>
-          <View style={styles.modalOverlay} />
-        </TouchableWithoutFeedback>
-        <View style={styles.modalContent}>
-          <ColorPickerModal
-            onColorSelected={handleColorSelected}
-            onClose={() => setIsColorPickerVisible(false)}
-          />
-        </View>
-      </Modal>
+      <View style={styles.buttonsContainer}>
+        <CromaButton
+          textStyle={{ color: Colors.primary }}
+          style={styles.buttonSecondary}
+          variant={'small'}
+          onPress={() => {
+            setDetailedColor(color);
+            navigation.navigate('Palettes');
+          }}>
+          {t('See color palettes')}
+        </CromaButton>
+        <CromaButton
+          textStyle={{ color: Colors.white }}
+          style={styles.buttonPrimary}
+          variant={'small'}
+          onPress={() => {
+            navigation.navigate('PaletteEdit', { paletteId });
+          }}>
+          {t('Edit palette')}
+        </CromaButton>
+      </View>
     </>
   );
 }
@@ -148,5 +149,23 @@ const styles = StyleSheet.create({
     width: '100%',
     position: 'absolute',
     bottom: 0
+  },
+  buttonsContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    padding: Spacing.large
+  },
+  buttonPrimary: {
+    backgroundColor: Colors.primary,
+    color: Colors.white,
+    flex: 1
+  },
+  buttonSecondary: {
+    backgroundColor: Colors.white,
+    color: Colors.black,
+    borderColor: Colors.primary,
+    borderWidth: 1,
+    flex: 1,
+    marginRight: 10
   }
 });

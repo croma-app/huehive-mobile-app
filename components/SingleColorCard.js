@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import Card from './Card';
-import Colors from '../constants/Styles';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Colors, { Spacing } from '../constants/Styles';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import PropTypes from 'prop-types';
 import { UndoDialog } from './CommonDialogs';
+import { pickTextColorBasedOnBgColor } from '../libs/ColorHelper';
 
 const SingleColorCard = function (props) {
   const [animationType, setAnimationType] = React.useState('fadeInLeftBig');
@@ -25,21 +25,29 @@ const SingleColorCard = function (props) {
     setAnimationType('fadeInLeftBig');
   }, []);
 
+  const textColor = pickTextColorBasedOnBgColor(color.color);
+
   return (
     <>
       {!isDeletedActive ? (
         <Card {...props} animationType={animationType}>
           <View>
-            <View style={{ backgroundColor: props.color.color, height: 100 }} />
             <TouchableOpacity
+              style={{
+                backgroundColor: props.color.color,
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                borderRadius: Spacing.medium,
+                color: textColor,
+                height: 100
+              }}
               onPress={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
               }}>
+              <Text style={[styles.label, { color: textColor }]}>{props.color.color}</Text>
               <View style={styles.bottom}>
-                <Text style={styles.label}>
-                  {props.color.color + (props.color.name ? ' (' + props.color.name + ')' : '')}
-                </Text>
                 <View style={styles.actionButtonsView}>
                   <TouchableOpacity
                     onPress={(event) => {
@@ -49,7 +57,7 @@ const SingleColorCard = function (props) {
                       onColorDeleteLocal();
                     }}
                     style={styles.actionButton}>
-                    <FontAwesome size={20} name="trash" />
+                    <MaterialIcons size={20} color={textColor} name="delete-outline" />
                   </TouchableOpacity>
                 </View>
                 <View style={[styles.actionButtonsView, styles.dragDropButton]}>
@@ -60,6 +68,7 @@ const SingleColorCard = function (props) {
                     <MaterialIcons
                       style={{ alignItems: 'center' }}
                       size={20}
+                      color={textColor}
                       name="drag-indicator"
                     />
                   </TouchableOpacity>

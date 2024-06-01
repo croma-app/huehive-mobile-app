@@ -6,15 +6,15 @@ import { pickTextColorBasedOnBgColor } from '../libs/ColorHelper';
 export default function MultiColorView(props) {
   const { colors, selectedColor, setSelectedColor } = props;
   // Create animated values for height and width
-  const heightAnim = useRef(new Animated.Value(10)).current;
-  const widthAnim = useRef(new Animated.Value(10)).current;
+  const heightAnim = useRef(new Animated.Value(5)).current;
+  const widthAnim = useRef(new Animated.Value(5)).current;
 
   useEffect(() => {
     // Animate the height and width from 1 to 10 over 500ms
     Animated.timing(heightAnim, {
       delay: 500,
       toValue: 15,
-      duration: 500,
+      duration: 300,
       easing: Easing.linear,
       useNativeDriver: false // Set to true if you don't need layout updates
     }).start();
@@ -22,7 +22,7 @@ export default function MultiColorView(props) {
     Animated.timing(widthAnim, {
       delay: 500,
       toValue: 15,
-      duration: 500,
+      duration: 300,
       easing: Easing.linear,
       useNativeDriver: false // Set to true if you don't need layout updates
     }).start();
