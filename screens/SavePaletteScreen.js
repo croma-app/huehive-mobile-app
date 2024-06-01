@@ -87,7 +87,7 @@ export default function SavePaletteScreen({ navigation, route }) {
           </Text>
           <CromaButton
             style={styles.proVersionButton}
-            textStyle={{ color: '#fff' }}
+            textStyle={{ color: Colors.white }}
             onPress={handleUnlockPro}>
             {t('Unlock Pro')}
           </CromaButton>
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     shadowOffset: { height: 1, width: 1 },
     shadowOpacity: 1,
     shadowRadius: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
     elevation: 2,
     marginVertical: 10,
     padding: 10,

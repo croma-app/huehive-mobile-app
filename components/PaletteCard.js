@@ -190,7 +190,6 @@ export const PaletteCard = (props) => {
                 />
                 <MenuItemWrapper
                   onPress={() => {
-                    logEvent('home_screen_edit');
                     navigation.navigate('Palette', { paletteId });
                   }}
                   icon="edit"

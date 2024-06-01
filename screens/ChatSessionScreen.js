@@ -168,8 +168,8 @@ const ChatSessionScreen = (props) => {
                 </View>
               ) : (
                 <CromaButton
-                  style={{ backgroundColor: '#ff5c59', margin: 10 }}
-                  textStyle={{ color: '#fff' }}
+                  style={{ backgroundColor: Colors.primary, margin: 10 }}
+                  textStyle={{ color: Colors.white }}
                   onPress={() => {
                     logEvent('chat_session_pro_button');
                     navigation.navigate('ProVersion');
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
   errorMessageContainer: {
     marginLeft: 10,
     marginRight: 10,
-    backgroundColor: '#ff5c59',
+    backgroundColor: Colors.primary,
     borderRadius: 8
   },
   errorMessageText: {

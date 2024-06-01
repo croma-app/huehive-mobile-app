@@ -52,7 +52,10 @@ export default function ProScreen() {
             {t('Enjoy lifetime access to all current and future pro features')}
           </Text>
         </View>
-        <CromaButton style={styles.proButton} textStyle={{ color: '#fff' }} onPress={purchasePro}>
+        <CromaButton
+          style={styles.proButton}
+          textStyle={{ color: Colors.white }}
+          onPress={purchasePro}>
           {isPro ? t('You are a pro user! Enjoy the app') : t('Unlock Pro for Lifetime Access')}
         </CromaButton>
         <View style={styles.benefit}>

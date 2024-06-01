@@ -1,8 +1,32 @@
-import * as React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+/* eslint-disable react/prop-types */
+import React, { useEffect, useRef } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, Animated, Easing } from 'react-native';
+import { pickTextColorBasedOnBgColor } from '../libs/ColorHelper';
 
 export default function MultiColorView(props) {
-  const { colors } = props;
+  const { colors, selectedColor, setSelectedColor } = props;
+  // Create animated values for height and width
+  const heightAnim = useRef(new Animated.Value(5)).current;
+  const widthAnim = useRef(new Animated.Value(5)).current;
+
+  useEffect(() => {
+    // Animate the height and width from 1 to 10 over 500ms
+    Animated.timing(heightAnim, {
+      delay: 500,
+      toValue: 15,
+      duration: 300,
+      easing: Easing.linear,
+      useNativeDriver: false // Set to true if you don't need layout updates
+    }).start();
+
+    Animated.timing(widthAnim, {
+      delay: 500,
+      toValue: 15,
+      duration: 300,
+      easing: Easing.linear,
+      useNativeDriver: false // Set to true if you don't need layout updates
+    }).start();
+  }, [heightAnim, widthAnim]);
 
   if (!colors || colors.length === 0) {
     return (
@@ -17,12 +41,31 @@ export default function MultiColorView(props) {
 
   return (
     <View style={styles.palette}>
-      {colors.map((item, index) => (
-        <View
-          style={[styles.color, { backgroundColor: item.color }]}
-          key={`${item.color}-${index}`}
-        />
-      ))}
+      {colors.map((item, index) => {
+        return setSelectedColor ? (
+          <TouchableOpacity
+            key={`${item.color}-${index}`}
+            onPress={() => {
+              setSelectedColor(index);
+            }}
+            style={[styles.color, { backgroundColor: item.color }]}>
+            {selectedColor === index && (
+              <Animated.View
+                style={{
+                  height: heightAnim,
+                  width: widthAnim,
+                  borderRadius: 10,
+                  backgroundColor: pickTextColorBasedOnBgColor(item.color)
+                }}
+              />
+            )}
+          </TouchableOpacity>
+        ) : (
+          <View
+            key={`${item.color}-${index}`}
+            style={[styles.color, { backgroundColor: item.color }]}></View>
+        );
+      })}
     </View>
   );
 }
@@ -37,7 +80,9 @@ const styles = StyleSheet.create({
   },
   color: {
     flex: 1,
-    marginStart: -1
+    marginStart: -1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   emptyContainer: {
     height: 60,

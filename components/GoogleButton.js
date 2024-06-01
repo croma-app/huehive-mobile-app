@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Colors from '../constants/Styles';
 
 const GoogleButton = ({ buttonType, onPress }) => {
   const [disabled, setDisabled] = useState(false);
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
     opacity: 0.6
   },
   buttonText: {
-    color: '#FFFFFF',
+    color: Colors.white,
     fontSize: 16,
     fontWeight: 'bold'
   },

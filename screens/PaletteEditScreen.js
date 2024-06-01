@@ -215,11 +215,11 @@ const styles = StyleSheet.create({
     width: '90%'
   },
   headerTitle: {
-    color: '#ffffff',
+    color: Colors.white,
     fontSize: 20
   },
   input: {
-    color: '#ffffff',
+    color: Colors.white,
     fontSize: 20,
     maxWidth: '80%'
   },

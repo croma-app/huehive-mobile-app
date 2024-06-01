@@ -1,14 +1,16 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from 'react';
 
 import { StyleSheet, Text, ActivityIndicator, TouchableOpacity } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Colors, { Spacing } from '../constants/Styles';
 
 const LOADER_DEFAULT = 0;
 const LOADER_LOADING = 1;
 const LOADER_DONE = 2;
 
 const CromaButton = function (props) {
-  const { style, onPress, onPressWithLoader, children, textStyle } = props;
+  const { style, onPress, onPressWithLoader, children, textStyle, variant } = props;
   const [loaderState, setLoaderState] = useState(LOADER_DEFAULT);
   const _onPress = async () => {
     if (onPressWithLoader) {
@@ -25,7 +27,9 @@ const CromaButton = function (props) {
     }
   };
   return (
-    <TouchableOpacity style={[styles.button, style]} onPress={_onPress}>
+    <TouchableOpacity
+      style={[variant === 'small' ? styles.buttonSmall : styles.button, style]}
+      onPress={_onPress}>
       {loaderState === LOADER_LOADING ? (
         <ActivityIndicator />
       ) : (
@@ -46,7 +50,7 @@ const styles = StyleSheet.create({
     shadowOffset: { height: 1, width: 1 },
     shadowOpacity: 1,
     shadowRadius: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
     elevation: 2,
     height: 50,
     marginTop: 10,
@@ -56,6 +60,22 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     borderRadius: 8
+  },
+  buttonSmall: {
+    shadowColor: 'rgba(0,0,0, .4)',
+    shadowOffset: { height: 1, width: 1 },
+    shadowOpacity: 1,
+    shadowRadius: 1,
+    backgroundColor: Colors.white,
+    elevation: 2,
+    height: 30,
+    marginTop: Spacing.small,
+    marginBottom: Spacing.small,
+    justifyContent: 'center',
+    alignItems: 'center',
+    display: 'flex',
+    flexDirection: 'row',
+    borderRadius: Spacing.medium
   },
   text: {
     textTransform: 'uppercase',
