@@ -10,6 +10,7 @@ import { AuthForm } from './AppAuthProvider';
 import useUserData from '../hooks/useUserData';
 import { ScrollView } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
+import Colors from '../constants/Styles';
 
 function AuthOnboardingScreen({ markLoginStepDone }) {
   const { t } = useTranslation();
@@ -83,13 +84,13 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: '#FFFFFF'
+    color: Colors.white
   },
   description: {
     fontSize: 20,
     textAlign: 'center',
     marginBottom: 20,
-    color: '#FFFFFF'
+    color: Colors.white
   },
   image: {
     width: '100%',
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'left',
     marginBottom: 10,
-    color: '#FFFFFF'
+    color: Colors.white
   },
   skip: {
     marginBottom: 20

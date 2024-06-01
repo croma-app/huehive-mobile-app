@@ -4,6 +4,7 @@ import * as Animatable from 'react-native-animatable';
 import { View, Text, StyleSheet, Platform, Dimensions } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
+import Colors from '../constants/Styles';
 
 export const DialogContainer = (props) => (
   <View style={styles.DialogContainer}>{props.children}</View>
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
     borderRadius: 6
   },
   undoText: {
-    color: '#fff',
+    color: Colors.white,
     fontSize: 15
   },
   undoButton: {

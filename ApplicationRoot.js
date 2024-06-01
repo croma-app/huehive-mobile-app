@@ -11,7 +11,7 @@ import ColorDetailsScreen from './screens/ColorDetailScreen';
 import PalettesScreen from './screens/PalettesScreen';
 import SavePaletteScreen from './screens/SavePaletteScreen';
 import ColorListScreen from './screens/ColorListScreen';
-import PaletteScreen from './screens/PaletteScreenV1';
+import PaletteViewScreen from './screens/PaletteScreenV1';
 import ProVersionScreen from './screens/ProVersionScreen';
 import SyncPalettesScreen from './screens/SyncPalettesScreen';
 import CommonPalettesScreen from './screens/CommonPalettesScreen';
@@ -106,7 +106,7 @@ export default function App() {
                   options={{ title: t('Save palette') }}
                   component={SavePaletteScreen}
                 />
-                <Stack.Screen name="Palette" component={PaletteScreen} />
+                <Stack.Screen name="Palette" component={PaletteViewScreen} />
                 <Stack.Screen
                   name={ROUTE_NAMES.PRO_VERSION}
                   options={{ title: t('Pro benefits') }}
@@ -169,5 +169,5 @@ const screenOptions = {
     shadowOffset: { height: 3, width: 0 },
     borderBottomWidth: 0
   },
-  headerTintColor: '#fff'
+  headerTintColor: Colors.white
 };

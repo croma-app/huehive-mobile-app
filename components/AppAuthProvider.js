@@ -15,6 +15,7 @@ import { notifyMessage, sendClientError } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
 import { googleLogin } from '../network/login-and-signup';
 import useApplicationStore from '../hooks/useApplicationStore';
+import Colors from '../constants/Styles';
 
 const SCREEN_TYPES = {
   LOGIN: 'LOGIN',
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 24,
     borderWidth: 4,
-    borderColor: '#ffffff'
+    borderColor: Colors.white
   },
   modal: {
     flex: 1,
@@ -149,7 +150,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)'
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
     paddingTop: 20
   },
   form_container: {
@@ -166,7 +167,7 @@ const styles = StyleSheet.create({
   separatorLine: {
     width: 120,
     height: 1,
-    backgroundColor: '#000'
+    backgroundColor: Colors.black
   },
   separatorText: {
     marginLeft: 20,

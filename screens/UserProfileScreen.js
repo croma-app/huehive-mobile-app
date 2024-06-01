@@ -11,6 +11,7 @@ import { ROUTE_NAMES } from '../libs/contants';
 import useApplicationStore from '../hooks/useApplicationStore';
 import { logout } from '../network/login-and-signup';
 import { logEvent } from '../libs/Helpers';
+import Colors from '../constants/Styles';
 
 function UserProfile(props) {
   const applicationState = useApplicationStore();
@@ -58,8 +59,8 @@ function UserProfile(props) {
           {userData?.email}
         </Text>
         <CromaButton
-          style={{ backgroundColor: '#ff5c59', width: '100%' }}
-          textStyle={{ color: '#fff' }}
+          style={{ backgroundColor: Colors.primary, width: '100%' }}
+          textStyle={{ color: Colors.white }}
           onPressWithLoader={onLogout}>
           {t('Logout')}
         </CromaButton>

@@ -150,12 +150,12 @@ const styles = StyleSheet.create({
     paddingVertical: 16
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
     borderRadius: 12,
     marginBottom: 16,
     padding: 16,
     elevation: 4,
-    shadowColor: '#000',
+    shadowColor: Colors.black,
     shadowOffset: {
       width: 0,
       height: 2

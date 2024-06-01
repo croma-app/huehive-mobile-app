@@ -142,7 +142,7 @@ export default function ColorPickerModal({ initialColor, onColorSelected, onClos
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     paddingTop: 8
@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   tabText: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: '#000'
+    color: Colors.black
   },
   scrollViewContent: {
     paddingHorizontal: 16,

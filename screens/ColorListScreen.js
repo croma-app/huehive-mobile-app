@@ -206,7 +206,7 @@ const CustomHeader = () => {
       }}>
       <Text
         style={{
-          color: '#ffffff',
+          color: Colors.white,
           fontSize: 18
         }}>
         {t('New palette')}
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
     padding: 16,
     borderRadius: 8,
     width: '80%'

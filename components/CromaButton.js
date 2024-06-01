@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { StyleSheet, Text, ActivityIndicator, TouchableOpacity } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Colors from '../constants/Styles';
 
 const LOADER_DEFAULT = 0;
 const LOADER_LOADING = 1;
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
     shadowOffset: { height: 1, width: 1 },
     shadowOpacity: 1,
     shadowRadius: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
     elevation: 2,
     height: 50,
     marginTop: 10,

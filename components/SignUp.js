@@ -8,6 +8,7 @@ import CromaButton from './CromaButton';
 import useUserData from '../hooks/useUserData';
 import { notifyMessage, sendClientError } from '../libs/Helpers';
 import useApplicationStore from '../hooks/useApplicationStore';
+import Colors from '../constants/Styles';
 
 const LOGIN_AND_SIGNUP_TEXT = {
   LOGIN: {
@@ -114,11 +115,14 @@ const SignUp = function ({ setScreenLogin }) {
       />
       {errors.confirmPassword && <Text style={styles.errorText}>{errors.confirmPassword}</Text>}
       <View style={styles.buttonsContainer}>
-        <CromaButton textStyle={{ color: '#fff' }} style={styles.buttonLeft} onPress={onSignup}>
+        <CromaButton
+          textStyle={{ color: Colors.white }}
+          style={styles.buttonLeft}
+          onPress={onSignup}>
           {isLoginInProgress ? 'loading...' : t(LOGIN_AND_SIGNUP_TEXT['SIGN_UP'].buttonText)}
         </CromaButton>
         <CromaButton
-          textStyle={{ color: '#ff5c59' }}
+          textStyle={{ color: Colors.primary }}
           style={styles.buttonRight}
           onPress={setScreenLogin}>
           {t(LOGIN_AND_SIGNUP_TEXT['LOGIN'].buttonText)}
@@ -134,15 +138,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   buttonLeft: {
-    backgroundColor: '#ff5c59',
-    color: '#fff',
+    backgroundColor: Colors.primary,
+    color: Colors.white,
     flex: 1,
     marginRight: 10
   },
   buttonRight: {
-    backgroundColor: '#fff',
-    color: '#000',
-    borderColor: '#ff5c59',
+    backgroundColor: Colors.white,
+    color: Colors.black,
+    borderColor: Colors.primary,
     borderWidth: 1,
     flex: 1,
     marginLeft: 10

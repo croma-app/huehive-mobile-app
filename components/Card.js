@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import * as Animatable from 'react-native-animatable';
 import { StyleSheet, View, TouchableOpacity, Animated } from 'react-native';
 import PropTypes from 'prop-types';
+import Colors from '../constants/Styles';
 
 const Card = ({ animationType, onLongPress, onPress, children }) => {
   const scaleValue = useRef(new Animated.Value(1)).current;
@@ -52,7 +53,7 @@ Card.propTypes = {
 const styles = StyleSheet.create({
   inner: {
     marginVertical: 8,
-    backgroundColor: '#fff', // Set a background color
+    backgroundColor: Colors.white, // Set a background color
 
     // Shadow properties for iOS
     shadowColor: '#ccc',

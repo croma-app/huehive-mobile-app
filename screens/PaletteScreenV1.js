@@ -8,7 +8,8 @@ import PropTypes from 'prop-types';
 import ColorPickerModal from '../components/ColorPickerModal';
 import useApplicationStore from '../hooks/useApplicationStore';
 import { ColorDetailItems } from '../components/ColorDetails';
-export default function PaletteScreen({ navigation, route }) {
+import Colors from '../constants/Styles';
+export default function PaletteViewScreen({ navigation, route }) {
   const { isPro, allPalettes, addNewColorToPalette } = useApplicationStore();
 
   const [selectedColor, setSelectedColor] = useState(0);
@@ -20,7 +21,7 @@ export default function PaletteScreen({ navigation, route }) {
   const colors = palette?.colors;
 
   useEffect(() => {
-    logEvent('palette_screen');
+    logEvent('palette_view_screen');
   });
 
   useLayoutEffect(() => {
@@ -54,7 +55,7 @@ export default function PaletteScreen({ navigation, route }) {
           style={{
             flexDirection: 'column',
             padding: 8,
-            backgroundColor: '#fff',
+            backgroundColor: Colors.white,
             borderRadius: 8,
             marginTop: 12
           }}>
@@ -87,7 +88,7 @@ export default function PaletteScreen({ navigation, route }) {
   );
 }
 
-PaletteScreen.propTypes = {
+PaletteViewScreen.propTypes = {
   navigation: PropTypes.any
 };
 
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   headerText: {
-    color: '#ffffff',
+    color: Colors.white,
     fontSize: 20,
     maxWidth: '80%'
   },

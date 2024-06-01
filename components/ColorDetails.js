@@ -6,6 +6,7 @@ import { notifyMessage } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
 
 import Color from 'pigment/full';
+import Colors from '../constants/Styles';
 
 export const ColorDetailItems = function ({ color, colorName }) {
   const fullColor = new Color(color);
@@ -79,7 +80,7 @@ export const ColorDetailItems = function ({ color, colorName }) {
                   backgroundColor: 'rgb(64, 64, 58)',
                   top: '-25px',
                   right: '-10px',
-                  color: '#fff',
+                  color: Colors.white,
                   padding: '5px',
                   textAlign: 'center',
                   borderRadius: '6px'
@@ -108,7 +109,7 @@ export const ColorDetail = ({ color }) => {
         flex: 1,
         flexDirection: 'column',
         padding: 8,
-        backgroundColor: '#fff',
+        backgroundColor: Colors.white,
         borderRadius: 8,
         marginTop: 12
       }}>
