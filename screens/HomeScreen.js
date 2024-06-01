@@ -33,6 +33,10 @@ const HomeScreen = function ({ navigation, route }) {
   };
 
   useEffect(() => {
+    logEvent('home_screen');
+  }, []);
+
+  useEffect(() => {
     getPermissionAsync();
     if (Platform?.OS === 'android') {
       // Deep linking code
@@ -96,9 +100,6 @@ const HomeScreen = function ({ navigation, route }) {
       </View>
     );
   } else {
-    logEvent('home_screen', {
-      length: allPalettes.length
-    });
     return (
       <View style={styles.container}>
         {pickImageLoading ? <ActivityIndicator /> : <View />}

@@ -10,8 +10,6 @@ import { logEvent } from '../libs/Helpers';
 import useApplicationStore from '../hooks/useApplicationStore';
 
 export default function SavePaletteScreen({ navigation, route }) {
-  logEvent('save_palette_screen');
-
   const { t } = useTranslation();
   const { addPalette, allPalettes, isPro } = useApplicationStore();
 
@@ -25,6 +23,10 @@ export default function SavePaletteScreen({ navigation, route }) {
   }, [route.params?.colors]);
 
   const inputRef = useRef(null);
+
+  useEffect(() => {
+    logEvent('save_palette_screen');
+  }, []);
 
   useEffect(() => {
     if (inputRef.current) {

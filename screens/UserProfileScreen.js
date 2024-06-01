@@ -10,11 +10,16 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { ROUTE_NAMES } from '../libs/contants';
 import useApplicationStore from '../hooks/useApplicationStore';
 import { logout } from '../network/login-and-signup';
+import { logEvent } from '../libs/Helpers';
 
 function UserProfile(props) {
   const applicationState = useApplicationStore();
   const { loadInitPaletteFromStore } = applicationState;
   const { userData, loadUserData } = useUserData();
+
+  useEffect(() => {
+    logEvent('user_profile_screen');
+  }, []);
 
   const { t } = useTranslation();
   useEffect(() => {

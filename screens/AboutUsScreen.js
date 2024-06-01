@@ -1,5 +1,5 @@
 import { Linking, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { material } from 'react-native-typography';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -15,7 +15,9 @@ const DISCORD_URL = 'https://discord.com/invite/ZSBVsBqDtg';
 const AboutUsScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
-  logEvent('about_us_screen');
+  useEffect(() => {
+    logEvent('about_us_screen');
+  }, []);
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>

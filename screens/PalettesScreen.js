@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import Color from 'pigment/full';
 import { PalettePreviewCard } from '../components/PalettePreviewCard';
@@ -40,7 +40,11 @@ export default function PalettesScreen({ navigation }) {
       );
     }
   }
-  logEvent('palettes_screen');
+
+  useEffect(() => {
+    logEvent('palettes_screen');
+  }, []);
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {items}
