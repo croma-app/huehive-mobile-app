@@ -50,7 +50,7 @@ export default function ColorListScreen({ navigation, route }) {
     });
   }, []);
   const renderItem = ({ item, drag }) => {
-    const opecity = item.opacity;
+    const opacity = item.opacity;
     return (
       <SingleColorView
         onColorChange={(updatedColor) => {
@@ -58,7 +58,7 @@ export default function ColorListScreen({ navigation, route }) {
           updatedColors[item.index] = updatedColor;
           updateColorList(updatedColors);
         }}
-        opacity={opecity}
+        opacity={opacity}
         key={item.color + '-' + item.locked}
         color={item}
         drag={drag}
@@ -86,7 +86,7 @@ export default function ColorListScreen({ navigation, route }) {
           }).start();
         }}
         onRemove={() => {
-          Animated.timing(opecity, {
+          Animated.timing(opacity, {
             toValue: 0,
             duration: 600,
             useNativeDriver: true
@@ -144,17 +144,27 @@ export default function ColorListScreen({ navigation, route }) {
       </View>
       <View style={styles.bottomActionArea}>
         <View style={styles.undoRedoContainer}>
-          <TouchableOpacity style={styles.smallButton} onPress={undo} disabled={currentIndex === 0}>
+          <TouchableOpacity
+            style={[styles.smallButton, currentIndex === 0 && styles.disabledButton]}
+            onPress={undo}
+            disabled={currentIndex === 0}>
             <View style={styles.smallButtonContent}>
-              <Icon name="undo" size={16} color={Colors.black} />
+              <Icon name="undo" size={16} color={currentIndex === 0 ? Colors.gray : Colors.black} />
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.smallButton}
+            style={[
+              styles.smallButton,
+              currentIndex === colorListHistory.length - 1 && styles.disabledButton
+            ]}
             onPress={redo}
             disabled={currentIndex === colorListHistory.length - 1}>
             <View style={styles.smallButtonContent}>
-              <Icon name="repeat" size={16} color={Colors.black} />
+              <Icon
+                name="repeat"
+                size={16}
+                color={currentIndex === colorListHistory.length - 1 ? Colors.gray : Colors.black}
+              />
             </View>
           </TouchableOpacity>
         </View>
@@ -178,7 +188,7 @@ export default function ColorListScreen({ navigation, route }) {
             });
           }}>
           <View style={styles.buttonContent}>
-            <MaterialIcons name="done" size={20} color={Colors.black} />
+            <MaterialIcons name="done" size={24} color={Colors.black} />
           </View>
         </TouchableOpacity>
       </View>
@@ -297,5 +307,8 @@ const styles = StyleSheet.create({
   modalCloseButtonText: {
     fontSize: 16,
     color: '#007AFF'
+  },
+  disabledButton: {
+    opacity: 0.5
   }
 });
