@@ -1,13 +1,12 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { SingleColorView } from '../components/SingleColorView';
-import { StyleSheet, View, Text, Platform, Animated, TouchableOpacity, Modal } from 'react-native';
+import { StyleSheet, View, Text, Platform, Animated, TouchableOpacity } from 'react-native';
 import { logEvent, notifyMessage } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import Color from 'pigment/full';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Colors from '../constants/Styles';
 import { generateRandomColorPaletteWithLockedColors } from '../libs/ColorHelper';
 
@@ -26,27 +25,6 @@ function uniqueColors(colors) {
   });
   return uniqueColors;
 }
-
-const GenerateInfoModal = ({ toggleGenerateInfo, showGenerateInfo }) => {
-  const { t } = useTranslation();
-
-  return (
-    <Modal visible={showGenerateInfo} transparent animationType="fade">
-      <TouchableOpacity style={styles.modalBackground} onPress={toggleGenerateInfo}>
-        <View style={styles.modalContent}>
-          <Text style={styles.modalText}>
-            {t(
-              'The "Generate" button creates new color variations for the unlocked colors in the list. It helps you explore different color combinations and discover new palettes.'
-            )}
-          </Text>
-          <TouchableOpacity style={styles.modalCloseButton} onPress={toggleGenerateInfo}>
-            <Text style={styles.modalCloseButtonText}>{t('Close')}</Text>
-          </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
-    </Modal>
-  );
-};
 
 export default function ColorListScreen({ navigation, route }) {
   const { t } = useTranslation();
@@ -165,30 +143,32 @@ export default function ColorListScreen({ navigation, route }) {
         />
       </View>
       <View style={styles.bottomActionArea}>
+        <View style={styles.undoRedoContainer}>
+          <TouchableOpacity style={styles.smallButton} onPress={undo} disabled={currentIndex === 0}>
+            <View style={styles.smallButtonContent}>
+              <Icon name="undo" size={16} color={Colors.black} />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.smallButton}
+            onPress={redo}
+            disabled={currentIndex === colorListHistory.length - 1}>
+            <View style={styles.smallButtonContent}>
+              <Icon name="repeat" size={16} color={Colors.black} />
+            </View>
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
             regenerateUnlockedColors();
           }}>
           <View style={styles.buttonContent}>
-            <Ionicons name="shuffle" size={20} color={Colors.primary} />
             <Text style={styles.buttonText}>{t('Generate')}</Text>
-            <TouchableOpacity
-              style={styles.infoIconContainer}
-              onPress={() => {
-                toggleGenerateInfo();
-              }}>
-              <MaterialCommunityIcons
-                name="information-outline"
-                size={20}
-                color={Colors.lightGrey}
-                style={styles.infoIcon}
-              />
-            </TouchableOpacity>
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
+          style={styles.doneButton}
           onPress={() => {
             navigation.navigate('SavePalette', {
               colors: colors.map((color) => {
@@ -198,28 +178,10 @@ export default function ColorListScreen({ navigation, route }) {
             });
           }}>
           <View style={styles.buttonContent}>
-            <Icon name="save" size={20} color={Colors.primary} />
-            <Text style={styles.buttonText}>{t('Save')}</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={undo} disabled={currentIndex === 0}>
-          <View style={styles.buttonContent}>
-            <Icon name="undo" size={20} color={Colors.fabPrimary} />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={redo}
-          disabled={currentIndex === colorListHistory.length - 1}>
-          <View style={styles.buttonContent}>
-            <Icon name="repeat" size={20} color={Colors.fabPrimary} />
+            <MaterialIcons name="done" size={20} color={Colors.black} />
           </View>
         </TouchableOpacity>
       </View>
-      <GenerateInfoModal
-        toggleGenerateInfo={toggleGenerateInfo}
-        showGenerateInfo={showGenerateInfo}
-      />
     </View>
   );
 }
@@ -257,7 +219,7 @@ const styles = StyleSheet.create({
   },
   bottomActionArea: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 16,
     borderTopWidth: 1,
@@ -272,18 +234,44 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  doneButton: {
+    paddingHorizontal: 16,
+    marginHorizontal: 8,
+    backgroundColor: 'white',
+    paddingVertical: 8,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   buttonContent: {
     flexDirection: 'row',
     alignItems: 'center'
   },
   buttonText: {
-    color: Colors.primary,
+    color: Colors.black,
     marginLeft: 8,
     fontSize: 18
   },
   infoIcon: {},
   infoIconContainer: {
     paddingHorizontal: 8
+  },
+  smallButton: {
+    marginHorizontal: 4,
+    backgroundColor: 'white',
+    padding: 8,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  smallButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  undoRedoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 8
   },
   modalBackground: {
     flex: 1,
