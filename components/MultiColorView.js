@@ -1,8 +1,10 @@
+/* eslint-disable react/prop-types */
 import * as React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { pickTextColorBasedOnBgColor } from '../libs/ColorHelper';
 
 export default function MultiColorView(props) {
-  const { colors } = props;
+  const { colors, selectedColor, setSelectedColor } = props;
 
   if (!colors || colors.length === 0) {
     return (
@@ -17,12 +19,31 @@ export default function MultiColorView(props) {
 
   return (
     <View style={styles.palette}>
-      {colors.map((item, index) => (
-        <View
-          style={[styles.color, { backgroundColor: item.color }]}
-          key={`${item.color}-${index}`}
-        />
-      ))}
+      {colors.map((item, index) => {
+        return setSelectedColor ? (
+          <TouchableOpacity
+            key={`${item.color}-${index}`}
+            onPress={() => {
+              setSelectedColor(index);
+            }}
+            style={[styles.color, { backgroundColor: item.color }]}>
+            {selectedColor === index && (
+              <View
+                style={{
+                  height: 15,
+                  width: 15,
+                  borderRadius: 10,
+                  backgroundColor: pickTextColorBasedOnBgColor(item.color)
+                }}
+              />
+            )}
+          </TouchableOpacity>
+        ) : (
+          <View
+            key={`${item.color}-${index}`}
+            style={[styles.color, { backgroundColor: item.color }]}></View>
+        );
+      })}
     </View>
   );
 }
@@ -37,7 +58,9 @@ const styles = StyleSheet.create({
   },
   color: {
     flex: 1,
-    marginStart: -1
+    marginStart: -1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   emptyContainer: {
     height: 60,

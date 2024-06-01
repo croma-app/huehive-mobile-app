@@ -24,6 +24,7 @@ import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatli
 import PropTypes from 'prop-types';
 import ColorPickerModal from '../components/ColorPickerModal';
 import useApplicationStore from '../hooks/useApplicationStore';
+import { ColorDetailItems } from '../components/ColorDetails';
 
 import { ColorDetail } from '../components/ColorDetails';
 import CromaButton from '../components/CromaButton';
@@ -96,63 +97,36 @@ export default function PaletteScreen({ navigation, route }) {
     setIsColorPickerVisible(false);
   };
 
-  console.log('colors to show', colorsToShow);
+  const color = colorsToShow[selectedColor].color;
+  const colorName = colorsToShow[selectedColor].name;
+
+  const backgroundColor = {
+    backgroundColor: color,
+    height: 112,
+    alignSelf: 'stretch',
+    borderRadius: 8
+  };
 
   return (
     <>
-      <View style={[styles.container]}>
-        {/* <DraggableFlatList
-          data={colorsToShow}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          style={styles.listview}
-          onDragEnd={({ data: reorderedColors }) => {
-            updatePalette(palette.id, { ...palette, colors: reorderedColors });
-          }}
-        /> */}
-        <ColorDetail color={colorsToShow[selectedColor].color}>
-          {colorsToShow[selectedColor].color}
-        </ColorDetail>
-
-        <MultiColorView colors={colorsToShow}></MultiColorView>
-        <View style={{ display: 'flex', flexDirection: 'row' }}>
-          <CromaButton
-            onPress={() => {
-              setDetailedColor(colorsToShow[selectedColor].color);
-              navigation.navigate('Palettes');
-            }}>
-            {t('See color palettes')}
-          </CromaButton>
-          <CromaButton
-            style={{ borderWidth: 1, borderColor: Colors.primary, color: '#fff' }}
-            onPress={() => {
-              setDetailedColor(colorsToShow[selectedColor].color);
-              navigation.navigate('Palettes');
-            }}>
-            {t('Edit Palette')}
-          </CromaButton>
+      <View style={styles.container}>
+        <View
+          style={{
+            flexDirection: 'column',
+            padding: 8,
+            backgroundColor: '#fff',
+            borderRadius: 8,
+            marginTop: 12
+          }}>
+          <View style={backgroundColor}></View>
+          <ColorDetailItems colorName={colorName} color={color} />
+          <View style={{ paddingTop: 10 }}>
+            <MultiColorView
+              colors={colorsToShow}
+              selectedColor={selectedColor}
+              setSelectedColor={setSelectedColor}></MultiColorView>
+          </View>
         </View>
-        {/* <ActionButton
-          offsetY={76}
-          bgColor="rgba(68, 68, 68, 0.6)"
-          hideShadow={Platform.OS === 'web' ? true : false}
-          fixNativeFeedbackRadius={true}
-          buttonColor={Colors.primary}
-          onPress={() => {
-            logEvent('palette_screen_add_color');
-            if (
-              (Platform.OS === 'android' || Platform.OS === 'ios') &&
-              colors.length >= 4 &&
-              isPro === false
-            ) {
-              notifyMessage('Unlock pro to add more than 4 colors!');
-              navigation.navigate('ProVersion');
-            } else {
-              setIsColorPickerVisible(true);
-            }
-          }}
-          style={styles.actionButton}
-        /> */}
       </View>
       <Modal
         visible={isColorPickerVisible}
@@ -234,7 +208,7 @@ const setNavigationOptions = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: Spacing.small,
+    padding: Spacing.medium,
     flex: 1
   },
   listview: {
