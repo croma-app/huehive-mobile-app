@@ -1,61 +1,24 @@
 /* eslint-disable react/prop-types */
-import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
-import SingleColorCard from '../components/SingleColorCard';
-import {
-  Dimensions,
-  Platform,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-  TouchableOpacity,
-  Modal,
-  TouchableWithoutFeedback
-} from 'react-native';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { StyleSheet, Text, View, Modal, TouchableWithoutFeedback } from 'react-native';
 import MultiColorView from '../components/MultiColorView';
-import ActionButton from 'react-native-action-button';
-import Colors, { Spacing } from '../constants/Styles';
-import { useHeaderHeight } from '@react-navigation/elements';
+import { Spacing } from '../constants/Styles';
 import { logEvent } from '../libs/Helpers';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { notifyMessage } from '../libs/Helpers';
-import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
 import PropTypes from 'prop-types';
 import ColorPickerModal from '../components/ColorPickerModal';
 import useApplicationStore from '../hooks/useApplicationStore';
 import { ColorDetailItems } from '../components/ColorDetails';
-
-import { ColorDetail } from '../components/ColorDetails';
-import CromaButton from '../components/CromaButton';
-import { useTranslation } from 'react-i18next';
-
 export default function PaletteScreen({ navigation, route }) {
-  const {
-    isPro,
-    allPalettes,
-    updatePalette,
-    deleteColorFromPalette,
-    addNewColorToPalette,
-    setDetailedColor
-  } = useApplicationStore();
+  const { isPro, allPalettes, addNewColorToPalette } = useApplicationStore();
 
   const [selectedColor, setSelectedColor] = useState(0);
-  const { t } = useTranslation();
 
   const paletteId = route.params.paletteId;
 
   const [isColorPickerVisible, setIsColorPickerVisible] = useState(false);
-
-  const { height } = Dimensions.get('window');
   const palette = allPalettes.find((palette) => palette.id === paletteId);
   const colors = palette?.colors;
-  const onColorDelete = React.useCallback(
-    (hex) => {
-      deleteColorFromPalette(palette.id, palette.colors.find((c) => c.color === hex).id || null);
-    },
-    [deleteColorFromPalette, palette.colors, palette.id]
-  );
+
   useEffect(() => {
     logEvent('palette_screen');
   });
@@ -63,29 +26,6 @@ export default function PaletteScreen({ navigation, route }) {
   useLayoutEffect(() => {
     setNavigationOptions({ navigation, paletteId: palette.id });
   }, [navigation, palette.id]);
-
-  const renderItem = React.useCallback(
-    (renderItemParams) => {
-      return (
-        <ScaleDecorator key={`${renderItemParams.item.id}`}>
-          <SingleColorCard
-            onPress={() => {
-              setDetailedColor(renderItemParams.item.color);
-              navigation.navigate('ColorDetails');
-            }}
-            onPressDrag={renderItemParams.drag}
-            color={renderItemParams.item}
-            onColorDelete={onColorDelete}
-          />
-        </ScaleDecorator>
-      );
-    },
-    [navigation, onColorDelete, setDetailedColor]
-  );
-
-  const keyExtractor = useCallback((item) => {
-    return item.id;
-  }, []);
 
   const colorsToShow = React.useMemo(
     () => colors?.slice(0, isPro ? colors.length : 4),
@@ -102,7 +42,7 @@ export default function PaletteScreen({ navigation, route }) {
 
   const backgroundColor = {
     backgroundColor: color,
-    height: 112,
+    height: 80,
     alignSelf: 'stretch',
     borderRadius: 8
   };
@@ -152,47 +92,20 @@ PaletteScreen.propTypes = {
 };
 
 const CustomHeader = ({ paletteId }) => {
-  const { updatePalette, allPalettes } = useApplicationStore();
+  const { allPalettes } = useApplicationStore();
   const palette = allPalettes.find((p) => p.id === paletteId);
   const [paletteName, setPaletteName] = useState(palette.name);
-  const [isEditingPaletteName, setIsEditingPaletteName] = useState(false);
-
-  const onDone = () => {
-    updatePalette(palette.id, { ...palette, name: paletteName });
-    setIsEditingPaletteName(false);
-  };
-
-  const onEdit = () => {
-    logEvent('edit_palette_name');
-    setIsEditingPaletteName(true);
-  };
 
   return (
     <View style={styles.headerContainer}>
-      {isEditingPaletteName ? (
-        <>
-          <TextInput
-            style={styles.input}
-            value={paletteName}
-            autoFocus={true}
-            onChangeText={(name) => {
-              setPaletteName(name);
-            }}
-          />
-          <TouchableOpacity onPress={onDone} style={styles.marginTop}>
-            <MaterialIcons name="done" size={24} color="white" />
-          </TouchableOpacity>
-        </>
-      ) : (
-        <>
-          <Text style={styles.headerTitle}>
-            {paletteName.substring(0, 25) + (paletteName.length > 25 ? '...' : '')}
-          </Text>
-          <TouchableOpacity onPress={onEdit} style={styles.marginTop}>
-            <AntDesign name="edit" size={20} color="white" />
-          </TouchableOpacity>
-        </>
-      )}
+      <Text
+        style={styles.headerText}
+        autoFocus={true}
+        onChangeText={(name) => {
+          setPaletteName(name);
+        }}>
+        {paletteName}
+      </Text>
     </View>
   );
 };
@@ -211,21 +124,13 @@ const styles = StyleSheet.create({
     padding: Spacing.medium,
     flex: 1
   },
-  listview: {
-    margin: 8
-  },
   headerContainer: {
-    display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    width: '90%'
+    width: '100%'
   },
-  headerTitle: {
-    color: '#ffffff',
-    fontSize: 20
-  },
-  input: {
+  headerText: {
     color: '#ffffff',
     fontSize: 20,
     maxWidth: '80%'
@@ -233,9 +138,6 @@ const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)'
-  },
-  marginTop: {
-    marginTop: 4
   },
   modalContent: {
     backgroundColor: 'white',
