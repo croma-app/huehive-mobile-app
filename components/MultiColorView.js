@@ -1,10 +1,32 @@
 /* eslint-disable react/prop-types */
-import * as React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { StyleSheet, View, Text, TouchableOpacity, Animated, Easing } from 'react-native';
 import { pickTextColorBasedOnBgColor } from '../libs/ColorHelper';
 
 export default function MultiColorView(props) {
   const { colors, selectedColor, setSelectedColor } = props;
+  // Create animated values for height and width
+  const heightAnim = useRef(new Animated.Value(10)).current;
+  const widthAnim = useRef(new Animated.Value(10)).current;
+
+  useEffect(() => {
+    // Animate the height and width from 1 to 10 over 500ms
+    Animated.timing(heightAnim, {
+      delay: 500,
+      toValue: 15,
+      duration: 500,
+      easing: Easing.linear,
+      useNativeDriver: false // Set to true if you don't need layout updates
+    }).start();
+
+    Animated.timing(widthAnim, {
+      delay: 500,
+      toValue: 15,
+      duration: 500,
+      easing: Easing.linear,
+      useNativeDriver: false // Set to true if you don't need layout updates
+    }).start();
+  }, [heightAnim, widthAnim]);
 
   if (!colors || colors.length === 0) {
     return (
@@ -28,10 +50,10 @@ export default function MultiColorView(props) {
             }}
             style={[styles.color, { backgroundColor: item.color }]}>
             {selectedColor === index && (
-              <View
+              <Animated.View
                 style={{
-                  height: 15,
-                  width: 15,
+                  height: heightAnim,
+                  width: widthAnim,
                   borderRadius: 10,
                   backgroundColor: pickTextColorBasedOnBgColor(item.color)
                 }}
