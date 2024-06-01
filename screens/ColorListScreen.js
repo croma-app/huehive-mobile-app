@@ -1,13 +1,12 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { SingleColorView } from '../components/SingleColorView';
-import { StyleSheet, View, Text, Platform, Animated, TouchableOpacity, Modal } from 'react-native';
+import { StyleSheet, View, Text, Platform, Animated, TouchableOpacity } from 'react-native';
 import { logEvent, notifyMessage } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import Color from 'pigment/full';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Colors from '../constants/Styles';
 import { generateRandomColorPaletteWithLockedColors } from '../libs/ColorHelper';
 
@@ -27,34 +26,16 @@ function uniqueColors(colors) {
   return uniqueColors;
 }
 
-const GenerateInfoModal = ({ toggleGenerateInfo, showGenerateInfo }) => {
-  const { t } = useTranslation();
-
-  return (
-    <Modal visible={showGenerateInfo} transparent animationType="fade">
-      <TouchableOpacity style={styles.modalBackground} onPress={toggleGenerateInfo}>
-        <View style={styles.modalContent}>
-          <Text style={styles.modalText}>
-            {t(
-              'The "Generate" button creates new color variations for the unlocked colors in the list. It helps you explore different color combinations and discover new palettes.'
-            )}
-          </Text>
-          <TouchableOpacity style={styles.modalCloseButton} onPress={toggleGenerateInfo}>
-            <Text style={styles.modalCloseButtonText}>{t('Close')}</Text>
-          </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
-    </Modal>
-  );
-};
-
 export default function ColorListScreen({ navigation, route }) {
   const { t } = useTranslation();
   const [showGenerateInfo, setShowGenerateInfo] = useState(false);
   const toggleGenerateInfo = () => {
     setShowGenerateInfo(!showGenerateInfo);
   };
-  const [colorList, setColorList] = useState(route.params?.colors || []);
+  const [colorListHistory, setColorListHistory] = useState([route.params?.colors || []]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const colorList = colorListHistory[currentIndex];
   const colors = uniqueColors(colorList).map((color) => ({
     ...color,
     opacity: color.opacity || new Animated.Value(1)
@@ -69,15 +50,15 @@ export default function ColorListScreen({ navigation, route }) {
     });
   }, []);
   const renderItem = ({ item, drag }) => {
-    const opecity = item.opacity;
+    const opacity = item.opacity;
     return (
       <SingleColorView
         onColorChange={(updatedColor) => {
           const updatedColors = [...colors];
           updatedColors[item.index] = updatedColor;
-          setColorList(updatedColors);
+          updateColorList(updatedColors);
         }}
-        opacity={opecity}
+        opacity={opacity}
         key={item.color + '-' + item.locked}
         color={item}
         drag={drag}
@@ -94,7 +75,7 @@ export default function ColorListScreen({ navigation, route }) {
             newColor,
             ...colors.slice(item.index + 1)
           ];
-          setColorList(updatedColors);
+          updateColorList(updatedColors);
           // Find the opacity value of the newly added color
           const newColorOpacity = updatedColors[item.index + 1].opacity;
           newColorOpacity.setValue(0);
@@ -105,13 +86,13 @@ export default function ColorListScreen({ navigation, route }) {
           }).start();
         }}
         onRemove={() => {
-          Animated.timing(opecity, {
+          Animated.timing(opacity, {
             toValue: 0,
             duration: 600,
             useNativeDriver: true
           }).start(() => {
             logEvent('remove_color_from_palette');
-            setColorList(colors.filter((color) => color.color !== item.color));
+            updateColorList(colors.filter((color) => color.color !== item.color));
           });
         }}
       />
@@ -120,7 +101,7 @@ export default function ColorListScreen({ navigation, route }) {
 
   const onDragEnd = ({ data }) => {
     logEvent('drag_end_event_color_list');
-    setColorList(data);
+    updateColorList(data);
   };
   const regenerateUnlockedColors = () => {
     logEvent('regenerate_unlocked_colors', colors.filter((color) => !color.locked).length);
@@ -128,8 +109,23 @@ export default function ColorListScreen({ navigation, route }) {
       notifyMessage('Please unlock some colors or add colors to generate new colors');
     } else {
       const newColors = generateRandomColorPaletteWithLockedColors([...colors]);
-      setColorList(newColors);
+      updateColorList(newColors);
     }
+  };
+  const undo = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
+  const redo = () => {
+    if (currentIndex < colorListHistory.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+  const updateColorList = (updatedColors) => {
+    setColorListHistory([...colorListHistory.slice(0, currentIndex + 1), updatedColors]);
+    setCurrentIndex(currentIndex + 1);
   };
   useEffect(() => {
     logEvent('color_list_screen');
@@ -147,30 +143,42 @@ export default function ColorListScreen({ navigation, route }) {
         />
       </View>
       <View style={styles.bottomActionArea}>
+        <View style={styles.undoRedoContainer}>
+          <TouchableOpacity
+            style={[styles.smallButton, currentIndex === 0 && styles.disabledButton]}
+            onPress={undo}
+            disabled={currentIndex === 0}>
+            <View style={styles.smallButtonContent}>
+              <Icon name="undo" size={16} color={currentIndex === 0 ? Colors.gray : Colors.black} />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.smallButton,
+              currentIndex === colorListHistory.length - 1 && styles.disabledButton
+            ]}
+            onPress={redo}
+            disabled={currentIndex === colorListHistory.length - 1}>
+            <View style={styles.smallButtonContent}>
+              <Icon
+                name="repeat"
+                size={16}
+                color={currentIndex === colorListHistory.length - 1 ? Colors.gray : Colors.black}
+              />
+            </View>
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
             regenerateUnlockedColors();
           }}>
           <View style={styles.buttonContent}>
-            <Ionicons name="shuffle" size={20} color={Colors.primary} />
             <Text style={styles.buttonText}>{t('Generate')}</Text>
-            <TouchableOpacity
-              style={styles.infoIconContainer}
-              onPress={() => {
-                toggleGenerateInfo();
-              }}>
-              <MaterialCommunityIcons
-                name="information-outline"
-                size={20}
-                color={Colors.lightGrey}
-                style={styles.infoIcon}
-              />
-            </TouchableOpacity>
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.button}
+          style={styles.doneButton}
           onPress={() => {
             navigation.navigate('SavePalette', {
               colors: colors.map((color) => {
@@ -180,15 +188,10 @@ export default function ColorListScreen({ navigation, route }) {
             });
           }}>
           <View style={styles.buttonContent}>
-            <Icon name="save" size={20} color={Colors.primary} />
-            <Text style={styles.buttonText}>{t('Save')}</Text>
+            <MaterialIcons name="done" size={24} color={Colors.black} />
           </View>
         </TouchableOpacity>
       </View>
-      <GenerateInfoModal
-        toggleGenerateInfo={toggleGenerateInfo}
-        showGenerateInfo={showGenerateInfo}
-      />
     </View>
   );
 }
@@ -226,7 +229,7 @@ const styles = StyleSheet.create({
   },
   bottomActionArea: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: 16,
     borderTopWidth: 1,
@@ -234,9 +237,18 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    marginHorizontal: 16,
+    marginHorizontal: 8,
     backgroundColor: 'white',
-    paddingVertical: 12,
+    paddingVertical: 8,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  doneButton: {
+    paddingHorizontal: 16,
+    marginHorizontal: 8,
+    backgroundColor: 'white',
+    paddingVertical: 8,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center'
@@ -246,13 +258,30 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   buttonText: {
-    color: Colors.primary,
+    color: Colors.black,
     marginLeft: 8,
     fontSize: 18
   },
   infoIcon: {},
   infoIconContainer: {
     paddingHorizontal: 8
+  },
+  smallButton: {
+    marginHorizontal: 4,
+    backgroundColor: 'white',
+    padding: 8,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  smallButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  undoRedoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 8
   },
   modalBackground: {
     flex: 1,
@@ -278,5 +307,8 @@ const styles = StyleSheet.create({
   modalCloseButtonText: {
     fontSize: 16,
     color: '#007AFF'
+  },
+  disabledButton: {
+    opacity: 0.5
   }
 });
