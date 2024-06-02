@@ -8,7 +8,7 @@ import { UndoDialog } from './CommonDialogs';
 import { pickTextColorBasedOnBgColor } from '../libs/ColorHelper';
 
 const SingleColorCard = function (props) {
-  const [animationType, setAnimationType] = React.useState('fadeInLeftBig');
+  const [animationType, setAnimationType] = React.useState('fadeInUpBig');
   const [isDeletedActive, setIsDeletedActive] = React.useState(false);
   const timeout = React.useRef(null);
   const { color, onColorDelete } = props;
@@ -22,7 +22,7 @@ const SingleColorCard = function (props) {
   const onUndo = React.useCallback(() => {
     setIsDeletedActive(false);
     clearTimeout(timeout.current);
-    setAnimationType('fadeInLeftBig');
+    setAnimationType('fadeInUpBig');
   }, []);
 
   const textColor = pickTextColorBasedOnBgColor(color.color);
@@ -31,51 +31,49 @@ const SingleColorCard = function (props) {
     <>
       {!isDeletedActive ? (
         <Card {...props} animationType={animationType}>
-          <View>
-            <TouchableOpacity
-              style={{
-                backgroundColor: props.color.color,
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                borderRadius: Spacing.medium,
-                color: textColor,
-                height: 100
-              }}
-              onPress={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-              }}>
-              <Text style={[styles.label, { color: textColor }]}>{props.color.color}</Text>
-              <View style={styles.bottom}>
-                <View style={styles.actionButtonsView}>
-                  <TouchableOpacity
-                    onPress={(event) => {
-                      event.preventDefault();
-                      event.stopPropagation();
-                      setAnimationType('fadeOutRightBig');
-                      onColorDeleteLocal();
-                    }}
-                    style={styles.actionButton}>
-                    <MaterialIcons size={20} color={textColor} name="delete-outline" />
-                  </TouchableOpacity>
-                </View>
-                <View style={[styles.actionButtonsView, styles.dragDropButton]}>
-                  <TouchableOpacity
-                    onPressIn={(e) => {
-                      props.onPressDrag();
-                    }}>
-                    <MaterialIcons
-                      style={{ alignItems: 'center' }}
-                      size={20}
-                      color={textColor}
-                      name="drag-indicator"
-                    />
-                  </TouchableOpacity>
-                </View>
+          <TouchableOpacity
+            style={{
+              backgroundColor: props.color.color,
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              borderRadius: Spacing.medium,
+              color: textColor,
+              height: 100
+            }}
+            onPress={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}>
+            <Text style={[styles.label, { color: textColor }]}>{props.color.color}</Text>
+            <View style={styles.bottom}>
+              <View style={styles.actionButtonsView}>
+                <TouchableOpacity
+                  onPress={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    setAnimationType('fadeOutRightBig');
+                    onColorDeleteLocal();
+                  }}
+                  style={styles.actionButton}>
+                  <MaterialIcons size={20} color={textColor} name="delete-outline" />
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
-          </View>
+              <View style={[styles.actionButtonsView, styles.dragDropButton]}>
+                <TouchableOpacity
+                  onPressIn={(e) => {
+                    props.onPressDrag();
+                  }}>
+                  <MaterialIcons
+                    style={{ alignItems: 'center' }}
+                    size={20}
+                    color={textColor}
+                    name="drag-indicator"
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </TouchableOpacity>
         </Card>
       ) : (
         <UndoDialog
