@@ -99,6 +99,7 @@ export default function PaletteScreen({ navigation, route }) {
           onDragEnd={({ data: reorderedColors }) => {
             updatePalette(palette.id, { ...palette, colors: reorderedColors });
           }}
+          ListFooterComponent={ListFooterComponent}
         />
         <ActionButton
           offsetY={76}
@@ -193,6 +194,12 @@ const CustomHeader = ({ paletteId }) => {
 
 CustomHeader.propTypes = { paletteId: PropTypes.string };
 
+const ListFooterComponent = () => {
+  return (
+    <View style={styles.footerHeight} /> // Adjust the height as needed
+  );
+};
+
 const setNavigationOptions = (props) => {
   const { navigation, paletteId } = props;
   navigation.setOptions({
@@ -238,5 +245,6 @@ const styles = StyleSheet.create({
     width: '100%',
     position: 'absolute',
     bottom: 0
-  }
+  },
+  footerHeight: { height: 200 }
 });
