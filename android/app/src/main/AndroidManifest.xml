@@ -8,14 +8,17 @@
     android:roundIcon="@mipmap/ic_launcher_round"
     android:allowBackup="false"
     android:theme="@style/AppTheme">
+    
     <activity
       android:name=".MainActivity"
       android:label="@string/app_name"
       android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
       android:launchMode="singleTask"
       android:exported="true"
+      android:screenOrientation="portrait">
       android:windowSoftInputMode="adjustResize">
-      <intent-filter android:label="View Palette">
+      
+      <intent-filter android:label="View Palette" android:autoVerify="true">
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
@@ -24,47 +27,57 @@
             android:scheme="https"
             android:pathPrefix="/color_palettes" />
       </intent-filter>
+      
       <intent-filter android:label="share">
         <action android:name="android.intent.action.SEND" />
-
         <category android:name="android.intent.category.DEFAULT" />
-
         <data android:mimeType="text/*" />
         <data android:mimeType="image/*" />
       </intent-filter>
+      
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
         <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
       </intent-filter>
+      
     </activity>
+    
     <activity
       android:name=".ImageColorPickerActivity"
       android:configChanges="orientation|keyboardHidden|screenSize"
       android:label="@string/title_activity_image_color_picker"
-      android:theme="@style/FullscreenTheme"></activity>
+      android:theme="@style/FullscreenTheme">
+    </activity>
+    
     <activity
       android:name=".ColorPickerActivity"
       android:configChanges="orientation|screenSize"
       android:icon="@mipmap/ic_camera"
       android:label="@string/picker_label"
-      android:theme="@style/FullscreenTheme"></activity>
+      android:theme="@style/FullscreenTheme">
+    </activity>
+    
     <activity
       android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
       android:theme="@style/Base.Theme.AppCompat">
     </activity>
+    
     <meta-data
       android:name="com.google.firebase.ml.vision.DEPENDENCIES"
       android:value="ocr" />
 
   </application>
+  
   <meta-data
     android:name="firebase_analytics_collection_deactivated"
     android:value="@bool/FIREBASE_ANALYTICS_DEACTIVATED" />
+    
   <uses-permission android:name="android.permission.CAMERA" />
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  
   <uses-feature
     android:name="android.hardware.camera"
     android:required="true" />
