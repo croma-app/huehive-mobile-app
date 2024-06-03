@@ -83,6 +83,13 @@ export default function PaletteScreen({ navigation, route }) {
     [colors, isPro]
   );
 
+  const onDragEnd = useCallback(
+    ({ data: reorderedColors }) => {
+      updatePalette(palette.id, { ...palette, colors: reorderedColors });
+    },
+    [palette, updatePalette]
+  );
+
   const handleColorSelected = (color) => {
     addNewColorToPalette(palette.id, { hex: color });
     setIsColorPickerVisible(false);
@@ -96,9 +103,7 @@ export default function PaletteScreen({ navigation, route }) {
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           style={styles.listview}
-          onDragEnd={({ data: reorderedColors }) => {
-            updatePalette(palette.id, { ...palette, colors: reorderedColors });
-          }}
+          onDragEnd={onDragEnd}
           ListFooterComponent={ListFooterComponent}
         />
         <ActionButton

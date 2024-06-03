@@ -47,31 +47,29 @@ const SingleColorCard = function (props) {
             }}>
             <Text style={[styles.label, { color: textColor }]}>{props.color.color}</Text>
             <View style={styles.bottom}>
-              <View style={styles.actionButtonsView}>
-                <TouchableOpacity
-                  onPress={(event) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    setAnimationType('fadeOutRightBig');
-                    onColorDeleteLocal();
-                  }}
-                  style={styles.actionButton}>
-                  <MaterialIcons size={20} color={textColor} name="delete-outline" />
-                </TouchableOpacity>
-              </View>
-              <View style={[styles.actionButtonsView, styles.dragDropButton]}>
-                <TouchableOpacity
-                  onPressIn={(e) => {
-                    props.onPressDrag();
-                  }}>
-                  <MaterialIcons
-                    style={{ alignItems: 'center' }}
-                    size={20}
-                    color={textColor}
-                    name="drag-indicator"
-                  />
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity
+                onPress={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  setAnimationType('fadeOutRightBig');
+                  onColorDeleteLocal();
+                }}
+                style={styles.actionButton}>
+                <MaterialIcons size={20} color={textColor} name="delete-outline" />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                onPressIn={(e) => {
+                  props.onPressDrag();
+                }}
+                style={styles.actionButton}>
+                <MaterialIcons
+                  style={{ alignItems: 'center' }}
+                  size={20}
+                  color={textColor}
+                  name="drag-indicator"
+                />
+              </TouchableOpacity>
             </View>
           </TouchableOpacity>
         </Card>
@@ -113,6 +111,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: Colors.darkGrey,
     padding: 10
+  },
+  actionButton: {
+    padding: Spacing.medium
   }
 });
 

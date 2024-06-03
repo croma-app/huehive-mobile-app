@@ -39,9 +39,13 @@ const useApplicationStore = create((set) => ({
 
   updatePalette: async (id, _palette) => {
     try {
+      const allPalettesCopy = [...useApplicationStore.getState().allPalettes];
+      const paletteIndex = allPalettesCopy.findIndex((palette) => palette.id === id);
+      if (paletteIndex > -1) {
+        allPalettesCopy[paletteIndex] = _palette;
+      }
+      set({ allPalettes: allPalettesCopy });
       await network.patchPalette(id, _palette);
-      const allPalettes = await useApplicationStore.getState().loadPalettes();
-      set({ allPalettes });
     } catch (error) {
       notifyMessage(t(error.message));
     }
