@@ -9,6 +9,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Colors from '../constants/Styles';
 import { generateRandomColorPaletteWithLockedColors } from '../libs/ColorHelper';
+import GenerateBtn from '../components/GenerateBtn';
 import useApplicationStore from '../hooks/useApplicationStore';
 
 function uniqueColors(colors) {
@@ -169,16 +170,10 @@ export default function ColorListScreen({ navigation, route }) {
             </View>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            regenerateUnlockedColors();
-          }}
-        >
-          <View style={styles.buttonContent}>
-            <Text style={styles.buttonText}>{t('Generate')}</Text>
-          </View>
-        </TouchableOpacity>
+        <GenerateBtn
+          onGenerate={regenerateUnlockedColors}
+          onGenerateWithAI={regenerateUnlockedColors}
+        />
         <TouchableOpacity
           style={styles.doneButton}
           onPress={() => {
