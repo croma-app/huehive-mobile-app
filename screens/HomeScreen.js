@@ -13,7 +13,7 @@ import {
 import { PaletteCard } from '../components/PaletteCard';
 import GridActionButton from '../components/GridActionButton';
 import * as Permissions from 'expo-permissions';
-import ShareMenu from '../libs/ShareMenu';
+import ShareMenu from 'react-native-share-menu';
 import { logEvent, notifyMessage } from '../libs/Helpers';
 import PropTypes from 'prop-types';
 import { material } from 'react-native-typography';
@@ -59,7 +59,7 @@ const HomeScreen = function ({ navigation, route }) {
         const suggestedName = queryParams['name'];
         navigation.navigate('SavePalette', {
           colors: colors.map((color) => {
-            return { color: color.color };
+            return { color: '#' + color };
           }),
           suggestedName: suggestedName
         });
@@ -98,20 +98,29 @@ const HomeScreen = function ({ navigation, route }) {
     getPermissionAsync();
   }, [handleDeepLink, navigation]);
 
-  useEffect(() => {
-    if (Platform.OS === 'android') {
-      ShareMenu.getSharedText((text) => {
-        if (text && typeof text === 'string') {
-          const colors = Color.parse(text);
-          logEvent('get_shared_text', { length: colors.length });
-          for (let i = 0, l = colors.length; i < l; i++) {
-            colors[i] = { color: colors[i].tohex().toLowerCase() };
-          }
-          navigation.navigate('SavePalette', { colors });
+  const handleShare = useCallback(
+    (item) => {
+      if (item && item.mimeType === 'text/plain' && item.data) {
+        const text = item.data;
+        notifyMessage('Shared text: ' + text);
+        const colors = Color.parse(text);
+        logEvent('get_shared_text', { length: colors.length });
+        for (let i = 0, l = colors.length; i < l; i++) {
+          colors[i] = { color: colors[i].tohex().toLowerCase() };
         }
-      });
-    }
-  }, [navigation]);
+        navigation.navigate('SavePalette', { colors });
+      }
+    },
+    [navigation]
+  );
+
+  useEffect(() => {
+    ShareMenu.getInitialShare(handleShare);
+    const listener = ShareMenu.addNewShareListener(handleShare);
+    return () => {
+      listener.remove();
+    };
+  }, [handleShare]);
 
   if (isLoading) {
     return (

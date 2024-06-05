@@ -31,7 +31,7 @@
       <intent-filter android:label="share">
         <action android:name="android.intent.action.SEND" />
         <category android:name="android.intent.category.DEFAULT" />
-        <data android:mimeType="text/*" />
+        <data android:mimeType="text/plain" />
         <data android:mimeType="image/*" />
       </intent-filter>
       
