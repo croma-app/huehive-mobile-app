@@ -14,17 +14,19 @@ import { PaletteCard } from '../components/PaletteCard';
 import GridActionButton from '../components/GridActionButton';
 import * as Permissions from 'expo-permissions';
 import ShareMenu from 'react-native-share-menu';
+import RNColorThief from 'react-native-color-thief';
 import { logEvent, notifyMessage } from '../libs/Helpers';
 import PropTypes from 'prop-types';
 import { material } from 'react-native-typography';
 import Spacer from '../components/Spacer';
 import Colors from '../constants/Styles';
 import useApplicationStore from '../hooks/useApplicationStore';
+import RNFS from 'react-native-fs';
 
 const HomeScreen = function ({ navigation, route }) {
   const { isLoading, allPalettes, isPro } = useApplicationStore();
   const [pickImageLoading, setPickImageLoading] = useState(false);
-
+  const [error, setError] = useState();
   const getPermissionAsync = async () => {
     if (Platform.OS === 'ios') {
       const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
@@ -98,17 +100,49 @@ const HomeScreen = function ({ navigation, route }) {
     getPermissionAsync();
   }, [handleDeepLink, navigation]);
 
+  const getPathFromURI = async (uri) => {
+    if (Platform.OS === 'android') {
+      // For Android, convert content URI to file path
+      const filePath = await RNFS.stat(uri).then((stat) => stat.path);
+      return filePath;
+    }
+    // For iOS, the URI is already a file path
+    return uri;
+  };
   const handleShare = useCallback(
-    (item) => {
+    async (item) => {
       if (item && item.mimeType === 'text/plain' && item.data) {
         const text = item.data;
-        notifyMessage('Shared text: ' + text);
+        //notifyMessage('Shared text: ' + text);
         const colors = Color.parse(text);
         logEvent('get_shared_text', { length: colors.length });
         for (let i = 0, l = colors.length; i < l; i++) {
           colors[i] = { color: colors[i].tohex().toLowerCase() };
         }
         navigation.navigate('SavePalette', { colors });
+      } else if (item.mimeType.startsWith('image/')) {
+        try {
+          const uriImage = item.data;
+          setError(JSON.stringify(item));
+          //notifyMessage(item.data);
+          const pickedColors = await RNColorThief.getPalette(
+            await getPathFromURI(uriImage),
+            6,
+            10,
+            false
+          );
+          const colors = pickedColors.map((colorThiefColor) => {
+            const hex = new Color(
+              'rgb(' + colorThiefColor.r + ', ' + colorThiefColor.g + ', ' + colorThiefColor.b + ')'
+            ).tohex();
+            return { color: hex };
+          });
+          logEvent('get_shared_image', { colors: colors.length });
+          navigation.navigate('SavePalette', { colors });
+        } catch (error) {
+          notifyMessage('Error extracting colors from image: ' + error.message);
+          // setError(error.message);
+        }
       }
     },
     [navigation]
@@ -134,6 +168,7 @@ const HomeScreen = function ({ navigation, route }) {
   } else {
     return (
       <View style={styles.container}>
+        {error && <Text>{error}</Text>}
         {pickImageLoading ? <ActivityIndicator /> : <View />}
         <ScrollView showsVerticalScrollIndicator={false}>
           {allPalettes.length === 0 && (
