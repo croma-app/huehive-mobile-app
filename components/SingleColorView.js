@@ -16,10 +16,13 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { logEvent } from '../libs/Helpers';
 import ColorPickerModal from './ColorPickerModal';
 import { pickTextColorBasedOnBgColor } from '../libs/ColorHelper';
+import { useNavigation } from '@react-navigation/native';
 
-export const SingleColorView = ({ color, onColorChange, drag, onRemove, onAdd }) => {
+export const SingleColorView = ({ color, showUnlockPro, onColorChange, drag, onRemove, onAdd }) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [isColorPickerVisible, setIsColorPickerVisible] = React.useState(false);
+  const [isColorPickerVisible, setIsColorPickerVisible] = useState(false);
+  const navigation = useNavigation();
+
   const openModal = () => {
     setModalVisible(true);
   };
@@ -36,44 +39,62 @@ export const SingleColorView = ({ color, onColorChange, drag, onRemove, onAdd })
     closeModal();
   };
 
-  const handleRmoveColor = () => {
+  const handleRemoveColor = () => {
     onRemove();
     closeModal();
   };
+
   const handleAddColor = () => {
     onAdd();
     closeModal();
   };
+
   const handleEditColor = () => {
     logEvent('handle_edit_color');
     setIsColorPickerVisible(true);
     closeModal();
   };
+
   const handleColorSelected = (hexCode) => {
-    //notifyMessage('Color selected: ' + hexCode);
     onColorChange({ ...color, color: hexCode });
   };
+
   const textColor = pickTextColorBasedOnBgColor(color.color);
   const menuItems = [
     { label: 'Copy Color', onPress: handleCopyColor },
     { label: 'Edit Color', onPress: handleEditColor },
     { label: 'Add Color', onPress: handleAddColor },
-    { label: 'Remove Color', onPress: handleRmoveColor }
+    { label: 'Remove Color', onPress: handleRemoveColor }
   ];
+
   return (
     <Animated.View style={[styles.container, { opacity: color.opacity }]}>
       <TouchableOpacity
-        onPress={openModal}
-        onLongPress={drag}
+        onPress={showUnlockPro ? () => navigation.navigate('ProVersion') : openModal}
+        onLongPress={() => {
+          if (!showUnlockPro) drag();
+        }}
         style={[styles.container, { backgroundColor: color.color }]}>
+        {showUnlockPro && (
+          <View style={styles.overlay}>
+            <Text
+              style={[styles.colorText, { color: textColor, textAlign: 'center', fontSize: 12 }]}>
+              Unlock Pro to view
+            </Text>
+          </View>
+        )}
         <Text style={[styles.colorText, { color: textColor }]}>
-          {color.color.toUpperCase() + (color.name ? ' (' + color.name + ')' : '')}
+          {showUnlockPro
+            ? '#XXXXXX'
+            : color.color.toUpperCase() + (color.name ? ' (' + color.name + ')' : '')}
         </Text>
         <View style={styles.actionArea}>
           <TouchableOpacity
             style={[styles.actionAreaItem, styles.lockActionAreaItem]}
             onPress={() => {
-              onColorChange({ ...color, color: color.color, locked: !color.locked });
+              if (!showUnlockPro) {
+                onColorChange({ ...color, color: color.color, locked: !color.locked });
+              }
             }}>
             <FontAwesome5
               style={[
@@ -86,7 +107,9 @@ export const SingleColorView = ({ color, onColorChange, drag, onRemove, onAdd })
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.actionAreaItem, styles.dragActionAreaItem]}
-            onPressIn={drag}>
+            onPressIn={() => {
+              if (!showUnlockPro) drag();
+            }}>
             <MaterialIcons
               style={[styles.icon, styles.dragIcon, { color: textColor }]}
               name="drag-indicator"
@@ -105,15 +128,12 @@ export const SingleColorView = ({ color, onColorChange, drag, onRemove, onAdd })
                 <View style={styles.modalContent}>
                   <Text style={styles.modalText}>{color.color.toUpperCase()}</Text>
                   {menuItems.map((item, index) => (
-                    <>
-                      <TouchableOpacity
-                        key={index}
-                        style={[styles.menuButton]}
-                        onPress={item.onPress}>
+                    <React.Fragment key={index}>
+                      <TouchableOpacity style={styles.menuButton} onPress={item.onPress}>
                         <Text style={styles.menuButtonText}>{item.label}</Text>
                       </TouchableOpacity>
-                      <View style={styles.lineseperator}></View>
-                    </>
+                      <View style={styles.lineSeparator}></View>
+                    </React.Fragment>
                   ))}
                 </View>
               </TouchableWithoutFeedback>
@@ -131,7 +151,6 @@ export const SingleColorView = ({ color, onColorChange, drag, onRemove, onAdd })
               <View style={styles.colorPickerModalOverlay} />
             </TouchableWithoutFeedback>
             <View style={styles.colorPickerModalContent}>
-              {/* TODO: make this color selection real time by adding onColorChangeCallback. This requires handling revert on close etc. */}
               <ColorPickerModal
                 onColorSelected={handleColorSelected}
                 onClose={() => {
@@ -149,10 +168,15 @@ export const SingleColorView = ({ color, onColorChange, drag, onRemove, onAdd })
 const styles = StyleSheet.create({
   container: {
     height: 72,
-    //justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
     flexDirection: 'row'
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255, 255, 255, .8)',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   colorText: {
     fontWeight: '700',
@@ -206,13 +230,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20
   },
-  copyButton: {
-    backgroundColor: 'blue',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 4,
-    marginBottom: 10
-  },
   menuButton: {
     paddingHorizontal: 12,
     borderRadius: 8,
@@ -225,7 +242,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold'
   },
-  lineseperator: {
+  lineSeparator: {
     height: 1,
     width: '100%',
     backgroundColor: 'gray'
