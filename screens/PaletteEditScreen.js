@@ -26,7 +26,7 @@ import useApplicationStore from '../hooks/useApplicationStore';
 
 export default function PaletteScreen({ navigation, route }) {
   const {
-    isPro,
+    pro,
     allPalettes,
     updatePalette,
     deleteColorFromPalette,
@@ -79,8 +79,8 @@ export default function PaletteScreen({ navigation, route }) {
   }, []);
 
   const colorsToShow = React.useMemo(
-    () => colors?.slice(0, isPro ? colors.length : 4),
-    [colors, isPro]
+    () => colors?.slice(0, pro.plan != 'free' ? colors.length : 4),
+    [colors, pro.plan != 'free']
   );
 
   const handleColorSelected = (color) => {
@@ -112,7 +112,7 @@ export default function PaletteScreen({ navigation, route }) {
             if (
               (Platform.OS === 'android' || Platform.OS === 'ios') &&
               colors.length >= 4 &&
-              isPro === false
+              pro.plan == 'free'
             ) {
               notifyMessage('Unlock pro to add more than 4 colors!');
               navigation.navigate('ProVersion');

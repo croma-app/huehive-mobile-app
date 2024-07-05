@@ -11,7 +11,7 @@ import Colors from '../constants/Styles';
 import CromaButton from '../components/CromaButton';
 import { useTranslation } from 'react-i18next';
 export default function PaletteViewScreen({ navigation, route }) {
-  const { isPro, allPalettes, setDetailedColor } = useApplicationStore();
+  const {  allPalettes, setDetailedColor } = useApplicationStore();
   const { t } = useTranslation();
 
   const [selectedColor, setSelectedColor] = useState(0);
@@ -29,8 +29,8 @@ export default function PaletteViewScreen({ navigation, route }) {
   }, [navigation, palette.id]);
 
   const colorsToShow = React.useMemo(
-    () => colors?.slice(0, isPro ? colors.length : 4),
-    [colors, isPro]
+    () => colors?.slice(0, pro.plan != 'free' ? colors.length : 4),
+    [colors, pro.plan != 'free']
   );
 
   const color = colorsToShow[selectedColor].color;

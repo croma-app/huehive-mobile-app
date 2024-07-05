@@ -31,7 +31,7 @@ export default function ColorListScreen({ navigation, route }) {
   const { t } = useTranslation();
   const [colorListHistory, setColorListHistory] = useState([route.params?.colors || []]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { isPro } = useApplicationStore();
+  const { pro } = useApplicationStore();
   const colorList = colorListHistory[currentIndex];
   const colors = uniqueColors(colorList).map((color) => ({
     ...color,
@@ -58,7 +58,7 @@ export default function ColorListScreen({ navigation, route }) {
         opacity={opacity}
         key={item.color + '-' + item.locked}
         color={item}
-        showUnlockPro={!isPro && item.index >= 4}
+        showUnlockPro={pro.plan == 'free' && item.index >= 4}
         drag={drag}
         onAdd={() => {
           logEvent('add_color_to_palette');

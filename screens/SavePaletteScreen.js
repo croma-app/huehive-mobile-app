@@ -11,7 +11,7 @@ import useApplicationStore from '../hooks/useApplicationStore';
 
 export default function SavePaletteScreen({ navigation, route }) {
   const { t } = useTranslation();
-  const { addPalette, allPalettes, isPro } = useApplicationStore();
+  const { addPalette, allPalettes, pro } = useApplicationStore();
 
   const [finalColors, setFinalColors] = useState([]);
   const [isPaletteNameExist, setIsPaletteNameExist] = React.useState(false);
@@ -43,7 +43,7 @@ export default function SavePaletteScreen({ navigation, route }) {
   return (
     <ScrollView style={{ margin: 8 }} showsVerticalScrollIndicator={false}>
       <PalettePreviewCard
-        colors={finalColors.slice(0, isPro ? finalColors.length : 4)}
+        colors={finalColors.slice(0, pro.plan != 'free' ? finalColors.length : 4)}
         name={paletteName}
       />
       <View style={styles.card}>
@@ -69,7 +69,7 @@ export default function SavePaletteScreen({ navigation, route }) {
               }
               const palette = {
                 name: paletteName,
-                colors: finalColors.slice(0, isPro ? finalColors.length : 4)
+                colors: finalColors.slice(0, pro.plan != 'free' ? finalColors.length : 4)
               };
               addPalette(palette);
               navigation.popToTop();
@@ -78,7 +78,7 @@ export default function SavePaletteScreen({ navigation, route }) {
           </CromaButton>
         </View>
       </View>
-      {!isPro && finalColors.length > 4 && (
+      {pro.plan == 'free' && finalColors.length > 4 && (
         <View style={styles.proVersionContainer}>
           <Text style={styles.proVersionText}>
             {t(
