@@ -55,7 +55,7 @@ const purchase = async function (setPurchase, productSKU) {
   }
   try {
     await getProducts({ skus: [productSKU] });
-    const details = await requestPurchase({
+    await requestPurchase({
       skus: [productSKU]
     });
     await setPurchase(skuToPlanMapping[productSKU]);

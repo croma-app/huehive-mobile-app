@@ -110,7 +110,7 @@ export default function ProScreen() {
         </View>
 
         {isFree && (
-          <View>
+          <View style={styles.restoreProView}>
             <Text style={styles.title}>{t('Restore Purchase')}</Text>
             <CromaButton
               style={styles.restoreButton}
@@ -183,5 +183,8 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     marginBottom: 16,
     backgroundColor: Colors.secondary
+  },
+  restoreProView: {
+    marginBottom: 24
   }
 });
