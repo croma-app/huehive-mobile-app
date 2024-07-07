@@ -62,15 +62,13 @@ export default function ProScreen() {
     <View style={styles.container}>
       <ScrollView style={styles.scrollContainer}  showsVerticalScrollIndicator={false}>
         <View>
-          <View style={styles.currentPlanContainer}>
-            <Text style={styles.currentPlanText}>{t('Your current plan is')} {t(planLabels[pro.plan])}</Text>
-          </View>
+         
           <View style={styles.table}>
             <View style={styles.row}>
               <Text style={styles.feature}></Text>
-              <Text style={styles.header}>{t(planLabels.starter)}</Text>
-              <Text style={styles.header}>{t(planLabels.pro)}</Text>
-              <Text style={styles.header}>{t(planLabels.proPlus)}</Text>
+              <Text style={[styles.header, isStarter ? styles.currentPlanLabel : null ]}>{t(planLabels.starter)}</Text>
+              <Text style={[styles.header, isPro ? styles.currentPlanLabel : null ]}>{t(planLabels.pro) }</Text>
+              <Text style={[styles.header, isProPlus ? styles.currentPlanLabel : null ]}>{t(planLabels.proPlus)}</Text>
             </View>
             {planFeatures.map((item, index) => (
               <View style={[
@@ -91,14 +89,14 @@ export default function ProScreen() {
             style={[styles.planButton]}
             onPress={() => handlePlanSelection('pro')}
           >
-            <Text style={styles.planButtonText}>{t('Upgrade to Pro plan')}</Text>
+            <Text style={styles.planButtonText}>{t('Upgrade to Pro')}</Text>
           </TouchableOpacity>
           }
-          {isPro && <TouchableOpacity
+          {(isStarter || isPro) && <TouchableOpacity
             style={[styles.planButton]}
             onPress={() => handlePlanSelection('proPlus')}
           >
-            <Text style={styles.planButtonText}>{t('Upgrade to Pro Plus plan')}</Text>
+            <Text style={styles.planButtonText}>{t('Upgrade to Pro Plus')}</Text>
           </TouchableOpacity>
           }
           {isProPlus && <View style={styles.proPlusUserMessage}>
@@ -207,9 +205,13 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.secondary,
   },
   restoreProView: {
-    marginBottom: 24,
+    marginVertical: 24,
+
   },
   currentPlan: {
     backgroundColor: Colors.lightBlue,
   },
+  currentPlanLabel: {
+    backgroundColor: Colors.lightBlue
+  }
 });

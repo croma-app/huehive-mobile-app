@@ -109,6 +109,7 @@ const initPurchase = async function (
           notifyMessage(`Congrats, You are already a pro (${selectedPlan}) user!`);
         }
       }
+      // await setPurchase("starter"); // For testing. 
     } catch (e) {
       if (retries > 0) {
         logEvent('init_purchase_retry', e.message);
