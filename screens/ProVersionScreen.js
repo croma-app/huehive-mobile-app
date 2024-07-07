@@ -63,7 +63,7 @@ export default function ProScreen() {
   const renderTickOrCross = (isAvailable) => (
     <FontAwesome
       name={isAvailable ? 'check' : 'times'}
-      size={18}
+      size={14}
       color={isAvailable ? Colors.darkGreen : Colors.darkRed}
     />
   );
@@ -82,12 +82,18 @@ export default function ProScreen() {
               <Text style={styles.feature}></Text>
               <Text style={[styles.header, isStarter ? styles.currentPlanLabel : null]}>
                 {t(planLabels.starter)}
+                {'\n'}
+                <Text style={styles.subHeader}>{t('Free \n')}</Text>
               </Text>
               <Text style={[styles.header, isPro ? styles.currentPlanLabel : null]}>
                 {t(planLabels.pro)}
+                {'\n'}
+                <Text style={styles.subHeader}>{t('Lifetime Access')}</Text>
               </Text>
               <Text style={[styles.header, isProPlus ? styles.currentPlanLabel : null]}>
                 {t(planLabels.proPlus)}
+                {'\n'}
+                <Text style={styles.subHeader}>{t('Lifetime Access')}</Text>
               </Text>
             </View>
             {planFeatures.map((item, index) => (
@@ -129,7 +135,7 @@ export default function ProScreen() {
           )}
           {isStarter && (
             <View style={styles.restoreProView}>
-              <Text style={styles.title}>{t('Already bougth click below to restore 👇')}</Text>
+              <Text style={styles.title}>{t('Already bought click below to restore 👇')}</Text>
               <CromaButton
                 style={styles.restoreButton}
                 onPress={async () => await initPurchase(setPurchase)}>
@@ -189,13 +195,16 @@ const styles = StyleSheet.create({
   header: {
     flex: 1,
     fontWeight: 'bold',
-    // color: Colors.primary,
     textAlign: 'center',
     textAlignVertical: 'center',
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     fontSize: 14,
-    height: 30
+    height: 60 // Increased height to accommodate the additional text
+  },
+  subHeader: {
+    fontSize: 10,
+    fontWeight: 'normal'
   },
   feature: {
     flex: 3,
@@ -219,7 +228,6 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   proPlusUserMessage: {
-    //backgroundColor: Colors.lightGrey,
     padding: 10,
     borderRadius: 8,
     marginTop: 16
@@ -227,7 +235,6 @@ const styles = StyleSheet.create({
   proPlusUserText: {
     fontSize: 18,
     fontWeight: 'bold',
-    //color: Colors.primary,
     textAlign: 'center'
   },
   restoreProView: {
