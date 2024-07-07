@@ -206,6 +206,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
               <ColorPickerModal
                 onColorSelected={handleColorSelected}
                 onClose={() => setIsColorPickerVisible(false)}
+                currentPlan={pro.plan}
               />
             </View>
           </View>

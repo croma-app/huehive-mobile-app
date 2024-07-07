@@ -135,6 +135,7 @@ export default function PaletteScreen({ navigation, route }) {
           <ColorPickerModal
             onColorSelected={handleColorSelected}
             onClose={() => setIsColorPickerVisible(false)}
+            currentPlan={pro.plan}
           />
         </View>
       </Modal>

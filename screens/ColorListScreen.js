@@ -60,6 +60,7 @@ export default function ColorListScreen({ navigation, route }) {
         color={item}
         showUnlockPro={pro.plan == 'starter' && item.index >= 4}
         drag={drag}
+        currentPlan={pro.plan}
         onAdd={() => {
           logEvent('add_color_to_palette');
           const currentColor = new Color(colors[item.index].color);

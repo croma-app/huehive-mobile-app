@@ -13,8 +13,11 @@ import Colors from '../constants/Styles';
 import { generateAIColorSuggestions } from '../network/colors';
 import { pickTextColorBasedOnBgColor } from '../libs/ColorHelper';
 import { logEvent, notifyMessage, sendClientError } from '../libs/Helpers';
+import CromaButton from './CromaButton';
+import { useTranslation } from 'react-i18next';
 
-export default function AIColorPicker({ setColor }) {
+export default function AIColorPicker({ setColor, currentPlan, onNavigateProScreen }) {
+  const { t } = useTranslation();
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
@@ -57,14 +60,22 @@ export default function AIColorPicker({ setColor }) {
         <TouchableOpacity
           style={styles.generateButton}
           onPress={generateColorFromQuery}
-          disabled={loading}>
+          disabled={loading || currentPlan !== 'proPlus'}>
           {loading ? (
             <ActivityIndicator size="small" color={Colors.primary} />
           ) : (
-            <FontAwesome5 name="magic" size={24} color={Colors.primary} />
+            <FontAwesome5 name="magic" size={24} color={currentPlan !== 'proPlus' ? Colors.lightGrey : Colors.primary} />
           )}
         </TouchableOpacity>
       </View>
+      {
+      currentPlan != 'proPlus' && <CromaButton
+            style={styles.proVersionButton}
+            textStyle={{ color: Colors.white }}
+            onPress={() =>  onNavigateProScreen()}>
+            {t('Upgrade to Pro Plus')}
+          </CromaButton>
+      }
       <View style={styles.suggestionsContainer}>
         {suggestions.length > 0 ? (
           suggestions.map(({ name, hex }) => (
@@ -146,5 +157,11 @@ const styles = StyleSheet.create({
   placeholderText: {
     color: 'gray',
     fontSize: 16
-  }
+  },
+  proVersionButton: {
+    backgroundColor: Colors.primary,
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 24
+  },
 });

@@ -106,7 +106,13 @@ export default function ProScreen() {
               </View>
             ))}
           </View>
-
+          <View style={styles.proPlusUserMessage}>
+            <Text style={styles.proPlusUserText}>
+              {t(
+                'You are a ' + planLabels[pro.plan] + ' user. Thanks for using HueHive. Enjoy the App.'
+              )}
+            </Text>
+          </View>
           {isStarter && (
             <TouchableOpacity
               style={[styles.planButton]}
@@ -120,15 +126,6 @@ export default function ProScreen() {
               onPress={() => handlePlanSelection('proPlus')}>
               <Text style={styles.planButtonText}>{t('Upgrade to Pro Plus')}</Text>
             </TouchableOpacity>
-          )}
-          {isProPlus && (
-            <View style={styles.proPlusUserMessage}>
-              <Text style={styles.proPlusUserText}>
-                {t(
-                  'You are already a Pro Plus user. Thanks for supporting HueHive. Enjoy the App.'
-                )}
-              </Text>
-            </View>
           )}
           {isStarter && (
             <View style={styles.restoreProView}>
@@ -172,8 +169,6 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   table: {
-    marginBottom: 24,
-    // borderWidth: 1,
     borderColor: Colors.lightGrey,
     borderRadius: 8
   },
@@ -224,7 +219,7 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   proPlusUserMessage: {
-    backgroundColor: Colors.lightGrey,
+    //backgroundColor: Colors.lightGrey,
     padding: 10,
     borderRadius: 8,
     marginTop: 16
@@ -232,15 +227,9 @@ const styles = StyleSheet.create({
   proPlusUserText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: Colors.primary,
+    //color: Colors.primary,
     textAlign: 'center'
   },
-  // restoreButton: {
-  //   borderRadius: 8,
-  //   paddingVertical: 12,
-  //   marginBottom: 16,
-  //   backgroundColor: Colors.secondary
-  // },
   restoreProView: {
     marginVertical: 24
   },
