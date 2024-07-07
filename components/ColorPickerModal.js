@@ -9,10 +9,12 @@ import Colors from '../constants/Styles';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import HexKeyboard from './HexKeyboard';
 import WheelColorPicker from './WheelColorPicker';
+import { useNavigation } from '@react-navigation/native';
 
-export default function ColorPickerModal({ initialColor, onColorSelected, onClose }) {
+export default function ColorPickerModal({ initialColor, onColorSelected, onClose, currentPlan }) {
   const [color, setColor] = useState(initialColor || '#db0a5b');
   const [activeTab, setActiveTab] = useState('basic');
+  const navigation = useNavigation();
   const handleHexKeyPress = async (key) => {
     if (key == 'clear') {
       setColor('#');
@@ -67,7 +69,7 @@ export default function ColorPickerModal({ initialColor, onColorSelected, onClos
     {
       key: 'AI',
       title: 'AI',
-      component: <AIColorPicker color={color} setColor={setColor} />
+      component: <AIColorPicker color={color} setColor={setColor} currentPlan={currentPlan} onNavigateProScreen={() => navigation.navigate("ProVersion")}/>
     },
     {
       key: 'hex',

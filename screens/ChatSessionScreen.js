@@ -12,7 +12,7 @@ import {
 import Colors from '../constants/Styles';
 import React, { useState, useEffect, useRef } from 'react';
 import { material } from 'react-native-typography';
-import { logEvent } from '../libs/Helpers';
+import { logEvent, planLabels } from '../libs/Helpers';
 import ChatCard from '../components/ChatCard';
 import CromaButton from '../components/CromaButton';
 import useChatSession from '../hooks/useChatSession';
@@ -41,7 +41,7 @@ const ChatSessionScreen = (props) => {
   const [inputText, setInputText] = useState('');
   const scrollViewRef = useRef();
 
-  const { isPro } = useApplicationStore();
+  const { pro } = useApplicationStore();
   const { messages, isLoading, isCreatingSession, error, createSession, followUpSession } =
     useChatSession(route.params?.messages);
 
@@ -143,7 +143,7 @@ const ChatSessionScreen = (props) => {
                 </View>
               )}
               <ActivityIndicator animating={isLoading} size="large" color="#ff7875" />
-              {isPro ? (
+              {pro.plan == 'proPlus' ? (
                 <View style={styles.inputContainer}>
                   <TextInput
                     style={styles.input}
@@ -174,7 +174,7 @@ const ChatSessionScreen = (props) => {
                     logEvent('chat_session_pro_button');
                     navigation.navigate('ProVersion');
                   }}>
-                  Unlock pro to use this feature
+                  Unlock {planLabels['proPlus']} to use this feature
                 </CromaButton>
               )}
             </>

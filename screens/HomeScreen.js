@@ -22,7 +22,7 @@ import Colors from '../constants/Styles';
 import useApplicationStore from '../hooks/useApplicationStore';
 
 const HomeScreen = function ({ navigation, route }) {
-  const { isLoading, allPalettes, isPro } = useApplicationStore();
+  const { isLoading, allPalettes, pro } = useApplicationStore();
   const [pickImageLoading, setPickImageLoading] = useState(false);
 
   const getPermissionAsync = async () => {
@@ -145,7 +145,7 @@ const HomeScreen = function ({ navigation, route }) {
             return (
               <PaletteCard
                 key={palette.id}
-                colors={palette.colors.slice(0, isPro ? palette.colors.length : 4)}
+                colors={palette.colors.slice(0, pro.plan != 'starter' ? palette.colors.length : 4)}
                 name={palette.name}
                 navigation={navigation}
                 route={route}

@@ -1,139 +1,249 @@
 import React, { useEffect } from 'react';
-import { ScrollView, StyleSheet, Text } from 'react-native';
-import { View } from 'react-native-animatable';
-import CromaButton from '../components/CromaButton';
-import { purchase, logEvent } from '../libs/Helpers';
-import { material } from 'react-native-typography';
-import { initPurchase } from '../libs/Helpers';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useTranslation } from 'react-i18next';
-import Colors from '../constants/Styles';
+import Colors, { Spacing } from '../constants/Styles';
 import useApplicationStore from '../hooks/useApplicationStore';
+import { purchase, logEvent, initPurchase, planLabels } from '../libs/Helpers';
+import { material } from 'react-native-typography';
+import CromaButton from '../components/CromaButton';
+import Spacer from '../components/Spacer';
 
 export default function ProScreen() {
   const { t } = useTranslation();
-  const { isPro, setPurchase } = useApplicationStore();
+  const { pro, setPurchase } = useApplicationStore();
+  const isStarter = pro.plan === 'starter';
+  const isPro = pro.plan === 'pro';
+  const isProPlus = pro.plan === 'proPlus';
 
-  const purchaseDevelopment = () => {
-    purchase(setPurchase, 'support_development');
-  };
+  const planFeatures = [
+    {
+      feature: t('Generate and modify palettes with up to 4 colors'),
+      starter: true,
+      pro: true,
+      proPlus: true
+    },
+    { feature: t('Extract colors from images'), starter: true, pro: true, proPlus: true },
+    { feature: t('Manually pick colors'), starter: true, pro: true, proPlus: true },
+    { feature: t('View and convert color codes'), starter: true, pro: true, proPlus: true },
+    {
+      feature: t('Access Material Design, CSS, and Tailwind palettes'),
+      starter: true,
+      pro: true,
+      proPlus: true
+    },
+    { feature: t('Download palettes as PNG images'), starter: true, pro: true, proPlus: true },
+    { feature: t('Explore AI-generated color palettes'), starter: false, pro: true, proPlus: true },
+    { feature: t('Add more than 4 colors to a palette'), starter: false, pro: true, proPlus: true },
+    {
+      feature: t('AI chat assistant to create palettes'),
+      starter: false,
+      pro: false,
+      proPlus: true
+    },
+    { feature: t('AI color picker'), starter: false, pro: false, proPlus: true }
+  ];
 
   const purchasePro = async () => {
-    if (await purchase(setPurchase)) {
-      logEvent('pro_version_screen_pur_pro_success');
-    } else {
-      logEvent('pro_version_screen_pur_pro_failed');
-    }
+    const success = await purchase(setPurchase, pro.plan, 'pro');
+    logEvent(success ? 'pro_version_screen_pur_pro_success' : 'pro_version_screen_pur_pro_failed');
+  };
+
+  const purchaseProPlus = async () => {
+    const success = await purchase(setPurchase, pro.plan, 'proPlus');
+    logEvent(
+      success ? 'pro_version_screen_pur_proPlus_success' : 'pro_version_screen_pur_proPlus_failed'
+    );
   };
 
   useEffect(() => {
     logEvent('pro_version_screen');
   }, []);
 
+  const renderTickOrCross = (isAvailable) => (
+    <FontAwesome
+      name={isAvailable ? 'check' : 'times'}
+      size={14}
+      color={isAvailable ? Colors.darkGreen : Colors.darkRed}
+    />
+  );
+
+  const handlePlanSelection = (plan) => {
+    if (plan === 'pro') purchasePro();
+    if (plan === 'proPlus') purchaseProPlus();
+  };
+
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <View>
-        <Text style={styles.title}>{t('Unlock Pro Benefits')}</Text>
-
-        <View style={styles.benefit}>
-          <Text style={styles.bulletPoint}>•</Text>
-          <Text style={styles.benefitText}>
-            {t('Use HiveHive AI assistant to create, explain, and modify color palettes with ease')}
-          </Text>
-        </View>
-        <View style={styles.benefit}>
-          <Text style={styles.bulletPoint}>•</Text>
-          <Text style={styles.benefitText}>
-            {t('Add more than 4 colors into your color palette')}
-          </Text>
-        </View>
-        <View style={styles.benefit}>
-          <Text style={styles.bulletPoint}>•</Text>
-          <Text style={styles.benefitText}>
-            {t('Enjoy lifetime access to all current and future pro features')}
-          </Text>
-        </View>
-        <CromaButton
-          style={styles.proButton}
-          textStyle={{ color: Colors.white }}
-          onPress={purchasePro}>
-          {isPro ? t('You are a pro user! Enjoy the app') : t('Unlock Pro for Lifetime Access')}
-        </CromaButton>
-        <View style={styles.benefit}>
-          <Text style={styles.bulletPoint}>•</Text>
-          <Text style={styles.benefitText}>
-            {t(
-              'Support the development efforts to keep the app awesome and simple without any ads or annoying notifications 😊'
-            )}
-          </Text>
-        </View>
-        <View style={styles.benefit}>
-          <Text style={styles.bulletPoint}>•</Text>
-          <Text style={styles.benefitText}>{t('Help us keep the app open source')}</Text>
-        </View>
-        <CromaButton style={styles.devButton} onPress={purchaseDevelopment}>
-          {t('Support Development')}
-        </CromaButton>
-
-        {!isPro && (
-          <View>
-            <Text style={styles.title}>{t('Restore Purchase')}</Text>
-            <CromaButton
-              style={styles.restoreButton}
-              onPress={async () => {
-                await initPurchase(setPurchase);
-              }}>
-              {t('Restore Pro')}
-            </CromaButton>
+    <View style={styles.container}>
+      <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+        <View>
+          <View style={styles.table}>
+            <View style={[styles.row, styles.rowTitle]}>
+              <Text style={styles.feature}></Text>
+              <Text style={[styles.header, isStarter ? styles.currentPlanLabel : null]}>
+                {t(planLabels.starter)}
+                {'\n'}
+                <Text style={styles.subHeader}>{t('Free \n')}</Text>
+              </Text>
+              <Text style={[styles.header, isPro ? styles.currentPlanLabel : null]}>
+                {t(planLabels.pro)}
+                {'\n'}
+                <Text style={styles.subHeader}>{t('Lifetime Access')}</Text>
+              </Text>
+              <Text style={[styles.header, isProPlus ? styles.currentPlanLabel : null]}>
+                {t(planLabels.proPlus)}
+                {'\n'}
+                <Text style={styles.subHeader}>{t('Lifetime Access')}</Text>
+              </Text>
+            </View>
+            {planFeatures.map((item, index) => (
+              <View
+                style={[
+                  styles.row,
+                  pro.plan === 'starter' && item.starter && styles.currentPlan,
+                  pro.plan === 'pro' && item.pro && styles.currentPlan,
+                  pro.plan === 'proPlus' && item.proPlus && styles.currentPlan
+                ]}
+                key={index}>
+                <Text style={styles.feature}>{item.feature}</Text>
+                <View style={styles.icon}>{renderTickOrCross(item.starter)}</View>
+                <View style={styles.icon}>{renderTickOrCross(item.pro)}</View>
+                <View style={styles.icon}>{renderTickOrCross(item.proPlus)}</View>
+              </View>
+            ))}
           </View>
-        )}
-      </View>
-    </ScrollView>
+          <View style={styles.proPlusUserMessage}>
+            <Text style={styles.proPlusUserText}>
+              {t(
+                'You are a ' + planLabels[pro.plan] + ' user. Thanks for using HueHive. Enjoy the App.'
+              )}
+            </Text>
+          </View>
+          {isStarter && (
+            <TouchableOpacity
+              style={[styles.planButton]}
+              onPress={() => handlePlanSelection('pro')}>
+              <Text style={styles.planButtonText}>{t('Upgrade to Pro')}</Text>
+            </TouchableOpacity>
+          )}
+          {(isStarter || isPro) && (
+            <TouchableOpacity
+              style={[styles.planButton]}
+              onPress={() => handlePlanSelection('proPlus')}>
+              <Text style={styles.planButtonText}>{t('Upgrade to Pro Plus')}</Text>
+            </TouchableOpacity>
+          )}
+          {isStarter && (
+            <View style={styles.restoreProView}>
+              <Text style={styles.title}>{t('Already bought click below to restore 👇')}</Text>
+              <CromaButton
+                style={styles.restoreButton}
+                onPress={async () => await initPurchase(setPurchase)}>
+                {t('Restore Purchase')}
+              </CromaButton>
+            </View>
+          )}
+        </View>
+        <Spacer></Spacer>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 16,
+    paddingHorizontal: Spacing.medium,
     paddingTop: 24
   },
   title: {
-    fontSize: 24,
+    fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 16,
+    textAlign: 'center',
     color: Colors.darkGrey
   },
-  benefit: {
+  currentPlanContainer: {
+    marginBottom: 16,
+    backgroundColor: Colors.lightGrey,
+    padding: 10,
+    borderRadius: 8
+  },
+  currentPlanText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: Colors.primary,
+    textAlign: 'center'
+  },
+  table: {
+    borderColor: Colors.lightGrey,
+    borderRadius: 8
+  },
+  row: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 12
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.lightGrey,
+    paddingVertical: 6,
+    paddingHorizontal: 6,
+    borderColor: Colors.lightGrey
   },
-  bulletPoint: {
-    fontSize: 16,
-    marginRight: 8,
-    color: Colors.darkGrey
+  rowTitle: {
+    paddingVertical: 0,
+    paddingHorizontal: 0,
+    borderWidth: 0
   },
-  benefitText: {
-    ...material.body1,
+  header: {
     flex: 1,
-    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+    fontSize: 14,
+    height: 60 // Increased height to accommodate the additional text
+  },
+  subHeader: {
+    fontSize: 10,
+    fontWeight: 'normal'
+  },
+  feature: {
+    flex: 3,
+    ...material.body1,
+    fontSize: 14,
     color: Colors.darkGrey
   },
-  proButton: {
+  icon: {
+    flex: 1,
+    alignItems: 'center'
+  },
+  planButton: {
+    borderRadius: 8,
+    paddingVertical: 12,
+    marginTop: 8,
     backgroundColor: Colors.primary,
-    borderRadius: 8,
-    paddingVertical: 12,
-    marginTop: 24,
-    marginBottom: 32
+    alignItems: 'center'
   },
-  devButton: {
-    borderRadius: 8,
-    paddingVertical: 12,
-    marginTop: 16,
-    marginBottom: 32
+  planButtonText: {
+    color: Colors.white,
+    fontSize: 16
   },
-  restoreButton: {
+  proPlusUserMessage: {
+    padding: 10,
     borderRadius: 8,
-    paddingVertical: 12,
-    marginBottom: 16
+    marginTop: 16
+  },
+  proPlusUserText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+  restoreProView: {
+    marginVertical: 24
+  },
+  currentPlan: {
+    backgroundColor: Colors.lightBlue
+  },
+  currentPlanLabel: {
+    backgroundColor: Colors.lightBlue
   }
 });

@@ -19,7 +19,15 @@ KEY FEATURES
 
 PRO BENEFITS
 
-Add more than 4 colors to a palette
+Pro 
+
+* Add more than 4 colors to a palette
+* Explore/Search AI generated color palettes
+
+Pro Plus
+
+* AI chat to create color palette
+* AI color picker
 
 DESCRIPTION
 

@@ -8,15 +8,34 @@ const isProduction = () => {
   return __DEV__ === false;
 };
 
+const planToSKUMapping = {
+  starter: {
+    pro: "starter_to_pro",
+    proPlus: "croma_pro" // Keep the product same for backward compatibility 
+  },
+  pro: {
+    proPlus: "pro_to_pro_plus"
+  }
+}
+
+const skuToPlanMapping = {
+  "starter_to_pro": "pro",
+  "croma_pro": "proPlus",
+  "pro_to_pro_plus": "proPlus"
+}
+
+const planLabels = {
+  starter: "Starter",
+  pro: "Pro",
+  proPlus: "Pro Plus"
+}
+
+
 const readRemoteConfig = async (key) => {
   // Native module always returns string. So, we need to convert it to boolean.
   return (await NativeModules.CromaModule.getConfigString(key)) == 'true';
 };
 
-const productSku = function () {
-  //return 'local_test1';
-  return Platform.OS === 'android' ? 'croma_pro' : 'app_croma';
-};
 const sendClientError = (event, errorMessage, stacktrace) => {
   if (isProduction()) {
     sendClientErrorAsync(event + ' -  ' + errorMessage, stacktrace || new Error().stack);
@@ -41,21 +60,19 @@ function isObject(value) {
   return value && typeof value === 'object' && value.constructor === Object;
 }
 
-const purchase = async function (setPurchase, productSKU) {
-  if (!productSKU) {
-    productSKU = productSku();
-  }
+const purchase = async function (setPurchase, currentPlan, toPlan) {
   try {
-    await getProducts({ skus: [productSKU] });
-    const details = await requestPurchase({
+    const productSKU = planToSKUMapping[currentPlan][toPlan]
+    await getProducts({ skus:  [productSKU]});
+    await requestPurchase({
       skus: [productSKU]
     });
-    await setPurchase(details);
+    await setPurchase(toPlan);
     logEvent('purchase_successful');
     notifyMessage('Congrats, You are now a pro user!');
   } catch (err) {
     if (err.code == 'E_ALREADY_OWNED') {
-      setPurchase('Already owned');
+      setPurchase(toPlan);
       notifyMessage('Purchase restored successfully!');
     } else {
       console.warn(err.code, err.message);
@@ -71,19 +88,28 @@ const initPurchase = async function (
   retryCount = 3,
   retryDelay = 500
 ) {
-  const productSKU = productSku();
+  const determinePlan = (plans) => {
+    if (plans.includes('proPlus')) {
+      return 'proPlus';
+    } else if (plans.includes('pro')) {
+      return 'pro';
+    }
+    return null;
+  };
 
   const retryPurchase = async (retries) => {
     try {
       let products = await getAvailablePurchases();
-      const product = products.find((product) => product.productId === productSKU);
+      const plans = products.map(product => skuToPlanMapping[product.productId]);
+      const selectedPlan = determinePlan(plans);
 
-      if (product) {
-        await setPurchase(product);
+      if (selectedPlan) {
+        await setPurchase(selectedPlan);
         if (showMessage) {
-          notifyMessage('Congrats, You are already a pro user!');
+          notifyMessage(`Congrats, You are already a pro (${planLabels[selectedPlan]}) user!`);
         }
       }
+      // await setPurchase("starter"); // For testing. 
     } catch (e) {
       if (retries > 0) {
         logEvent('init_purchase_retry', e.message);
@@ -92,13 +118,14 @@ const initPurchase = async function (
       } else {
         logEvent('init_purchase_failed', e.message);
         notifyMessage('Init purchase failed: ' + e.message);
+        sendClientError('init_purchase_failed_' + retryCount, e.message, e.stack);
       }
-      sendClientError('init_purchase_failed_' + retryCount, e.message, e.stack);
     }
   };
 
   await retryPurchase(retryCount);
 };
+
 
 const getAvailablePurchases = async () => {
   try {
@@ -181,4 +208,4 @@ export function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export { logEvent, sendClientError, purchase, notifyMessage, initPurchase, readRemoteConfig };
+export { logEvent, sendClientError, purchase, notifyMessage, initPurchase, readRemoteConfig, planLabels };

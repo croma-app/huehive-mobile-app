@@ -34,7 +34,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   const [selectedImage, setSelectedImage] = React.useState(null);
   const [automaticColors, setAutomaticColors] = React.useState([]);
 
-  const { isPro, setDetailedColor } = useApplicationStore();
+  const { pro, setDetailedColor } = useApplicationStore();
 
   const pickImageResult = async () => {
     setPickImageLoading(true);
@@ -172,7 +172,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                 navigation.navigate('ChatSession');
               }
             },
-            isPro
+            pro.plan != 'starter'
               ? {
                   id: 6,
                   icon: <Ionicons name="md-color-filter-outline" size={20} />,
@@ -206,6 +206,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
               <ColorPickerModal
                 onColorSelected={handleColorSelected}
                 onClose={() => setIsColorPickerVisible(false)}
+                currentPlan={pro.plan}
               />
             </View>
           </View>

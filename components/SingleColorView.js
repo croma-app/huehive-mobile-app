@@ -18,7 +18,7 @@ import ColorPickerModal from './ColorPickerModal';
 import { pickTextColorBasedOnBgColor } from '../libs/ColorHelper';
 import { useNavigation } from '@react-navigation/native';
 
-export const SingleColorView = ({ color, showUnlockPro, onColorChange, drag, onRemove, onAdd }) => {
+export const SingleColorView = ({ color, showUnlockPro, onColorChange, drag, onRemove, onAdd, currentPlan }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isColorPickerVisible, setIsColorPickerVisible] = useState(false);
   const navigation = useNavigation();
@@ -79,7 +79,7 @@ export const SingleColorView = ({ color, showUnlockPro, onColorChange, drag, onR
           <View style={styles.overlay}>
             <Text
               style={[styles.colorText, { color: textColor, textAlign: 'center', fontSize: 12 }]}>
-              Unlock Pro to view
+              Upgrade to Pro to view
             </Text>
           </View>
         )}
@@ -156,6 +156,7 @@ export const SingleColorView = ({ color, showUnlockPro, onColorChange, drag, onR
                 onClose={() => {
                   setIsColorPickerVisible(false);
                 }}
+                currentPlan={currentPlan}
               />
             </View>
           </View>
