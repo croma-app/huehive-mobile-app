@@ -80,7 +80,7 @@ export default function PaletteScreen({ navigation, route }) {
 
   const colorsToShow = React.useMemo(
     () => colors?.slice(0, pro.plan != 'free' ? colors.length : 4),
-    [colors, pro.plan != 'free']
+    [colors, pro.plan != 'starter']
   );
 
   const handleColorSelected = (color) => {
@@ -114,7 +114,7 @@ export default function PaletteScreen({ navigation, route }) {
               colors.length >= 4 &&
               pro.plan == 'starter'
             ) {
-              notifyMessage('Unlock Pro to add more than 4 colors!');
+              notifyMessage('Upgrade to Pro to add more than 4 colors!');
               navigation.navigate('ProVersion');
             } else {
               setIsColorPickerVisible(true);

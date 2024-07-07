@@ -43,7 +43,7 @@ export default function SavePaletteScreen({ navigation, route }) {
   return (
     <ScrollView style={{ margin: 8 }} showsVerticalScrollIndicator={false}>
       <PalettePreviewCard
-        colors={finalColors.slice(0, pro.plan != 'free' ? finalColors.length : 4)}
+        colors={finalColors.slice(0, pro.plan != 'starter' ? finalColors.length : 4)}
         name={paletteName}
       />
       <View style={styles.card}>
@@ -69,7 +69,7 @@ export default function SavePaletteScreen({ navigation, route }) {
               }
               const palette = {
                 name: paletteName,
-                colors: finalColors.slice(0, pro.plan != 'free' ? finalColors.length : 4)
+                colors: finalColors.slice(0, pro.plan != 'starter' ? finalColors.length : 4)
               };
               addPalette(palette);
               navigation.popToTop();
@@ -82,14 +82,14 @@ export default function SavePaletteScreen({ navigation, route }) {
         <View style={styles.proVersionContainer}>
           <Text style={styles.proVersionText}>
             {t(
-              'Unlock Pro to save unlimited colors in a palette. Free version allows saving up to 4 colors.'
+              'Upgrade to Pro to save unlimited colors in a palette. Starter Plan allows saving up to 4 colors.'
             )}
           </Text>
           <CromaButton
             style={styles.proVersionButton}
             textStyle={{ color: Colors.white }}
             onPress={handleUnlockPro}>
-            {t('Unlock Pro')}
+            {t('Upgrade to Pro')}
           </CromaButton>
         </View>
       )}

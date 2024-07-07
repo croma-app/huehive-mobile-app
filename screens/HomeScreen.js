@@ -145,7 +145,7 @@ const HomeScreen = function ({ navigation, route }) {
             return (
               <PaletteCard
                 key={palette.id}
-                colors={palette.colors.slice(0, pro.plan != 'free' ? palette.colors.length : 4)}
+                colors={palette.colors.slice(0, pro.plan != 'starter' ? palette.colors.length : 4)}
                 name={palette.name}
                 navigation={navigation}
                 route={route}

@@ -29,8 +29,8 @@ export default function PaletteViewScreen({ navigation, route }) {
   }, [navigation, palette.id]);
 
   const colorsToShow = React.useMemo(
-    () => colors?.slice(0, pro.plan != 'free' ? colors.length : 4),
-    [colors, pro.plan != 'free']
+    () => colors?.slice(0, pro.plan != 'starter' ? colors.length : 4),
+    [colors, pro.plan != 'starter']
   );
 
   const color = colorsToShow[selectedColor].color;

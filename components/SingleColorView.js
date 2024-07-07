@@ -79,7 +79,7 @@ export const SingleColorView = ({ color, showUnlockPro, onColorChange, drag, onR
           <View style={styles.overlay}>
             <Text
               style={[styles.colorText, { color: textColor, textAlign: 'center', fontSize: 12 }]}>
-              Unlock Pro to view
+              Upgrade to Pro to view
             </Text>
           </View>
         )}

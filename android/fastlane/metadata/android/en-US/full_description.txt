@@ -16,13 +16,13 @@ KEY FEATURES
 * Access a color palette library with Material Design, CSS, and Tailwind palettes
 * Download palettes as PNG images
 * Rearrange colors in a palette with ease
-* Explore AI generated color palettes
 
 PRO BENEFITS
 
 Pro 
 
 * Add more than 4 colors to a palette
+* Explore/Search AI generated color palettes
 
 Pro Plus
 

@@ -10,18 +10,18 @@ const isProduction = () => {
 
 const planToSKUMapping = {
   starter: {
-    pro: "huehive_pro_basic",
-    proPlus: "croma_pro"
+    pro: "starter_to_pro",
+    proPlus: "croma_pro" // Keep the product same for backward compatibility 
   },
   pro: {
-    proPlus: "huehive_basic_to_advance"
+    proPlus: "pro_to_pro_plus"
   }
 }
 
 const skuToPlanMapping = {
-  "huehive_pro_basic": "pro",
+  "starter_to_pro": "pro",
   "croma_pro": "proPlus",
-  "huehive_basic_to_advance": "proPlus"
+  "pro_to_pro_plus": "proPlus"
 }
 
 const planLabels = {
@@ -106,7 +106,7 @@ const initPurchase = async function (
       if (selectedPlan) {
         await setPurchase(selectedPlan);
         if (showMessage) {
-          notifyMessage(`Congrats, You are already a pro (${selectedPlan}) user!`);
+          notifyMessage(`Congrats, You are already a pro (${planLabels[selectedPlan]}) user!`);
         }
       }
       // await setPurchase("starter"); // For testing. 

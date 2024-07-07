@@ -172,7 +172,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                 navigation.navigate('ChatSession');
               }
             },
-            pro.plan != 'free'
+            pro.plan != 'starter'
               ? {
                   id: 6,
                   icon: <Ionicons name="md-color-filter-outline" size={20} />,
