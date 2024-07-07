@@ -58,7 +58,7 @@ export default function ColorListScreen({ navigation, route }) {
         opacity={opacity}
         key={item.color + '-' + item.locked}
         color={item}
-        showUnlockPro={pro.plan == 'free' && item.index >= 4}
+        showUnlockPro={pro.plan == 'starter' && item.index >= 4}
         drag={drag}
         onAdd={() => {
           logEvent('add_color_to_palette');

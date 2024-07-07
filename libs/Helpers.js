@@ -9,19 +9,25 @@ const isProduction = () => {
 };
 
 const planToSKUMapping = {
-  free: {
-    basic: "huehive_pro_basic",
-    advance: "croma_pro"
+  starter: {
+    pro: "huehive_pro_basic",
+    proPlus: "croma_pro"
   },
-  basic: {
-    advance: "huehive_basic_to_advance"
+  pro: {
+    proPlus: "huehive_basic_to_advance"
   }
 }
 
 const skuToPlanMapping = {
-  "huehive_pro_basic": "basic",
-  "croma_pro": "advance",
-  "huehive_basic_to_advance": "advance"
+  "huehive_pro_basic": "pro",
+  "croma_pro": "proPlus",
+  "huehive_basic_to_advance": "proPlus"
+}
+
+const planLabels = {
+  starter: "Starter",
+  pro: "Pro",
+  proPlus: "Pro Plus"
 }
 
 
@@ -83,10 +89,10 @@ const initPurchase = async function (
   retryDelay = 500
 ) {
   const determinePlan = (plans) => {
-    if (plans.includes('advance')) {
-      return 'advance';
-    } else if (plans.includes('basic')) {
-      return 'basic';
+    if (plans.includes('proPlus')) {
+      return 'proPlus';
+    } else if (plans.includes('pro')) {
+      return 'pro';
     }
     return null;
   };
@@ -201,4 +207,4 @@ export function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export { logEvent, sendClientError, purchase, notifyMessage, initPurchase, readRemoteConfig };
+export { logEvent, sendClientError, purchase, notifyMessage, initPurchase, readRemoteConfig, planLabels };

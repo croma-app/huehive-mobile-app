@@ -10,7 +10,7 @@ const useApplicationStore = create((set) => ({
   deletedPalettes: {},
   isLoading: false,
   pro: {
-    plan: "free"
+    plan: "starter"
   },
   detailedColor: null,
   commonPalettes: [],

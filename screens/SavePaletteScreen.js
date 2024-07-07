@@ -78,7 +78,7 @@ export default function SavePaletteScreen({ navigation, route }) {
           </CromaButton>
         </View>
       </View>
-      {pro.plan == 'free' && finalColors.length > 4 && (
+      {pro.plan == 'starter' && finalColors.length > 4 && (
         <View style={styles.proVersionContainer}>
           <Text style={styles.proVersionText}>
             {t(

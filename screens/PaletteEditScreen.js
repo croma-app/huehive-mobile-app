@@ -112,9 +112,9 @@ export default function PaletteScreen({ navigation, route }) {
             if (
               (Platform.OS === 'android' || Platform.OS === 'ios') &&
               colors.length >= 4 &&
-              pro.plan == 'free'
+              pro.plan == 'starter'
             ) {
-              notifyMessage('Unlock pro to add more than 4 colors!');
+              notifyMessage('Unlock Pro to add more than 4 colors!');
               navigation.navigate('ProVersion');
             } else {
               setIsColorPickerVisible(true);
