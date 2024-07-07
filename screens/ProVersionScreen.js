@@ -1,122 +1,111 @@
 import React, { useEffect } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
-import CromaButton from '../components/CromaButton';
-import { purchase, logEvent } from '../libs/Helpers';
-import { material } from 'react-native-typography';
-import { initPurchase } from '../libs/Helpers';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useTranslation } from 'react-i18next';
 import Colors from '../constants/Styles';
 import useApplicationStore from '../hooks/useApplicationStore';
+import { purchase, logEvent, initPurchase } from '../libs/Helpers';
+import { material } from 'react-native-typography';
+import CromaButton from '../components/CromaButton';
 
 export default function ProScreen() {
   const { t } = useTranslation();
   const { pro, setPurchase } = useApplicationStore();
-  const isFree = pro.plan == 'free';
-  const isBasic = pro.plan == 'basic';
-  const isAdvance = pro.plan == 'advance';
+  const isFree = pro.plan === 'free';
+  const isBasic = pro.plan === 'basic';
+  const isAdvance = pro.plan === 'advance';
+
+  const planFeatures = [
+    { feature: t('Generate and modify palettes with up to 4 colors'), free: true, basic: true, advance: true },
+    { feature: t('Extract colors from images'), free: true, basic: true, advance: true },
+    { feature: t('Manually pick colors'), free: true, basic: true, advance: true },
+    { feature: t('View and convert color codes'), free: true, basic: true, advance: true },
+    { feature: t('Access Material Design, CSS, and Tailwind palettes'), free: true, basic: true, advance: true },
+    { feature: t('Download palettes as PNG images'), free: true, basic: true, advance: true },
+    { feature: t('Explore AI-generated color palettes'), free: true, basic: true, advance: true },
+    { feature: t('Add more than 4 colors to a palette'), free: false, basic: true, advance: true },
+    { feature: t('AI chat assistant to create palettes'), free: false, basic: false, advance: true },
+    { feature: t('AI color picker'), free: false, basic: false, advance: true },
+  ];
+
   const purchasePro = async () => {
-    if (await purchase(setPurchase)) {
-      logEvent('pro_version_screen_pur_pro_success');
-    } else {
-      logEvent('pro_version_screen_pur_pro_failed');
-    }
+    const success = await purchase(setPurchase, pro.plan, 'basic');
+    logEvent(success ? 'pro_version_screen_pur_pro_success' : 'pro_version_screen_pur_pro_failed');
   };
 
   const purchaseAdvance = async () => {
-    if (await purchase(setPurchase, 'advance')) {
-      logEvent('pro_version_screen_pur_advance_success');
-    } else {
-      logEvent('pro_version_screen_pur_advance_failed');
-    }
+    const success = await purchase(setPurchase, pro.plan, 'advance');
+    logEvent(success ? 'pro_version_screen_pur_advance_success' : 'pro_version_screen_pur_advance_failed');
   };
 
   useEffect(() => {
     logEvent('pro_version_screen');
   }, []);
 
+  const renderTickOrCross = (isAvailable) => (
+    <FontAwesome
+      name={isAvailable ? 'check' : 'times'}
+      size={18}
+      color={isAvailable ? Colors.darkGreen : Colors.darkRed}
+    />
+  );
+
+  const handlePlanSelection = (plan) => {
+    if (plan === 'basic') purchasePro();
+    if (plan === 'advance') purchaseAdvance();
+  };
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      
       <View>
         <Text style={styles.title}>{t('Choose Your Plan')}</Text>
-
-        <View style={styles.plan}>
-          <Text style={styles.planTitle}>{t('Free Plan')}</Text>
-          <View style={styles.benefit}>
-            <Text style={styles.bulletPoint}>•</Text>
-            <Text style={styles.benefitText}>{t('List of features')}</Text>
-          </View>
-          {isFree && (
-            <CromaButton style={[styles.planButton, styles.primaryButton]}>
-              {t('Current Plan')}
-            </CromaButton>
-          )}
+        <View>
+          <Text>Your current plan is {pro.plan}</Text>
         </View>
-
-        <View style={styles.plan}>
-          <Text style={styles.planTitle}>{t('Pro Plan')}</Text>
-          <View style={styles.benefit}>
-            <Text style={styles.bulletPoint}>•</Text>
-            <Text style={styles.benefitText}>{t('Save more than 4 colours')}</Text>
+        <View style={styles.table}>
+          <View style={styles.row}>
+            <Text style={styles.feature}></Text>
+            <Text style={styles.header}>{t('Free')}</Text>
+            <Text style={styles.header}>{t('Basic')}</Text>
+            <Text style={styles.header}>{t('Advance')}</Text>
           </View>
-          <View style={styles.benefit}>
-            <Text style={styles.bulletPoint}>•</Text>
-            <Text style={styles.benefitText}>{t('All Free plan features')}</Text>
-          </View>
-          <View style={styles.benefit}>
-            <Text style={styles.bulletPoint}>•</Text>
-            <Text style={styles.benefitText}>{t('1 day trial to Advance plan')}</Text>
-          </View>
-          <View style={styles.benefit}>
-            <Text style={styles.bulletPoint}>•</Text>
-            <Text style={styles.benefitText}>{t('Explore AI generated existing palettes')}</Text>
-          </View>
-          {isBasic && (
-            <CromaButton
-              style={
-                isBasic
-                  ? [styles.planButton, styles.primaryButton]
-                  : [styles.planButton, styles.secondaryButton]
-              }
-              onPress={purchasePro}>
-              {isBasic ? t('Current Plan') : t('Unlock Pro')}
-            </CromaButton>
-          )}
+          {planFeatures.map((item, index) => (
+            <View style={styles.row} key={index}>
+              <Text style={styles.feature}>{item.feature}</Text>
+              <View style={styles.icon}>{renderTickOrCross(item.free)}</View>
+              <View style={styles.icon}>{renderTickOrCross(item.basic)}</View>
+              <View style={styles.icon}>{renderTickOrCross(item.advance)}</View>
+            </View>
+          ))}
         </View>
-
-        <View style={styles.plan}>
-          <Text style={styles.planTitle}>{t('Advance Plan')}</Text>
-          <View style={styles.benefit}>
-            <Text style={styles.bulletPoint}>•</Text>
-            <Text style={styles.benefitText}>{t('All Pro plan features')}</Text>
+        
+        {isFree && <TouchableOpacity
+          style={[styles.planButton]}
+          onPress={() => handlePlanSelection('basic')}
+        >
+          <Text style={styles.planButtonText}>{ t('Upgrade to Basic pro plan')}</Text>
+        </TouchableOpacity>
+        }
+        { isFree && isBasic &&
+        <TouchableOpacity
+          style={[styles.planButton]}
+          onPress={() => handlePlanSelection('advance')}
+        >
+          <Text style={styles.planButtonText}>{t('Upgrade to Advance pro plan')}</Text>
+        </TouchableOpacity>
+        }
+        { isAdvance && <View>
+            <Text>You are already Advance Pro user. Thanks for supporting HueHive. Enjoy the App.</Text>
           </View>
-          <View style={styles.benefit}>
-            <Text style={styles.bulletPoint}>•</Text>
-            <Text style={styles.benefitText}>{t('AI chat to create color palette')}</Text>
-          </View>
-          <View style={styles.benefit}>
-            <Text style={styles.bulletPoint}>•</Text>
-            <Text style={styles.benefitText}>{t('AI color picker')}</Text>
-          </View>
-          <CromaButton
-            style={
-              isAdvance
-                ? [styles.planButton, styles.primaryButton]
-                : [styles.planButton, styles.secondaryButton]
-            }
-            onPress={purchaseAdvance}>
-            {isAdvance ? t('Current Plan') : t('Unlock Advance')}
-          </CromaButton>
-        </View>
-
+        }
         {isFree && (
           <View style={styles.restoreProView}>
             <Text style={styles.title}>{t('Restore Purchase')}</Text>
             <CromaButton
               style={styles.restoreButton}
-              onPress={async () => {
-                await initPurchase(setPurchase);
-              }}>
+              onPress={async () => await initPurchase(setPurchase)}
+            >
               {t('Restore Pro')}
             </CromaButton>
           </View>
@@ -129,62 +118,78 @@ export default function ProScreen() {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
-    paddingTop: 24
+    paddingTop: 24,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
-    color: Colors.darkGrey
+    color: Colors.darkGrey,
+    textAlign: 'center',
   },
-  plan: {
+  priceRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 16,
+  },
+  priceHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: Colors.primary,
+  },
+  table: {
     marginBottom: 24,
-    padding: 16,
-    borderRadius: 8,
     borderWidth: 1,
     borderColor: Colors.lightGrey,
-    backgroundColor: Colors.white
+    borderRadius: 8,
   },
-  planTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 12,
-    color: Colors.primary
-  },
-  benefit: {
+  row: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 8
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.lightGrey,
+    paddingVertical: 8,
+    paddingHorizontal: 8,
   },
-  bulletPoint: {
-    fontSize: 16,
-    marginRight: 8,
-    color: Colors.darkGrey
-  },
-  benefitText: {
-    ...material.body1,
+  header: {
     flex: 1,
-    fontSize: 16,
-    color: Colors.darkGrey
+    fontWeight: 'bold',
+    color: Colors.primary,
+    textAlign: 'center',
+    fontSize: 14,
+  },
+  feature: {
+    flex: 2,
+    ...material.body1,
+    fontSize: 14,
+    color: Colors.darkGrey,
+  },
+  icon: {
+    flex: 1,
+    alignItems: 'center',
   },
   planButton: {
     borderRadius: 8,
     paddingVertical: 12,
-    marginTop: 16
+    marginTop: 8,
+    backgroundColor: Colors.secondary,
+    alignItems: 'center',
   },
-  primaryButton: {
-    backgroundColor: Colors.primary
+  planButtonText: {
+    color: Colors.white,
+    fontSize: 16,
   },
-  secondaryButton: {
-    backgroundColor: Colors.secondary
+  currentPlan: {
+    backgroundColor: Colors.primary,
   },
   restoreButton: {
     borderRadius: 8,
     paddingVertical: 12,
     marginBottom: 16,
-    backgroundColor: Colors.secondary
+    backgroundColor: Colors.secondary,
   },
   restoreProView: {
-    marginBottom: 24
-  }
+    marginBottom: 24,
+  },
 });
+

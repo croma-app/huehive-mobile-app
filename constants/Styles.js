@@ -12,6 +12,8 @@ export default {
   darkGrey: '#333',
   white: '#fff',
   black: '#000',
+  darkGreen: '#006400',
+  darkRed: '#8B0000',
   backgroundColor: '#f2f2f2',
   overlay: 'rgba(0, 0, 0, 0.5)',
   primaryDark: '#C94740',

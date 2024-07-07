@@ -9,22 +9,27 @@ const isProduction = () => {
 };
 
 const planToSKUMapping = {
-  basic: "huehive_pro_basic",
-  advance: "croma_pro"
+  free: {
+    basic: "huehive_pro_basic",
+    advance: "croma_pro"
+  },
+  basic: {
+    advance: "huehive_basic_to_advance"
+  }
 }
 
-const skuToPlanMapping = Object.fromEntries(
-  Object.entries(planToSKUMapping).map(([key, value]) => [value, key])
-);
+const skuToPlanMapping = {
+  "huehive_pro_basic": "basic",
+  "croma_pro": "advance",
+  "huehive_basic_to_advance": "advance"
+}
+
+
 const readRemoteConfig = async (key) => {
   // Native module always returns string. So, we need to convert it to boolean.
   return (await NativeModules.CromaModule.getConfigString(key)) == 'true';
 };
 
-const productSku = function () {
-  //return 'local_test1';
-  return Platform.OS === 'android' ? 'croma_pro' : 'app_croma';
-};
 const sendClientError = (event, errorMessage, stacktrace) => {
   if (isProduction()) {
     sendClientErrorAsync(event + ' -  ' + errorMessage, stacktrace || new Error().stack);
@@ -49,21 +54,19 @@ function isObject(value) {
   return value && typeof value === 'object' && value.constructor === Object;
 }
 
-const purchase = async function (setPurchase, productSKU) {
-  if (!productSKU) {
-    productSKU = productSku();
-  }
+const purchase = async function (setPurchase, currentPlan, toPlan) {
   try {
-    await getProducts({ skus: [productSKU] });
+    const productSKU = planToSKUMapping[currentPlan][toPlan]
+    await getProducts({ skus:  [productSKU]});
     await requestPurchase({
       skus: [productSKU]
     });
-    await setPurchase(skuToPlanMapping[productSKU]);
+    await setPurchase(toPlan);
     logEvent('purchase_successful');
     notifyMessage('Congrats, You are now a pro user!');
   } catch (err) {
     if (err.code == 'E_ALREADY_OWNED') {
-      setPurchase(skuToPlanMapping[productSKU]);
+      setPurchase(toPlan);
       notifyMessage('Purchase restored successfully!');
     } else {
       console.warn(err.code, err.message);
@@ -79,17 +82,25 @@ const initPurchase = async function (
   retryCount = 3,
   retryDelay = 500
 ) {
+  const determinePlan = (plans) => {
+    if (plans.includes('advance')) {
+      return 'advance';
+    } else if (plans.includes('basic')) {
+      return 'basic';
+    }
+    return null;
+  };
+
   const retryPurchase = async (retries) => {
     try {
       let products = await getAvailablePurchases();
-      
-      const basicPlan = products.find((product) => product.productId === planToSKUMapping.basic);
-      const advancePlan = products.find((product) => product.productId === planToSKUMapping.advance);
-      if (basicPlan || advancePlan) {
-        const plan = basicPlan ? 'basic': 'advance';
-        await setPurchase(plan);
+      const plans = products.map(product => skuToPlanMapping[product.productId]);
+      const selectedPlan = determinePlan(plans);
+
+      if (selectedPlan) {
+        await setPurchase(selectedPlan);
         if (showMessage) {
-          notifyMessage('Congrats, You are already a pro (' + plan + ') user!');
+          notifyMessage(`Congrats, You are already a pro (${selectedPlan}) user!`);
         }
       }
     } catch (e) {
@@ -100,13 +111,14 @@ const initPurchase = async function (
       } else {
         logEvent('init_purchase_failed', e.message);
         notifyMessage('Init purchase failed: ' + e.message);
+        sendClientError('init_purchase_failed_' + retryCount, e.message, e.stack);
       }
-      sendClientError('init_purchase_failed_' + retryCount, e.message, e.stack);
     }
   };
 
   await retryPurchase(retryCount);
 };
+
 
 const getAvailablePurchases = async () => {
   try {
