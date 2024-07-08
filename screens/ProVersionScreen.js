@@ -24,7 +24,7 @@ export default function ProScreen() {
     logEvent('pro_version_screen');
     async function fetchPrices() {
       try {
-        let priceData =  await getPlanPrice('starter', ['pro', 'proPlus']);
+        let priceData =  [];
         if (pro.plan == 'starter') {
           priceData = await getPlanPrice('starter', ['pro', 'proPlus']);
         } else if (pro.plan == 'pro') {
