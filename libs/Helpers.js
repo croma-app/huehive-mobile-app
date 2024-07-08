@@ -11,6 +11,7 @@ const isProduction = () => {
 const planToSKUMapping = {
   starter: {
     pro: "starter_to_pro",
+    // proPlus: "local_test1" 
     proPlus: "croma_pro" // Keep the product same for backward compatibility 
   },
   pro: {
@@ -20,6 +21,7 @@ const planToSKUMapping = {
 
 const skuToPlanMapping = {
   "starter_to_pro": "pro",
+  // "local_test1": "proPlus",
   "croma_pro": "proPlus",
   "pro_to_pro_plus": "proPlus"
 }
@@ -29,7 +31,6 @@ const planLabels = {
   pro: "Pro",
   proPlus: "Pro Plus"
 }
-
 
 const readRemoteConfig = async (key) => {
   // Native module always returns string. So, we need to convert it to boolean.
@@ -82,6 +83,7 @@ const purchase = async function (setPurchase, currentPlan, toPlan) {
     sendClientError('purchase_failed', err.message + 'Error code: ' + err.code, err.stack);
   }
 };
+
 const initPurchase = async function (
   setPurchase,
   showMessage = true,
@@ -126,7 +128,6 @@ const initPurchase = async function (
   await retryPurchase(retryCount);
 };
 
-
 const getAvailablePurchases = async () => {
   try {
     const purchases = await RNIap.getAvailablePurchases();
@@ -145,6 +146,37 @@ const getAvailablePurchases = async () => {
     throw err;
   }
 };
+
+const getPlanPrice = async (currentPlan, toPlans) => {
+  try {
+    const productSKUs = toPlans.map(toPlan => planToSKUMapping[currentPlan][toPlan]);
+    const products = await RNIap.getProducts({skus: productSKUs});
+    if (products.length > 0) {
+      const prices = {};
+      products.forEach(product => {
+        prices[product.productId] = {
+          localizedPrice: product.localizedPrice,
+        };
+      });
+      return toPlans.map(toPlan => {
+        const productSKU = planToSKUMapping[currentPlan][toPlan];
+        const priceInfo = prices[productSKU] || {};
+        return {
+          toPlan,
+          price: priceInfo.localizedPrice 
+        };
+      });
+    } else {
+      throw new Error('Products not found');
+    }
+  } catch (err) {
+    console.warn(err.code, err.message);
+    logEvent('get_plan_price_failed', err.message);
+    sendClientError('get_plan_price_failed', err.message, err.stack);
+    throw err;
+  }
+};
+
 
 function notifyMessage(msg, duration = ToastAndroid.LONG) {
   if (Platform.OS === 'android') {
@@ -185,6 +217,7 @@ function extractHexColors2(text) {
   }
   return hexColors;
 }
+
 export function extractHexColors(text) {
   let extractedColors1 = extractHexColors1(text);
   let extractedColors2 = extractHexColors2(text);
@@ -208,4 +241,4 @@ export function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export { logEvent, sendClientError, purchase, notifyMessage, initPurchase, readRemoteConfig, planLabels };
+export { logEvent, sendClientError, purchase, notifyMessage, initPurchase, readRemoteConfig, planLabels, getPlanPrice };

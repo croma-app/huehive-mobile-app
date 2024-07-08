@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useTranslation } from 'react-i18next';
 import Colors, { Spacing } from '../constants/Styles';
 import useApplicationStore from '../hooks/useApplicationStore';
-import { purchase, logEvent, initPurchase, planLabels } from '../libs/Helpers';
+import { purchase, logEvent, initPurchase, planLabels, getPlanPrice } from '../libs/Helpers';
 import { material } from 'react-native-typography';
 import CromaButton from '../components/CromaButton';
 import Spacer from '../components/Spacer';
@@ -15,7 +15,32 @@ export default function ProScreen() {
   const isStarter = pro.plan === 'starter';
   const isPro = pro.plan === 'pro';
   const isProPlus = pro.plan === 'proPlus';
+  const [prices, setPrices] = useState({
+    pro: '',
+    proPlus: ''
+  });
 
+  useEffect(() => {
+    logEvent('pro_version_screen');
+    async function fetchPrices() {
+      try {
+        let priceData =  await getPlanPrice('starter', ['pro', 'proPlus']);
+        if (pro.plan == 'starter') {
+          priceData = await getPlanPrice('starter', ['pro', 'proPlus']);
+        } else if (pro.plan == 'pro') {
+          priceData = await getPlanPrice('pro', ['proPlus']);
+        }
+        const prices = priceData.reduce((acc, plan) => {
+          acc[plan.toPlan] = plan.price;
+          return acc;
+        }, {});
+        setPrices(prices);
+      } catch (error) {
+        console.error('Failed to fetch prices', error);
+      }
+    }
+    fetchPrices();
+  }, []);
   const planFeatures = [
     {
       feature: t('Generate and modify palettes with up to 4 colors'),
@@ -23,8 +48,9 @@ export default function ProScreen() {
       pro: true,
       proPlus: true
     },
-    { feature: t('Extract colors from images'), starter: true, pro: true, proPlus: true },
+    { feature: t('Extract colors from images and camera'), starter: true, pro: true, proPlus: true },
     { feature: t('Manually pick colors'), starter: true, pro: true, proPlus: true },
+    { feature: t('Generate harmonious color schemes'), starter: true, pro: true, proPlus: true },
     { feature: t('View and convert color codes'), starter: true, pro: true, proPlus: true },
     {
       feature: t('Access Material Design, CSS, and Tailwind palettes'),
@@ -32,7 +58,7 @@ export default function ProScreen() {
       pro: true,
       proPlus: true
     },
-    { feature: t('Download palettes as PNG images'), starter: true, pro: true, proPlus: true },
+    { feature: t('Download palettes as PNG'), starter: true, pro: true, proPlus: true },
     { feature: t('Explore AI-generated color palettes'), starter: false, pro: true, proPlus: true },
     { feature: t('Add more than 4 colors to a palette'), starter: false, pro: true, proPlus: true },
     {
@@ -83,17 +109,23 @@ export default function ProScreen() {
               <Text style={[styles.header, isStarter ? styles.currentPlanLabel : null]}>
                 {t(planLabels.starter)}
                 {'\n'}
-                <Text style={styles.subHeader}>{t('Free \n')}</Text>
+                <Text style={styles.subHeader}>{t('Free')}</Text>
               </Text>
               <Text style={[styles.header, isPro ? styles.currentPlanLabel : null]}>
                 {t(planLabels.pro)}
                 {'\n'}
-                <Text style={styles.subHeader}>{t('Lifetime Access')}</Text>
+                <Text style={[ styles.subHeader] }>{`Lifetime Access`} </Text>
+                { prices.pro && 
+                  <Text style={[styles.price, styles.subHeader] }>{prices.pro}</Text>
+                }
               </Text>
               <Text style={[styles.header, isProPlus ? styles.currentPlanLabel : null]}>
                 {t(planLabels.proPlus)}
                 {'\n'}
-                <Text style={styles.subHeader}>{t('Lifetime Access')}</Text>
+                <Text style={[ styles.subHeader] }>{`Lifetime Access`} </Text>
+                { prices.proPlus &&
+                  <Text style={[styles.price, styles.subHeader] }>{prices.proPlus}</Text>
+                }
               </Text>
             </View>
             {planFeatures.map((item, index) => (
@@ -115,7 +147,7 @@ export default function ProScreen() {
           <View style={styles.proPlusUserMessage}>
             <Text style={styles.proPlusUserText}>
               {t(
-                'You are a ' + planLabels[pro.plan] + ' user. Thanks for using HueHive. Enjoy the App.'
+                'You are a ' + planLabels[pro.plan] + ' user.'
               )}
             </Text>
           </View>
@@ -196,15 +228,21 @@ const styles = StyleSheet.create({
     flex: 1,
     fontWeight: 'bold',
     textAlign: 'center',
-    textAlignVertical: 'center',
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     fontSize: 14,
-    height: 60 // Increased height to accommodate the additional text
+    height: 70 
   },
   subHeader: {
     fontSize: 10,
-    fontWeight: 'normal'
+    fontWeight: 'normal',
+  },
+  price: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 4,
+    color: Colors.royalBlue
   },
   feature: {
     flex: 3,
