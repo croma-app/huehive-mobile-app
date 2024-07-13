@@ -11,8 +11,7 @@ const isProduction = () => {
 const planToSKUMapping = {
   starter: {
     pro: 'starter_to_pro',
-    // proPlus: "local_test1"
-    proPlus: 'croma_pro' // Keep the product same for backward compatibility
+    proPlus: isProduction() ? 'croma_pro' : 'local_test1'
   },
   pro: {
     proPlus: 'pro_to_pro_plus'
@@ -21,9 +20,8 @@ const planToSKUMapping = {
 
 const skuToPlanMapping = {
   starter_to_pro: 'pro',
-  // "local_test1": "proPlus",
-  croma_pro: 'proPlus',
-  pro_to_pro_plus: 'proPlus'
+  pro_to_pro_plus: 'proPlus',
+  ...(isProduction() ? { croma_pro: 'proPlus' } : { local_test1: 'proPlus' })
 };
 
 const planLabels = {
@@ -111,9 +109,7 @@ const initPurchase = async function (
           notifyMessage(`Congrats, You are already a pro (${planLabels[selectedPlan]}) user!`);
         }
       }
-      if (!isProduction()) {
-        await setPurchase('starter'); // For testing.
-      }
+      //  await setPurchase('starter'); // For testing.
     } catch (e) {
       if (retries > 0) {
         logEvent('init_purchase_retry', e.message);
