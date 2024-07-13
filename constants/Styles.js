@@ -14,11 +14,11 @@ export default {
   black: '#000',
   darkGreen: '#009900',
   darkRed: '#E63946',
-  lightBlue: "#D6E8EE",
+  lightBlue: '#D6E8EE',
   backgroundColor: '#f2f2f2',
   overlay: 'rgba(0, 0, 0, 0.5)',
   primaryDark: '#C94740',
   transparent: 'transparent',
-  royalBlue: "#4169E1"
+  royalBlue: '#4169E1'
   // fabPrimary: '#ff6f00'
 };

@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Animated,
+  Easing,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useTranslation } from 'react-i18next';
 import Colors, { Spacing } from '../constants/Styles';
@@ -9,22 +17,54 @@ import { material } from 'react-native-typography';
 import CromaButton from '../components/CromaButton';
 import Spacer from '../components/Spacer';
 
-export default function ProScreen() {
+export default function ProVersionScreen({ route }) {
   const { t } = useTranslation();
   const { pro, setPurchase } = useApplicationStore();
   const isStarter = pro.plan === 'starter';
   const isPro = pro.plan === 'pro';
   const isProPlus = pro.plan === 'proPlus';
+  const [highlightFeatureId, setHighlightFeatureId] = useState();
+  const [highlightOpacity] = useState(new Animated.Value(0));
   const [prices, setPrices] = useState({
     pro: '',
     proPlus: ''
   });
 
   useEffect(() => {
+    let highlightFeatureId = route.params?.highlightFeatureId;
+    if (highlightFeatureId) {
+      setHighlightFeatureId(highlightFeatureId);
+    }
+  }, [route.params?.highlightFeatureId]);
+
+  useEffect(() => {
+    if (highlightFeatureId) {
+      const animation = Animated.loop(
+        Animated.sequence([
+          Animated.timing(highlightOpacity, {
+            toValue: 1,
+            duration: 500,
+            easing: Easing.inOut(Easing.ease),
+            useNativeDriver: false
+          }),
+          Animated.timing(highlightOpacity, {
+            toValue: 0,
+            duration: 500,
+            easing: Easing.inOut(Easing.ease),
+            useNativeDriver: false
+          })
+        ])
+      );
+      animation.start();
+      return () => animation.stop(); // Stop the animation when the component is unmounted or highLightId changes
+    }
+  }, [highlightFeatureId]);
+
+  useEffect(() => {
     logEvent('pro_version_screen');
     async function fetchPrices() {
       try {
-        let priceData =  [];
+        let priceData = [];
         if (pro.plan == 'starter') {
           priceData = await getPlanPrice('starter', ['pro', 'proPlus']);
         } else if (pro.plan == 'pro') {
@@ -41,33 +81,61 @@ export default function ProScreen() {
     }
     fetchPrices();
   }, []);
+
   const planFeatures = [
     {
+      id: 1,
       feature: t('Generate and modify palettes with up to 4 colors'),
       starter: true,
       pro: true,
       proPlus: true
     },
-    { feature: t('Extract colors from images and camera'), starter: true, pro: true, proPlus: true },
-    { feature: t('Manually pick colors'), starter: true, pro: true, proPlus: true },
-    { feature: t('Generate harmonious color schemes'), starter: true, pro: true, proPlus: true },
-    { feature: t('View and convert color codes'), starter: true, pro: true, proPlus: true },
     {
+      id: 2,
+      feature: t('Extract colors from images and camera'),
+      starter: true,
+      pro: true,
+      proPlus: true
+    },
+    { id: 3, feature: t('Manually pick colors'), starter: true, pro: true, proPlus: true },
+    {
+      id: 4,
+      feature: t('Generate harmonious color schemes'),
+      starter: true,
+      pro: true,
+      proPlus: true
+    },
+    { id: 5, feature: t('View and convert color codes'), starter: true, pro: true, proPlus: true },
+    {
+      id: 6,
       feature: t('Access Material Design, CSS, and Tailwind palettes'),
       starter: true,
       pro: true,
       proPlus: true
     },
-    { feature: t('Download palettes as PNG'), starter: true, pro: true, proPlus: true },
-    { feature: t('Explore AI-generated color palettes'), starter: false, pro: true, proPlus: true },
-    { feature: t('Add more than 4 colors to a palette'), starter: false, pro: true, proPlus: true },
+    { id: 7, feature: t('Download palettes as PNG'), starter: true, pro: true, proPlus: true },
     {
+      id: 8,
+      feature: t('Explore AI-generated color palettes'),
+      starter: false,
+      pro: true,
+      proPlus: true
+    },
+    {
+      id: 9,
+      feature: t('Add more than 4 colors to a palette'),
+      starter: false,
+      pro: true,
+      proPlus: true
+    },
+    {
+      id: 10,
       feature: t('AI chat assistant to create palettes'),
       starter: false,
       pro: false,
       proPlus: true
     },
-    { feature: t('AI color picker'), starter: false, pro: false, proPlus: true }
+    { id: 11, feature: t('AI color picker'), starter: false, pro: false, proPlus: true }
   ];
 
   const purchasePro = async () => {
@@ -99,6 +167,13 @@ export default function ProScreen() {
     if (plan === 'proPlus') purchaseProPlus();
   };
 
+  const animatedHighlightStyle = {
+    backgroundColor: highlightOpacity.interpolate({
+      inputRange: [0, 1],
+      outputRange: ['white', 'rgba(173, 216, 230, 0.8)'] // From white to light blue
+    })
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
@@ -114,41 +189,38 @@ export default function ProScreen() {
               <Text style={[styles.header, isPro ? styles.currentPlanLabel : null]}>
                 {t(planLabels.pro)}
                 {'\n'}
-                <Text style={[ styles.subHeader] }>{`Lifetime Access`} </Text>
-                { prices.pro && 
-                  <Text style={[styles.price, styles.subHeader] }>{prices.pro}</Text>
-                }
+                <Text style={[styles.subHeader]}>{`Lifetime Access`} </Text>
+                {prices.pro && <Text style={[styles.price, styles.subHeader]}>{prices.pro}</Text>}
               </Text>
               <Text style={[styles.header, isProPlus ? styles.currentPlanLabel : null]}>
                 {t(planLabels.proPlus)}
                 {'\n'}
-                <Text style={[ styles.subHeader] }>{`Lifetime Access`} </Text>
-                { prices.proPlus &&
-                  <Text style={[styles.price, styles.subHeader] }>{prices.proPlus}</Text>
-                }
+                <Text style={[styles.subHeader]}>{`Lifetime Access`} </Text>
+                {prices.proPlus && (
+                  <Text style={[styles.price, styles.subHeader]}>{prices.proPlus}</Text>
+                )}
               </Text>
             </View>
             {planFeatures.map((item, index) => (
-              <View
+              <Animated.View
                 style={[
                   styles.row,
                   pro.plan === 'starter' && item.starter && styles.currentPlan,
                   pro.plan === 'pro' && item.pro && styles.currentPlan,
-                  pro.plan === 'proPlus' && item.proPlus && styles.currentPlan
+                  pro.plan === 'proPlus' && item.proPlus && styles.currentPlan,
+                  item.id === highlightFeatureId && animatedHighlightStyle
                 ]}
                 key={index}>
                 <Text style={styles.feature}>{item.feature}</Text>
                 <View style={styles.icon}>{renderTickOrCross(item.starter)}</View>
                 <View style={styles.icon}>{renderTickOrCross(item.pro)}</View>
                 <View style={styles.icon}>{renderTickOrCross(item.proPlus)}</View>
-              </View>
+              </Animated.View>
             ))}
           </View>
           <View style={styles.proPlusUserMessage}>
             <Text style={styles.proPlusUserText}>
-              {t(
-                'You are a ' + planLabels[pro.plan] + ' user.'
-              )}
+              {t('You are a ' + planLabels[pro.plan] + ' user.')}
             </Text>
           </View>
           {isStarter && (
@@ -231,11 +303,11 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     fontSize: 14,
-    height: 70 
+    height: 70
   },
   subHeader: {
     fontSize: 10,
-    fontWeight: 'normal',
+    fontWeight: 'normal'
   },
   price: {
     fontSize: 10,

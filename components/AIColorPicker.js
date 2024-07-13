@@ -64,18 +64,22 @@ export default function AIColorPicker({ setColor, currentPlan, onNavigateProScre
           {loading ? (
             <ActivityIndicator size="small" color={Colors.primary} />
           ) : (
-            <FontAwesome5 name="magic" size={24} color={currentPlan !== 'proPlus' ? Colors.lightGrey : Colors.primary} />
+            <FontAwesome5
+              name="magic"
+              size={24}
+              color={currentPlan !== 'proPlus' ? Colors.lightGrey : Colors.primary}
+            />
           )}
         </TouchableOpacity>
       </View>
-      {
-      currentPlan != 'proPlus' && <CromaButton
-            style={styles.proVersionButton}
-            textStyle={{ color: Colors.white }}
-            onPress={() =>  onNavigateProScreen()}>
-            {t('Upgrade to Pro Plus')}
-          </CromaButton>
-      }
+      {currentPlan != 'proPlus' && (
+        <CromaButton
+          style={styles.proVersionButton}
+          textStyle={{ color: Colors.white }}
+          onPress={() => onNavigateProScreen()}>
+          {t('Upgrade to Pro Plus')}
+        </CromaButton>
+      )}
       <View style={styles.suggestionsContainer}>
         {suggestions.length > 0 ? (
           suggestions.map(({ name, hex }) => (
@@ -163,5 +167,5 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 24
-  },
+  }
 });

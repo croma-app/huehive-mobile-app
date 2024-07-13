@@ -146,7 +146,8 @@ export default function ColorListScreen({ navigation, route }) {
           <TouchableOpacity
             style={[styles.smallButton, currentIndex === 0 && styles.disabledButton]}
             onPress={undo}
-            disabled={currentIndex === 0}>
+            disabled={currentIndex === 0}
+          >
             <View style={styles.smallButtonContent}>
               <Icon name="undo" size={16} color={currentIndex === 0 ? Colors.gray : Colors.black} />
             </View>
@@ -157,7 +158,8 @@ export default function ColorListScreen({ navigation, route }) {
               currentIndex === colorListHistory.length - 1 && styles.disabledButton
             ]}
             onPress={redo}
-            disabled={currentIndex === colorListHistory.length - 1}>
+            disabled={currentIndex === colorListHistory.length - 1}
+          >
             <View style={styles.smallButtonContent}>
               <Icon
                 name="repeat"
@@ -171,7 +173,8 @@ export default function ColorListScreen({ navigation, route }) {
           style={styles.button}
           onPress={() => {
             regenerateUnlockedColors();
-          }}>
+          }}
+        >
           <View style={styles.buttonContent}>
             <Text style={styles.buttonText}>{t('Generate')}</Text>
           </View>
@@ -185,7 +188,8 @@ export default function ColorListScreen({ navigation, route }) {
               }),
               suggestedName: route.params?.suggestedName
             });
-          }}>
+          }}
+        >
           <View style={styles.buttonContent}>
             <MaterialIcons name="done" size={24} color={Colors.black} />
           </View>
@@ -205,12 +209,14 @@ const CustomHeader = () => {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '100%'
-      }}>
+      }}
+    >
       <Text
         style={{
           color: Colors.white,
           fontSize: 18
-        }}>
+        }}
+      >
         {t('New palette')}
       </Text>
     </View>

@@ -55,7 +55,8 @@ const SingleColorCard = function (props) {
                     setAnimationType('fadeOutRightBig');
                     onColorDeleteLocal();
                   }}
-                  style={styles.actionButton}>
+                  style={styles.actionButton}
+                >
                   <MaterialIcons size={20} color={textColor} name="delete-outline" />
                 </TouchableOpacity>
               </View>
@@ -63,7 +64,8 @@ const SingleColorCard = function (props) {
                 <TouchableOpacity
                   onPressIn={(e) => {
                     props.onPressDrag();
-                  }}>
+                  }}
+                >
                   <MaterialIcons
                     style={{ alignItems: 'center' }}
                     size={20}

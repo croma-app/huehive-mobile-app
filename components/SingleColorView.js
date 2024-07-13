@@ -18,7 +18,15 @@ import ColorPickerModal from './ColorPickerModal';
 import { pickTextColorBasedOnBgColor } from '../libs/ColorHelper';
 import { useNavigation } from '@react-navigation/native';
 
-export const SingleColorView = ({ color, showUnlockPro, onColorChange, drag, onRemove, onAdd, currentPlan }) => {
+export const SingleColorView = ({
+  color,
+  showUnlockPro,
+  onColorChange,
+  drag,
+  onRemove,
+  onAdd,
+  currentPlan
+}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isColorPickerVisible, setIsColorPickerVisible] = useState(false);
   const navigation = useNavigation();
@@ -70,7 +78,11 @@ export const SingleColorView = ({ color, showUnlockPro, onColorChange, drag, onR
   return (
     <Animated.View style={[styles.container, { opacity: color.opacity }]}>
       <TouchableOpacity
-        onPress={showUnlockPro ? () => navigation.navigate('ProVersion') : openModal}
+        onPress={
+          showUnlockPro
+            ? () => navigation.navigate('ProVersion', { highlightFeatureId: 9 })
+            : openModal
+        }
         onLongPress={() => {
           if (!showUnlockPro) drag();
         }}

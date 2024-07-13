@@ -51,7 +51,7 @@ export default function ExplorePaletteScreen({ navigation }) {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      { pro.plan !== 'starter' && (
+      {pro.plan !== 'starter' && (
         <>
           <View style={styles.searchContainer}>
             <TextInput
@@ -88,14 +88,18 @@ export default function ExplorePaletteScreen({ navigation }) {
       {pro.plan === 'starter' && (
         <>
           <View>
-            <Text style={styles.upgradeToProDesc}>Exploring and searching  AI generate palettes is only available in Pro and Pro plus plans. Please upgrade to use this features.</Text>
+            <Text style={styles.upgradeToProDesc}>
+              Exploring and searching AI generate palettes is only available in Pro and Pro plus
+              plans. Please upgrade to use this features.
+            </Text>
           </View>
           <CromaButton
             style={styles.proVersionButton}
             textStyle={{ color: Colors.white }}
-            onPress={() => navigation.navigate("ProVersion")}>
+            onPress={() => navigation.navigate('ProVersion', { highlightFeatureId: 8 })}>
             Upgrade to Pro
-          </CromaButton></>
+          </CromaButton>
+        </>
       )}
     </ScrollView>
   );
@@ -137,6 +141,6 @@ const styles = StyleSheet.create({
   },
   upgradeToProDesc: {
     marginVertical: 16,
-    ...material.body2,
+    ...material.body2
   }
 });

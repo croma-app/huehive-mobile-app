@@ -4,63 +4,48 @@
     ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-H1
-{
-    FONT-SIZE: 200%;
-    COLOR: #00008B;
+H1 {
+  font-size: 200%;
+  color: #00008b;
 }
-H2
-{
-    FONT-SIZE: 150%;
+H2 {
+  font-size: 150%;
 }
-H3
-{
-    FONT-SIZE: 125%;
+H3 {
+  font-size: 125%;
 }
-H4
-{
-    FONT-SIZE: 108%;
+H4 {
+  font-size: 108%;
 }
-BODY
-{
-    FONT-SIZE: 100%;
-    BACKGROUND-COLOR: #ffffff;
-    COLOR: #000000;
+BODY {
+  font-size: 100%;
+  background-color: #ffffff;
+  color: #000000;
 }
-PRE
-{
-    MARGIN-LEFT: 2em;
-    FONT-FAMILY: Courier,
-                 monospace;
+PRE {
+  margin-left: 2em;
+  font-family: Courier, monospace;
 }
-CODE
-{
-    FONT-FAMILY: Courier,
-                 monospace;
+CODE {
+  font-family: Courier, monospace;
 }
-CODE.as_pre
-{
-    white-space: pre;
+CODE.as_pre {
+  white-space: pre;
 }
-.index
-{
-    TEXT-ALIGN: left;
+.index {
+  text-align: left;
 }
-.page-index
-{
-    TEXT-ALIGN: left;
+.page-index {
+  text-align: left;
 }
-.definition
-{
-    TEXT-ALIGN: left;
+.definition {
+  text-align: left;
 }
-.footnote
-{
-    FONT-SIZE: 66%;
-    VERTICAL-ALIGN: super;
-    TEXT-DECORATION: none;
+.footnote {
+  font-size: 66%;
+  vertical-align: super;
+  text-decoration: none;
 }
-.function-semantics
-{
-    CLEAR: left;
+.function-semantics {
+  clear: left;
 }
