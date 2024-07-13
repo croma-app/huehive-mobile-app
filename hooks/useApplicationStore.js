@@ -10,7 +10,7 @@ const useApplicationStore = create((set) => ({
   deletedPalettes: {},
   isLoading: false,
   pro: {
-    plan: "starter"
+    plan: 'starter'
   },
   detailedColor: null,
   commonPalettes: [],
@@ -96,7 +96,7 @@ const useApplicationStore = create((set) => ({
   },
 
   setPurchase: (plan) => {
-    set({ pro: {plan: plan} });
+    set({ pro: { plan: plan } });
   },
 
   setDetailedColor: (detailedColor) => {

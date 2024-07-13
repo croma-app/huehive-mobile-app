@@ -37,7 +37,7 @@ export default function SavePaletteScreen({ navigation, route }) {
   const [paletteName, setPaletteName] = useState(route.params?.suggestedName ?? '');
 
   const handleUnlockPro = () => {
-    navigation.navigate('ProVersion');
+    navigation.navigate('ProVersion', { highlightFeatureId: 9 });
   };
 
   return (
@@ -73,7 +73,8 @@ export default function SavePaletteScreen({ navigation, route }) {
               };
               addPalette(palette);
               navigation.popToTop();
-            }}>
+            }}
+          >
             {t('Save')}
           </CromaButton>
         </View>
@@ -88,7 +89,8 @@ export default function SavePaletteScreen({ navigation, route }) {
           <CromaButton
             style={styles.proVersionButton}
             textStyle={{ color: Colors.white }}
-            onPress={handleUnlockPro}>
+            onPress={handleUnlockPro}
+          >
             {t('Upgrade to Pro')}
           </CromaButton>
         </View>

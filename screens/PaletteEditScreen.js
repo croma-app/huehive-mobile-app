@@ -115,7 +115,7 @@ export default function PaletteScreen({ navigation, route }) {
               pro.plan == 'starter'
             ) {
               notifyMessage('Upgrade to Pro to add more than 4 colors!');
-              navigation.navigate('ProVersion');
+              navigation.navigate('ProVersion', { highlightFeatureId: 9 });
             } else {
               setIsColorPickerVisible(true);
             }
@@ -127,7 +127,8 @@ export default function PaletteScreen({ navigation, route }) {
         visible={isColorPickerVisible}
         animationType="slide"
         transparent={true}
-        onRequestClose={() => setIsColorPickerVisible(false)}>
+        onRequestClose={() => setIsColorPickerVisible(false)}
+      >
         <TouchableWithoutFeedback onPress={() => setIsColorPickerVisible(false)}>
           <View style={styles.modalOverlay} />
         </TouchableWithoutFeedback>

@@ -10,27 +10,25 @@ const isProduction = () => {
 
 const planToSKUMapping = {
   starter: {
-    pro: "starter_to_pro",
-    // proPlus: "local_test1" 
-    proPlus: "croma_pro" // Keep the product same for backward compatibility 
+    pro: 'starter_to_pro',
+    proPlus: isProduction() ? 'croma_pro' : 'local_test1'
   },
   pro: {
-    proPlus: "pro_to_pro_plus"
+    proPlus: 'pro_to_pro_plus'
   }
-}
+};
 
 const skuToPlanMapping = {
-  "starter_to_pro": "pro",
-  // "local_test1": "proPlus",
-  "croma_pro": "proPlus",
-  "pro_to_pro_plus": "proPlus"
-}
+  starter_to_pro: 'pro',
+  pro_to_pro_plus: 'proPlus',
+  ...(isProduction() ? { croma_pro: 'proPlus' } : { local_test1: 'proPlus' })
+};
 
 const planLabels = {
-  starter: "Starter",
-  pro: "Pro",
-  proPlus: "Pro Plus"
-}
+  starter: 'Starter',
+  pro: 'Pro',
+  proPlus: 'Pro Plus'
+};
 
 const readRemoteConfig = async (key) => {
   // Native module always returns string. So, we need to convert it to boolean.
@@ -63,8 +61,8 @@ function isObject(value) {
 
 const purchase = async function (setPurchase, currentPlan, toPlan) {
   try {
-    const productSKU = planToSKUMapping[currentPlan][toPlan]
-    await getProducts({ skus:  [productSKU]});
+    const productSKU = planToSKUMapping[currentPlan][toPlan];
+    await getProducts({ skus: [productSKU] });
     await requestPurchase({
       skus: [productSKU]
     });
@@ -102,7 +100,7 @@ const initPurchase = async function (
   const retryPurchase = async (retries) => {
     try {
       let products = await getAvailablePurchases();
-      const plans = products.map(product => skuToPlanMapping[product.productId]);
+      const plans = products.map((product) => skuToPlanMapping[product.productId]);
       const selectedPlan = determinePlan(plans);
 
       if (selectedPlan) {
@@ -111,7 +109,7 @@ const initPurchase = async function (
           notifyMessage(`Congrats, You are already a pro (${planLabels[selectedPlan]}) user!`);
         }
       }
-      // await setPurchase("starter"); // For testing. 
+      //  await setPurchase('starter'); // For testing.
     } catch (e) {
       if (retries > 0) {
         logEvent('init_purchase_retry', e.message);
@@ -149,21 +147,21 @@ const getAvailablePurchases = async () => {
 
 const getPlanPrice = async (currentPlan, toPlans) => {
   try {
-    const productSKUs = toPlans.map(toPlan => planToSKUMapping[currentPlan][toPlan]);
-    const products = await RNIap.getProducts({skus: productSKUs});
+    const productSKUs = toPlans.map((toPlan) => planToSKUMapping[currentPlan][toPlan]);
+    const products = await RNIap.getProducts({ skus: productSKUs });
     if (products.length > 0) {
       const prices = {};
-      products.forEach(product => {
+      products.forEach((product) => {
         prices[product.productId] = {
-          localizedPrice: product.localizedPrice,
+          localizedPrice: product.localizedPrice
         };
       });
-      return toPlans.map(toPlan => {
+      return toPlans.map((toPlan) => {
         const productSKU = planToSKUMapping[currentPlan][toPlan];
         const priceInfo = prices[productSKU] || {};
         return {
           toPlan,
-          price: priceInfo.localizedPrice 
+          price: priceInfo.localizedPrice
         };
       });
     } else {
@@ -176,7 +174,6 @@ const getPlanPrice = async (currentPlan, toPlans) => {
     throw err;
   }
 };
-
 
 function notifyMessage(msg, duration = ToastAndroid.LONG) {
   if (Platform.OS === 'android') {
@@ -241,4 +238,13 @@ export function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export { logEvent, sendClientError, purchase, notifyMessage, initPurchase, readRemoteConfig, planLabels, getPlanPrice };
+export {
+  logEvent,
+  sendClientError,
+  purchase,
+  notifyMessage,
+  initPurchase,
+  readRemoteConfig,
+  planLabels,
+  getPlanPrice
+};

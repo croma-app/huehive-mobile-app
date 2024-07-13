@@ -69,7 +69,14 @@ export default function ColorPickerModal({ initialColor, onColorSelected, onClos
     {
       key: 'AI',
       title: 'AI',
-      component: <AIColorPicker color={color} setColor={setColor} currentPlan={currentPlan} onNavigateProScreen={() => navigation.navigate("ProVersion")}/>
+      component: (
+        <AIColorPicker
+          color={color}
+          setColor={setColor}
+          currentPlan={currentPlan}
+          onNavigateProScreen={() => navigation.navigate('ProVersion', { highlightFeatureId: 11 })}
+        />
+      )
     },
     {
       key: 'hex',

@@ -9,22 +9,30 @@ import { material } from 'react-native-typography';
 import CromaButton from '../components/CromaButton';
 import Spacer from '../components/Spacer';
 
-export default function ProScreen() {
+export default function ProVersionScreen({ route }) {
   const { t } = useTranslation();
   const { pro, setPurchase } = useApplicationStore();
   const isStarter = pro.plan === 'starter';
   const isPro = pro.plan === 'pro';
   const isProPlus = pro.plan === 'proPlus';
+  const [highlightFeatureId, setHighlightFeatureId] = useState();
   const [prices, setPrices] = useState({
     pro: '',
     proPlus: ''
   });
 
   useEffect(() => {
+    let highlightFeatureId = route.params?.highlightFeatureId;
+    if (highlightFeatureId) {
+      setHighlightFeatureId(highlightFeatureId);
+    }
+  }, [route.params?.highlightFeatureId]);
+
+  useEffect(() => {
     logEvent('pro_version_screen');
     async function fetchPrices() {
       try {
-        let priceData =  [];
+        let priceData = [];
         if (pro.plan == 'starter') {
           priceData = await getPlanPrice('starter', ['pro', 'proPlus']);
         } else if (pro.plan == 'pro') {
@@ -41,33 +49,61 @@ export default function ProScreen() {
     }
     fetchPrices();
   }, []);
+
   const planFeatures = [
     {
+      id: 1,
       feature: t('Generate and modify palettes with up to 4 colors'),
       starter: true,
       pro: true,
       proPlus: true
     },
-    { feature: t('Extract colors from images and camera'), starter: true, pro: true, proPlus: true },
-    { feature: t('Manually pick colors'), starter: true, pro: true, proPlus: true },
-    { feature: t('Generate harmonious color schemes'), starter: true, pro: true, proPlus: true },
-    { feature: t('View and convert color codes'), starter: true, pro: true, proPlus: true },
     {
+      id: 2,
+      feature: t('Extract colors from images and camera'),
+      starter: true,
+      pro: true,
+      proPlus: true
+    },
+    { id: 3, feature: t('Manually pick colors'), starter: true, pro: true, proPlus: true },
+    {
+      id: 4,
+      feature: t('Generate harmonious color schemes'),
+      starter: true,
+      pro: true,
+      proPlus: true
+    },
+    { id: 5, feature: t('View and convert color codes'), starter: true, pro: true, proPlus: true },
+    {
+      id: 6,
       feature: t('Access Material Design, CSS, and Tailwind palettes'),
       starter: true,
       pro: true,
       proPlus: true
     },
-    { feature: t('Download palettes as PNG'), starter: true, pro: true, proPlus: true },
-    { feature: t('Explore AI-generated color palettes'), starter: false, pro: true, proPlus: true },
-    { feature: t('Add more than 4 colors to a palette'), starter: false, pro: true, proPlus: true },
+    { id: 7, feature: t('Download palettes as PNG'), starter: true, pro: true, proPlus: true },
     {
+      id: 8,
+      feature: t('Explore AI-generated color palettes'),
+      starter: false,
+      pro: true,
+      proPlus: true
+    },
+    {
+      id: 9,
+      feature: t('Add more than 4 colors to a palette'),
+      starter: false,
+      pro: true,
+      proPlus: true
+    },
+    {
+      id: 10,
       feature: t('AI chat assistant to create palettes'),
       starter: false,
       pro: false,
       proPlus: true
     },
-    { feature: t('AI color picker'), starter: false, pro: false, proPlus: true }
+    { id: 11, feature: t('AI color picker'), starter: false, pro: false, proPlus: true }
   ];
 
   const purchasePro = async () => {
@@ -95,8 +131,8 @@ export default function ProScreen() {
   );
 
   const handlePlanSelection = (plan) => {
-    if (plan === 'pro') purchasePro();
-    if (plan === 'proPlus') purchaseProPlus();
+    if (pro.plan == 'starter' && plan === 'pro') purchasePro();
+    if ((pro.plan == 'pro' || pro.plan == 'starter') && plan === 'proPlus') purchaseProPlus();
   };
 
   return (
@@ -106,27 +142,37 @@ export default function ProScreen() {
           <View style={styles.table}>
             <View style={[styles.row, styles.rowTitle]}>
               <Text style={styles.feature}></Text>
-              <Text style={[styles.header, isStarter ? styles.currentPlanLabel : null]}>
-                {t(planLabels.starter)}
-                {'\n'}
-                <Text style={styles.subHeader}>{t('Free')}</Text>
-              </Text>
-              <Text style={[styles.header, isPro ? styles.currentPlanLabel : null]}>
-                {t(planLabels.pro)}
-                {'\n'}
-                <Text style={[ styles.subHeader] }>{`Lifetime Access`} </Text>
-                { prices.pro && 
-                  <Text style={[styles.price, styles.subHeader] }>{prices.pro}</Text>
-                }
-              </Text>
-              <Text style={[styles.header, isProPlus ? styles.currentPlanLabel : null]}>
-                {t(planLabels.proPlus)}
-                {'\n'}
-                <Text style={[ styles.subHeader] }>{`Lifetime Access`} </Text>
-                { prices.proPlus &&
-                  <Text style={[styles.price, styles.subHeader] }>{prices.proPlus}</Text>
-                }
-              </Text>
+              <TouchableOpacity
+                style={[styles.header, isStarter ? styles.currentPlanLabel : null]}
+                onPress={() => handlePlanSelection('starter')}>
+                <Text style={styles.planTitle}>
+                  {t(planLabels.starter)}
+                  {'\n'}
+                  <Text style={styles.subHeader}>{t('Free')}</Text>
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.header, isPro ? styles.currentPlanLabel : null]}
+                onPress={() => handlePlanSelection('pro')}>
+                <Text style={[styles.planTitle]}>
+                  {t(planLabels.pro)}
+                  {'\n'}
+                  <Text style={styles.subHeader}>Lifetime Access</Text>
+                  {'\n'}
+                  {prices.pro && <Text style={styles.price}>{prices.pro}</Text>}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.header, isProPlus ? styles.currentPlanLabel : null]}
+                onPress={() => handlePlanSelection('proPlus')}>
+                <Text style={styles.planTitle}>
+                  {t(planLabels.proPlus)}
+                  {'\n'}
+                  <Text style={styles.subHeader}>Lifetime Access</Text>
+                  {'\n'}
+                  {prices.proPlus && <Text style={styles.price}>{prices.proPlus}</Text>}
+                </Text>
+              </TouchableOpacity>
             </View>
             {planFeatures.map((item, index) => (
               <View
@@ -134,7 +180,8 @@ export default function ProScreen() {
                   styles.row,
                   pro.plan === 'starter' && item.starter && styles.currentPlan,
                   pro.plan === 'pro' && item.pro && styles.currentPlan,
-                  pro.plan === 'proPlus' && item.proPlus && styles.currentPlan
+                  pro.plan === 'proPlus' && item.proPlus && styles.currentPlan,
+                  item.id === highlightFeatureId && styles.highlightFeature
                 ]}
                 key={index}>
                 <Text style={styles.feature}>{item.feature}</Text>
@@ -146,9 +193,7 @@ export default function ProScreen() {
           </View>
           <View style={styles.proPlusUserMessage}>
             <Text style={styles.proPlusUserText}>
-              {t(
-                'You are a ' + planLabels[pro.plan] + ' user.'
-              )}
+              {t('You are a ' + planLabels[pro.plan] + ' user.')}
             </Text>
           </View>
           {isStarter && (
@@ -231,11 +276,17 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     fontSize: 14,
-    height: 70 
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  planTitle: {
+    textAlign: 'center'
   },
   subHeader: {
     fontSize: 10,
     fontWeight: 'normal',
+    textAlign: 'center'
   },
   price: {
     fontSize: 10,
@@ -249,6 +300,9 @@ const styles = StyleSheet.create({
     ...material.body1,
     fontSize: 14,
     color: Colors.darkGrey
+  },
+  highlightFeature: {
+    backgroundColor: Colors.lightBlue200
   },
   icon: {
     flex: 1,

@@ -172,7 +172,7 @@ const ChatSessionScreen = (props) => {
                   textStyle={{ color: Colors.white }}
                   onPress={() => {
                     logEvent('chat_session_pro_button');
-                    navigation.navigate('ProVersion');
+                    navigation.navigate('ProVersion', { highlightFeatureId: 10 });
                   }}>
                   Unlock {planLabels['proPlus']} to use this feature
                 </CromaButton>
