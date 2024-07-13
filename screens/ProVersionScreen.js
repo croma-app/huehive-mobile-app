@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Animated,
-  Easing,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View
-} from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useTranslation } from 'react-i18next';
 import Colors, { Spacing } from '../constants/Styles';
@@ -24,7 +16,6 @@ export default function ProVersionScreen({ route }) {
   const isPro = pro.plan === 'pro';
   const isProPlus = pro.plan === 'proPlus';
   const [highlightFeatureId, setHighlightFeatureId] = useState();
-  const [highlightOpacity] = useState(new Animated.Value(0));
   const [prices, setPrices] = useState({
     pro: '',
     proPlus: ''
@@ -36,29 +27,6 @@ export default function ProVersionScreen({ route }) {
       setHighlightFeatureId(highlightFeatureId);
     }
   }, [route.params?.highlightFeatureId]);
-
-  useEffect(() => {
-    if (highlightFeatureId) {
-      const animation = Animated.loop(
-        Animated.sequence([
-          Animated.timing(highlightOpacity, {
-            toValue: 1,
-            duration: 500,
-            easing: Easing.inOut(Easing.ease),
-            useNativeDriver: false
-          }),
-          Animated.timing(highlightOpacity, {
-            toValue: 0,
-            duration: 500,
-            easing: Easing.inOut(Easing.ease),
-            useNativeDriver: false
-          })
-        ])
-      );
-      animation.start();
-      return () => animation.stop(); // Stop the animation when the component is unmounted or highLightId changes
-    }
-  }, [highlightFeatureId]);
 
   useEffect(() => {
     logEvent('pro_version_screen');
@@ -167,13 +135,6 @@ export default function ProVersionScreen({ route }) {
     if (plan === 'proPlus') purchaseProPlus();
   };
 
-  const animatedHighlightStyle = {
-    backgroundColor: highlightOpacity.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['white', 'rgba(173, 216, 230, 0.8)'] // From white to light blue
-    })
-  };
-
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
@@ -202,20 +163,20 @@ export default function ProVersionScreen({ route }) {
               </Text>
             </View>
             {planFeatures.map((item, index) => (
-              <Animated.View
+              <View
                 style={[
                   styles.row,
                   pro.plan === 'starter' && item.starter && styles.currentPlan,
                   pro.plan === 'pro' && item.pro && styles.currentPlan,
                   pro.plan === 'proPlus' && item.proPlus && styles.currentPlan,
-                  item.id === highlightFeatureId && animatedHighlightStyle
+                  item.id === highlightFeatureId && styles.highlightFeature
                 ]}
                 key={index}>
                 <Text style={styles.feature}>{item.feature}</Text>
                 <View style={styles.icon}>{renderTickOrCross(item.starter)}</View>
                 <View style={styles.icon}>{renderTickOrCross(item.pro)}</View>
                 <View style={styles.icon}>{renderTickOrCross(item.proPlus)}</View>
-              </Animated.View>
+              </View>
             ))}
           </View>
           <View style={styles.proPlusUserMessage}>
@@ -321,6 +282,9 @@ const styles = StyleSheet.create({
     ...material.body1,
     fontSize: 14,
     color: Colors.darkGrey
+  },
+  highlightFeature: {
+    backgroundColor: Colors.lightBlue200
   },
   icon: {
     flex: 1,
