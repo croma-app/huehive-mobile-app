@@ -131,8 +131,8 @@ export default function ProVersionScreen({ route }) {
   );
 
   const handlePlanSelection = (plan) => {
-    if (plan === 'pro') purchasePro();
-    if (plan === 'proPlus') purchaseProPlus();
+    if (pro.plan == 'starter' && plan === 'pro') purchasePro();
+    if ((pro.plan == 'pro' || pro.plan == 'starter') && plan === 'proPlus') purchaseProPlus();
   };
 
   return (
@@ -142,25 +142,37 @@ export default function ProVersionScreen({ route }) {
           <View style={styles.table}>
             <View style={[styles.row, styles.rowTitle]}>
               <Text style={styles.feature}></Text>
-              <Text style={[styles.header, isStarter ? styles.currentPlanLabel : null]}>
-                {t(planLabels.starter)}
-                {'\n'}
-                <Text style={styles.subHeader}>{t('Free')}</Text>
-              </Text>
-              <Text style={[styles.header, isPro ? styles.currentPlanLabel : null]}>
-                {t(planLabels.pro)}
-                {'\n'}
-                <Text style={[styles.subHeader]}>{`Lifetime Access`} </Text>
-                {prices.pro && <Text style={[styles.price, styles.subHeader]}>{prices.pro}</Text>}
-              </Text>
-              <Text style={[styles.header, isProPlus ? styles.currentPlanLabel : null]}>
-                {t(planLabels.proPlus)}
-                {'\n'}
-                <Text style={[styles.subHeader]}>{`Lifetime Access`} </Text>
-                {prices.proPlus && (
-                  <Text style={[styles.price, styles.subHeader]}>{prices.proPlus}</Text>
-                )}
-              </Text>
+              <TouchableOpacity
+                style={[styles.header, isStarter ? styles.currentPlanLabel : null]}
+                onPress={() => handlePlanSelection('starter')}>
+                <Text style={styles.planTitle}>
+                  {t(planLabels.starter)}
+                  {'\n'}
+                  <Text style={styles.subHeader}>{t('Free')}</Text>
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.header, isPro ? styles.currentPlanLabel : null]}
+                onPress={() => handlePlanSelection('pro')}>
+                <Text style={[styles.planTitle]}>
+                  {t(planLabels.pro)}
+                  {'\n'}
+                  <Text style={styles.subHeader}>Lifetime Access</Text>
+                  {'\n'}
+                  {prices.pro && <Text style={styles.price}>{prices.pro}</Text>}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.header, isProPlus ? styles.currentPlanLabel : null]}
+                onPress={() => handlePlanSelection('proPlus')}>
+                <Text style={styles.planTitle}>
+                  {t(planLabels.proPlus)}
+                  {'\n'}
+                  <Text style={styles.subHeader}>Lifetime Access</Text>
+                  {'\n'}
+                  {prices.proPlus && <Text style={styles.price}>{prices.proPlus}</Text>}
+                </Text>
+              </TouchableOpacity>
             </View>
             {planFeatures.map((item, index) => (
               <View
@@ -264,11 +276,17 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     fontSize: 14,
-    height: 70
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  planTitle: {
+    textAlign: 'center'
   },
   subHeader: {
     fontSize: 10,
-    fontWeight: 'normal'
+    fontWeight: 'normal',
+    textAlign: 'center'
   },
   price: {
     fontSize: 10,
