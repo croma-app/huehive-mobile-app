@@ -107,8 +107,6 @@ export default function ColorListScreen({ navigation, route }) {
 
   const regenerateUnlockedColorsWithAI = ({ canGenerate }) => {
     if (canGenerate) {
-      navigation.navigate('ProVersion', { highlightFeatureId: 12 });
-    } else {
       logEvent('regenerate_unlocked_colors_ai', colors.filter((color) => !color.locked).length);
       if (colors.filter((color) => !color.locked).length == 0) {
         notifyMessage('Please unlock some colors or add colors to generate new colors');
@@ -120,6 +118,8 @@ export default function ColorListScreen({ navigation, route }) {
           setLoadingGenerate(false);
         }, 1000);
       }
+    } else {
+      navigation.navigate('ProVersion', { highlightFeatureId: 12 });
     }
   };
 
