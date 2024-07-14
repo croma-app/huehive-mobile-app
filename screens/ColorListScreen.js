@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { SingleColorView } from '../components/SingleColorView';
-import { StyleSheet, View, Text, Platform, Animated, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, Platform, Animated, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { logEvent, notifyMessage } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
 import DraggableFlatList from 'react-native-draggable-flatlist';
@@ -32,6 +32,7 @@ export default function ColorListScreen({ navigation, route }) {
   const { t } = useTranslation();
   const [colorListHistory, setColorListHistory] = useState([route.params?.colors || []]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loadingGenerate, setLoadingGenerate] = useState(false);
   const { pro } = useApplicationStore();
   const colorList = colorListHistory[currentIndex];
   const colors = uniqueColors(colorList).map((color) => ({
@@ -47,6 +48,7 @@ export default function ColorListScreen({ navigation, route }) {
           : t('Colors')
     });
   }, []);
+  
   const renderItem = ({ item, drag }) => {
     const opacity = item.opacity;
     return (
@@ -76,7 +78,6 @@ export default function ColorListScreen({ navigation, route }) {
             ...colors.slice(item.index + 1)
           ];
           updateColorList(updatedColors);
-          // Find the opacity value of the newly added color
           const newColorOpacity = updatedColors[item.index + 1].opacity;
           newColorOpacity.setValue(0);
           Animated.timing(newColorOpacity, {
@@ -103,26 +104,27 @@ export default function ColorListScreen({ navigation, route }) {
     logEvent('drag_end_event_color_list');
     updateColorList(data);
   };
+
   const regenerateUnlockedColorsWithAI = ({ canGenerate }) => {
-    if (!canGenerate) {
+    if (canGenerate) {
       navigation.navigate('ProVersion', { highlightFeatureId: 12 });
     } else {
-      logEvent('regenerate_unlocked_colors', colors.filter((color) => !color.locked).length);
+      logEvent('regenerate_unlocked_colors_ai', colors.filter((color) => !color.locked).length);
       if (colors.filter((color) => !color.locked).length == 0) {
         notifyMessage('Please unlock some colors or add colors to generate new colors');
       } else {
-        //setLoadingGenerate(true);
+        setLoadingGenerate(true);
         setTimeout(() => {
-          // Add loading support
           const newColors = generateRandomColorPaletteWithLockedColors([...colors]);
           updateColorList(newColors);
-          //setLoadingGenerate(false);
+          setLoadingGenerate(false);
         }, 1000);
       }
     }
   };
+
   const regenerateUnlockedColors = () => {
-    logEvent('regenerate_unlocked_colors_ai', colors.filter((color) => !color.locked).length);
+    logEvent('regenerate_unlocked_colors', colors.filter((color) => !color.locked).length);
     if (colors.filter((color) => !color.locked).length == 0) {
       notifyMessage('Please unlock some colors or add colors to generate new colors');
     } else {
@@ -130,6 +132,7 @@ export default function ColorListScreen({ navigation, route }) {
       updateColorList(newColors);
     }
   };
+
   const undo = () => {
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
@@ -141,10 +144,12 @@ export default function ColorListScreen({ navigation, route }) {
       setCurrentIndex(currentIndex + 1);
     }
   };
+
   const updateColorList = (updatedColors) => {
     setColorListHistory([...colorListHistory.slice(0, currentIndex + 1), updatedColors]);
     setCurrentIndex(currentIndex + 1);
   };
+
   useEffect(() => {
     logEvent('color_list_screen');
   }, []);
@@ -206,6 +211,14 @@ export default function ColorListScreen({ navigation, route }) {
           </View>
         </TouchableOpacity>
       </View>
+      {loadingGenerate && (
+        <View style={styles.overlay}>
+          <View style={styles.overlayContent}>
+            <ActivityIndicator size="large" color={Colors.black} />
+            <Text style={styles.loadingText}>{t('Generating...')}</Text>
+          </View>
+        </View>
+      )}
     </View>
   );
 }
@@ -274,11 +287,8 @@ const styles = StyleSheet.create({
   buttonText: {
     color: Colors.black,
     marginLeft: 8,
-    fontSize: 18
-  },
-  infoIcon: {},
-  infoIconContainer: {
-    paddingHorizontal: 8
+    fontSize: 18,
+    fontWeight: 'bold'
   },
   smallButton: {
     marginHorizontal: 4,
@@ -324,5 +334,26 @@ const styles = StyleSheet.create({
   },
   disabledButton: {
     opacity: 0.5
+  },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  overlayContent: {
+    backgroundColor: Colors.white,
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center'
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 18,
+    color: Colors.gray
   }
 });

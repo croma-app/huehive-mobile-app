@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Colors from '../constants/Styles';
+import Icon from 'react-native-vector-icons/FontAwesome'; // Import FontAwesome icons
 
 const GenerateBtn = ({ onGenerateWithAI, onGenerate, currentPlan }) => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -85,7 +86,7 @@ const GenerateBtn = ({ onGenerateWithAI, onGenerate, currentPlan }) => {
                   <Text style={styles.gradientText}>AI</Text>
                 </View>
                 <View style={styles.aiGenerateText}>
-                  <Text>Generate</Text>
+                  <Text style={styles.aiButtonText}>Generate</Text>
                   {currentPlan != 'proPlus' && (
                     <Text style={styles.aiProPlusOnlyText}>Pro Plus only</Text>
                   )}
@@ -93,7 +94,10 @@ const GenerateBtn = ({ onGenerateWithAI, onGenerate, currentPlan }) => {
               </>
             )}
             <TouchableOpacity onPress={() => setShowDropdown(!showDropdown)}>
-              <Text style={styles.arrow}>▼</Text>
+              <Icon
+                name={showDropdown ? 'chevron-down' : useAI ? 'chevron-up' : 'magic'}
+                style={styles.arrow}
+              />
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -130,7 +134,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%'
   },
+  aiButtonText: {
+    color: 'black'
+  },
   buttonText: {
+    paddingVertical: 8,
+    paddingLeft: 32, // TODO: added this to center align text. Need to find a better way.
     color: 'black',
     textAlign: 'center',
     flex: 1
@@ -160,8 +169,8 @@ const styles = StyleSheet.create({
   },
   arrow: {
     color: 'black',
-    fontSize: 24,
-    marginLeft: 10
+    fontSize: 16,
+    padding: 8
   },
   dropdown: {
     backgroundColor: 'white',
