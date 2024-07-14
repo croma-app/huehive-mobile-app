@@ -103,8 +103,26 @@ export default function ColorListScreen({ navigation, route }) {
     logEvent('drag_end_event_color_list');
     updateColorList(data);
   };
+  const regenerateUnlockedColorsWithAI = ({ canGenerate }) => {
+    if (!canGenerate) {
+      navigation.navigate('ProVersion', { highlightFeatureId: 12 });
+    } else {
+      logEvent('regenerate_unlocked_colors', colors.filter((color) => !color.locked).length);
+      if (colors.filter((color) => !color.locked).length == 0) {
+        notifyMessage('Please unlock some colors or add colors to generate new colors');
+      } else {
+        //setLoadingGenerate(true);
+        setTimeout(() => {
+          // Add loading support
+          const newColors = generateRandomColorPaletteWithLockedColors([...colors]);
+          updateColorList(newColors);
+          //setLoadingGenerate(false);
+        }, 1000);
+      }
+    }
+  };
   const regenerateUnlockedColors = () => {
-    logEvent('regenerate_unlocked_colors', colors.filter((color) => !color.locked).length);
+    logEvent('regenerate_unlocked_colors_ai', colors.filter((color) => !color.locked).length);
     if (colors.filter((color) => !color.locked).length == 0) {
       notifyMessage('Please unlock some colors or add colors to generate new colors');
     } else {
@@ -147,8 +165,7 @@ export default function ColorListScreen({ navigation, route }) {
           <TouchableOpacity
             style={[styles.smallButton, currentIndex === 0 && styles.disabledButton]}
             onPress={undo}
-            disabled={currentIndex === 0}
-          >
+            disabled={currentIndex === 0}>
             <View style={styles.smallButtonContent}>
               <Icon name="undo" size={16} color={currentIndex === 0 ? Colors.gray : Colors.black} />
             </View>
@@ -159,8 +176,7 @@ export default function ColorListScreen({ navigation, route }) {
               currentIndex === colorListHistory.length - 1 && styles.disabledButton
             ]}
             onPress={redo}
-            disabled={currentIndex === colorListHistory.length - 1}
-          >
+            disabled={currentIndex === colorListHistory.length - 1}>
             <View style={styles.smallButtonContent}>
               <Icon
                 name="repeat"
@@ -172,7 +188,8 @@ export default function ColorListScreen({ navigation, route }) {
         </View>
         <GenerateBtn
           onGenerate={regenerateUnlockedColors}
-          onGenerateWithAI={regenerateUnlockedColors}
+          onGenerateWithAI={regenerateUnlockedColorsWithAI}
+          currentPlan={pro.plan}
         />
         <TouchableOpacity
           style={styles.doneButton}
@@ -183,8 +200,7 @@ export default function ColorListScreen({ navigation, route }) {
               }),
               suggestedName: route.params?.suggestedName
             });
-          }}
-        >
+          }}>
           <View style={styles.buttonContent}>
             <MaterialIcons name="done" size={24} color={Colors.black} />
           </View>
@@ -204,14 +220,12 @@ const CustomHeader = () => {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '100%'
-      }}
-    >
+      }}>
       <Text
         style={{
           color: Colors.white,
           fontSize: 18
-        }}
-      >
+        }}>
         {t('New palette')}
       </Text>
     </View>

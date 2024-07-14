@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import Colors from '../constants/Styles';
 
-const GenerateBtn = ({ onGenerateWithAI, onGenerate }) => {
+const GenerateBtn = ({ onGenerateWithAI, onGenerate, currentPlan }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [buttonText, setButtonText] = useState('Generate');
   const [dropdownText, setDropdownText] = useState('Generate - AI');
@@ -28,7 +29,11 @@ const GenerateBtn = ({ onGenerateWithAI, onGenerate }) => {
 
   const handlePress = () => {
     if (useAI) {
-      onGenerateWithAI();
+      if (currentPlan !== 'proPlus') {
+        onGenerateWithAI({ canGenerate: false });
+      } else {
+        onGenerateWithAI({ canGenerate: true });
+      }
     } else {
       onGenerate();
     }
@@ -40,7 +45,7 @@ const GenerateBtn = ({ onGenerateWithAI, onGenerate }) => {
       setDropdownText('Generate - AI');
       setUseAI(false);
     } else {
-      setButtonText('Generate - AI');
+      setButtonText(currentPlan !== 'proPlus' ? 'Generate - AI (Pro Plus only)' : 'Generate - AI');
       setDropdownText('Generate');
       setUseAI(true);
     }
@@ -79,7 +84,12 @@ const GenerateBtn = ({ onGenerateWithAI, onGenerate }) => {
                   </Animated.View>
                   <Text style={styles.gradientText}>AI</Text>
                 </View>
-                <Text>Generate </Text>
+                <View style={styles.aiGenerateText}>
+                  <Text>Generate</Text>
+                  {currentPlan != 'proPlus' && (
+                    <Text style={styles.aiProPlusOnlyText}>Pro Plus only</Text>
+                  )}
+                </View>
               </>
             )}
             <TouchableOpacity onPress={() => setShowDropdown(!showDropdown)}>
@@ -157,7 +167,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderColor: 'white',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 10,
     position: 'absolute',
     bottom: '100%',
     marginBottom: 5,
@@ -169,6 +179,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     textAlign: 'center',
     fontSize: 16
+  },
+  aiProPlusOnlyText: {
+    fontSize: 8,
+    textAlign: 'center',
+    color: Colors.primary
   }
 });
 
