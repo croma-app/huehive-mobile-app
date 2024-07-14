@@ -11,7 +11,7 @@ import Colors from '../constants/Styles';
 import CromaButton from '../components/CromaButton';
 import { useTranslation } from 'react-i18next';
 export default function PaletteViewScreen({ navigation, route }) {
-  const { allPalettes, setDetailedColor } = useApplicationStore();
+  const { allPalettes, setDetailedColor, pro } = useApplicationStore();
   const { t } = useTranslation();
 
   const [selectedColor, setSelectedColor] = useState(0);
@@ -30,7 +30,7 @@ export default function PaletteViewScreen({ navigation, route }) {
 
   const colorsToShow = React.useMemo(
     () => colors?.slice(0, pro.plan != 'starter' ? colors.length : 4),
-    [colors, pro.plan != 'starter']
+    [colors, pro.plan]
   );
 
   const color = colorsToShow[selectedColor].color;
@@ -53,16 +53,14 @@ export default function PaletteViewScreen({ navigation, route }) {
             backgroundColor: Colors.white,
             borderRadius: 8,
             marginTop: 12
-          }}
-        >
+          }}>
           <View style={backgroundColor}></View>
           <ColorDetailItems colorName={colorName} color={color} />
           <View style={{ paddingTop: 10 }}>
             <MultiColorView
               colors={colorsToShow}
               selectedColor={selectedColor}
-              setSelectedColor={setSelectedColor}
-            ></MultiColorView>
+              setSelectedColor={setSelectedColor}></MultiColorView>
           </View>
         </View>
       </View>
@@ -74,8 +72,7 @@ export default function PaletteViewScreen({ navigation, route }) {
           onPress={() => {
             setDetailedColor(color);
             navigation.navigate('Palettes');
-          }}
-        >
+          }}>
           {t('See color palettes')}
         </CromaButton>
         <CromaButton
@@ -84,8 +81,7 @@ export default function PaletteViewScreen({ navigation, route }) {
           variant={'small'}
           onPress={() => {
             navigation.navigate('PaletteEdit', { paletteId });
-          }}
-        >
+          }}>
           {t('Edit palette')}
         </CromaButton>
       </View>
@@ -109,8 +105,7 @@ const CustomHeader = ({ paletteId }) => {
         autoFocus={true}
         onChangeText={(name) => {
           setPaletteName(name);
-        }}
-      >
+        }}>
         {paletteName}
       </Text>
     </View>
