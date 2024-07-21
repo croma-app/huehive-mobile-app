@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Colors from '../constants/Styles';
-import Icon from 'react-native-vector-icons/FontAwesome'; // Import FontAwesome icons
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const GenerateBtn = ({ onGenerateWithAI, onGenerate, currentPlan }) => {
   const [showDropdown, setShowDropdown] = useState(false);
-  const [buttonText, setButtonText] = useState('Generate');
   const [dropdownText, setDropdownText] = useState('Generate - AI');
   const [useAI, setUseAI] = useState(false);
   const [gradientAnimation] = useState(new Animated.Value(0));
@@ -26,7 +25,7 @@ const GenerateBtn = ({ onGenerateWithAI, onGenerate, currentPlan }) => {
         })
       ])
     ).start();
-  }, [gradientAnimation, buttonText]);
+  }, [gradientAnimation]);
 
   const handlePress = () => {
     if (useAI) {
@@ -42,11 +41,9 @@ const GenerateBtn = ({ onGenerateWithAI, onGenerate, currentPlan }) => {
 
   const handleSelectAI = () => {
     if (useAI) {
-      setButtonText('Generate');
       setDropdownText('Generate - AI');
       setUseAI(false);
     } else {
-      setButtonText(currentPlan !== 'proPlus' ? 'Generate - AI (Pro Plus only)' : 'Generate - AI');
       setDropdownText('Generate');
       setUseAI(true);
     }
@@ -70,7 +67,7 @@ const GenerateBtn = ({ onGenerateWithAI, onGenerate, currentPlan }) => {
         )}
         <TouchableOpacity style={styles.button} onPress={handlePress}>
           <View style={styles.buttonContent}>
-            {!useAI && <Text style={styles.buttonText}>{buttonText}</Text>}
+            {!useAI && <Text style={styles.buttonText}>Generate</Text>}
             {useAI && (
               <>
                 <View style={styles.gradientTextContainer}>
