@@ -106,7 +106,7 @@ export default function ProVersionScreen({ route }) {
     { id: 11, feature: t('AI color picker'), starter: false, pro: false, proPlus: true },
     {
       id: 12,
-      feature: t('Quick color palette generator using AI'),
+      feature: t('Unlimited quick color palette generator using AI'),
       starter: false,
       pro: false,
       proPlus: true

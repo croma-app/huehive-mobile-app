@@ -9,6 +9,7 @@ const GenerateBtn = ({ onGenerateWithAI, onGenerate, currentPlan }) => {
   const [dropdownText, setDropdownText] = useState('Generate - AI');
   const [useAI, setUseAI] = useState(false);
   const [gradientAnimation] = useState(new Animated.Value(0));
+  const [remainingAiGenerateCount, setRemainingAiGenerateCount] = useState(2);
 
   useEffect(() => {
     Animated.loop(
@@ -30,7 +31,8 @@ const GenerateBtn = ({ onGenerateWithAI, onGenerate, currentPlan }) => {
   const handlePress = () => {
     if (useAI) {
       if (currentPlan !== 'proPlus') {
-        onGenerateWithAI({ canGenerate: false });
+        onGenerateWithAI({ canGenerate: remainingAiGenerateCount > 0 });
+        setRemainingAiGenerateCount(remainingAiGenerateCount - 1);
       } else {
         onGenerateWithAI({ canGenerate: true });
       }
@@ -85,7 +87,11 @@ const GenerateBtn = ({ onGenerateWithAI, onGenerate, currentPlan }) => {
                 <View style={styles.aiGenerateText}>
                   <Text style={styles.aiButtonText}>Generate</Text>
                   {currentPlan != 'proPlus' && (
-                    <Text style={styles.aiProPlusOnlyText}>Pro Plus only</Text>
+                    <Text style={styles.aiProPlusOnlyText}>
+                      {remainingAiGenerateCount > 0
+                        ? remainingAiGenerateCount + ' remaining'
+                        : 'Pro Plus only'}
+                    </Text>
                   )}
                 </View>
               </>
