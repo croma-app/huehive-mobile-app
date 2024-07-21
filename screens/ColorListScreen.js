@@ -1,6 +1,14 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { SingleColorView } from '../components/SingleColorView';
-import { StyleSheet, View, Text, Platform, Animated, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Platform,
+  Animated,
+  TouchableOpacity,
+  ActivityIndicator
+} from 'react-native';
 import { logEvent, notifyMessage } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
 import DraggableFlatList from 'react-native-draggable-flatlist';
@@ -9,7 +17,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Colors from '../constants/Styles';
 import { generateRandomColorPaletteWithLockedColors } from '../libs/ColorHelper';
+import GenerateBtn from '../components/GenerateBtn';
 import useApplicationStore from '../hooks/useApplicationStore';
+import { generate as aiGenerate } from '../network/color_palette';
 
 function uniqueColors(colors) {
   let set = new Set();
@@ -31,6 +41,7 @@ export default function ColorListScreen({ navigation, route }) {
   const { t } = useTranslation();
   const [colorListHistory, setColorListHistory] = useState([route.params?.colors || []]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loadingGenerate, setLoadingGenerate] = useState(false);
   const { pro } = useApplicationStore();
   const colorList = colorListHistory[currentIndex];
   const colors = uniqueColors(colorList).map((color) => ({
@@ -46,6 +57,7 @@ export default function ColorListScreen({ navigation, route }) {
           : t('Colors')
     });
   }, []);
+
   const renderItem = ({ item, drag }) => {
     const opacity = item.opacity;
     return (
@@ -75,7 +87,6 @@ export default function ColorListScreen({ navigation, route }) {
             ...colors.slice(item.index + 1)
           ];
           updateColorList(updatedColors);
-          // Find the opacity value of the newly added color
           const newColorOpacity = updatedColors[item.index + 1].opacity;
           newColorOpacity.setValue(0);
           Animated.timing(newColorOpacity, {
@@ -102,6 +113,40 @@ export default function ColorListScreen({ navigation, route }) {
     logEvent('drag_end_event_color_list');
     updateColorList(data);
   };
+
+  const regenerateUnlockedColorsWithAI = async ({ canGenerate }) => {
+    if (canGenerate) {
+      logEvent('regenerate_unlocked_colors_ai', colors.filter((color) => !color.locked).length);
+      if (colors.filter((color) => !color.locked).length == 0) {
+        notifyMessage('Please unlock some colors or add colors to generate new colors');
+      } else {
+        setLoadingGenerate(true);
+        const lockedColors = colors
+          .map((color, index) => {
+            return { color, index };
+          })
+          .filter((color) => color.color.locked)
+          .map((color) => {
+            return { index: color.index, color: color.color.color };
+          });
+        const response = await aiGenerate(lockedColors, colorList.length);
+        const aiColors = response.data.colors;
+        updateColorList(
+          aiColors.map((aiColor) => {
+            return {
+              name: aiColor.name,
+              color: aiColor.hex,
+              locked: lockedColors.some((lockedColor) => lockedColor.color == aiColor.hex)
+            };
+          })
+        );
+        setLoadingGenerate(false);
+      }
+    } else {
+      navigation.navigate('ProVersion', { highlightFeatureId: 12 });
+    }
+  };
+
   const regenerateUnlockedColors = () => {
     logEvent('regenerate_unlocked_colors', colors.filter((color) => !color.locked).length);
     if (colors.filter((color) => !color.locked).length == 0) {
@@ -111,6 +156,7 @@ export default function ColorListScreen({ navigation, route }) {
       updateColorList(newColors);
     }
   };
+
   const undo = () => {
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
@@ -122,10 +168,12 @@ export default function ColorListScreen({ navigation, route }) {
       setCurrentIndex(currentIndex + 1);
     }
   };
+
   const updateColorList = (updatedColors) => {
     setColorListHistory([...colorListHistory.slice(0, currentIndex + 1), updatedColors]);
     setCurrentIndex(currentIndex + 1);
   };
+
   useEffect(() => {
     logEvent('color_list_screen');
   }, []);
@@ -146,8 +194,7 @@ export default function ColorListScreen({ navigation, route }) {
           <TouchableOpacity
             style={[styles.smallButton, currentIndex === 0 && styles.disabledButton]}
             onPress={undo}
-            disabled={currentIndex === 0}
-          >
+            disabled={currentIndex === 0}>
             <View style={styles.smallButtonContent}>
               <Icon name="undo" size={16} color={currentIndex === 0 ? Colors.gray : Colors.black} />
             </View>
@@ -158,8 +205,7 @@ export default function ColorListScreen({ navigation, route }) {
               currentIndex === colorListHistory.length - 1 && styles.disabledButton
             ]}
             onPress={redo}
-            disabled={currentIndex === colorListHistory.length - 1}
-          >
+            disabled={currentIndex === colorListHistory.length - 1}>
             <View style={styles.smallButtonContent}>
               <Icon
                 name="repeat"
@@ -169,16 +215,11 @@ export default function ColorListScreen({ navigation, route }) {
             </View>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            regenerateUnlockedColors();
-          }}
-        >
-          <View style={styles.buttonContent}>
-            <Text style={styles.buttonText}>{t('Generate')}</Text>
-          </View>
-        </TouchableOpacity>
+        <GenerateBtn
+          onGenerate={regenerateUnlockedColors}
+          onGenerateWithAI={regenerateUnlockedColorsWithAI}
+          currentPlan={pro.plan}
+        />
         <TouchableOpacity
           style={styles.doneButton}
           onPress={() => {
@@ -188,13 +229,20 @@ export default function ColorListScreen({ navigation, route }) {
               }),
               suggestedName: route.params?.suggestedName
             });
-          }}
-        >
+          }}>
           <View style={styles.buttonContent}>
             <MaterialIcons name="done" size={24} color={Colors.black} />
           </View>
         </TouchableOpacity>
       </View>
+      {loadingGenerate && (
+        <View style={styles.overlay}>
+          <View style={styles.overlayContent}>
+            <ActivityIndicator size="large" color={Colors.black} />
+            <Text style={styles.loadingText}>{t('Generating...')}</Text>
+          </View>
+        </View>
+      )}
     </View>
   );
 }
@@ -209,14 +257,12 @@ const CustomHeader = () => {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '100%'
-      }}
-    >
+      }}>
       <Text
         style={{
           color: Colors.white,
           fontSize: 18
-        }}
-      >
+        }}>
         {t('New palette')}
       </Text>
     </View>
@@ -265,11 +311,8 @@ const styles = StyleSheet.create({
   buttonText: {
     color: Colors.black,
     marginLeft: 8,
-    fontSize: 18
-  },
-  infoIcon: {},
-  infoIconContainer: {
-    paddingHorizontal: 8
+    fontSize: 18,
+    fontWeight: 'bold'
   },
   smallButton: {
     marginHorizontal: 4,
@@ -315,5 +358,26 @@ const styles = StyleSheet.create({
   },
   disabledButton: {
     opacity: 0.5
+  },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  overlayContent: {
+    backgroundColor: Colors.white,
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center'
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 18,
+    color: Colors.gray
   }
 });
