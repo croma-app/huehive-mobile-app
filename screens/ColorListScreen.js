@@ -1,6 +1,14 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { SingleColorView } from '../components/SingleColorView';
-import { StyleSheet, View, Text, Platform, Animated, TouchableOpacity, ActivityIndicator } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Platform,
+  Animated,
+  TouchableOpacity,
+  ActivityIndicator
+} from 'react-native';
 import { logEvent, notifyMessage } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
 import DraggableFlatList from 'react-native-draggable-flatlist';
@@ -11,6 +19,7 @@ import Colors from '../constants/Styles';
 import { generateRandomColorPaletteWithLockedColors } from '../libs/ColorHelper';
 import GenerateBtn from '../components/GenerateBtn';
 import useApplicationStore from '../hooks/useApplicationStore';
+import { generate as aiGenerate } from '../network/color_palette';
 
 function uniqueColors(colors) {
   let set = new Set();
@@ -48,7 +57,7 @@ export default function ColorListScreen({ navigation, route }) {
           : t('Colors')
     });
   }, []);
-  
+
   const renderItem = ({ item, drag }) => {
     const opacity = item.opacity;
     return (
@@ -105,18 +114,33 @@ export default function ColorListScreen({ navigation, route }) {
     updateColorList(data);
   };
 
-  const regenerateUnlockedColorsWithAI = ({ canGenerate }) => {
+  const regenerateUnlockedColorsWithAI = async ({ canGenerate }) => {
     if (canGenerate) {
       logEvent('regenerate_unlocked_colors_ai', colors.filter((color) => !color.locked).length);
       if (colors.filter((color) => !color.locked).length == 0) {
         notifyMessage('Please unlock some colors or add colors to generate new colors');
       } else {
         setLoadingGenerate(true);
-        setTimeout(() => {
-          const newColors = generateRandomColorPaletteWithLockedColors([...colors]);
-          updateColorList(newColors);
-          setLoadingGenerate(false);
-        }, 1000);
+        const lockedColors = colors
+          .map((color, index) => {
+            return { color, index };
+          })
+          .filter((color) => color.color.locked)
+          .map((color) => {
+            return { index: color.index, color: color.color.color };
+          });
+        const response = await aiGenerate(lockedColors, colorList.length);
+        const aiColors = response.data.colors;
+        updateColorList(
+          aiColors.map((aiColor) => {
+            return {
+              name: aiColor.name,
+              color: aiColor.hex,
+              locked: lockedColors.some((lockedColor) => lockedColor.color == aiColor.hex)
+            };
+          })
+        );
+        setLoadingGenerate(false);
       }
     } else {
       navigation.navigate('ProVersion', { highlightFeatureId: 12 });
