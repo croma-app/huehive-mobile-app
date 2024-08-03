@@ -215,7 +215,7 @@ function extractHexColors2(text) {
   return hexColors;
 }
 
-export function extractHexColors(text) {
+function extractHexColors(text) {
   let extractedColors1 = extractHexColors1(text);
   let extractedColors2 = extractHexColors2(text);
   let combinedHexMap = {};
@@ -234,7 +234,7 @@ export function extractHexColors(text) {
   return Object.values(combinedHexMap);
 }
 
-export function capitalizeFirstLetter(string) {
+function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
@@ -246,5 +246,7 @@ export {
   initPurchase,
   readRemoteConfig,
   planLabels,
-  getPlanPrice
+  getPlanPrice,
+  extractHexColors,
+  capitalizeFirstLetter
 };
