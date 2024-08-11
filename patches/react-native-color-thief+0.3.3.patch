@@ -1,0 +1,21 @@
+diff --git a/node_modules/react-native-color-thief/android/build.gradle b/node_modules/react-native-color-thief/android/build.gradle
+index a28f0dd..edd6e84 100644
+--- a/node_modules/react-native-color-thief/android/build.gradle
++++ b/node_modules/react-native-color-thief/android/build.gradle
+@@ -24,6 +24,7 @@ android {
+     lintOptions {
+         abortOnError false
+     }
++    namespace 'app.croma'
+ }
+ 
+ repositories {
+@@ -31,6 +32,6 @@ repositories {
+ }
+ 
+ dependencies {
+-    compile 'com.facebook.react:react-native:+'
++    implementation 'com.facebook.react:react-native:+'
+ }
+   
+\ No newline at end of file
