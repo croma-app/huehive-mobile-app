@@ -95,11 +95,14 @@ export const SingleColorView = ({
             </Text>
           </View>
         )}
-        <Text style={[styles.colorText, { color: textColor }]}>
-          {showUnlockPro
-            ? '#XXXXXX'
-            : color.color.toUpperCase() + (color.name ? ' (' + color.name + ')' : '')}
-        </Text>
+        <View style={styles.colorInfo}>
+          <Text style={[styles.colorHex, { color: textColor }]}>
+            {showUnlockPro ? '#XXXXXX' : color.color.toUpperCase()}
+          </Text>
+          {!showUnlockPro && color.name && (
+            <Text style={[styles.colorName, { color: textColor }]}>{`${color.name}`}</Text>
+          )}
+        </View>
         <View style={styles.actionArea}>
           <TouchableOpacity
             style={[styles.actionAreaItem, styles.lockActionAreaItem]}
@@ -191,10 +194,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  colorText: {
-    fontWeight: '700',
+  colorInfo: {
+    flexDirection: 'row',
     paddingLeft: 16,
+    alignItems: 'center'
+  },
+  colorHex: {
+    fontWeight: '700',
     paddingRight: 8
+  },
+  colorName: {
+    fontWeight: '700',
+    fontSize: 8,
+    textAlign: 'center'
   },
   actionArea: {
     position: 'absolute',

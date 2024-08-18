@@ -127,8 +127,7 @@ export default function PaletteScreen({ navigation, route }) {
         visible={isColorPickerVisible}
         animationType="slide"
         transparent={true}
-        onRequestClose={() => setIsColorPickerVisible(false)}
-      >
+        onRequestClose={() => setIsColorPickerVisible(false)}>
         <TouchableWithoutFeedback onPress={() => setIsColorPickerVisible(false)}>
           <View style={styles.modalOverlay} />
         </TouchableWithoutFeedback>
