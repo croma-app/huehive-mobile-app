@@ -190,7 +190,7 @@ export const PaletteCard = (props) => {
                 />
                 <MenuItemWrapper
                   onPress={() => {
-                    navigation.navigate('Palette', { paletteId });
+                    navigation.navigate('PaletteEdit', { paletteId });
                   }}
                   icon="edit"
                   label="Edit"
