@@ -40,7 +40,10 @@ export default function PaletteScreen({ navigation, route }) {
 
   const { height } = Dimensions.get('window');
   const palette = allPalettes.find((palette) => palette.id === paletteId);
-  const colors = palette?.colors;
+  const [colors, setColors] = useState(palette?.colors);
+  useEffect(() => {
+    setColors(allPalettes.find((palette) => palette.id === paletteId)?.colors);
+  }, [allPalettes, paletteId]);
   const onColorDelete = React.useCallback(
     (hex) => {
       deleteColorFromPalette(palette.id, palette.colors.find((c) => c.color === hex).id || null);
@@ -80,7 +83,7 @@ export default function PaletteScreen({ navigation, route }) {
 
   const colorsToShow = React.useMemo(
     () => colors?.slice(0, pro.plan != 'free' ? colors.length : 4),
-    [colors, pro.plan != 'starter']
+    [colors, pro.plan]
   );
 
   const handleColorSelected = (color) => {
@@ -97,6 +100,9 @@ export default function PaletteScreen({ navigation, route }) {
           keyExtractor={keyExtractor}
           style={styles.listview}
           onDragEnd={({ data: reorderedColors }) => {
+            // Colors is update in local state first and then updated on the server and in global state.
+            // The whole state logic is little messed up now and need refactoring but for now this approach works.
+            setColors(reorderedColors);
             updatePalette(palette.id, { ...palette, colors: reorderedColors });
           }}
           ListFooterComponent={ListFooterComponent}
@@ -127,8 +133,7 @@ export default function PaletteScreen({ navigation, route }) {
         visible={isColorPickerVisible}
         animationType="slide"
         transparent={true}
-        onRequestClose={() => setIsColorPickerVisible(false)}
-      >
+        onRequestClose={() => setIsColorPickerVisible(false)}>
         <TouchableWithoutFeedback onPress={() => setIsColorPickerVisible(false)}>
           <View style={styles.modalOverlay} />
         </TouchableWithoutFeedback>
