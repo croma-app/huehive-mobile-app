@@ -145,6 +145,8 @@ android {
         manifestPlaceholders = [appAuthRedirectScheme: 'app.croma']
         missingDimensionStrategy 'store', 'play'
     }
+    namespace 'app.croma'
+
     splits {
         abi {
             reset()

@@ -4,8 +4,8 @@ buildscript {
     ext {
         buildToolsVersion = "30.0.2"
         minSdkVersion = 24
-        compileSdkVersion = 33
-        targetSdkVersion = 33
+        compileSdkVersion = 34
+        targetSdkVersion = 34
         ndkVersion = "21.4.7075529"
         androidXAnnotation = "1.1.0"
         androidXBrowser = "1.0.0"
@@ -16,9 +16,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:4.2.2")
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath("com.android.tools.build:gradle:8.0.0") // or the latest stable version
         classpath 'com.google.gms:google-services:4.3.3'
         classpath 'com.android.billingclient:billing:4.0.0'
     }

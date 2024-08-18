@@ -1,0 +1,12 @@
+diff --git a/node_modules/react-native-app-auth/android/build.gradle b/node_modules/react-native-app-auth/android/build.gradle
+index 85fb638..cdc7abe 100644
+--- a/node_modules/react-native-app-auth/android/build.gradle
++++ b/node_modules/react-native-app-auth/android/build.gradle
+@@ -33,6 +33,7 @@ android {
+     lintOptions {
+         abortOnError false
+     }
++    namespace 'app.croma'
+     compileOptions {
+         sourceCompatibility JavaVersion.VERSION_1_8
+         targetCompatibility JavaVersion.VERSION_1_8
