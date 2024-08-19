@@ -23,9 +23,6 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.numixproject.colorextractor.image.Color;
-import org.numixproject.colorextractor.image.Image;
-import org.numixproject.colorextractor.image.KMeansColorPicker;
 
 public class CromaModule extends ReactContextBaseJavaModule implements ActivityEventListener {
 
@@ -111,30 +108,6 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
   public void onNewIntent(Intent intent) {}
 
   @ReactMethod
-  public void pickTopColorsFromImage(String uri, Promise promise) {
-    try {
-      long startTime = System.currentTimeMillis();
-      Uri imageUri = Uri.parse(uri);
-      Bitmap bitmap =
-          MediaStore.Images.Media.getBitmap(reactContext.getContentResolver(), imageUri);
-      Image image = new BitmapImage(bitmap);
-      KMeansColorPicker k = new KMeansColorPicker();
-      List<Color> colors = k.getUsefulColors(image, 6);
-      List<Integer> intColors = new ArrayList<>();
-      for (Color color : colors) {
-        intColors.add(color.getRGB());
-      }
-      Bundle params = new Bundle();
-      params.putLong(TIME_TAKEN_TO_PROCESS_MS, (System.currentTimeMillis() - startTime));
-      mFirebaseAnalytics.logEvent(FirebaseAnalyticsConstants.PICK_COLORS_FROM_IMAGE, params);
-      promise.resolve(mapToJsonString(intColors));
-    } catch (Exception e) {
-      e.printStackTrace();
-      promise.reject(e);
-    }
-  }
-
-  @ReactMethod
   public void navigateToImageColorPicker(String uri, Promise promise) {
     this.promise = promise;
     ReactApplicationContext context = getReactApplicationContext();
@@ -183,23 +156,4 @@ public class CromaModule extends ReactContextBaseJavaModule implements ActivityE
     }
   }
 
-  private static class BitmapImage extends Image {
-    private Bitmap image;
-
-    public BitmapImage(Bitmap b) {
-      super(b.getWidth(), b.getHeight());
-      this.image = b;
-    }
-
-    @Override
-    public Color getColor(int x, int y) {
-      return new Color(image.getPixel(x, y));
-    }
-
-    @Override
-    public BitmapImage getScaledInstance(int width, int height) {
-      Bitmap resized = Bitmap.createScaledBitmap(this.image, width, height, true);
-      return new BitmapImage(resized);
-    }
-  }
 }
