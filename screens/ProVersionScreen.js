@@ -219,7 +219,7 @@ export default function ProVersionScreen({ route }) {
           )}
           {isStarter && (
             <View style={styles.restoreProView}>
-              <Text style={styles.title}>{t('Already bought click below to restore 👇')}</Text>
+              <Text style={styles.title}>{t('Already bought? Restore 👇')}</Text>
               <CromaButton
                 style={styles.restoreButton}
                 onPress={async () => await initPurchase(setPurchase)}>

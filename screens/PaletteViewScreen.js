@@ -49,14 +49,14 @@ export default function PaletteViewScreen({ navigation, route }) {
         <View
           style={{
             flexDirection: 'column',
-            padding: 8,
+            padding: 6,
             backgroundColor: Colors.white,
             borderRadius: 8,
-            marginTop: 12
+            marginTop: 8
           }}>
           <View style={backgroundColor}></View>
           <ColorDetailItems colorName={colorName} color={color} />
-          <View style={{ paddingTop: 10 }}>
+          <View style={{ paddingTop: 8 }}>
             <MultiColorView
               colors={colorsToShow}
               selectedColor={selectedColor}
@@ -68,21 +68,25 @@ export default function PaletteViewScreen({ navigation, route }) {
         <CromaButton
           textStyle={{ color: Colors.primary }}
           style={styles.buttonSecondary}
-          variant={'small'}
           onPress={() => {
             setDetailedColor(color);
             navigation.navigate('Palettes');
           }}>
-          {t('See color palettes')}
+          <View style={{ alignItems: 'center' }}>
+            <Text style={{ fontSize: 14 }}>{t('Generate Palettes')}</Text>
+            <Text style={{ fontSize: 8, color: Colors.grey, textAlign: 'center' }}>
+              {t('Using ' + color)}
+            </Text>
+          </View>
         </CromaButton>
+
         <CromaButton
           textStyle={{ color: Colors.white }}
           style={styles.buttonPrimary}
-          variant={'small'}
           onPress={() => {
             navigation.navigate('PaletteEdit', { paletteId });
           }}>
-          {t('Edit palette')}
+          {t('Edit')}
         </CromaButton>
       </View>
     </>
@@ -153,7 +157,7 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     display: 'flex',
     flexDirection: 'row',
-    padding: Spacing.large
+    padding: Spacing.medium
   },
   buttonPrimary: {
     backgroundColor: Colors.primary,
