@@ -1,5 +1,5 @@
-import React, { useEffect, useLayoutEffect } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Color from 'pigment/full';
@@ -9,6 +9,7 @@ import useApplicationStore from '../hooks/useApplicationStore';
 import { useNavigation } from '@react-navigation/native';
 import Colors from '../constants/Styles';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { generateUsingColor } from '../network/color_palette';
 
 function PalettesScreen() {
   const { detailedColor } = useApplicationStore();
@@ -57,45 +58,46 @@ function PalettesScreen() {
 
 function PalettesScreenAI() {
   const { detailedColor } = useApplicationStore();
+  const [loading, setLoading] = useState(true);
+  const [palettes, setPalettes] = useState([]);
   const navigation = useNavigation();
 
-  const parseCamelCase = (text) => {
-    if (typeof text !== 'string') {
-      return '';
-    }
-    return text
-      .replace(/([a-z])([A-Z])/g, '$1 $2')
-      .replace(/\b([A-Z]+)([A-Z])([a-z])/, '$1 $2$3')
-      .replace(/^./, (str) => str.toUpperCase());
-  };
-
-  const fullColor = new Color(detailedColor);
-  let items = [];
-  for (const i in fullColor) {
-    if (/.*scheme$/i.test(i) && typeof fullColor[i] === 'function') {
-      let colors = [];
-      const paletteColors = fullColor[i]();
-      paletteColors.forEach((c) => colors.push({ color: c.tohex() }));
-      items.push(
-        <PalettePreviewCard
-          onPress={() => {
-            navigation.navigate('ColorList', { colors: colors });
-          }}
-          key={i.toString()}
-          colors={colors}
-          name={parseCamelCase(i.toString())}
-        />
-      );
-    }
-  }
-
   useEffect(() => {
-    logEvent('palettes_screen');
-  }, []);
+    const fetchPalettes = async () => {
+      try {
+        const response = await generateUsingColor(detailedColor);
+        const generatedPalettes = response.data.palettes;
+        setPalettes(generatedPalettes);
+      } catch (error) {
+        console.error('Error fetching AI palettes:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPalettes();
+    logEvent('palettes_screen_ai');
+  }, [detailedColor]);
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {items}
+      {loading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : (
+        palettes.map((palette, index) => {
+          const colors = palette.colors.map((color) => ({ color: color.hex }));
+          return (
+            <PalettePreviewCard
+              onPress={() => {
+                navigation.navigate('ColorList', { suggestedName: palette.name, colors });
+              }}
+              key={index.toString()}
+              colors={colors}
+              name={palette.name}
+            />
+          );
+        })
+      )}
     </ScrollView>
   );
 }
