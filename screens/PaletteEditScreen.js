@@ -25,14 +25,8 @@ import ColorPickerModal from '../components/ColorPickerModal';
 import useApplicationStore from '../hooks/useApplicationStore';
 
 export default function PaletteScreen({ navigation, route }) {
-  const {
-    pro,
-    allPalettes,
-    updatePalette,
-    deleteColorFromPalette,
-    addNewColorToPalette,
-    setDetailedColor
-  } = useApplicationStore();
+  const { pro, allPalettes, updatePalette, deleteColorFromPalette, addNewColorToPalette } =
+    useApplicationStore();
 
   const paletteId = route.params.paletteId;
 
@@ -64,8 +58,7 @@ export default function PaletteScreen({ navigation, route }) {
         <ScaleDecorator key={`${renderItemParams.item.id}`}>
           <SingleColorCard
             onPress={() => {
-              setDetailedColor(renderItemParams.item.color);
-              navigation.navigate('ColorDetails');
+              navigation.navigate('ColorDetails', { hexColor: renderItemParams.item.color });
             }}
             onPressDrag={renderItemParams.drag}
             color={renderItemParams.item}
@@ -74,7 +67,7 @@ export default function PaletteScreen({ navigation, route }) {
         </ScaleDecorator>
       );
     },
-    [navigation, onColorDelete, setDetailedColor]
+    [navigation, onColorDelete]
   );
 
   const keyExtractor = useCallback((item) => {

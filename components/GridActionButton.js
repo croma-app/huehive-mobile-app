@@ -34,7 +34,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   const [selectedImage, setSelectedImage] = React.useState(null);
   const [automaticColors, setAutomaticColors] = React.useState([]);
 
-  const { pro, setDetailedColor } = useApplicationStore();
+  const { pro } = useApplicationStore();
 
   const pickImageResult = async () => {
     setPickImageLoading(true);
@@ -46,9 +46,8 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   };
 
   const handleColorSelected = (color) => {
-    setDetailedColor(color);
     setIsColorPickerVisible(false);
-    navigation.navigate('Palettes');
+    navigation.navigate('Palettes', { hexColor: color });
   };
 
   const handleImagePicker = async () => {

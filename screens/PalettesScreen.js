@@ -5,14 +5,13 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Color from 'pigment/full';
 import { PalettePreviewCard } from '../components/PalettePreviewCard';
 import { logEvent } from '../libs/Helpers';
-import useApplicationStore from '../hooks/useApplicationStore';
 import { useNavigation } from '@react-navigation/native';
 import Colors from '../constants/Styles';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { generateUsingColor } from '../network/color_palette';
 
-function PalettesScreen() {
-  const { detailedColor } = useApplicationStore();
+function PalettesScreen({ route }) {
+  const hexColor = route.params.hexColor;
   const navigation = useNavigation();
 
   const parseCamelCase = (text) => {
@@ -25,7 +24,7 @@ function PalettesScreen() {
       .replace(/^./, (str) => str.toUpperCase());
   };
 
-  const fullColor = new Color(detailedColor);
+  const fullColor = new Color(hexColor);
   let items = [];
   for (const i in fullColor) {
     if (/.*scheme$/i.test(i) && typeof fullColor[i] === 'function') {
@@ -56,8 +55,8 @@ function PalettesScreen() {
   );
 }
 
-function PalettesScreenAI() {
-  const { detailedColor } = useApplicationStore();
+function PalettesScreenAI({ route }) {
+  const hexColor = route.params.hexColor;
   const [loading, setLoading] = useState(true);
   const [palettes, setPalettes] = useState([]);
   const navigation = useNavigation();
@@ -65,7 +64,7 @@ function PalettesScreenAI() {
   useEffect(() => {
     const fetchPalettes = async () => {
       try {
-        const response = await generateUsingColor(detailedColor);
+        const response = await generateUsingColor(hexColor);
         const generatedPalettes = response.data.palettes;
         setPalettes(generatedPalettes);
       } catch (error) {
@@ -77,7 +76,7 @@ function PalettesScreenAI() {
 
     fetchPalettes();
     logEvent('palettes_screen_ai');
-  }, [detailedColor]);
+  }, [hexColor]);
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -111,12 +110,11 @@ const styles = StyleSheet.create({
 
 const Tab = createBottomTabNavigator();
 
-export default function PalettesTabNavigator() {
-  const { detailedColor } = useApplicationStore();
-  const navigation = useNavigation();
+export default function PalettesTabNavigator({ navigation, route }) {
+  const hexColor = route.params.hexColor;
   useLayoutEffect(() => {
-    navigation.setOptions({ title: detailedColor });
-  }, [detailedColor, navigation]);
+    navigation.setOptions({ title: hexColor });
+  }, [hexColor, navigation]);
 
   return (
     <Tab.Navigator
@@ -170,8 +168,12 @@ export default function PalettesTabNavigator() {
           fontWeight: '600' // Bold text for the labels
         }
       })}>
-      <Tab.Screen name="Color Theory" component={PalettesScreen} />
-      <Tab.Screen name="AI" component={PalettesScreenAI} />
+      <Tab.Screen
+        name="Color Theory"
+        component={PalettesScreen}
+        initialParams={{ hexColor: hexColor }}
+      />
+      <Tab.Screen name="AI" component={PalettesScreenAI} initialParams={{ hexColor: hexColor }} />
     </Tab.Navigator>
   );
 }

@@ -11,7 +11,7 @@ import Colors from '../constants/Styles';
 import CromaButton from '../components/CromaButton';
 import { useTranslation } from 'react-i18next';
 export default function PaletteViewScreen({ navigation, route }) {
-  const { allPalettes, setDetailedColor, pro } = useApplicationStore();
+  const { allPalettes, pro } = useApplicationStore();
   const { t } = useTranslation();
 
   const [selectedColor, setSelectedColor] = useState(0);
@@ -69,8 +69,7 @@ export default function PaletteViewScreen({ navigation, route }) {
           textStyle={{ color: Colors.primary }}
           style={styles.buttonSecondary}
           onPress={() => {
-            setDetailedColor(color);
-            navigation.navigate('Palettes');
+            navigation.navigate('Palettes', { hexColor: color });
           }}>
           <View style={{ alignItems: 'center' }}>
             <Text style={{ fontSize: 14 }}>{t('Generate Palettes')}</Text>

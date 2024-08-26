@@ -12,7 +12,6 @@ const useApplicationStore = create((set) => ({
   pro: {
     plan: 'starter'
   },
-  detailedColor: null,
   commonPalettes: [],
 
   loadPalettes: async () => {
@@ -97,10 +96,6 @@ const useApplicationStore = create((set) => ({
 
   setPurchase: (plan) => {
     set({ pro: { plan: plan } });
-  },
-
-  setDetailedColor: (detailedColor) => {
-    set({ detailedColor });
   },
 
   setCommonPalettes: (commonPalettes) => {
