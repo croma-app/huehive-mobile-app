@@ -16,8 +16,6 @@ import { logEvent, planLabels } from '../libs/Helpers';
 import ChatCard from '../components/ChatCard';
 import CromaButton from '../components/CromaButton';
 import useChatSession from '../hooks/useChatSession';
-import useUserData from '../hooks/useUserData';
-import useAuth from '../hooks/useAuth';
 import useApplicationStore from '../hooks/useApplicationStore';
 
 // eslint-disable-next-line no-undef
@@ -44,15 +42,6 @@ const ChatSessionScreen = (props) => {
   const { pro } = useApplicationStore();
   const { messages, isLoading, isCreatingSession, error, createSession, followUpSession } =
     useChatSession(route.params?.messages);
-
-  const { userData, isLoading: isUserDataLoading } = useUserData();
-  const { openAuthOverlay } = useAuth();
-
-  useEffect(() => {
-    if (!userData) {
-      openAuthOverlay();
-    }
-  }, [openAuthOverlay, userData]);
 
   useEffect(() => {
     logEvent('chat_session_screen');
@@ -87,14 +76,6 @@ const ChatSessionScreen = (props) => {
       clearInterval(interval);
     };
   }, [messages]);
-
-  if (isUserDataLoading) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator animating={true} size="large" color="#ff7875" />
-      </View>
-    );
-  }
 
   return (
     <View style={styles.container}>
