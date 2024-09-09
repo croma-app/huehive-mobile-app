@@ -70,3 +70,5 @@ ios/fastlane1/screenshots
 localnotes.txt
 .env
 .yarn/cache
+ios/*.cer
+ios/croma.app.*.zip
