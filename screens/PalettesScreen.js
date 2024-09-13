@@ -69,7 +69,7 @@ function PalettesScreenAI({ route }) {
         setPalettes(generatedPalettes);
       } catch (error) {
         //console.error('Error fetching AI palettes:', error);
-        notifyMessage(error);
+        notifyMessage("Error fetching AI palettes: " + error);
       } finally {
         setLoading(false);
       }
