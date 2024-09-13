@@ -3333,7 +3333,6 @@ __metadata:
     react: "npm:18.3.1"
     react-i18next: "npm:^15.0.1"
     react-native: "npm:^0.75.2"
-    react-native-action-button: "npm:^2.8.5"
     react-native-animatable: "npm:^1.4.0"
     react-native-app-auth: "npm:^8.0.0"
     react-native-color-thief: "https://github.com/croma-app/react-native-color-thief.git"
@@ -9643,17 +9642,6 @@ __metadata:
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
   checksum: 10/73b36281e58eeb27c9cc6031301b6ae19ecdc9f18ae2d518bdb39b0ac564e65c5779405d623f1df9abf378a13858b79442480244bd579968afc1faf9a2ce5e05
-  languageName: node
-  linkType: hard
-
-"react-native-action-button@npm:^2.8.5":
-  version: 2.8.5
-  resolution: "react-native-action-button@npm:2.8.5"
-  dependencies:
-    prop-types: "npm:^15.5.10"
-  peerDependencies:
-    react-native: ">=0.11"
-  checksum: 10/dc08e38d72ed6e2226128444a5e3e83e49329888c4053feb2d87e6b2da0daebd856154e7a5e145a1d5d07fec598658b7f1f83ba9ce682a4b6ec9341ab88dc746
   languageName: node
   linkType: hard
 

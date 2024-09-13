@@ -12,7 +12,7 @@ import {
   Modal,
   TouchableWithoutFeedback
 } from 'react-native';
-import ActionButton from 'react-native-action-button';
+import FloatingActionButton from '../components/FloatingActionButton';
 import Colors from '../constants/Styles';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { logEvent } from '../libs/Helpers';
@@ -100,12 +100,7 @@ export default function PaletteScreen({ navigation, route }) {
           }}
           ListFooterComponent={ListFooterComponent}
         />
-        <ActionButton
-          offsetY={76}
-          bgColor="rgba(68, 68, 68, 0.6)"
-          hideShadow={Platform.OS === 'web' ? true : false}
-          fixNativeFeedbackRadius={true}
-          buttonColor={Colors.primary}
+        <FloatingActionButton
           onPress={() => {
             logEvent('palette_screen_add_color');
             if (
@@ -119,7 +114,7 @@ export default function PaletteScreen({ navigation, route }) {
               setIsColorPickerVisible(true);
             }
           }}
-          style={styles.actionButton}
+          
         />
       </View>
       <Modal

@@ -72,3 +72,4 @@ localnotes.txt
 .yarn/cache
 ios/*.cer
 ios/croma.app.*.zip
+.yarn/install-state.gz
