@@ -105,7 +105,6 @@
   },
   "resolutions": {
     "styled-components": "^5",
-    "react-native-share-menu@^6.0.0": "patch:react-native-share-menu@npm%3A6.0.0#./.yarn/patches/react-native-share-menu-npm-6.0.0-f1094c3204.patch",
-    "react-native-action-button@^2.8.5": "patch:react-native-action-button@npm%3A2.8.5#./.yarn/patches/react-native-action-button-npm-2.8.5-bcd65e566e.patch"
+    "react-native-share-menu@^6.0.0": "patch:react-native-share-menu@npm%3A6.0.0#./.yarn/patches/react-native-share-menu-npm-6.0.0-f1094c3204.patch"
   }
 }
