@@ -153,7 +153,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
           [
             {
               id: 4,
-              icon: <Ionicons name="md-shuffle" size={20} />,
+              icon: <Ionicons name="shuffle" size={20} />,
               text1: t('Quick'),
               text2: t('palette'),
               onPress: () => {

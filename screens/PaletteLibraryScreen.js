@@ -17,9 +17,6 @@ export default function PaletteLibraryScreen({ navigation }) {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <Text style={[styles.title, styles.popularTitle]}>
-        {t(' Explore popular palette libraries ')}
-      </Text>
       {allPalettes.map((palettes, index) => {
         return (
           <TouchableOpacity
@@ -64,10 +61,5 @@ const styles = StyleSheet.create({
   },
   desc: {
     ...material.body1
-  },
-  popularTitle: {
-    textAlign: 'center',
-    marginBottom: 15,
-    marginTop: 15
   }
 });
