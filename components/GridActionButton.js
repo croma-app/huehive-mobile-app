@@ -19,6 +19,7 @@ import ActionButtonContainer from './ActionButton';
 import { logEvent } from '../libs/Helpers';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Evillcon from 'react-native-vector-icons/EvilIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useTranslation } from 'react-i18next';
@@ -171,10 +172,10 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                 navigation.navigate('ChatSession');
               }
             },
-            pro.plan != 'starter'
+            pro.plan == 'starter'
               ? {
                   id: 6,
-                  icon: <Ionicons name="md-color-filter-outline" size={20} />,
+                  icon: <MaterialIcons name="create" size={20} />,
                   text1: t('Create palette'),
                   text2: t(' manully'),
                   onPress: () => {
@@ -184,7 +185,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                 }
               : {
                   id: 7,
-                  icon: <Feather name="unlock" size={20} />,
+                  icon: <M name="unlock" size={20} />,
                   text1: t('Unlock'),
                   text2: t('Pro'),
                   onPress: () => {
