@@ -12,13 +12,13 @@ import { logEvent } from '../libs/Helpers';
 import { getChatSessions } from '../network/chat_session';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
-import ActionButton from 'react-native-action-button';
 import Colors from '../constants/Styles';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Spacer from '../components/Spacer';
 import Color from 'pigment/full';
 import useAuth from '../hooks/useAuth';
 import useUserData from '../hooks/useUserData';
+import FloatingActionButton from '../components/FloatingActionButton';
 
 function extractColorsFromChatSession(session) {
   if (session.messages) {
@@ -128,17 +128,12 @@ const ChatSessionHistoriesScreen = () => {
         )}
         <Spacer />
       </ScrollView>
-      <ActionButton
-        offsetY={76}
-        bgColor="rgba(68, 68, 68, 0.6)"
-        fixNativeFeedbackRadius={true}
-        buttonColor={Colors.primary}
+      <FloatingActionButton
         onPress={() => {
           logEvent('add_chat_session_fab');
           navigation.navigate('ChatSession');
-        }}
-        renderIcon={() => <FontAwesome5 name="magic" size={20} color="white" />}
-        style={styles.actionButton}
+        }} 
+        icon={<FontAwesome5 name="magic" size={20} color="white" />}
       />
     </>
   );

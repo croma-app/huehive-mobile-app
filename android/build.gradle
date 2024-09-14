@@ -1,14 +1,11 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
 buildscript {
     ext {
-        buildToolsVersion = "30.0.2"
-        minSdkVersion = 24
-        compileSdkVersion = 33
-        targetSdkVersion = 33
-        ndkVersion = "21.4.7075529"
-        androidXAnnotation = "1.1.0"
-        androidXBrowser = "1.0.0"
+        buildToolsVersion = "34.0.0"
+        minSdkVersion = 23
+        compileSdkVersion = 34
+        targetSdkVersion = 34
+        ndkVersion = "26.1.10909125"
+        kotlinVersion = "1.9.24"
         supportLibVersion = "28.0.0"
     }
     repositories {
@@ -16,38 +13,12 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:4.2.2")
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath("com.android.tools.build:gradle")
+        classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
         classpath 'com.google.gms:google-services:4.3.3'
         classpath 'com.android.billingclient:billing:4.0.0'
     }
 }
-allprojects {
-    repositories {
-        mavenCentral()
-        mavenLocal()
-        maven {
-            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-            url("$rootDir/../node_modules/react-native/android")
-        }
-        maven {
-            // Android JSC is installed from npm
-            url("$rootDir/../node_modules/jsc-android/dist")
-        }
 
-        google()
-        maven { url 'https://www.jitpack.io' }
-        // https://stackoverflow.com/questions/74334162/react-native-android-build-failure-with-different-errors-without-any-changes-in
-        exclusiveContent {
-            filter {
-                includeGroup "com.facebook.react"
-            }
-            forRepository {
-                maven {
-                    url "$rootDir/../node_modules/react-native/android"
-                }
-            }
-       }
-    }
-}
+apply plugin: "com.facebook.react.rootproject"

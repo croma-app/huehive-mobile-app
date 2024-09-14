@@ -1,6 +1,0 @@
-module RNShareMenu {
-  umbrella header "RNShareMenu-umbrella.h"
-
-  export *
-  module * { export * }
-}

@@ -69,3 +69,7 @@ ios/fastlane1/screenshots
 *.jsbundle
 localnotes.txt
 .env
+.yarn/cache
+ios/*.cer
+ios/croma.app.*.zip
+.yarn/install-state.gz

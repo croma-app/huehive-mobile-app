@@ -3,8 +3,7 @@ import { retrieveUserSession } from '../libs/EncryptedStoreage';
 import Storage from '../libs/Storage';
 
 const axiosInstance = axios.create({
-  baseURL: 'https:huehive.co/',
-  timeout: 1000,
+  baseURL: 'https://huehive.co/',
   headers: {
     accept: 'application/json',
     'Content-Type': 'application/json'

@@ -4,7 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Color from 'pigment/full';
 import { PalettePreviewCard } from '../components/PalettePreviewCard';
-import { logEvent } from '../libs/Helpers';
+import { logEvent, notifyMessage } from '../libs/Helpers';
 import { useNavigation } from '@react-navigation/native';
 import Colors from '../constants/Styles';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -68,7 +68,8 @@ function PalettesScreenAI({ route }) {
         const generatedPalettes = response.data.palettes;
         setPalettes(generatedPalettes);
       } catch (error) {
-        console.error('Error fetching AI palettes:', error);
+        //console.error('Error fetching AI palettes:', error);
+        notifyMessage("Error fetching AI palettes: " + error);
       } finally {
         setLoading(false);
       }
