@@ -1,1 +1,0 @@
-../../../../../node_modules/react-native-color-thief/ios/RNColorThief-Bridging-Header.h

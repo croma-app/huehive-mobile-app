@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import Color from 'pigment/full';
 import RNColorThief from 'react-native-color-thief';
-import Feather from 'react-native-vector-icons/Feather';
+
 import { notifyMessage, sendClientError } from '../libs/Helpers';
 import { generateRandomColorPalette } from '../libs/ColorHelper';
 import Colors from '../constants/Styles';
@@ -19,7 +19,9 @@ import ActionButtonContainer from './ActionButton';
 import { logEvent } from '../libs/Helpers';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Evillcon from 'react-native-vector-icons/EvilIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
@@ -153,7 +155,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
           [
             {
               id: 4,
-              icon: <Ionicons name="md-shuffle" size={20} />,
+              icon: <Ionicons name="shuffle" size={20} />,
               text1: t('Quick'),
               text2: t('palette'),
               onPress: () => {
@@ -174,7 +176,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
             pro.plan != 'starter'
               ? {
                   id: 6,
-                  icon: <Ionicons name="md-color-filter-outline" size={20} />,
+                  icon: <MaterialIcons name="create" size={20} />,
                   text1: t('Create palette'),
                   text2: t(' manully'),
                   onPress: () => {
@@ -184,7 +186,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                 }
               : {
                   id: 7,
-                  icon: <Feather name="unlock" size={20} />,
+                  icon: <FontAwesome5 name="unlock" size={20} />,
                   text1: t('Unlock'),
                   text2: t('Pro'),
                   onPress: () => {

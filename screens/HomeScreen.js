@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import { PaletteCard } from '../components/PaletteCard';
 import GridActionButton from '../components/GridActionButton';
-import * as Permissions from 'expo-permissions';
 import ShareMenu from 'react-native-share-menu';
 import { logEvent, notifyMessage } from '../libs/Helpers';
 import PropTypes from 'prop-types';
@@ -24,15 +23,6 @@ import useApplicationStore from '../hooks/useApplicationStore';
 const HomeScreen = function ({ navigation, route }) {
   const { isLoading, allPalettes, pro } = useApplicationStore();
   const [pickImageLoading, setPickImageLoading] = useState(false);
-
-  const getPermissionAsync = async () => {
-    if (Platform.OS === 'ios') {
-      const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
-      if (status !== 'granted') {
-        Alert.alert('Sorry, we need camera roll permissions to make this work!');
-      }
-    }
-  };
 
   useEffect(() => {
     logEvent('home_screen');
@@ -94,8 +84,6 @@ const HomeScreen = function ({ navigation, route }) {
         linkingListener.remove();
       };
     }
-
-    getPermissionAsync();
   }, [handleDeepLink, navigation]);
 
   const handleShare = useCallback(

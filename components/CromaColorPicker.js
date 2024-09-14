@@ -79,7 +79,7 @@ function CromaColorPicker(props) {
     ));
   }
   return (
-    <View props={props} style={[...props.style]}>
+    <View props={props} style={[...props?.style]}>
       <View style={styles.primaryColorsView}>
         {colorsRow1.map((color) => (
           <ColorBox
@@ -128,7 +128,7 @@ function ColorBox(props) {
     <TouchableOpacity
       onPress={props.onPress}
       props={props}
-      style={[props.style, styles.colorBox, { backgroundColor: props.color }]}>
+      style={[props?.style, styles.colorBox, { backgroundColor: props.color }]}>
       <View />
     </TouchableOpacity>
   );

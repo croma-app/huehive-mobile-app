@@ -1,1 +1,0 @@
-../../../Target Support Files/react-native-color-thief/react-native-color-thief-umbrella.h

@@ -1,1 +1,0 @@
-../../../../../node_modules/react-native-share-menu/ios/ShareMenu-Bridging-Header.h

@@ -192,7 +192,7 @@ function MenuLink(props) {
 MenuLink.propTypes = {
   id: PropTypes.string,
   link: PropTypes.string,
-  icon: PropTypes.icon,
+  // icon: PropTypes.icon,
   children: PropTypes.children
 };
 
