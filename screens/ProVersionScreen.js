@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Linking } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useTranslation } from 'react-i18next';
 import Colors, { Spacing } from '../constants/Styles';
@@ -21,6 +21,17 @@ export default function ProVersionScreen({ route }) {
     proPlus: ''
   });
 
+  const handlePaymentHelp = () => {
+    const email = 'kamal@huehive.co';
+    const subject = 'HueHive Purchase Issue';
+    const body =
+      'Hello Kamal,\n\nI am facing issues with my purchase. Please assist me.\n\n[Describe the issue here]\n\nBest regards,\n[Your Name]';
+    const url = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
+      body
+    )}`;
+
+    Linking.openURL(url).catch((err) => console.error('Failed to open email client', err));
+  };
   useEffect(() => {
     let highlightFeatureId = route.params?.highlightFeatureId;
     if (highlightFeatureId) {
@@ -83,6 +94,13 @@ export default function ProVersionScreen({ route }) {
     },
     { id: 7, feature: t('Download palettes as PNG'), starter: true, pro: true, proPlus: true },
     {
+      id: 10,
+      feature: t('AI chat assistant to create palettes'),
+      starter: true,
+      pro: true,
+      proPlus: true
+    },
+    {
       id: 8,
       feature: t('Explore AI-generated color palettes'),
       starter: false,
@@ -94,13 +112,6 @@ export default function ProVersionScreen({ route }) {
       feature: t('Add more than 4 colors to a palette'),
       starter: false,
       pro: true,
-      proPlus: true
-    },
-    {
-      id: 10,
-      feature: t('AI chat assistant to create palettes'),
-      starter: false,
-      pro: false,
       proPlus: true
     },
     { id: 11, feature: t('AI color picker'), starter: false, pro: false, proPlus: true },
@@ -228,6 +239,12 @@ export default function ProVersionScreen({ route }) {
             </View>
           )}
         </View>
+        <View style={styles.helpSection}>
+          <Text style={styles.helpText}>{t('Having trouble with purchase?')}</Text>
+          <TouchableOpacity style={styles.helpButton} onPress={handlePaymentHelp}>
+            <Text style={styles.helpButtonText}>{t('Get Help')}</Text>
+          </TouchableOpacity>
+        </View>
         <Spacer></Spacer>
       </ScrollView>
     </View>
@@ -344,5 +361,28 @@ const styles = StyleSheet.create({
   },
   currentPlanLabel: {
     backgroundColor: Colors.lightBlue
+  },
+  helpSection: {
+    marginTop: 24,
+    padding: 16,
+    backgroundColor: Colors.lightGrey,
+    borderRadius: 8,
+    alignItems: 'center'
+  },
+  helpText: {
+    fontSize: 16,
+    color: Colors.darkGrey,
+    marginBottom: 8,
+    textAlign: 'center'
+  },
+  helpButton: {
+    backgroundColor: Colors.primary,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8
+  },
+  helpButtonText: {
+    color: Colors.white,
+    fontSize: 16
   }
 });

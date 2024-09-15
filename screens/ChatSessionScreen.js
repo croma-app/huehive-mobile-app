@@ -12,11 +12,9 @@ import {
 import Colors from '../constants/Styles';
 import React, { useState, useEffect, useRef } from 'react';
 import { material } from 'react-native-typography';
-import { logEvent, planLabels } from '../libs/Helpers';
+import { logEvent } from '../libs/Helpers';
 import ChatCard from '../components/ChatCard';
-import CromaButton from '../components/CromaButton';
 import useChatSession from '../hooks/useChatSession';
-import useApplicationStore from '../hooks/useApplicationStore';
 
 // eslint-disable-next-line no-undef
 const bgImage = require('../assets/images/colorful_background.jpg');
@@ -39,7 +37,6 @@ const ChatSessionScreen = (props) => {
   const [inputText, setInputText] = useState('');
   const scrollViewRef = useRef();
 
-  const { pro } = useApplicationStore();
   const { messages, isLoading, isCreatingSession, error, createSession, followUpSession } =
     useChatSession(route.params?.messages);
 
@@ -124,40 +121,28 @@ const ChatSessionScreen = (props) => {
                 </View>
               )}
               <ActivityIndicator animating={isLoading} size="large" color="#ff7875" />
-              {pro.plan == 'proPlus' ? (
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.input}
-                    value={inputText}
-                    onChangeText={setInputText}
-                    placeholder={
-                      messages.length == 0
-                        ? 'Ex: create a color palette for kids website'
-                        : 'follow up message to change the color palette'
-                    }
-                  />
-                  <TouchableOpacity
-                    disabled={isLoading || inputText.trim() === ''}
-                    onPress={handleSendMessage}
-                    style={
-                      isLoading || inputText.trim() === ''
-                        ? styles.disableSendButton
-                        : styles.sendButton
-                    }>
-                    <Text style={styles.textSend}> Send </Text>
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <CromaButton
-                  style={{ backgroundColor: Colors.primary, margin: 10 }}
-                  textStyle={{ color: Colors.white }}
-                  onPress={() => {
-                    logEvent('chat_session_pro_button');
-                    navigation.navigate('ProVersion', { highlightFeatureId: 10 });
-                  }}>
-                  Unlock {planLabels['proPlus']} to use this feature
-                </CromaButton>
-              )}
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={styles.input}
+                  value={inputText}
+                  onChangeText={setInputText}
+                  placeholder={
+                    messages.length == 0
+                      ? 'Ex: create a color palette for kids website'
+                      : 'follow up message to change the color palette'
+                  }
+                />
+                <TouchableOpacity
+                  disabled={isLoading || inputText.trim() === ''}
+                  onPress={handleSendMessage}
+                  style={
+                    isLoading || inputText.trim() === ''
+                      ? styles.disableSendButton
+                      : styles.sendButton
+                  }>
+                  <Text style={styles.textSend}> Send </Text>
+                </TouchableOpacity>
+              </View>
             </>
           )}
         </View>
@@ -195,7 +180,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#d6e4ff',
-    // height: Dimensions.get('window').height,
     flex: 1
   },
   chat_container: {

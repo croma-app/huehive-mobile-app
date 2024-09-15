@@ -5,7 +5,9 @@ import { extractHexColors } from '../libs/Helpers';
 import { PalettePreviewCard } from './PalettePreviewCard';
 
 const ChatCard = ({ sender, message, navigation }) => {
-  const colors = extractHexColors(message);
+  const palette = extractHexColors(message);
+  const colors = palette.colors;
+  const paletteName = palette.name;
   const tokens = message.split(/(```[\s\S]+?```)|(\n)/g);
 
   return (
@@ -45,7 +47,7 @@ const ChatCard = ({ sender, message, navigation }) => {
                         return (
                           <>
                             <Text style={styles.code} key={index}>
-                              {line}
+                              {line.replace(/<\s*([^>]+)\s*>/g, '$1')}
                             </Text>
                           </>
                         );
@@ -53,9 +55,9 @@ const ChatCard = ({ sender, message, navigation }) => {
                   </View>
                   <PalettePreviewCard
                     onPress={() => {
-                      navigation.navigate('ColorList', { colors });
+                      navigation.navigate('ColorList', { colors, suggestedName: paletteName });
                     }}
-                    name="Click to save"
+                    name={paletteName || ''}
                     colors={colors}
                   />
                 </View>

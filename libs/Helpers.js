@@ -73,12 +73,14 @@ const purchase = async function (setPurchase, currentPlan, toPlan) {
     if (err.code == 'E_ALREADY_OWNED') {
       setPurchase(toPlan);
       notifyMessage('Purchase restored successfully!');
+    } else if (err.code == 'E_USER_CANCELLED') {
+      notifyMessage('Purchase cancelled ');
     } else {
       console.warn(err.code, err.message);
       notifyMessage(`Purchase unsuccessful ${err.message}`);
+      logEvent('purchase_failed', err.message);
+      sendClientError('purchase_failed', err.message + 'Error code: ' + err.code, err.stack);
     }
-    logEvent('purchase_failed', err.message);
-    sendClientError('purchase_failed', err.message + 'Error code: ' + err.code, err.stack);
   }
 };
 
@@ -231,7 +233,8 @@ function extractHexColors(text) {
       combinedHexMap[hex] = color;
     }
   }
-  return Object.values(combinedHexMap);
+  const match = text.match(/<\s*(.*?)\s*>/);
+  return { colors: Object.values(combinedHexMap), name: match ? match[1] : null };
 }
 
 function capitalizeFirstLetter(string) {
