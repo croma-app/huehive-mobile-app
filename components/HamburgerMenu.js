@@ -123,19 +123,6 @@ const HamburgerMenu = (props) => {
           <TouchableOpacity
             style={styles.menuItem}
             onPress={async () => {
-              logEvent('hm_sync_palettes');
-              navigate('SyncPalettes');
-            }}>
-            <View style={styles.menuItemView}>
-              <View style={styles.menuIcon}>
-                <MaterialIcons name="import-export" style={styles.icon} />
-              </View>
-              <Text style={styles.textAreaMenuItem}>{t('Import/Export palettes')}</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.menuItem}
-            onPress={async () => {
               logEvent('hm_chat_session_histories');
               navigate('ChatSessionHistories');
             }}>

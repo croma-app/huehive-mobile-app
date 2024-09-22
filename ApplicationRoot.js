@@ -14,7 +14,6 @@ import ColorListScreen from './screens/ColorListScreen';
 import PaletteViewScreen from './screens/PaletteViewScreen.js';
 import PaletteEditScreen from './screens/PaletteEditScreen.js';
 import ProVersionScreen from './screens/ProVersionScreen';
-import SyncPalettesScreen from './screens/SyncPalettesScreen';
 import CommonPalettesScreen from './screens/CommonPalettesScreen';
 import PaletteLibraryScreen from './screens/PaletteLibraryScreen';
 import HamburgerMenu from './components/HamburgerMenu';
@@ -120,11 +119,6 @@ export default function App() {
                   name={ROUTE_NAMES.PRO_VERSION}
                   options={{ title: t('Pro benefits') }}
                   component={ProVersionScreen}
-                />
-                <Stack.Screen
-                  name={ROUTE_NAMES.SYNC_PALETTES}
-                  options={{ title: t('Import/Export your palettes') }}
-                  component={SyncPalettesScreen}
                 />
                 <Stack.Screen name="CommonPalettes" component={CommonPalettesScreen} />
                 <Stack.Screen

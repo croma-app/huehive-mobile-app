@@ -7,7 +7,6 @@ export const ROUTE_NAMES = {
   PALETTES: 'Palettes',
   SAVE_PALETTE: 'SavePalette',
   PRO_VERSION: 'ProVersion',
-  SYNC_PALETTES: 'SyncPalettes',
   PALETTE_LIBRARY: 'PaletteLibrary',
   COLOR_LIST: 'ColorList',
   USER_PROFILE: 'UserProfile',
