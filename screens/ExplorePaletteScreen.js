@@ -89,8 +89,7 @@ export default function ExplorePaletteScreen({ navigation }) {
         <>
           <View>
             <Text style={styles.upgradeToProDesc}>
-              Exploring and searching AI generate palettes is only available in Pro and Pro plus
-              plans. Please upgrade to use this feature.
+            AI palette search is available in Pro and Pro Plus plans. Upgrade now to use
             </Text>
           </View>
           <CromaButton
