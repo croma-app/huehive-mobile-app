@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import {
   initConnection,
+  endConnection,
   purchaseErrorListener,
   purchaseUpdatedListener,
   type SubscriptionPurchase,
@@ -66,6 +67,7 @@ const useIAPConnection = () => {
       if (purchaseErrorSubscription) {
         purchaseErrorSubscription.remove();
       }
+      endConnection();
     };
   }, []);
 };
