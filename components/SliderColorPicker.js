@@ -44,7 +44,7 @@ export default function SliderColorPicker(props) {
         />
       </View>
       <View style={{ marginHorizontal: 24, marginTop: 20, height: 36, width: width - 48 }}>
-        <Text>Seturation({hsv.s.toFixed(2)})</Text>
+        <Text>Saturation({hsv.s.toFixed(2)})</Text>
         <SliderSaturationPicker
           oldColor={color}
           trackStyle={[{ height: 12, width: width - 48 }]}

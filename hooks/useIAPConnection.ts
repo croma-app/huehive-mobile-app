@@ -9,6 +9,7 @@ import {
   type PurchaseError,
   flushFailedPurchasesCachedAsPendingAndroid,
   finishTransaction,
+  ErrorCode,
 } from 'react-native-iap';
 import { notifyMessage, logEvent, sendClientError } from  '../libs/Helpers';
 // https://react-native-iap.dooboolab.com/docs/guides/purchases
@@ -51,15 +52,17 @@ const useIAPConnection = () => {
           );
           purchaseErrorSubscription = purchaseErrorListener(
             (error: PurchaseError) => {
-              sendClientError('purchase_event_error', JSON.stringify({
-                  name: error.name,
-                  message: error.message, 
-                  debugMessage: error.debugMessage, 
-                  productId: error.productId, 
-                  code: error.code,
-                  responseCode: error.responseCode
-                }));
-              logEvent('purchase_event_error');
+              if (error.code != ErrorCode.E_USER_CANCELLED) {
+                sendClientError('purchase_event_error', JSON.stringify({
+                    name: error.name,
+                    message: error.message, 
+                    debugMessage: error.debugMessage, 
+                    productId: error.productId, 
+                    code: error.code,
+                    responseCode: error.responseCode
+                  }));
+                logEvent('purchase_event_error');
+              }
             },
           );
         });

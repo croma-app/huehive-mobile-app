@@ -3521,7 +3521,7 @@ __metadata:
     react-native-encrypted-storage: "npm:^4.0.3"
     react-native-exception-handler: "npm:^2.10.10"
     react-native-fs: "npm:^2.20.0"
-    react-native-gesture-handler: "npm:^2.18.1"
+    react-native-gesture-handler: "npm:^2.19.0"
     react-native-get-random-values: "npm:^1.11.0"
     react-native-iap: "npm:^12.15.2"
     react-native-image-picker: "npm:^7.1.2"
@@ -10262,7 +10262,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-gesture-handler@npm:^2.18.1":
+"react-native-gesture-handler@npm:^2.19.0":
   version: 2.19.0
   resolution: "react-native-gesture-handler@npm:2.19.0"
   dependencies:
