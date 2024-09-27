@@ -94,13 +94,6 @@ export default function ProVersionScreen({ route }) {
     },
     { id: 7, feature: t('Download palettes as PNG'), starter: true, pro: true, proPlus: true },
     {
-      id: 10,
-      feature: t('AI chat assistant to create palettes'),
-      starter: true,
-      pro: true,
-      proPlus: true
-    },
-    {
       id: 8,
       feature: t('Explore AI-generated color palettes'),
       starter: false,
@@ -110,6 +103,13 @@ export default function ProVersionScreen({ route }) {
     {
       id: 9,
       feature: t('Add more than 4 colors to a palette'),
+      starter: false,
+      pro: true,
+      proPlus: true
+    },
+    {
+      id: 10,
+      feature: t('AI chat assistant to create palettes'),
       starter: false,
       pro: true,
       proPlus: true
