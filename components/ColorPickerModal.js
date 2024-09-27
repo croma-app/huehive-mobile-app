@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ScrollView, View, StyleSheet, TouchableOpacity, Text, TextInput } from 'react-native';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { logEvent, notifyMessage } from '../libs/Helpers';
-import SliderColorPicker from './SliderColorPicker';
+//import SliderColorPicker from './SliderColorPicker';
 import AIColorPicker from './AIColorPicker';
 import { CromaColorPicker } from './CromaColorPicker';
 import Colors from '../constants/Styles';
@@ -61,11 +61,13 @@ export default function ColorPickerModal({ initialColor, onColorSelected, onClos
       title: 'Color Wheel',
       component: <WheelColorPicker color={color} onColorChange={(color) => setColor(color)} />
     },
+    /*
     {
       key: 'HSB',
       title: 'HSB',
       component: <SliderColorPicker color={`${color}`} setColor={setColor} />
     },
+    */
     {
       key: 'AI',
       title: 'AI',
@@ -94,7 +96,12 @@ export default function ColorPickerModal({ initialColor, onColorSelected, onClos
   }, [activeTab]);
 
   return (
-    <View style={styles.container}>
+    <View
+      style={styles.container}
+      onStartShouldSetResponder={(e) => {
+        e.stopPropagation();
+        return true;
+      }}>
       <View style={styles.tabContainer}>
         {tabs.map((tab) => (
           <TouchableOpacity
@@ -109,13 +116,9 @@ export default function ColorPickerModal({ initialColor, onColorSelected, onClos
         contentContainerStyle={styles.scrollViewContent}
         scrollEnabled={activeTab !== 'wheel'} // TODO: find if there is some other way to solve this issue. - https://github.com/croma-app/huehive-mobile-app/pull/236/files#r1609216412
         showsVerticalScrollIndicator={false}>
-        <TouchableOpacity
-          onPress={(e) => {
-            e.stopPropagation();
-          }}
-          style={styles.colorPickerContainer}>
+        <View style={styles.colorPickerContainer}>
           {tabs.find((tab) => tab.key === activeTab)?.component}
-        </TouchableOpacity>
+        </View>
       </ScrollView>
       <View style={styles.bottomContainer}>
         <View style={styles.selectedColorView}>
