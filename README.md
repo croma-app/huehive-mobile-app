@@ -11,6 +11,9 @@
 - Installation: `yarn`
 - Running on android: `yarn android`
 - Running on ios: `yarn ios`
+#### IOS
+ - https://microsoft.github.io/react-native-windows/docs/rnm-getting-started
+
 
 ### Release
 

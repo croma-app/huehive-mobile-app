@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface HueHiveTests : XCTestCase
+@interface cromaTests : XCTestCase
 
 @end
 
-@implementation HueHiveTests
+@implementation cromaTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL (^)(UIView *view))test
 {
