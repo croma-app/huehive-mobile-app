@@ -1,7 +1,13 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  ActivityIndicator,
+  View,
+  TouchableOpacity,
+  Alert, Text
+} from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/Ionicons';
 import Color from 'pigment/full';
 import { PalettePreviewCard } from '../components/PalettePreviewCard';
 import { logEvent, notifyMessage } from '../libs/Helpers';
@@ -109,72 +115,133 @@ const styles = StyleSheet.create({
   }
 });
 
+// Custom button for the vertical three-dots menu
+function ThreeDotsButton({ onPress }) {
+  return (
+    <TouchableOpacity
+      style={{ justifyContent: 'center', alignItems: 'center', paddingRight: 20 }}
+      onPress={onPress}>
+      <FontAwesome name="ellipsis-v" color={Colors.primary} size={24} />
+    </TouchableOpacity>
+  );
+}
+
+// Custom Tab Bar Component
+function CustomTabBar({ state, descriptors, navigation }) {
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      {state.routes.map((route, index) => {
+        const { options } = descriptors[route.key];
+        const label =
+          options.tabBarLabel !== undefined
+            ? options.tabBarLabel
+            : options.title !== undefined
+            ? options.title
+            : route.name;
+
+        const isFocused = state.index === index;
+
+        const onPress = () => {
+          if (route.name === 'ThreeDotsMenu') {
+            // Handle Three Dots Menu Press
+            Alert.alert('Menu', 'Three dots menu pressed!');
+          } else {
+            const event = navigation.emit({
+              type: 'tabPress',
+              target: route.key,
+              canPreventDefault: true
+            });
+
+            if (!isFocused && !event.defaultPrevented) {
+              navigation.navigate(route.name);
+            }
+          }
+        };
+
+        // Special case for the Three Dots Menu
+        if (route.name === 'ThreeDotsMenu') {
+          return <ThreeDotsButton key={route.name} onPress={onPress} />;
+        }
+
+        return (
+          <TouchableOpacity
+            key={route.name}
+            accessibilityRole="button"
+            accessibilityState={isFocused ? { selected: true } : {}}
+            accessibilityLabel={options.tabBarAccessibilityLabel}
+            testID={options.tabBarTestID}
+            onPress={onPress}
+            style={{ flex: 1, alignItems: 'center', padding: 10 }}>
+            <FontAwesome
+              name={options.tabBarIcon ? options.tabBarIcon.name : 'circle'}
+              color={isFocused ? Colors.primary : '#222'}
+              size={24}
+            />
+            <Text style={{ color: isFocused ? Colors.primary : '#222' }}>{label}</Text>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+}
+
 const Tab = createBottomTabNavigator();
 
 export default function PalettesTabNavigator({ navigation, route }) {
   const hexColor = route.params.hexColor;
-  useLayoutEffect(() => {
-    navigation.setOptions({ title: hexColor });
-  }, [hexColor, navigation]);
 
   return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        headerShown: false,
-        tabBarIcon: ({ focused, color, size }) => {
-          if (route.name === 'Color Theory') {
-            return (
-              <Icon
-                name="color-palette"
-                size={size}
-                color={focused ? Colors.primary : color} // Highlight the selected tab
-                style={{
-                  shadowColor: focused ? Colors.primary : '#000',
-                  shadowOpacity: 0.2,
-                  shadowRadius: 10
-                }}
-              />
-            );
-          } else if (route.name === 'AI') {
-            return (
-              <FontAwesome
-                name="magic"
-                size={size}
-                color={focused ? Colors.primary : color} // Highlight the selected tab
-                style={{
-                  shadowColor: focused ? Colors.primary : '#000',
-                  shadowOpacity: 0.2,
-                  shadowRadius: 10
-                }}
-              />
-            );
+    <View style={{ flex: 1 }}>
+      <Tab.Navigator
+        tabBar={(props) => <CustomTabBar {...props} />} // Use the custom tab bar
+        screenOptions={{
+          headerShown: false,
+          tabBarStyle: {
+            backgroundColor: '#ffffff',
+            borderTopWidth: 0,
+            elevation: 10,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 5 },
+            shadowOpacity: 0.1,
+            shadowRadius: 10,
+            paddingBottom: 10,
+            paddingTop: 10,
+            height: 60
+          },
+          tabBarActiveTintColor: Colors.primary,
+          tabBarInactiveTintColor: Colors.gray,
+          tabBarLabelStyle: {
+            fontSize: 12,
+            fontWeight: '600'
           }
-        },
-        tabBarStyle: {
-          backgroundColor: '#ffffff',
-          borderTopWidth: 0,
-          elevation: 10,
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 5 },
-          shadowOpacity: 0.1,
-          shadowRadius: 10,
-          paddingBottom: 10,
-          paddingTop: 10,
-          height: 60
-        },
-        tabBarActiveTintColor: Colors.primary,
-        tabBarInactiveTintColor: Colors.gray,
-        tabBarLabelStyle: {
-          fontSize: 12, // Slightly larger font size for better readability
-          fontWeight: '600' // Bold text for the labels
-        }
-      })}>
-      <Tab.Screen
-        name="Color Theory"
-        component={PalettesScreen}
-        initialParams={{ hexColor: hexColor }}
-      />
-      <Tab.Screen name="AI" component={PalettesScreenAI} initialParams={{ hexColor: hexColor }} />
-    </Tab.Navigator>
+        }}>
+        <Tab.Screen
+          name="Color Theory"
+          component={PalettesScreen}
+          initialParams={{ hexColor: hexColor }}
+          options={{
+            tabBarLabel: 'Color Theory',
+            tabBarIcon: { name: 'color-palette' }
+          }}
+        />
+        <Tab.Screen
+          name="AI"
+          component={PalettesScreenAI}
+          initialParams={{ hexColor: hexColor }}
+          options={{
+            tabBarLabel: 'AI',
+            tabBarIcon: { name: 'magic' }
+          }}
+        />
+        <Tab.Screen
+          name="ThreeDotsMenu"
+          component={PalettesScreenAI} // Placeholder component; replace if needed
+          options={{
+            tabBarLabel: '', // Hide the label for the three dots menu
+            tabBarIcon: { name: 'ellipsis-v' }
+          }}
+        />
+      </Tab.Navigator>
+    </View>
   );
 }
