@@ -7,7 +7,6 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  Dimensions
 } from 'react-native';
 import Color from 'pigment/full';
 import RNColorThief from 'react-native-color-thief';
@@ -281,19 +280,26 @@ export default GridActionButtonAndroid;
 
 const styles = {
   modalOverlay: {
-    height: Dimensions.get('window').height - 56,
-    backgroundColor: Colors.overlay,
-    justifyContent: 'flex-end'
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
   },
   modalContent: {
     backgroundColor: 'white',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    padding: 20
+    height: '50%',
+    width: '100%',
+    position: 'absolute',
+    bottom: 0
   },
   colorPickerModalContent: {
-    height: Dimensions.get('window').height / 2,
-    justifyContent: 'flex-end'
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    height: '50%',
+    width: '100%',
+    position: 'absolute',
+    bottom: 0
   },
   previewImage: {
     height: 200,
