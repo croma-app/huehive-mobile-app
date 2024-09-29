@@ -107,5 +107,6 @@
   "resolutions": {
     "styled-components": "^5",
     "react-native-share-menu@^6.0.0": "patch:react-native-share-menu@npm%3A6.0.0#./.yarn/patches/react-native-share-menu-npm-6.0.0-f1094c3204.patch"
-  }
+  },
+  "packageManager": "yarn@3.6.4"
 }
