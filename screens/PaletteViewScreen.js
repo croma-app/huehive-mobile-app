@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import MultiColorView from '../components/MultiColorView';
 import { Spacing } from '../constants/Styles';
 import { logEvent } from '../libs/Helpers';
@@ -10,6 +10,8 @@ import { ColorDetailItems } from '../components/ColorDetails';
 import Colors from '../constants/Styles';
 import CromaButton from '../components/CromaButton';
 import { useTranslation } from 'react-i18next';
+import { ScrollView } from 'react-native-gesture-handler';
+import Spacer from '../components/Spacer';
 export default function PaletteViewScreen({ navigation, route }) {
   const { allPalettes, pro } = useApplicationStore();
   const { t } = useTranslation();
@@ -44,33 +46,32 @@ export default function PaletteViewScreen({ navigation, route }) {
   };
 
   return (
-    <>
-      <View style={styles.container}>
-        <View
-          style={{
-            flexDirection: 'column',
-            padding: 6,
-            backgroundColor: Colors.white,
-            borderRadius: 8,
-            marginTop: 8
-          }}>
-          <View style={backgroundColor}></View>
-          <ColorDetailItems colorName={colorName} color={color} />
-          <View style={{ paddingTop: 8 }}>
-            <MultiColorView
-              colors={colorsToShow}
-              selectedColor={selectedColor}
-              setSelectedColor={setSelectedColor}></MultiColorView>
-          </View>
+      <><ScrollView style={styles.container}>
+      <View
+        style={{
+          flexDirection: 'column',
+          padding: 6,
+          backgroundColor: Colors.white,
+          borderRadius: 8,
+          marginTop: 8
+        }}>
+        <View style={backgroundColor}></View>
+        <ColorDetailItems colorName={colorName} color={color} />
+        <View style={{ paddingTop: 8 }}>
+          <MultiColorView
+            colors={colorsToShow}
+            selectedColor={selectedColor}
+            setSelectedColor={setSelectedColor}></MultiColorView>
         </View>
       </View>
-      <View style={styles.buttonsContainer}>
+      <Spacer />
+    </ScrollView><View style={styles.buttonsContainer}>
         <CromaButton
           textStyle={{ color: Colors.primary }}
           style={styles.buttonSecondary}
           onPress={() => {
             navigation.navigate('Palettes', { hexColor: color });
-          }}>
+          } }>
           <View style={{ alignItems: 'center' }}>
             <Text style={{ fontSize: 14 }}>{t('Generate Palettes')}</Text>
             <Text style={{ fontSize: 8, color: Colors.grey, textAlign: 'center' }}>
@@ -84,11 +85,11 @@ export default function PaletteViewScreen({ navigation, route }) {
           style={styles.buttonPrimary}
           onPress={() => {
             navigation.navigate('PaletteEdit', { paletteId });
-          }}>
+          } }>
           {t('Edit')}
         </CromaButton>
-      </View>
-    </>
+      </View></>
+    
   );
 }
 

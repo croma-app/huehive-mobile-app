@@ -4,6 +4,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useHeaderHeight } from '@react-navigation/elements';
 import Colors, { Spacing } from '../constants/Styles';
 import * as Animatable from 'react-native-animatable';
+import FloatingActionButton from './FloatingActionButton';
 
 const VerticalLine = () => <View style={styles.verticalLine} />;
 
@@ -25,9 +26,11 @@ const ActionButtonContainer = ({ config }) => {
   const headerHeight = useHeaderHeight();
   const screenHeight = Dimensions.get('window').height;
 
+  const availableHeight = screenHeight - headerHeight - 56; // TODO: Find a better way to calculate available height. This is a hack for quick fix.
+  
   return active ? (
     <TouchableOpacity
-      style={[styles.actionButtonContainer, { height: screenHeight - headerHeight }]}
+      style={[styles.actionButtonContainer, { height: availableHeight }]}
       onPress={() => setActive(false)}>
       <View style={[styles.actionButton, styles.actionButtonClose]}>
         <Animatable.View duration={300} animation={rotateAnimation}>
@@ -57,13 +60,14 @@ const ActionButtonContainer = ({ config }) => {
         ))}
       </Animatable.View>
     </TouchableOpacity>
-  ) : (
-    <TouchableOpacity
-      onPress={() => setActive(true)}
-      style={[styles.actionButton, styles.actionButtonOpen]}>
-      <AntDesign name="plus" color="#fff" size={24} />
-    </TouchableOpacity>
-  );
+  ) : 
+    (
+      <FloatingActionButton
+      onPress={() => {
+        setActive(true);
+      }} /> 
+    );
+    
 };
 
 const styles = StyleSheet.create({
@@ -88,18 +92,6 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     width: 56,
     height: 56
-  },
-  actionButtonOpen: {
-    position: 'absolute',
-    bottom: 40,
-    right: 30,
-    backgroundColor: Colors.primary,
-    zIndex: 2,
-    elevation: 5,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.8,
-    shadowRadius: 1
   },
   actionButtonClose: {
     alignSelf: 'flex-end',

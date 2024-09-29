@@ -29,6 +29,7 @@ import ColorPickerModal from './ColorPickerModal';
 import useApplicationStore from '../hooks/useApplicationStore';
 import MultiColorView from './MultiColorView';
 
+
 const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   const { t } = useTranslation();
   const [isColorPickerVisible, setIsColorPickerVisible] = React.useState(false);
@@ -280,7 +281,7 @@ export default GridActionButtonAndroid;
 
 const styles = {
   modalOverlay: {
-    height: Dimensions.get('window').height,
+    height: Dimensions.get('window').height - 56,
     backgroundColor: Colors.overlay,
     justifyContent: 'flex-end'
   },
