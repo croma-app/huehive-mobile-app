@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import MultiColorView from '../components/MultiColorView';
 import { Spacing } from '../constants/Styles';
 import { logEvent } from '../libs/Helpers';
