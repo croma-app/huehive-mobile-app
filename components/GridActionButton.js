@@ -7,6 +7,7 @@ import {
   Text,
   Image,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import Color from 'pigment/full';
 import RNColorThief from 'react-native-color-thief';
@@ -16,9 +17,8 @@ import { generateRandomColorPalette } from '../libs/ColorHelper';
 import Colors from '../constants/Styles';
 import ActionButtonContainer from './ActionButton';
 import { logEvent } from '../libs/Helpers';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Evillcon from 'react-native-vector-icons/EvilIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -116,86 +116,90 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
     });
     navigation.navigate('ColorList', { colors: randomColors });
   };
+  const actionButtonConfig = [
+    [
+      Platform.OS === 'android'
+        ? {
+            id: 1,
+            icon: <MaterialCommunityIcons name="camera" size={20} />,
+            text1: 'Palette',
+            text2: 'using camera',
+            onPress: async () => {
+              const pickedColors = await NativeModules.CromaModule.navigateToColorPicker();
+              logEvent('hm_pick_text_colors_from_camera', {
+                length: pickedColors.length
+              });
+              navigation.navigate('ColorList', { colors: JSON.parse(pickedColors)?.colors });
+            }
+          }
+        : null, // Camera option not available on iOS
+      {
+        id: 2,
+        icon: <MaterialCommunityIcons name="image" size={20} />,
+        text1: t('Palette'),
+        text2: t('using image'),
+        onPress: handleImagePicker
+      },
+      {
+        id: 3,
+        icon: <MaterialIcons name="palette" size={20} />,
+        text1: t('Palette'),
+        text2: t('using color'),
+        onPress: () => {
+          logEvent('get_palette_from_color');
+          setIsColorPickerVisible(true);
+        }
+      }
+    ].filter(Boolean),
+    [
+      {
+        id: 4,
+        icon: <MaterialCommunityIcons name="shuffle-variant" size={20} />,
+        text1: t('Quick'),
+        text2: t('palette'),
+        onPress: () => {
+          logEvent('generate_random_colors');
+          handleRandomColors();
+        }
+      },
+      {
+        id: 5,
+        icon: <FontAwesome name="magic" size={20} />,
+        text1: t('Palette using'),
+        text2: t('HueHive ai'),
+        onPress: async () => {
+          logEvent('chat_session_action_button');
+          navigation.navigate('ChatSession');
+        }
+      },
+      Platform.OS == 'android' ? (
+      pro.plan !== 'starter'
+        ? {
+            id: 6,
+            icon: <MaterialIcons name="create" size={20} />,
+            text1: t('Create palette'),
+            text2: t(' manually'),
+            onPress: () => {
+              logEvent('create_new_palette');
+              navigation.navigate('SavePalette');
+            }
+          }
+        : {
+            id: 7,
+            icon: <FontAwesome5 name="unlock" size={20} />,
+            text1: t('Unlock'),
+            text2: t('Pro'),
+            onPress: () => {
+              logEvent('home_screen_pro_button');
+              navigation.navigate('ProVersion');
+            }
+          }) : null
+    ].filter(Boolean)
+  ];
   return (
     <>
       <ActionButtonContainer
-        config={[
-          [
-            {
-              id: 1,
-              icon: <Evillcon name="camera" size={20} />,
-              text1: 'Palette',
-              text2: 'using camera',
-              onPress: async () => {
-                const pickedColors = await NativeModules.CromaModule.navigateToColorPicker();
-                logEvent('hm_pick_text_colors_from_camera', {
-                  length: pickedColors.length
-                });
-                navigation.navigate('ColorList', { colors: JSON.parse(pickedColors)?.colors });
-              }
-            },
-            {
-              id: 2,
-              icon: <Evillcon name="image" size={20} />,
-              text1: t('Palette'),
-              text2: t('using image'),
-              onPress: handleImagePicker
-            },
-            {
-              id: 3,
-              icon: <Ionicons name="color-palette-outline" size={20} />,
-              text1: t('Palette'),
-              text2: t('using color'),
-              onPress: () => {
-                logEvent('get_palette_from_color');
-                setIsColorPickerVisible(true);
-              }
-            }
-          ],
-          [
-            {
-              id: 4,
-              icon: <Ionicons name="shuffle" size={20} />,
-              text1: t('Quick'),
-              text2: t('palette'),
-              onPress: () => {
-                logEvent('generate_random_colors');
-                handleRandomColors();
-              }
-            },
-            {
-              id: 5,
-              icon: <FontAwesome name="magic" size={20} />,
-              text1: t('Palette using'),
-              text2: t('HueHive ai'),
-              onPress: async () => {
-                logEvent('chat_session_action_button');
-                navigation.navigate('ChatSession');
-              }
-            },
-            pro.plan != 'starter'
-              ? {
-                  id: 6,
-                  icon: <MaterialIcons name="create" size={20} />,
-                  text1: t('Create palette'),
-                  text2: t(' manully'),
-                  onPress: () => {
-                    logEvent('create_new_palette');
-                    navigation.navigate('SavePalette');
-                  }
-                }
-              : {
-                  id: 7,
-                  icon: <FontAwesome5 name="unlock" size={20} />,
-                  text1: t('Unlock'),
-                  text2: t('Pro'),
-                  onPress: () => {
-                    logEvent('home_screen_pro_button');
-                    navigation.navigate('ProVersion');
-                  }
-                }
-          ]
-        ]}></ActionButtonContainer>
+        config={actionButtonConfig} />
       <Modal
         visible={isColorPickerVisible}
         animationType="slide"
@@ -230,7 +234,7 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
           }}>
           <View style={styles.modalOverlay}>
             <TouchableWithoutFeedback>
-              <View style={styles.modalContent}>
+              <View style={styles.imageColorPreviewModelContent}>
                 {selectedImage && (
                   <Image source={{ uri: selectedImage.uri }} style={styles.previewImage} />
                 )}
@@ -242,14 +246,14 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                     justifyContent: 'space-between',
                     height: 230
                   }}>
-                  <View style={styles.colorPreviewContainer}>
+                  <View style={styles.imageColorPreviewModelContent}>
                     <MultiColorView colors={automaticColors}></MultiColorView>
                   </View>
                   <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
                     <Text style={styles.nextButtonText}>{t('Next')}</Text>
-                    <Ionicons name="arrow-forward" size={24} color={Color.primaryDark} />
+                    <MaterialIcons name="arrow-forward" size={24} color={Color.primaryDark} />
                   </TouchableOpacity>
-                  <View
+                  {Platform.OS == 'android' && (<><View
                     style={{
                       flexDirection: 'row',
                       alignItems: 'center'
@@ -261,7 +265,10 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                   <TouchableOpacity style={styles.pickColorsButton} onPress={handlePickColors}>
                     <Text style={styles.pickColorsButtonText}>{t('Pick colors Manually')}</Text>
                   </TouchableOpacity>
+                  </>
+                  )}
                 </View>
+                  
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -292,7 +299,7 @@ const styles = {
     position: 'absolute',
     bottom: 0
   },
-  colorPickerModalContent: {
+  imageColorPreviewModelContent: {
     backgroundColor: 'white',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -302,9 +309,9 @@ const styles = {
     bottom: 0
   },
   previewImage: {
-    height: 200,
+    height: 150,
     resizeMode: 'contain',
-    marginBottom: 20
+    marginHorizontal: 20,
   },
   colorPreviewContainer: {
     display: 'flex',
