@@ -9,8 +9,10 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '18.x'
-      - name: Setup Yarn
-        run: corepack prepare yarn@stable --activate
+      - name: Install Latest Yarn (v3 or v4)
+        run: |
+          npm install -g yarn@berry
+          yarn set version stable  # This ensures you get the latest stable release (v4.x.x)
       - uses: actions/checkout@v2
       - name: Install npm dependencies
         run: |
