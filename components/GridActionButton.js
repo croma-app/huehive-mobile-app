@@ -239,14 +239,8 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
                   <Image source={{ uri: selectedImage.uri }} style={styles.previewImage} />
                 )}
 
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    height: 230
-                  }}>
-                  <View style={styles.imageColorPreviewModelContent}>
+                <View style={styles.imageActionArea}>
+                  <View style={styles.imageExtractedColorPreview}>
                     <MultiColorView colors={automaticColors}></MultiColorView>
                   </View>
                   <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
@@ -303,7 +297,26 @@ const styles = {
     backgroundColor: 'white',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+    paddingTop: 8,
     height: '50%',
+    width: '100%',
+    position: 'absolute',
+    bottom: 0
+  },
+  imageActionArea: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    height: 120
+  },
+  imageExtractedColorPreview: {
+    margin: 16,
+  },
+  colorPickerModalContent: {
+    backgroundColor: 'white',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    height: '60%',
     width: '100%',
     position: 'absolute',
     bottom: 0
@@ -326,7 +339,8 @@ const styles = {
     margin: 5
   },
   pickColorsButton: {
-    alignItems: 'center'
+    alignItems: 'center',
+    marginVertical: 8,
   },
   pickColorsButtonText: {
     fontSize: 18,
@@ -338,10 +352,10 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 5,
-    marginLeft: 10,
+    marginHorizontal: 16,
+    marginBottom: 8,
     borderWidth: 1,
     borderColor: Colors.primary
   },
