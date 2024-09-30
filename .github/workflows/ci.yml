@@ -9,10 +9,10 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '18.x'
-      - name: Install Latest Yarn (v3 or v4)
+      - name: Setup Yarn (v2 or later using Corepack)
         run: |
-          npm install -g yarn@berry
-          yarn set version stable  # This ensures you get the latest stable release (v4.x.x)
+          corepack enable
+          corepack prepare yarn@stable --activate  # This is causing the issue
       - uses: actions/checkout@v2
       - name: Install npm dependencies
         run: |
