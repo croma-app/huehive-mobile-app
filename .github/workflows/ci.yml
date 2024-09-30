@@ -12,7 +12,7 @@ jobs:
       - name: Setup Yarn (v2 or later using Corepack)
         run: |
           corepack enable
-          corepack prepare yarn@stable --activate  # This is causing the issue
+          corepack prepare yarn@4.4.1 --activate
       - uses: actions/checkout@v2
       - name: Install npm dependencies
         run: |
