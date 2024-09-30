@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Color from 'pigment/full';
 import { PalettePreviewCard } from '../components/PalettePreviewCard';
 import { logEvent, notifyMessage } from '../libs/Helpers';
@@ -124,8 +124,8 @@ export default function PalettesTabNavigator({ navigation, route }) {
         tabBarIcon: ({ focused, color, size }) => {
           if (route.name === 'Color Theory') {
             return (
-              <Icon
-                name="color-palette"
+              <MaterialCommunityIcons
+                name="palette-swatch-variant"
                 size={size}
                 color={focused ? Colors.primary : color} // Highlight the selected tab
                 style={{

@@ -28,8 +28,7 @@ Pods/
 *.xcdebugger/
 *.xcuserdatad/
 *.xcuserdatad/*
-.xcodeproj/
-.xcschemes/
+
 
 # Ignore Carthage dependencies if used (optional)
 Carthage/
@@ -42,7 +41,7 @@ fastlane/test_output/
 
 # Ignore SPM (Swift Package Manager) artifacts
 .swiftpm/
-Package.resolved
+
 
 # Ignore React Native caches
 node_modules/

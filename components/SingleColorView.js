@@ -40,9 +40,7 @@ export const SingleColorView = ({
   };
 
   const handleCopyColor = () => {
-    if (Platform?.OS === 'android' || Platform.OS === 'ios') {
-      notifyMessage(color.color + ' copied to clipboard!');
-    }
+    notifyMessage(color.color + ' copied to clipboard!');
     Clipboard.setString(color.color);
     closeModal();
   };

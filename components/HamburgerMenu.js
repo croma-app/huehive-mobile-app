@@ -91,7 +91,7 @@ const HamburgerMenu = (props) => {
                   : 'https://apps.apple.com/app/id1596763657?action=write-review'
               }
               icon={<MaterialIcons name="star-outline" style={styles.icon} />}>
-              {t('Rate us on playstore')}
+              {t('Rate us on ' + (Platform.OS == 'android' ? 'PlayStore' : "AppStore"))}
             </MenuLink>
           }
           <TouchableOpacity
