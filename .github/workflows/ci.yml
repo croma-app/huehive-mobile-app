@@ -4,7 +4,6 @@ on: [push, pull_request]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-node@v1
@@ -15,7 +14,6 @@ jobs:
         with:
           version: 4.4.1
           cache: false
-      runs-on: ubuntu-latest
       - uses: actions/checkout@v2
       - name: Install npm dependencies
         run: |
