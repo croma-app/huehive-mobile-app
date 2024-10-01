@@ -214,7 +214,8 @@ const styles = StyleSheet.create({
   },
   bottomContainerPreviewArea: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingVertical: 12
   },
   doneButton: {
     backgroundColor: Colors.primary,
