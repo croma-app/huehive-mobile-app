@@ -33,7 +33,6 @@ iOS is not fully automated yet. From your local
 cd ios
 fastlane beta
 ```
-Update 
 
 ### Web
 
