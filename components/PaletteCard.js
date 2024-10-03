@@ -136,7 +136,7 @@ export const PaletteCard = (props) => {
   
       const shareMessage = `HueHive - Palette Manager\nColors:\n${colors
         .map((colorObj) => colorObj.color)
-        .join('\n')}\n\n${paletteUrl}`;
+        .join('\n')}\n`;
   
       const shareOptions = {
         title: 'Share Palette',
