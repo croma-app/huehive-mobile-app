@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import Storage from '../libs/Storage';
 import { initPurchase, notifyMessage } from '../libs/Helpers';
-import { Platform } from 'react-native';
 import { t } from 'i18next';
 import network from '../network';
 
@@ -85,11 +84,10 @@ const useApplicationStore = create((set) => ({
       await Storage.setUserAlreadyExists();
       await Storage.setUserDeviceId();
     }
-    Platform.OS === 'android' &&
-      (await initPurchase(
+    await initPurchase(
         useApplicationStore.getState().setPurchase,
         /* showMessage=*/ !isUserAlreadyExits
-      ));
+      );
     const allPalettes = await useApplicationStore.getState().loadPalettes();
     set({ allPalettes, isLoading: false });
   },

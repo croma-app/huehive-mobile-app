@@ -120,20 +120,22 @@ const HamburgerMenu = (props) => {
               <Text style={[styles.textAreaMenuItem]}>{t('About us')}</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.menuItem}
-            onPress={async () => {
-              logEvent('hm_chat_session_histories');
-              navigate('ChatSessionHistories');
-            }}>
-            <View style={styles.menuItemView}>
-              <View style={styles.menuIcon}>
-                <MaterialCommunityIcons name="history" style={styles.icon} />
+          { Platform.OS == 'android' && // right now histories requires login. That's why enabling it in only android.
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={async () => {
+                logEvent('hm_chat_session_histories');
+                navigate('ChatSessionHistories');
+              }}>
+              <View style={styles.menuItemView}>
+                <View style={styles.menuIcon}>
+                  <MaterialCommunityIcons name="history" style={styles.icon} />
+                </View>
+                <Text style={styles.textAreaMenuItem}>{t('Huehive AI chat history')}</Text>
               </View>
-              <Text style={styles.textAreaMenuItem}>{t('Huehive AI chat history')}</Text>
-            </View>
-          </TouchableOpacity>
-          {!userData && (
+            </TouchableOpacity>
+          }
+          {(Platform.OS == 'android' && !userData) && (
             <TouchableOpacity
               style={styles.menuItem}
               onPress={async () => {
