@@ -63,9 +63,13 @@ const purchase = async function (setPurchase, currentPlan, toPlan) {
   try {
     const productSKU = planToSKUMapping[currentPlan][toPlan];
     await getProducts({ skus: [productSKU] });
-    await requestPurchase({
-      skus: [productSKU]
-    });
+    const requestPurchaseParam = Platform.OS == 'android' ? {
+      skus: [productSKU],
+    } : {
+      sku: productSKU,
+      andDangerouslyFinishTransactionAutomaticallyIOS: true
+    };
+    await requestPurchase(requestPurchaseParam);
     await setPurchase(toPlan);
     logEvent('purchase_successful');
     notifyMessage('Congrats, You are now a pro user!');
