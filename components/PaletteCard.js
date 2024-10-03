@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
 import * as React from 'react';
 import { useState } from 'react';
+import Share from 'react-native-share';
 import { StyleSheet, View, Text, Platform, TouchableOpacity } from 'react-native';
 import Card from './Card';
 import Colors from '../constants/Styles';
-import { Share, PermissionsAndroid } from 'react-native';
-
+import {  PermissionsAndroid } from 'react-native';
 import MultiColorView from './MultiColorView';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
@@ -14,8 +14,6 @@ import ViewShot from 'react-native-view-shot';
 import { UndoDialog } from '../components/CommonDialogs';
 
 import RNFS from 'react-native-fs';
-import { t } from 'i18next';
-import RNFetchBlob from 'rn-fetch-blob';
 
 import PropTypes from 'prop-types';
 import { Menu, MenuItem } from 'react-native-material-menu';
@@ -52,7 +50,6 @@ export const PaletteCard = (props) => {
   let timer = React.useRef(null);
 
   const deletePaletteLocal = React.useCallback(() => {
-    hideMenu();
     setIsDeleteActive(true);
     timer.current = setTimeout(() => {
       deletePalette(paletteId);
@@ -67,47 +64,63 @@ export const PaletteCard = (props) => {
 
   const onDownload = async () => {
     logEvent('home_screen_palette_card_download', colors.length + '');
+    
     try {
       const uri = await viewShotRef.current.capture();
       let granted = Platform.OS == 'ios';
-      if (Platform.OS == 'android') {
-        // Download works without this permission also in some devices. Need to explore this more. For now keeping it for the safer side. Will monitor events and errors.
-        await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
-          title: 'Storage Permission Required',
-          message: 'This app needs access to your storage to export color palette to png image.',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK'
-        });
+      
+      if (Platform.OS === 'android') {
+        granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Storage Permission Required',
+            message: 'This app needs access to your storage to export color palette to png image.',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
       }
+  
       const downloadPath =
         Platform.OS === 'ios' ? RNFS.DocumentDirectoryPath : RNFS.DownloadDirectoryPath;
-
+  
       let path = downloadPath + '/' + name + '.png';
       const isFileExists = await RNFS.exists(path);
+      
       if (isFileExists) {
         path = downloadPath + '/' + name + Math.floor(Math.random() * 100000) + '.png';
       }
-      // write a new file
+      
+      // Save the captured image to the device
       await RNFS.copyFile(uri, path);
-      if (Platform.OS == 'android') {
-        RNFetchBlob.android.addCompleteDownload({
-          title: name,
-          description: t('Download complete'),
-          mime: 'image/png',
-          path: path,
-          showNotification: true
+  
+      const shareOptions = {
+        title: 'Share Palette Image',
+        url: `file://${path}`, // The file path to be shared
+        type: 'image/png',
+        failOnCancel: false,
+      };
+  
+      // Share the file using react-native-share
+      Share.open(shareOptions)
+        .then((res) => {
+          console.log('Share response: ', res);
+          notifyMessage('Palette shared successfully.');
+        })
+        .catch((err) => {
+          console.log('Error while sharing: ', err);
+          if (err && err.message) {
+            notifyMessage('Error: ' + err.message);
+          }
+          sendClientError('home_screen_palette_card_download', err.toString());
         });
-        notifyMessage('Palette exported. Check download status in notifications.');
-      }
-      if (Platform.OS == 'ios') {
-        await RNFetchBlob.ios.previewDocument(path);
-      }
-
+      
       if (!granted) {
         sendClientError('home_screen_palette_card_download', 'Permission denied for storage');
       }
     } catch (error) {
+      console.error('Error during download: ', error);
       notifyMessage('Error: ' + error.toString());
       sendClientError('home_screen_palette_card_download', error.toString());
     }
@@ -116,27 +129,34 @@ export const PaletteCard = (props) => {
   const onShare = async () => {
     try {
       logEvent('home_screen_palette_card_share', colors.length + '');
-      // https://huehive.co/color_palettes/f8a6a1-dcdcdc-f2b3ad-e0e0e0-aec6cf-c4c4c4
-      const result = await Share.share({
-        message: `HueHive - Palette Manager\nColors:\n${colors
-          .map((colorObj) => colorObj.color)
-          .join('\n')}
-
-          https://huehive.co/color_palettes/${colors
-            .map((colorObj) => colorObj.color.replace('#', '').toLowerCase())
-            .join('-')}?name=${encodeURIComponent(name)}`
-      });
-
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
+  
+      const paletteUrl = `https://huehive.co/color_palettes/${colors
+        .map((colorObj) => colorObj.color.replace('#', '').toLowerCase())
+        .join('-')}?name=${encodeURIComponent(name)}`;
+  
+      const shareMessage = `HueHive - Palette Manager\nColors:\n${colors
+        .map((colorObj) => colorObj.color)
+        .join('\n')}\n\n${paletteUrl}`;
+  
+      const shareOptions = {
+        title: 'Share Palette',
+        message: shareMessage,
+        url: paletteUrl,
+        failOnCancel: false,
+      };
+  
+      // Use react-native-share to open the share dialog
+      const result = await Share.open(shareOptions);
+  
+      if (result) {
+        console.log('Shared successfully:', result);
+        // Handle result based on platform-specific response, if necessary
+      } else {
+        console.log('Share dismissed or failed');
       }
+      hideMenu();
     } catch (error) {
+      console.error('Error while sharing: ', error);
       notifyMessage('Error while sharing: ' + error.message);
       sendClientError('home_screen_palette_card_share', error.toString());
     }
@@ -167,10 +187,19 @@ export const PaletteCard = (props) => {
                 visible={visible}
                 anchor={<MenuAnchor onPress={showMenu} />}
                 onRequestClose={hideMenu}>
-                <MenuItemWrapper onPress={onShare} icon="share" label="Share" />
-                <MenuItemWrapper onPress={onDownload} icon="download" label="Export" />
+                <MenuItemWrapper onPress={ () => {
+                  //hideMenu();
+                  onShare();
+
+                }} icon="share" label="Share" />
+                {Platform.OS == 'android' && <MenuItemWrapper onPress={ () => { // It is not working in iOS. Need to debug and enable it.
+                  hideMenu();
+                  onDownload();
+                }} icon="download" label="Export" />
+                }
                 <MenuItemWrapper
                   onPress={() => {
+                    hideMenu();
                     logEvent('home_screen_palette_card_delete');
                     setAnimationType('fadeOutRightBig');
                     setTimeout(() => {
@@ -182,6 +211,7 @@ export const PaletteCard = (props) => {
                 />
                 <MenuItemWrapper
                   onPress={() => {
+                    hideMenu();
                     logEvent('home_screen_open_in_generator');
                     navigation.navigate('ColorList', { colors: colors });
                   }}
@@ -190,6 +220,7 @@ export const PaletteCard = (props) => {
                 />
                 <MenuItemWrapper
                   onPress={() => {
+                    hideMenu();
                     navigation.navigate('PaletteEdit', { paletteId });
                   }}
                   icon="edit"

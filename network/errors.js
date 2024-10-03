@@ -17,7 +17,7 @@ export const sendClientErrorAsync = (errorMessage, backtrace) => {
           message: errorMessage,
           deviceInfo: deviceInfo
         }),
-        source: 'android-app',
+        source: Platform.OS + '-app',
         backtrace: backtrace
       };
 

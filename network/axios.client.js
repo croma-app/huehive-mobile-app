@@ -13,9 +13,11 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(async (config) => {
   const userAuthInfo = await retrieveUserSession();
   const userDeviceId = await Storage.getUserDeviceId();
+  if (!userDeviceId?.trim() || userAuthInfo?.email) throw new Error("Device ID or auth is not defined, null, or empty.");
+
   config.headers['X-User-Email'] = userAuthInfo?.email || null;
   config.headers['X-User-Token'] = userAuthInfo?.token || null;
-  config.headers['X-User-Device-Id'] = userDeviceId || null;
+  config.headers['X-User-Device-Id'] = userDeviceId;
 
   return config;
 });

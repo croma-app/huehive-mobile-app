@@ -154,7 +154,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
+    paddingBottom: 8,
   },
   sideMenuIcon: {
     fontSize: 25,
