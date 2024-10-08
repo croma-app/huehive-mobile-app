@@ -38,6 +38,7 @@
     "react-native-draggable-flatlist": "^4.0.1",
     "react-native-encrypted-storage": "^4.0.3",
     "react-native-exception-handler": "^2.10.10",
+    "react-native-flash-message": "^0.4.2",
     "react-native-fs": "^2.20.0",
     "react-native-gesture-handler": "^2.19.0",
     "react-native-get-random-values": "^1.11.0",

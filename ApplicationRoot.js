@@ -29,6 +29,8 @@ import UserProfile from './screens/UserProfileScreen.js';
 import useApplicationStore from './hooks/useApplicationStore.js';
 import ExplorePaletteScreen from './screens/ExplorePaletteScreen.js';
 import { notifyMessage } from './libs/Helpers.js';
+import FlashMessage from "react-native-flash-message";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -148,6 +150,7 @@ export default function App() {
             </AppAuthProvider>
           </NavigationContainer>
         </View>
+        <FlashMessage position="top" />
       </SideMenu>
     </GestureHandlerRootView>
   );

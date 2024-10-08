@@ -2,6 +2,9 @@ import { NativeModules, Platform, Alert, ToastAndroid } from 'react-native';
 import * as RNIap from 'react-native-iap';
 import { requestPurchase, getProducts } from 'react-native-iap';
 import { sendClientErrorAsync } from '../network/errors';
+import { showMessage } from "react-native-flash-message";
+import Colors from '../constants/Styles';
+
 
 const isProduction = () => {
   // eslint-disable-next-line no-undef
@@ -181,12 +184,12 @@ const getPlanPrice = async (currentPlan, toPlans) => {
   }
 };
 
-function notifyMessage(msg, duration = ToastAndroid.LONG) {
-  if (Platform.OS === 'android') {
-    ToastAndroid.show(msg, duration);
-  } else {
-    Alert.alert(msg);
-  }
+function notifyMessage(msg) {
+  showMessage({
+    message: msg,
+    backgroundColor: Colors.primary,
+    duration: 3000,
+  });
 }
 
 function extractHexColors1(text) {
