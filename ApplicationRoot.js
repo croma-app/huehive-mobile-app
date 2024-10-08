@@ -28,6 +28,7 @@ import AppAuthProvider from './components/AppAuthProvider.js';
 import UserProfile from './screens/UserProfileScreen.js';
 import useApplicationStore from './hooks/useApplicationStore.js';
 import ExplorePaletteScreen from './screens/ExplorePaletteScreen.js';
+import { notifyMessage } from './libs/Helpers.js';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,11 +39,13 @@ export default function App() {
   const { loadInitPaletteFromStore } = applicationState;
   const [isMenuOpen, setMenu] = useState(false);
   const navigationRef = useNavigationContainerRef();
-  useIAPConnection();
-
-  useEffect(() => {
-    loadInitPaletteFromStore();
-  }, [loadInitPaletteFromStore]);
+  useIAPConnection(function(error) {
+    if (error) {
+      // TODO: figure out a better way to handle this error and show user a way to retry, ask for help or continue.
+      notifyMessage("Error during purchase initialization. Purchase might not work. Please retry");
+    } 
+    loadInitPaletteFromStore(); // Still load the palettes. Specially simulator will always face this issue.
+  });
 
   const hamburgerMenuIcon = () => (
     <TouchableOpacity onPress={() => setMenu(!isMenuOpen)}>

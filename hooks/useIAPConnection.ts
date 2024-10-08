@@ -14,12 +14,15 @@ import {
 import { notifyMessage, logEvent, sendClientError } from  '../libs/Helpers';
 // https://react-native-iap.dooboolab.com/docs/guides/purchases
 // TODO: We need to implement this properly with server side validation.
-const useIAPConnection = () => {
+const useIAPConnection = (callback) => {
   useEffect(() => {
     let purchaseUpdateSubscription = null;
     let purchaseErrorSubscription = null;
 
     initConnection().then(() => {
+      if (callback) {
+        callback();
+      }
       flushFailedPurchasesCachedAsPendingAndroid()
         .catch((error) => {
           sendClientError('purchase_event_error_flush', error.message);
@@ -66,6 +69,9 @@ const useIAPConnection = () => {
             },
           );
         });
+    }).catch((error) => {
+      callback(error);
+      sendClientError('init_connection_error', error.message);
     });
 
     return () => {
