@@ -3,7 +3,6 @@ import * as RNIap from 'react-native-iap';
 import { requestPurchase, getProducts } from 'react-native-iap';
 import { sendClientErrorAsync } from '../network/errors';
 import { showMessage } from "react-native-flash-message";
-import Colors from '../constants/Styles';
 
 
 const isProduction = () => {

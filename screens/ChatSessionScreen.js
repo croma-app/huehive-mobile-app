@@ -20,18 +20,6 @@ import useApplicationStore from '../hooks/useApplicationStore';
 
 // eslint-disable-next-line no-undef
 const bgImage = require('../assets/images/colorful_background.jpg');
-const EXAMPLE_PHRASES = [
-  'Create a color palette for a kids website',
-  'Design a color palette for a fashion brand',
-  'Generate a color scheme for a travel website',
-  'Create a color palette for a food blog',
-  'Design a color scheme for a fitness app'
-];
-const ExamplePhrase = ({ phrase, onPress }) => (
-  <TouchableOpacity onPress={() => onPress(phrase)}>
-    <Text style={styles.examplePhrase}>{phrase}</Text>
-  </TouchableOpacity>
-);
 
 const ChatSessionScreen = (props) => {
   const { route, navigation } = props;
@@ -76,6 +64,9 @@ const ChatSessionScreen = (props) => {
       clearInterval(interval);
     };
   }, [messages]);
+  function showUnlockPro() {
+    return pro.plan == 'starter' && messages.length >= 2
+  }
 
   return (
     <View style={styles.container}>
@@ -93,16 +84,28 @@ const ChatSessionScreen = (props) => {
                 style={styles.chat_container}
                 showsVerticalScrollIndicator={false}>
                 {messages.length === 0 ? (
-                  <View style={styles.emptyChat}>
-                    <Text style={styles.emptyChatText}>
-                      Welcome to HueHive AI! Start a conversation to create color palettes for your
-                      next project
+                  <View style={styles.searchContainer}>
+                    <Text style={styles.searchTitle}>
+                      Welcome to HueHive AI!
                     </Text>
-                    <Text style={styles.emptyChatSubtext}>Here are few examples</Text>
-                    <View style={styles.examplePhrasesContainer}>
-                      {EXAMPLE_PHRASES.map((phrase, index) => (
-                        <ExamplePhrase key={index} phrase={phrase} onPress={setInputText} />
-                      ))}
+                    <Text style={styles.searchSubtitle}>
+                      Start by generating a color palette for your next project.
+                    </Text>
+                    <View style={styles.searchInputContainer}>
+                      <TextInput
+                        style={styles.input}
+                        value={inputText}
+                        onChangeText={setInputText}
+                        placeholder='Create a color palette for...'
+                      />
+                      <TouchableOpacity
+                        disabled={inputText.trim() === ''}
+                        onPress={handleSendMessage}
+                        style={
+                          inputText.trim() === '' ? styles.disableGenerateButton : styles.generateButton
+                        }>
+                        <Text style={styles.textGenerate}> Generate </Text>
+                      </TouchableOpacity>
                     </View>
                   </View>
                 ) : (
@@ -117,6 +120,7 @@ const ChatSessionScreen = (props) => {
                   ))
                 )}
               </ScrollView>
+
               {error && (
                 <View style={styles.errorMessageContainer}>
                   <Text style={styles.errorMessageTitle}>Error: </Text>
@@ -124,30 +128,27 @@ const ChatSessionScreen = (props) => {
                 </View>
               )}
               <ActivityIndicator animating={isLoading} size="large" color="#ff7875" />
-              {pro.plan != 'starter' ? (
+              
+              {!showUnlockPro() && messages.length > 0 && (
                 <View style={styles.inputContainer}>
                   <TextInput
                     style={styles.input}
                     value={inputText}
                     onChangeText={setInputText}
-                    placeholder={
-                      messages.length == 0
-                        ? 'Ex: create a color palette for kids website'
-                        : 'follow up message to change the color palette'
-                    }
+                    placeholder="Follow up to refine the palette"
                   />
                   <TouchableOpacity
                     disabled={isLoading || inputText.trim() === ''}
                     onPress={handleSendMessage}
                     style={
-                      isLoading || inputText.trim() === ''
-                        ? styles.disableSendButton
-                        : styles.sendButton
+                      isLoading || inputText.trim() === '' ? styles.disableSendButton : styles.sendButton
                     }>
                     <Text style={styles.textSend}> Send </Text>
                   </TouchableOpacity>
                 </View>
-              ) : (
+              )}
+              
+              {showUnlockPro() && (
                 <CromaButton
                   style={{ backgroundColor: Colors.primary, margin: 10 }}
                   textStyle={{ color: Colors.white }}
@@ -155,7 +156,7 @@ const ChatSessionScreen = (props) => {
                     logEvent('chat_session_pro_button');
                     navigation.navigate('ProVersion', { highlightFeatureId: 10 });
                   }}>
-                  Unlock {planLabels['pro']} to use this feature
+                  Unlock {planLabels['pro']} for follow up messages
                 </CromaButton>
               )}
             </>
@@ -167,55 +168,45 @@ const ChatSessionScreen = (props) => {
 };
 
 const styles = StyleSheet.create({
-  line: {
-    ...material.body1,
-    fontSize: 15,
-    textAlign: 'justify'
-  },
-  icon: {
-    fontSize: 40,
-    color: 'black'
-  },
-  linksMainView: {
-    paddingVertical: 15
-  },
-  linkView: {
-    paddingVertical: 20,
-    alignItems: 'center'
-  },
-  subtitle: {
-    fontSize: 18,
-    textAlign: 'center'
-  },
-  link: {
-    fontSize: 14,
-    color: 'blue'
-  },
   container: {
     display: 'flex',
     flexDirection: 'column',
     backgroundColor: '#d6e4ff',
-    // height: Dimensions.get('window').height,
     flex: 1
   },
   chat_container: {
     flex: 1,
-    paddingTop: 10,
     padding: 5
   },
-  message: {
-    ...material.body1,
-    fontSize: 15,
-    textAlign: 'justify'
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center'
   },
-  inputContainer: {
-    display: 'flex',
+  bgImageOpecity: {
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    flex: 1
+  },
+  searchContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20
+  },
+  searchTitle: {
+    ...material.headline,
+    textAlign: 'center',
+    marginBottom: 10
+  },
+  searchSubtitle: {
+    ...material.body1,
+    textAlign: 'center',
+    marginBottom: 20
+  },
+  searchInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'transparent',
-    padding: 10,
-    height: 60,
-    paddingTop: 12
+    justifyContent: 'center'
   },
   input: {
     flex: 1,
@@ -227,47 +218,34 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     height: 40
   },
-  emptyChat: {
-    flex: 1,
-    justifyContent: 'center',
+  generateButton: {
+    padding: 8,
+    backgroundColor: Colors.primary,
+    borderRadius: 8
+  },
+  disableGenerateButton: {
+    padding: 8,
+    backgroundColor: 'gray',
+    borderRadius: 8
+  },
+  textGenerate: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+  inputContainer: {
+    display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center',
-    padding: 20
-  },
-  emptyChatText: {
-    ...material.headline,
-    textAlign: 'center',
-    marginBottom: 10
-  },
-  emptyChatSubtext: {
-    ...material.body1,
-    textAlign: 'center',
-    marginBottom: 10
-  },
-  emptyChatExample: {
-    ...material.body1,
-    textAlign: 'center',
-    color: 'gray'
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  loadingText: {
-    ...material.body1,
-    marginTop: 10
-  },
-  backgroundImage: {
-    flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center'
-  },
-  bgImageOpecity: {
-    backgroundColor: 'rgba(255, 255, 255, 0.6)',
-    flex: 1
-  },
-  examplePhrase: {
-    padding: 5
+    backgroundColor: 'transparent',
+    padding: 10,
+    height: 60,
+    paddingTop: 12,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0
   },
   sendButton: {
     padding: 8,

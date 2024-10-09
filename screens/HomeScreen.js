@@ -7,8 +7,7 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  Text,
-  Alert
+  Text
 } from 'react-native';
 import { PaletteCard } from '../components/PaletteCard';
 import GridActionButton from '../components/GridActionButton';

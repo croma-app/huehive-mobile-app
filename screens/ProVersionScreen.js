@@ -109,7 +109,7 @@ export default function ProVersionScreen({ route }) {
     },
     {
       id: 10,
-      feature: t('AI chat assistant to create palettes'),
+      feature: t('AI chat assistant to create palettes with unlimited messages'),
       starter: false,
       pro: true,
       proPlus: true
