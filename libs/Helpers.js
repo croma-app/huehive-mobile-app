@@ -187,8 +187,8 @@ const getPlanPrice = async (currentPlan, toPlans) => {
 function notifyMessage(msg) {
   showMessage({
     message: msg,
-    backgroundColor: Colors.primary,
     duration: 3000,
+
   });
 }
 

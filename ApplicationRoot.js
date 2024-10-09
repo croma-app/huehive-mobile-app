@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Animated } from 'react-native';
 import AboutUsScreen from './screens/AboutUsScreen';
 import ChatSessionScreen from './screens/ChatSessionScreen';
@@ -150,7 +150,7 @@ export default function App() {
             </AppAuthProvider>
           </NavigationContainer>
         </View>
-        <FlashMessage position="top" />
+        <FlashMessage floating={true} position={{bottom: 100}} />
       </SideMenu>
     </GestureHandlerRootView>
   );
