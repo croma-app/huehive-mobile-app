@@ -20,6 +20,7 @@ import useUserData from '../hooks/useUserData';
 import useAuth from '../hooks/useAuth';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import Colors from '../constants/Styles';
+import { ROUTE_NAMES } from '../libs/contants';
 
 const HamburgerMenu = (props) => {
   const { t } = useTranslation();
@@ -56,6 +57,36 @@ const HamburgerMenu = (props) => {
 
       <ScrollView>
         <View style={styles.menu}>
+        <TouchableOpacity
+            style={styles.menuItem}
+            onPress={async () => {
+              logEvent('home');
+              props.toggleSideMenu();
+              props.navigation.reset({
+                index: 0,
+                routes: [{ name: ROUTE_NAMES.HOME }],
+              });
+            }}>
+            <View style={styles.menuItemView}>
+              <View style={styles.menuIcon}>
+                <MaterialCommunityIcons name="home-outline" style={styles.icon} />
+              </View>
+              <Text style={styles.textAreaMenuItem}>{t('Home')}</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.menuItem}
+            onPress={async () => {
+              logEvent('hm_my_palette');
+              navigate('MyPalettes');
+            }}>
+            <View style={styles.menuItemView}>
+              <View style={styles.menuIcon}>
+                <MaterialCommunityIcons name="format-list-bulleted" style={styles.icon} />
+              </View>
+              <Text style={styles.textAreaMenuItem}>{t('My Palettes')}</Text>
+            </View>
+          </TouchableOpacity>
           <TouchableOpacity
             style={styles.menuItem}
             onPress={async () => {
@@ -66,7 +97,7 @@ const HamburgerMenu = (props) => {
               <View style={styles.menuIcon}>
                 <FontAwesome5Icon name="wpexplorer" style={styles.icon} />
               </View>
-              <Text style={styles.textAreaMenuItem}>{t('Explore palettes')}</Text>
+              <Text style={styles.textAreaMenuItem}>{t('Explore Palettes')}</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity
@@ -104,7 +135,7 @@ const HamburgerMenu = (props) => {
               <View style={[styles.menuIcon]}>
                 <Feather name="unlock" style={styles.icon} />
               </View>
-              <Text style={styles.textAreaMenuItem}>{t('Pro benefits')}</Text>
+              <Text style={styles.textAreaMenuItem}>{t('Pro Benefits')}</Text>
             </View>
           </TouchableOpacity>
           <TouchableOpacity

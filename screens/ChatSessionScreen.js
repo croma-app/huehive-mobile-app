@@ -17,6 +17,7 @@ import ChatCard from '../components/ChatCard';
 import CromaButton from '../components/CromaButton';
 import useChatSession from '../hooks/useChatSession';
 import useApplicationStore from '../hooks/useApplicationStore';
+import GridActionButton from '../components/GridActionButton';
 
 // eslint-disable-next-line no-undef
 const bgImage = require('../assets/images/colorful_background.jpg');
@@ -156,13 +157,14 @@ const ChatSessionScreen = (props) => {
                     logEvent('chat_session_pro_button');
                     navigation.navigate('ProVersion', { highlightFeatureId: 10 });
                   }}>
-                  Unlock {planLabels['pro']} for follow up messages
+                  Get {planLabels['pro']} : Unlock unlimited follow-ups!
                 </CromaButton>
               )}
             </>
           )}
         </View>
       </ImageBackground>
+      {messages.length == 0 && <GridActionButton navigation={navigation} />}
     </View>
   );
 };

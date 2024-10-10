@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, TouchableOpacity, Animated } from 'react-native';
+import React, { useState, useCallback, useEffect} from 'react';
+import { StyleSheet, View, TouchableOpacity, Linking, Platform, Animated } from 'react-native';
 import AboutUsScreen from './screens/AboutUsScreen';
 import ChatSessionScreen from './screens/ChatSessionScreen';
 import ChatSessionHistoriesScreen from './screens/ChatSessionHistoriesScreen';
-import HomeScreen from './screens/HomeScreen';
+import MyPalettesScreen from './screens/MyPalettesScreen.js';
 import Colors from './constants/Styles';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -30,7 +30,9 @@ import useApplicationStore from './hooks/useApplicationStore.js';
 import ExplorePaletteScreen from './screens/ExplorePaletteScreen.js';
 import { notifyMessage } from './libs/Helpers.js';
 import FlashMessage from "react-native-flash-message";
-
+import ShareMenu from 'react-native-share-menu';
+import Color from 'pigment/full';
+import { logEvent } from './libs/Helpers.js';
 
 const Stack = createNativeStackNavigator();
 
@@ -54,6 +56,88 @@ export default function App() {
       <Entypo name="menu" style={styles.sideMenuIcon} />
     </TouchableOpacity>
   );
+
+  const handleDeepLink = useCallback(
+    (url) => {
+      try {
+        const urlParts = url.split('?');
+        const path = urlParts[0].split('/');
+        const colorsPart = path[path.length - 1];
+
+        // Split the colors part by `-` to get the color codes
+        const colors = colorsPart.split('-');
+
+        // Parse the query parameters
+        const queryParamsString = urlParts[1] || '';
+        const queryParams = {};
+        queryParamsString.split('&').forEach((param) => {
+          const [key, value] = param.split('=');
+          queryParams[key] = decodeURIComponent(value);
+        });
+
+        const suggestedName = queryParams['name'];
+        navigationRef.navigate('SavePalette', {
+          colors: colors.map((color) => {
+            return { color: '#' + color };
+          }),
+          suggestedName: suggestedName
+        });
+      } catch (error) {
+        notifyMessage('Error parsing url: ' + error.message);
+        navigationRef.navigate(ROUTE_NAMES.HOME);
+      }
+    },
+    [navigationRef]
+  );
+
+  useEffect(() => {
+    if (Platform.OS === 'android' || Platform.OS === 'ios') {
+      // Handle deep link when the app is launched
+      Linking.getInitialURL().then((url) => {
+        if (url) {
+          logEvent('deep_linking_open_link');
+          handleDeepLink(url);
+        }
+      });
+
+      // Handle deep link when the app is already running
+      const linkingListener = Linking.addEventListener('url', (event) => {
+        if (event.url) {
+          logEvent('deep_linking_open_link');
+          handleDeepLink(event.url);
+        }
+      });
+
+      // Cleanup listener on unmount
+      return () => {
+        linkingListener.remove();
+      };
+    }
+  }, [handleDeepLink, navigationRef]);
+
+  const handleShare = useCallback(
+    (item) => {
+      if (item && item.mimeType === 'text/plain' && item.data) {
+        const text = item.data;
+        notifyMessage('Shared text: ' + text);
+        const colors = Color.parse(text);
+        logEvent('get_shared_text', { length: colors.length });
+        for (let i = 0, l = colors.length; i < l; i++) {
+          colors[i] = { color: colors[i].tohex().toLowerCase() };
+        }
+        navigationRef.navigate('SavePalette', { colors });
+      }
+    },
+    [navigationRef]
+  );
+
+  useEffect(() => {
+    ShareMenu.getInitialShare(handleShare);
+    const listener = ShareMenu.addNewShareListener(handleShare);
+    return () => {
+      listener.remove();
+    };
+  }, [handleShare]);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -82,26 +166,30 @@ export default function App() {
                   }
                 }}>
                 <Stack.Screen
-                  name={ROUTE_NAMES.HOME}
+                  name={ROUTE_NAMES.CHAT_SESSION}
+                  options={{ 
+                    headerLeft: hamburgerMenuIcon,
+                    headerTitleContainerStyle: { left: 40 }, 
+                    title: t('HueHive AI') }}
+                  component={ChatSessionScreen}
+                />
+                <Stack.Screen
+                  name={ROUTE_NAMES.MY_PALETTES}
                   options={() => {
                     return {
-                      title: t('HueHive'),
                       headerLeft: hamburgerMenuIcon,
-                      headerTitleContainerStyle: { left: 40 }
+                      headerTitleContainerStyle: { left: 40 }, 
+                      title: t('My Palettes')
                     };
                   }}
-                  component={HomeScreen}
+                  component={MyPalettesScreen}
                 />
                 <Stack.Screen
                   name={ROUTE_NAMES.ABOUT_US}
                   options={{ title: t('About us') }}
                   component={AboutUsScreen}
                 />
-                <Stack.Screen
-                  name={ROUTE_NAMES.CHAT_SESSION}
-                  options={{ title: t('HueHive AI assistant') }}
-                  component={ChatSessionScreen}
-                />
+                
                 <Stack.Screen
                   name={ROUTE_NAMES.CHAT_SESSION_HISTORIES}
                   options={{ title: t('Your chats') }}
@@ -161,7 +249,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     flexDirection: 'row',
-    paddingBottom: 8,
   },
   sideMenuIcon: {
     fontSize: 25,

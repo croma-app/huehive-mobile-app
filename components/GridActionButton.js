@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
+  ActivityIndicator,
   NativeModules,
   Modal,
   TouchableWithoutFeedback,
@@ -29,8 +30,9 @@ import useApplicationStore from '../hooks/useApplicationStore';
 import MultiColorView from './MultiColorView';
 
 
-const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
+const GridActionButton = ({ navigation}) => {
   const { t } = useTranslation();
+  const [pickImageLoading, setPickImageLoading] = useState(false);
   const [isColorPickerVisible, setIsColorPickerVisible] = React.useState(false);
   const [isImagePickerModalVisible, setIsImagePickerModalVisible] = React.useState(false);
   const [selectedImage, setSelectedImage] = React.useState(null);
@@ -226,6 +228,9 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
           setSelectedImage(null);
           setAutomaticColors([]);
         }}>
+        {pickImageLoading && 
+            <ActivityIndicator size="large" color={Colors.primary} style={styles.loadingIndicator} />
+          }
         <TouchableWithoutFeedback
           onPress={() => {
             setIsImagePickerModalVisible(false);
@@ -272,12 +277,12 @@ const GridActionButtonAndroid = ({ navigation, setPickImageLoading }) => {
   );
 };
 
-GridActionButtonAndroid.propTypes = {
+GridActionButton.propTypes = {
   navigation: PropTypes.any,
   setPickImageLoading: PropTypes.func
 };
 
-export default GridActionButtonAndroid;
+export default GridActionButton;
 
 const styles = {
   modalOverlay: {

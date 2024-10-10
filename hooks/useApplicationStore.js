@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import Storage from '../libs/Storage';
-import { initPurchase, notifyMessage } from '../libs/Helpers';
-import { t } from 'i18next';
+import { initPurchase } from '../libs/Helpers';
 import network from '../network';
 
 const useApplicationStore = create((set) => ({
@@ -24,56 +23,36 @@ const useApplicationStore = create((set) => ({
   },
 
   addPalette: async (palette) => {
-    try {
-      await network.createPalette({
-        ...palette,
-        colors: palette.colors.map((color) => ({ name: null, hex: color.color }))
-      });
-      const allPalettes = await useApplicationStore.getState().loadPalettes();
-      set({ allPalettes });
-    } catch (error) {
-      notifyMessage(t(error.message));
-    }
+    await network.createPalette({
+      ...palette,
+      colors: palette.colors.map((color) => ({ name: null, hex: color.color }))
+    });
+    const allPalettes = await useApplicationStore.getState().loadPalettes();
+    set({ allPalettes });
   },
 
   updatePalette: async (id, _palette) => {
-    try {
-      await network.patchPalette(id, _palette);
-      const allPalettes = await useApplicationStore.getState().loadPalettes();
-      set({ allPalettes });
-    } catch (error) {
-      notifyMessage(t(error.message));
-    }
+    await network.patchPalette(id, _palette);
+    const allPalettes = await useApplicationStore.getState().loadPalettes();
+    set({ allPalettes });
   },
 
   deleteColorFromPalette: async (paletteId, colorId) => {
-    try {
-      await network.deleteColorFromPalette(paletteId, colorId);
-      const allPalettes = await useApplicationStore.getState().loadPalettes();
-      set({ allPalettes });
-    } catch (error) {
-      notifyMessage(t(error.message));
-    }
+    await network.deleteColorFromPalette(paletteId, colorId);
+    const allPalettes = await useApplicationStore.getState().loadPalettes();
+    set({ allPalettes });
   },
 
   addNewColorToPalette: async (paletteId, color) => {
-    try {
-      await network.addNewColorToPalette(paletteId, color);
-      const allPalettes = await useApplicationStore.getState().loadPalettes();
-      set({ allPalettes });
-    } catch (error) {
-      notifyMessage(t(error.message));
-    }
+    await network.addNewColorToPalette(paletteId, color);
+    const allPalettes = await useApplicationStore.getState().loadPalettes();
+    set({ allPalettes });
   },
 
   deletePalette: async (id) => {
-    try {
-      await network.deletePalette(id);
-      const allPalettes = await useApplicationStore.getState().loadPalettes();
-      set({ allPalettes });
-    } catch (error) {
-      notifyMessage(t(error.message));
-    }
+    await network.deletePalette(id);
+    const allPalettes = await useApplicationStore.getState().loadPalettes();
+    set({ allPalettes });
   },
 
   loadInitPaletteFromStore: async () => {

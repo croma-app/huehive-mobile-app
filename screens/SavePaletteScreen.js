@@ -6,7 +6,7 @@ import Colors from '../constants/Styles';
 import CromaButton from '../components/CromaButton';
 import { TextDialog } from '../components/CommonDialogs';
 import { useTranslation } from 'react-i18next';
-import { logEvent } from '../libs/Helpers';
+import { logEvent, notifyMessage } from '../libs/Helpers';
 import useApplicationStore from '../hooks/useApplicationStore';
 
 export default function SavePaletteScreen({ navigation, route }) {
@@ -72,6 +72,7 @@ export default function SavePaletteScreen({ navigation, route }) {
                 colors: finalColors.slice(0, pro.plan != 'starter' ? finalColors.length : 4)
               };
               addPalette(palette);
+              notifyMessage("Successfully saved to Your Palettes");
               navigation.popToTop();
             }}
           >
