@@ -1,19 +1,14 @@
-## [HueHive (Formerly Croma)](https://huehive.co)
+## [HueHive](https://huehive.co)
 
-### Croma is now renamed to Huehive
+#### [AppStore](https://apps.apple.com/in/app/huehive-color-palette-manager/id1596763657)
+#### [Playstore](https://play.google.com/store/apps/details?id=app.croma)
 
-[![Croma DEMO](https://img.youtube.com/vi/KqrsdAuvW40/0.jpg)](https://www.youtube.com/watch?v=KqrsdAuvW40)
-
-![](Croma_web.gif)
 
 ### Installation guide
 
 - Installation: `yarn`
 - Running on android: `yarn android`
 - Running on ios: `yarn ios`
-#### IOS
- - https://microsoft.github.io/react-native-windows/docs/rnm-getting-started
-
 
 ### Release
 
@@ -27,39 +22,13 @@ Releases are maintained using fastlane.
 
 #### App store(iOS):
 
-iOS is not fully automated yet. From your local
-
-```
-cd ios
-fastlane beta
-```
-
-### Web
-
-Currently, We are upgrading react-native and web version is available in the `web` branch with the old react-native.
-https://github.com/croma-app/croma-react/tree/web
+iOS is not fully automated yet. Build it from XCode.
 
 # References
 
 - https://github.com/numixproject/croma
 - https://github.com/satya164/croma
 - https://github.com/satya164/pigment
-
-### Code styling
-
-https://github.com/google/google-java-format
-
-https://github.com/sherter/google-java-format-gradle-plugin
-
-https://github.com/typicode/husky
-
-Fix java files
-
-```
-
-./gradlew goJF
-
-```
 
 ### Contribution
 
