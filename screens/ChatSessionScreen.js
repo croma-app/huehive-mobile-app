@@ -7,7 +7,8 @@ import {
   TextInput,
   ActivityIndicator,
   Text,
-  ImageBackground
+  ImageBackground,
+  Platform
 } from 'react-native';
 import Colors from '../constants/Styles';
 import React, { useState, useEffect, useRef } from 'react';
@@ -18,22 +19,43 @@ import CromaButton from '../components/CromaButton';
 import useChatSession from '../hooks/useChatSession';
 import useApplicationStore from '../hooks/useApplicationStore';
 import GridActionButton from '../components/GridActionButton';
+import appConfig from '../app.json';
+import mobileAds, { BannerAd, BannerAdSize, TestIds, AdsConsent } from 'react-native-google-mobile-ads';
 
-// eslint-disable-next-line no-undef
 const bgImage = require('../assets/images/colorful_background.jpg');
 
 const ChatSessionScreen = (props) => {
   const { route, navigation } = props;
-
   const [inputText, setInputText] = useState('');
   const scrollViewRef = useRef();
-
+  const [mobileAdConsent, setMobileAdConsent] = useState(false);
   const { pro } = useApplicationStore();
   const { messages, isLoading, isCreatingSession, error, createSession, followUpSession } =
     useChatSession(route.params?.messages);
 
   useEffect(() => {
     logEvent('chat_session_screen');
+  }, []);
+
+  // Request ads consent when the component mounts
+  useEffect(() => {
+    async function requestConsent() {
+      const consentInfo = await AdsConsent.requestInfoUpdate();
+      // Check if consent is required
+      if (consentInfo.status === AdsConsentStatus.REQUIRED) {
+        const adsConsentInfo = await AdsConsent.loadAndShowConsentFormIfRequired();
+        setMobileAdConsent(adsConsentInfo.canRequestAds);
+      } else {
+        setMobileAdConsent(consentInfo.canRequestAds);
+      }
+      
+      // Initialize ads only if consent is obtained
+      if (mobileAdConsent) {
+        await mobileAds().initialize();
+      }
+    }
+
+    requestConsent();
   }, []);
 
   const handleSendMessage = async () => {
@@ -65,8 +87,9 @@ const ChatSessionScreen = (props) => {
       clearInterval(interval);
     };
   }, [messages]);
+
   function showUnlockPro() {
-    return pro.plan == 'starter' && messages.length >= 2
+    return pro.plan == 'starter' && messages.length >= 2;
   }
 
   return (
@@ -162,6 +185,17 @@ const ChatSessionScreen = (props) => {
               )}
             </>
           )}
+          { pro.plan == 'starter' && mobileAdConsent && Platform.OS == 'android' && 
+            <View >
+              <BannerAd
+                unitId={__DEV__ ? TestIds.BANNER : appConfig['react-native-google-mobile-ads']['android_app_id']}
+                size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+                requestOptions={{
+                  requestNonPersonalizedAdsOnly: true,
+                }}
+              />
+            </View>
+          }
         </View>
       </ImageBackground>
       {messages.length == 0 && <GridActionButton navigation={navigation} />}
@@ -240,45 +274,45 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'transparent',
-    padding: 10,
-    height: 60,
-    paddingTop: 12,
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0
+    margin: 10
   },
   sendButton: {
-    padding: 8,
     backgroundColor: Colors.primary,
-    borderRadius: 8
+    borderRadius: 8,
+    padding: 8,
+    marginLeft: 12
   },
   disableSendButton: {
-    padding: 8,
     backgroundColor: 'gray',
-    borderRadius: 8
+    borderRadius: 8,
+    padding: 8,
+    marginLeft: 12
   },
   textSend: {
     color: 'white',
     fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center'
+    fontWeight: 'bold'
   },
   errorMessageContainer: {
-    marginLeft: 10,
-    marginRight: 10,
-    backgroundColor: Colors.primary,
-    borderRadius: 8
-  },
-  errorMessageText: {
-    color: 'white',
-    padding: 5
+    padding: 20,
+    backgroundColor: 'rgba(255,0,0,0.2)',
+    borderRadius: 8,
+    margin: 10
   },
   errorMessageTitle: {
-    color: 'white',
-    paddingLeft: 5,
-    paddingRight: 5
+    fontWeight: 'bold'
+  },
+  errorMessageText: {
+    marginTop: 5
+  },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 18
   }
 });
 
