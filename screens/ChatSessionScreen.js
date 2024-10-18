@@ -183,7 +183,7 @@ const ChatSessionScreen = (props) => {
               )}
             </>
           )}
-          { pro.plan == 'starter' && mobileAdConsent && Platform.OS == 'android' && 
+          { pro.plan != 'proPlus' && mobileAdConsent && Platform.OS == 'android' && 
             <View >
               <BannerAd
                 unitId={__DEV__ ? TestIds.BANNER : 'ca-app-pub-6847037498271557/2834003395'}
