@@ -19,7 +19,6 @@ import CromaButton from '../components/CromaButton';
 import useChatSession from '../hooks/useChatSession';
 import useApplicationStore from '../hooks/useApplicationStore';
 import GridActionButton from '../components/GridActionButton';
-import appConfig from '../app.json';
 import mobileAds, { BannerAd, BannerAdSize, TestIds, AdsConsent } from 'react-native-google-mobile-ads';
 
 const bgImage = require('../assets/images/colorful_background.jpg');
@@ -41,7 +40,6 @@ const ChatSessionScreen = (props) => {
   useEffect(() => {
     async function requestConsent() {
       const consentInfo = await AdsConsent.requestInfoUpdate();
-      // Check if consent is required
       if (consentInfo.status === AdsConsentStatus.REQUIRED) {
         const adsConsentInfo = await AdsConsent.loadAndShowConsentFormIfRequired();
         setMobileAdConsent(adsConsentInfo.canRequestAds);
@@ -188,7 +186,7 @@ const ChatSessionScreen = (props) => {
           { pro.plan == 'starter' && mobileAdConsent && Platform.OS == 'android' && 
             <View >
               <BannerAd
-                unitId={__DEV__ ? TestIds.BANNER : appConfig['react-native-google-mobile-ads']['android_app_id']}
+                unitId={__DEV__ ? TestIds.BANNER : 'ca-app-pub-6847037498271557/2834003395'}
                 size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
                 requestOptions={{
                   requestNonPersonalizedAdsOnly: true,
