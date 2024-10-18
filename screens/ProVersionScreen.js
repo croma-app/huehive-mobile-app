@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Linking } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View, Linking, Platform } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useTranslation } from 'react-i18next';
 import Colors, { Spacing } from '../constants/Styles';
@@ -71,7 +71,7 @@ export default function ProVersionScreen({ route }) {
     },
     {
       id: 2,
-      feature: t('Extract colors from images and camera'),
+      feature: t('Extract colors from images' + Platform.OS == 'android' ? ' and camera' : ''),
       starter: true,
       pro: true,
       proPlus: true
@@ -85,13 +85,6 @@ export default function ProVersionScreen({ route }) {
       proPlus: true
     },
     { id: 5, feature: t('View and convert color codes'), starter: true, pro: true, proPlus: true },
-    {
-      id: 6,
-      feature: t('Access Material Design, CSS, and Tailwind palettes'),
-      starter: true,
-      pro: true,
-      proPlus: true
-    },
     { id: 7, feature: t('Download palettes as PNG'), starter: true, pro: true, proPlus: true },
     {
       id: 8,
@@ -112,6 +105,13 @@ export default function ProVersionScreen({ route }) {
       feature: t('AI chat assistant to create palettes with unlimited messages'),
       starter: false,
       pro: true,
+      proPlus: true
+    },
+    {
+      id: 12,
+      feature: t('Ads free experience'),
+      starter: false,
+      pro: false,
       proPlus: true
     },
     { id: 11, feature: t('AI color picker'), starter: false, pro: false, proPlus: true },

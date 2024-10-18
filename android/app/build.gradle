@@ -119,7 +119,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.0.0'
     implementation 'androidx.navigation:navigation-ui:2.0.0'
     implementation 'com.google.firebase:firebase-config:19.2.0'
-    implementation 'com.google.firebase:firebase-analytics:17.2.2'
+    implementation 'com.google.firebase:firebase-analytics:20.1.2'
     implementation 'com.google.firebase:firebase-ml-vision:24.0.2'
     implementation "com.google.guava:guava:29.0-android"
     implementation 'com.google.android.flexbox:flexbox:3.0.0'

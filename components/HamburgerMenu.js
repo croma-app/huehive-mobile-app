@@ -100,7 +100,7 @@ const HamburgerMenu = (props) => {
               <Text style={styles.textAreaMenuItem}>{t('Explore Palettes')}</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity
+          {Platform.OS == 'ios' && <TouchableOpacity
             style={styles.menuItem}
             onPress={async () => {
               logEvent('hm_palette_library');
@@ -113,6 +113,7 @@ const HamburgerMenu = (props) => {
               <Text style={styles.textAreaMenuItem}>{t('Palette Library')}</Text>
             </View>
           </TouchableOpacity>
+          }
           {
             <MenuLink
               id={'rate-us'}
@@ -179,6 +180,22 @@ const HamburgerMenu = (props) => {
                   <Feather name="user" style={styles.icon} />
                 </View>
                 <Text style={[styles.textAreaMenuItem]}>{t('Login/Signup')}</Text>
+              </View>
+            </TouchableOpacity>
+          )}
+          {(Platform.OS == 'android') && (
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={async () => {
+                logEvent('hm_setting');
+                navigate('UserProfile');
+                props.toggleSideMenu();
+              }}>
+              <View style={styles.menuItemView}>
+                <View style={{ ...styles.menuIcon }}>
+                  <MaterialIcons name="settings" style={styles.icon} />
+                </View>
+                <Text style={[styles.textAreaMenuItem]}>{t('Setting')}</Text>
               </View>
             </TouchableOpacity>
           )}
