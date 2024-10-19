@@ -13,7 +13,7 @@ import {
 import Colors from '../constants/Styles';
 import React, { useState, useEffect, useRef } from 'react';
 import { material } from 'react-native-typography';
-import { logEvent, planLabels } from '../libs/Helpers';
+import { logEvent, notifyMessage, planLabels } from '../libs/Helpers';
 import ChatCard from '../components/ChatCard';
 import CromaButton from '../components/CromaButton';
 import useChatSession from '../hooks/useChatSession';
@@ -40,17 +40,20 @@ const ChatSessionScreen = (props) => {
   useEffect(() => {
     async function requestConsent() {
       const consentInfo = await AdsConsent.requestInfoUpdate();
-      if (consentInfo.status === AdsConsentStatus.REQUIRED) {
+      console.error(consentInfo);
+      var canRequestAds = false;
+      if (consentInfo.status === 'REQUIRED') {
         const adsConsentInfo = await AdsConsent.loadAndShowConsentFormIfRequired();
-        setMobileAdConsent(adsConsentInfo.canRequestAds);
+        canRequestAds =  adsConsentInfo.canRequestAds;
       } else {
-        setMobileAdConsent(consentInfo.canRequestAds);
+        canRequestAds = consentInfo.canRequestAds;
       }
-      
       // Initialize ads only if consent is obtained
-      if (mobileAdConsent) {
+      console.error("hello---" + canRequestAds);
+      if (canRequestAds) {
         await mobileAds().initialize();
       }
+      setMobileAdConsent(canRequestAds);
     }
 
     requestConsent();

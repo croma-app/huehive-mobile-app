@@ -103,7 +103,7 @@ function UserProfile(props) {
         </CromaButton>
       }
 
-      { consentInfo.status == AdsConsentStatus.REQUIRED && 
+      { consentInfo.status == 'REQUIRED' && 
       <TouchableOpacity
         style={styles.consentButton}
         onPress={handleAdConsent}>
