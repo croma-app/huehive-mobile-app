@@ -72,14 +72,12 @@
   <meta-data
     android:name="firebase_analytics_collection_deactivated"
     android:value="@bool/FIREBASE_ANALYTICS_DEACTIVATED" />
-  <meta-data
-    android:name="com.google.android.gms.ads.APPLICATION_ID"
-    android:value="ca-app-pub-6847037498271557~7057578612"/>
   <uses-permission android:name="android.permission.CAMERA" />
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
   
   <uses-feature
     android:name="android.hardware.camera"
