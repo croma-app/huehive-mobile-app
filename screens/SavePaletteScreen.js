@@ -8,6 +8,7 @@ import { TextDialog } from '../components/CommonDialogs';
 import { useTranslation } from 'react-i18next';
 import { logEvent, notifyMessage } from '../libs/Helpers';
 import useApplicationStore from '../hooks/useApplicationStore';
+import AdBanner from '../components/AdBanner';
 
 export default function SavePaletteScreen({ navigation, route }) {
   const { t } = useTranslation();
@@ -41,69 +42,75 @@ export default function SavePaletteScreen({ navigation, route }) {
   };
 
   return (
-    <ScrollView style={{ margin: 8 }} showsVerticalScrollIndicator={false}>
-      <PalettePreviewCard
-        colors={finalColors.slice(0, pro.plan != 'starter' ? finalColors.length : 4)}
-        name={paletteName}
-      />
-      <View style={styles.card}>
-        <View style={styles.inputContainer}>
-          <TextInput
-            ref={inputRef}
-            style={styles.input}
-            value={paletteName}
-            autoFocus
-            placeholder={t('Enter a name for the palette')}
-            onChangeText={(name) => setPaletteName(name)}
-          />
-          <CromaButton
-            style={styles.saveButton}
-            textStyle={styles.saveButtonText}
-            onPress={async () => {
-              if (allPalettes.findIndex((palette) => palette.name === paletteName) !== -1) {
-                setIsPaletteNameExist(true);
-                setTimeout(() => {
-                  setIsPaletteNameExist(false);
-                }, 3000);
-                return null;
-              }
-              const palette = {
-                name: paletteName,
-                colors: finalColors.slice(0, pro.plan != 'starter' ? finalColors.length : 4)
-              };
-              addPalette(palette);
-              notifyMessage("Successfully saved to Your Palettes");
-              navigation.popToTop();
-            }}
-          >
-            {t('Save')}
-          </CromaButton>
+    <View style={styles.container}>
+      <ScrollView style={{ margin: 8 }} showsVerticalScrollIndicator={false}>
+        <PalettePreviewCard
+          colors={finalColors.slice(0, pro.plan != 'starter' ? finalColors.length : 4)}
+          name={paletteName}
+        />
+        <View style={styles.card}>
+          <View style={styles.inputContainer}>
+            <TextInput
+              ref={inputRef}
+              style={styles.input}
+              value={paletteName}
+              autoFocus
+              placeholder={t('Enter a name for the palette')}
+              onChangeText={(name) => setPaletteName(name)}
+            />
+            <CromaButton
+              style={styles.saveButton}
+              textStyle={styles.saveButtonText}
+              onPress={async () => {
+                if (allPalettes.findIndex((palette) => palette.name === paletteName) !== -1) {
+                  setIsPaletteNameExist(true);
+                  setTimeout(() => {
+                    setIsPaletteNameExist(false);
+                  }, 3000);
+                  return null;
+                }
+                const palette = {
+                  name: paletteName,
+                  colors: finalColors.slice(0, pro.plan != 'starter' ? finalColors.length : 4)
+                };
+                addPalette(palette);
+                notifyMessage("Successfully saved to Your Palettes");
+                navigation.popToTop();
+              }}
+            >
+              {t('Save')}
+            </CromaButton>
+          </View>
         </View>
-      </View>
-      {pro.plan == 'starter' && finalColors.length > 4 && (
-        <View style={styles.proVersionContainer}>
-          <Text style={styles.proVersionText}>
-            {t(
-              'Upgrade to Pro to save unlimited colors in a palette. Starter Plan allows saving up to 4 colors.'
-            )}
-          </Text>
-          <CromaButton
-            style={styles.proVersionButton}
-            textStyle={{ color: Colors.white }}
-            onPress={handleUnlockPro}
-          >
-            {t('Upgrade to Pro')}
-          </CromaButton>
-        </View>
-      )}
-      {isPaletteNameExist && (
-        <TextDialog text={t('A palette with the same name already exists.')} />
-      )}
-    </ScrollView>
+        {pro.plan == 'starter' && finalColors.length > 4 && (
+          <View style={styles.proVersionContainer}>
+            <Text style={styles.proVersionText}>
+              {t(
+                'Upgrade to Pro to save unlimited colors in a palette. Starter Plan allows saving up to 4 colors.'
+              )}
+            </Text>
+            <CromaButton
+              style={styles.proVersionButton}
+              textStyle={{ color: Colors.white }}
+              onPress={handleUnlockPro}
+            >
+              {t('Upgrade to Pro')}
+            </CromaButton>
+          </View>
+        )}
+        {isPaletteNameExist && (
+          <TextDialog text={t('A palette with the same name already exists.')} />
+        )}
+      </ScrollView>
+      <AdBanner plan={pro.plan} />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   card: {
     flex: 1,
     flexDirection: 'column',

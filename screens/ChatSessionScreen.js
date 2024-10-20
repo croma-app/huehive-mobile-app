@@ -8,7 +8,6 @@ import {
   ActivityIndicator,
   Text,
   ImageBackground,
-  Platform
 } from 'react-native';
 import Colors from '../constants/Styles';
 import React, { useState, useEffect, useRef } from 'react';
@@ -19,7 +18,7 @@ import CromaButton from '../components/CromaButton';
 import useChatSession from '../hooks/useChatSession';
 import useApplicationStore from '../hooks/useApplicationStore';
 import GridActionButton from '../components/GridActionButton';
-import mobileAds, { BannerAd, BannerAdSize, TestIds, AdsConsent } from 'react-native-google-mobile-ads';
+import AdBanner from '../components/AdBanner';  // Import the new AdBanner component
 
 const bgImage = require('../assets/images/colorful_background.jpg');
 
@@ -27,34 +26,12 @@ const ChatSessionScreen = (props) => {
   const { route, navigation } = props;
   const [inputText, setInputText] = useState('');
   const scrollViewRef = useRef();
-  const [mobileAdConsent, setMobileAdConsent] = useState(false);
   const { pro } = useApplicationStore();
   const { messages, isLoading, isCreatingSession, error, createSession, followUpSession } =
     useChatSession(route.params?.messages);
 
   useEffect(() => {
     logEvent('chat_session_screen');
-  }, []);
-
-  // Request ads consent when the component mounts
-  useEffect(() => {
-    async function requestConsent() {
-      const consentInfo = await AdsConsent.requestInfoUpdate();
-      var canRequestAds = false;
-      if (consentInfo.status === 'REQUIRED') {
-        const adsConsentInfo = await AdsConsent.loadAndShowConsentFormIfRequired();
-        canRequestAds =  adsConsentInfo.canRequestAds;
-      } else {
-        canRequestAds = consentInfo.canRequestAds;
-      }
-      // Initialize ads only if consent is obtained
-      if (canRequestAds) {
-        await mobileAds().initialize();
-      }
-      setMobileAdConsent(canRequestAds);
-    }
-
-    requestConsent();
   }, []);
 
   const handleSendMessage = async () => {
@@ -88,7 +65,7 @@ const ChatSessionScreen = (props) => {
   }, [messages]);
 
   function showUnlockPro() {
-    return pro.plan == 'starter' && messages.length >= 2;
+    return pro.plan === 'starter' && messages.length >= 2;
   }
 
   return (
@@ -184,20 +161,12 @@ const ChatSessionScreen = (props) => {
               )}
             </>
           )}
-          { pro.plan != 'proPlus' && mobileAdConsent && Platform.OS == 'android' && 
-            <View >
-              <BannerAd
-                unitId={__DEV__ ? TestIds.BANNER : 'ca-app-pub-6847037498271557/2834003395'}
-                size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-                requestOptions={{
-                  requestNonPersonalizedAdsOnly: true,
-                }}
-              />
-            </View>
-          }
+          
+          { messages.length < 2 && <AdBanner plan={pro.plan} />}
+
         </View>
       </ImageBackground>
-      {messages.length == 0 && <GridActionButton navigation={navigation} />}
+      <GridActionButton navigation={navigation} />
     </View>
   );
 };

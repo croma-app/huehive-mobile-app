@@ -23,7 +23,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import { t } from 'i18next';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import useIAPConnection from './hooks/useIAPConnection';
-import { ROUTE_NAMES } from './libs/contants.js';
+import { ROUTE_NAMES } from './libs/constants.js';
 import AppAuthProvider from './components/AppAuthProvider.js';
 import UserProfile from './screens/UserProfileScreen.js';
 import useApplicationStore from './hooks/useApplicationStore.js';

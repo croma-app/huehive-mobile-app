@@ -20,7 +20,7 @@ import useUserData from '../hooks/useUserData';
 import useAuth from '../hooks/useAuth';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import Colors from '../constants/Styles';
-import { ROUTE_NAMES } from '../libs/contants';
+import { ROUTE_NAMES } from '../libs/constants';
 
 const HamburgerMenu = (props) => {
   const { t } = useTranslation();

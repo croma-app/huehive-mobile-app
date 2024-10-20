@@ -8,7 +8,7 @@ import SignUp from './SignUp';
 import useAuth from '../hooks/useAuth';
 import useUserData from '../hooks/useUserData';
 import { useNavigation } from '@react-navigation/native';
-import { PRIVATE_ROUTES } from '../libs/contants';
+import { PRIVATE_ROUTES } from '../libs/constants';
 import GoogleButton from './GoogleButton';
 import { storeUserSession } from '../libs/EncryptedStoreage';
 import { notifyMessage, sendClientError } from '../libs/Helpers';

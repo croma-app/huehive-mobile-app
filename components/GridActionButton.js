@@ -28,6 +28,7 @@ import PropTypes from 'prop-types';
 import ColorPickerModal from './ColorPickerModal';
 import useApplicationStore from '../hooks/useApplicationStore';
 import MultiColorView from './MultiColorView';
+import { ROUTE_NAMES } from '../libs/constants';
 
 
 const GridActionButton = ({ navigation}) => {
@@ -171,7 +172,10 @@ const GridActionButton = ({ navigation}) => {
         text2: t('HueHive ai'),
         onPress: async () => {
           logEvent('chat_session_action_button');
-          navigation.navigate('ChatSession');
+          props.navigation.reset({
+            index: 0,
+            routes: [{ name: ROUTE_NAMES.CHAT_SESSION }],
+          });
         }
       },
       Platform.OS == 'android' ? (
