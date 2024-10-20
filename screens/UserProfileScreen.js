@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import useUserData from '../hooks/useUserData';
 import { removeUserSession } from '../libs/EncryptedStoreage';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { ROUTE_NAMES } from '../libs/contants';
+import { ROUTE_NAMES } from '../libs/constants';
 import useApplicationStore from '../hooks/useApplicationStore';
 import { logout } from '../network/login-and-signup';
 import { logEvent } from '../libs/Helpers';

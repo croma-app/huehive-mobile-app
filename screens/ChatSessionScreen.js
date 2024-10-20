@@ -184,7 +184,7 @@ const ChatSessionScreen = (props) => {
               )}
             </>
           )}
-          { pro.plan != 'proPlus' && mobileAdConsent && Platform.OS == 'android' && 
+          { pro.plan != 'proPlus' && mobileAdConsent && Platform.OS == 'android' && messages.length < 2 && 
             <View >
               <BannerAd
                 unitId={__DEV__ ? TestIds.BANNER : 'ca-app-pub-6847037498271557/2834003395'}
@@ -197,7 +197,7 @@ const ChatSessionScreen = (props) => {
           }
         </View>
       </ImageBackground>
-      {messages.length == 0 && <GridActionButton navigation={navigation} />}
+      <GridActionButton navigation={navigation} />
     </View>
   );
 };
