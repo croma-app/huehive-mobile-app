@@ -15,6 +15,7 @@ import { material } from 'react-native-typography';
 import Spacer from '../components/Spacer';
 import Colors from '../constants/Styles';
 import useApplicationStore from '../hooks/useApplicationStore';
+import AdBanner from '../components/AdBanner';
 
 const MyPalettesScreen = function ({ navigation, route }) {
   const { isLoading, allPalettes, pro } = useApplicationStore();
@@ -34,27 +35,31 @@ const MyPalettesScreen = function ({ navigation, route }) {
     );
   } else {
     return (
+      
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
           {allPalettes.length === 0 && (
             <Text style={styles.noColorPaletteMessage}>
-              No color palettes found. Tap the + button below to create a new one.
+              No color palettes found. Create new palettes from Home screen
             </Text>
           )}
           {allPalettes.map((palette) => {
             return (
-              <PaletteCard
-                key={palette.id}
-                colors={palette.colors.slice(0, pro.plan != 'starter' ? palette.colors.length : 4)}
-                name={palette.name}
-                navigation={navigation}
-                route={route}
-                paletteId={palette.id}
-              />
+              <View style={styles.paletteCardContainer}>
+                <PaletteCard
+                  key={palette.id}
+                  colors={palette.colors.slice(0, pro.plan != 'starter' ? palette.colors.length : 4)}
+                  name={palette.name}
+                  navigation={navigation}
+                  route={route}
+                  paletteId={palette.id}
+                />
+              </View>
             );
           })}
           <Spacer />
         </ScrollView>
+      <AdBanner plan={pro.plan} />
       </View>
     );
   }
@@ -72,14 +77,17 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexGrow: 1,
     height: 200,
-    padding: 8,
     justifyContent: 'center',
     position: 'relative'
   },
   noColorPaletteMessage: {
     ...material.headline,
     textAlign: 'center',
-    marginTop: 100
+    marginTop: 100,
+    padding: 8,
+  },
+  paletteCardContainer: {
+    paddingHorizontal: 8,
   },
   loadingContainer: {
     display: 'flex',

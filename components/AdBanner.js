@@ -33,7 +33,7 @@ const AdBanner = ({ plan }) => {
   }
 
   return (
-    <View>
+    <View style={{}}>
       <BannerAd
         unitId={__DEV__ ? TestIds.BANNER : 'ca-app-pub-6847037498271557/2834003395'}
         size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
