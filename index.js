@@ -7,7 +7,7 @@ import App from './App';
 import { name as appName } from './app.json';
 import './i18n';
 import { setJSExceptionHandler, setNativeExceptionHandler } from 'react-native-exception-handler';
-import { notifyMessage, sendClientError } from './libs/Helpers';
+import { notifyError, sendClientError } from './libs/Helpers';
 
 // Custom JS error handler function
 const jsErrorHandler = (error, isFatal) => {
@@ -15,7 +15,7 @@ const jsErrorHandler = (error, isFatal) => {
   console.log(`JS Error: ${isFatal ? 'Fatal' : 'Non-fatal'}: ${error}`);
   if (isFatal) {
     // Show an alert for fatal errors
-    notifyMessage(
+    notifyError(
       'Unexpected error occurred' +
         `Error: ${error.name} ${error.message}\nWe have reported this to our team ! Please close the app and start again!`,
       2000
@@ -33,7 +33,7 @@ setJSExceptionHandler(jsErrorHandler, true);
 // Custom native error handler function (Android only)
 const nativeErrorHandler = (exceptionString) => {
   console.log(`Native Error: ${exceptionString}`);
-  notifyMessage('react-native-generic-native-error', exceptionString);
+  notifyError('react-native-generic-native-error', exceptionString);
 };
 
 // Set the global native error handler

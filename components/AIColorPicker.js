@@ -12,7 +12,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Colors from '../constants/Styles';
 import { generateAIColorSuggestions } from '../network/colors';
 import { pickTextColorBasedOnBgColor } from '../libs/ColorHelper';
-import { logEvent, notifyMessage, sendClientError } from '../libs/Helpers';
+import { logEvent, notifyError, notifyMessage, sendClientError } from '../libs/Helpers';
 import CromaButton from './CromaButton';
 import { useTranslation } from 'react-i18next';
 
@@ -37,7 +37,7 @@ export default function AIColorPicker({ setColor, currentPlan, onNavigateProScre
     } catch (error) {
       console.error('Error generating AI color suggestions:', error);
       sendClientError('ai_color_picker_query_submitted', error.message);
-      notifyMessage('Failed to generate suggestion: ' + error.message + ', please try again.');
+      notifyError('Failed to generate suggestion: ' + error.message + ', please try again.');
     }
     setLoading(false);
   };

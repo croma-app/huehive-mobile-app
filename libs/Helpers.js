@@ -64,6 +64,9 @@ function isObject(value) {
 const purchase = async function (setPurchase, currentPlan, toPlan) {
   try {
     const productSKU = planToSKUMapping[currentPlan][toPlan];
+    if (!productSKU) {
+      throw new Error(`Product SKU is not defined for currentPlan: ${currentPlan} and toPlan: ${toPlan}`);
+    }
     await getProducts({ skus: [productSKU] });
     const requestPurchaseParam = Platform.OS == 'android' ? {
       skus: [productSKU],
@@ -83,7 +86,7 @@ const purchase = async function (setPurchase, currentPlan, toPlan) {
       notifyMessage('Purchase cancelled ');
     } else {
       console.warn(err.code, err.message);
-      notifyMessage(`Purchase unsuccessful ${err.message}`);
+      notifyError(`Purchase unsuccessful ${err.message}, Tap to dismiss`, {autoHide: false});
       logEvent('purchase_failed', err.message);
       sendClientError('purchase_failed', err.message + 'Error code: ' + err.code, err.stack);
     }
@@ -125,7 +128,7 @@ const initPurchase = async function (
         await retryPurchase(retries - 1);
       } else {
         logEvent('init_purchase_failed', e.message);
-        notifyMessage('Init purchase failed: ' + e.message);
+        notifyError('Init purchase failed: ' + e.message);
         sendClientError('init_purchase_failed_' + retryCount, e.message, e.stack);
       }
     }
@@ -137,13 +140,6 @@ const initPurchase = async function (
 const getAvailablePurchases = async () => {
   try {
     const purchases = await RNIap.getAvailablePurchases();
-    console.info('Available purchases :: ', purchases);
-    if (purchases && purchases.length > 0) {
-      console.log({
-        availableItemsMessage: `Got ${purchases.length} items.`,
-        receipt: purchases[0].transactionReceipt
-      });
-    }
     return purchases;
   } catch (err) {
     console.warn(err.code, err.message);
@@ -186,10 +182,18 @@ const getPlanPrice = async (currentPlan, toPlans) => {
 function notifyMessage(msg) {
   showMessage({
     message: msg,
-    duration: 3000,
-
+    duration: 3000
   });
 }
+function notifyError(msg) {
+  showMessage({
+    message: msg,
+    duration: 3000,
+    autoHide: false,
+    hideOnPress: true
+  });
+}
+
 
 function extractHexColors1(text) {
   let hexColors = [];
@@ -252,6 +256,7 @@ export {
   sendClientError,
   purchase,
   notifyMessage,
+  notifyError,
   initPurchase,
   readRemoteConfig,
   planLabels,
