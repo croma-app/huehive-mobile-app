@@ -113,7 +113,7 @@ const GridActionButton = ({ navigation}) => {
   };
 
   const handleRandomColors = () => {
-    const colorsHex = generateRandomColorPalette(pro.plan == 'starter' ? 4 : 6);
+    const colorsHex = generateRandomColorPalette(6);
     const randomColors = colorsHex.map((colorHex) => {
       return { color: colorHex, locked: false };
     });

@@ -16,6 +16,7 @@ import Spacer from '../components/Spacer';
 import Colors from '../constants/Styles';
 import useApplicationStore from '../hooks/useApplicationStore';
 import AdBanner from '../components/AdBanner';
+import {NUMBER_OF_COLORS_PRO_COUNT} from '../libs/constants';
 
 const MyPalettesScreen = function ({ navigation, route }) {
   const { isLoading, allPalettes, pro } = useApplicationStore();
@@ -48,7 +49,7 @@ const MyPalettesScreen = function ({ navigation, route }) {
               <View style={styles.paletteCardContainer}>
                 <PaletteCard
                   key={palette.id}
-                  colors={palette.colors.slice(0, pro.plan != 'starter' ? palette.colors.length : 4)}
+                  colors={palette.colors.slice(0, pro.plan != 'starter' ? palette.colors.length : NUMBER_OF_COLORS_PRO_COUNT)}
                   name={palette.name}
                   navigation={navigation}
                   route={route}

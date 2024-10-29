@@ -195,7 +195,7 @@ const HamburgerMenu = (props) => {
                 <View style={{ ...styles.menuIcon }}>
                   <MaterialIcons name="settings" style={styles.icon} />
                 </View>
-                <Text style={[styles.textAreaMenuItem]}>{t('Setting')}</Text>
+                <Text style={[styles.textAreaMenuItem]}>{t('Settings')}</Text>
               </View>
             </TouchableOpacity>
           )}

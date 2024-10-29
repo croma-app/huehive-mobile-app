@@ -17,8 +17,7 @@ const jsErrorHandler = (error, isFatal) => {
     // Show an alert for fatal errors
     notifyError(
       'Unexpected error occurred' +
-        `Error: ${error.name} ${error.message}\nWe have reported this to our team ! Please close the app and start again!`,
-      2000
+        `Error: ${error.name} ${error.message}\nWe have reported this to our team ! Please close the app and start again!`
     );
     sendClientError('react-native-generic-js-error', 'Fatal - ' + isFatal + ' ' + error.message);
   } else {

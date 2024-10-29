@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { logEvent, notifyMessage } from '../libs/Helpers';
 import useApplicationStore from '../hooks/useApplicationStore';
 import AdBanner from '../components/AdBanner';
+import { NUMBER_OF_COLORS_PRO_COUNT } from '../libs/constants';
 
 export default function SavePaletteScreen({ navigation, route }) {
   const { t } = useTranslation();
@@ -45,7 +46,7 @@ export default function SavePaletteScreen({ navigation, route }) {
     <View style={styles.container}>
       <ScrollView style={{ margin: 8 }} showsVerticalScrollIndicator={false}>
         <PalettePreviewCard
-          colors={finalColors.slice(0, pro.plan != 'starter' ? finalColors.length : 4)}
+          colors={finalColors.slice(0, pro.plan != 'starter' ? finalColors.length : NUMBER_OF_COLORS_PRO_COUNT)}
           name={paletteName}
         />
         <View style={styles.card}>
@@ -71,7 +72,7 @@ export default function SavePaletteScreen({ navigation, route }) {
                 }
                 const palette = {
                   name: paletteName,
-                  colors: finalColors.slice(0, pro.plan != 'starter' ? finalColors.length : 4)
+                  colors: finalColors.slice(0, pro.plan != 'starter' ? finalColors.length : NUMBER_OF_COLORS_PRO_COUNT)
                 };
                 addPalette(palette);
                 notifyMessage("Successfully saved to Your Palettes");
@@ -82,11 +83,11 @@ export default function SavePaletteScreen({ navigation, route }) {
             </CromaButton>
           </View>
         </View>
-        {pro.plan == 'starter' && finalColors.length > 4 && (
+        {pro.plan == 'starter' && finalColors.length > NUMBER_OF_COLORS_PRO_COUNT && (
           <View style={styles.proVersionContainer}>
             <Text style={styles.proVersionText}>
               {t(
-                'Upgrade to Pro to save unlimited colors in a palette. Starter Plan allows saving up to 4 colors.'
+                'Upgrade to Pro to save unlimited colors in a palette. Starter Plan allows saving up to ' + NUMBER_OF_COLORS_PRO_COUNT + ' colors.'
               )}
             </Text>
             <CromaButton

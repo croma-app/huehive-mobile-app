@@ -20,6 +20,7 @@ import { generateRandomColorPaletteWithLockedColors } from '../libs/ColorHelper'
 import GenerateBtn from '../components/GenerateBtn';
 import useApplicationStore from '../hooks/useApplicationStore';
 import { generate as aiGenerate } from '../network/color_palette';
+import {NUMBER_OF_COLORS_PRO_COUNT} from '../libs/constants';
 
 function uniqueColors(colors) {
   let set = new Set();
@@ -70,7 +71,7 @@ export default function ColorListScreen({ navigation, route }) {
         opacity={opacity}
         key={item.color + '-' + item.locked}
         color={item}
-        showUnlockPro={pro.plan == 'starter' && item.index >= 4}
+        showUnlockPro={pro.plan == 'starter' && item.index >= NUMBER_OF_COLORS_PRO_COUNT}
         drag={drag}
         currentPlan={pro.plan}
         onAdd={() => {

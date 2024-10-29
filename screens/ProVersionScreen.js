@@ -63,15 +63,8 @@ export default function ProVersionScreen({ route }) {
 
   const planFeatures = [
     {
-      id: 1,
-      feature: t('Generate and modify palettes with up to 4 colors'),
-      starter: true,
-      pro: true,
-      proPlus: true
-    },
-    {
       id: 2,
-      feature: t('Extract colors from images' + Platform.OS == 'android' ? ' and camera' : ''),
+      feature: t('Extract colors from images' + (Platform.OS == 'android' ? ' and camera' : '')),
       starter: true,
       pro: true,
       proPlus: true
@@ -89,13 +82,6 @@ export default function ProVersionScreen({ route }) {
     {
       id: 8,
       feature: t('Explore AI-generated color palettes'),
-      starter: false,
-      pro: true,
-      proPlus: true
-    },
-    {
-      id: 9,
-      feature: t('Add more than 4 colors to a palette'),
       starter: false,
       pro: true,
       proPlus: true

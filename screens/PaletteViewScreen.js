@@ -12,6 +12,7 @@ import CromaButton from '../components/CromaButton';
 import { useTranslation } from 'react-i18next';
 import { ScrollView } from 'react-native-gesture-handler';
 import Spacer from '../components/Spacer';
+import {NUMBER_OF_COLORS_PRO_COUNT} from '../libs/constants';
 export default function PaletteViewScreen({ navigation, route }) {
   const { allPalettes, pro } = useApplicationStore();
   const { t } = useTranslation();
@@ -31,7 +32,7 @@ export default function PaletteViewScreen({ navigation, route }) {
   }, [navigation, palette.id]);
 
   const colorsToShow = React.useMemo(
-    () => colors?.slice(0, pro.plan != 'starter' ? colors.length : 4),
+    () => colors?.slice(0, pro.plan != 'starter' ? colors.length : NUMBER_OF_COLORS_PRO_COUNT),
     [colors, pro.plan]
   );
 

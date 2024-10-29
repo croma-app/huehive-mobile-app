@@ -14,6 +14,7 @@ export const ROUTE_NAMES = {
   EXPLORE_PALETTE: 'ExplorePalette'
 };
 
+export const NUMBER_OF_COLORS_PRO_COUNT = 10;
 export const PRIVATE_ROUTES = new Set([
   ROUTE_NAMES.CHAT_SESSION,
   ROUTE_NAMES.CHAT_SESSION_HISTORIES

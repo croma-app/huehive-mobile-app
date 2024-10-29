@@ -23,6 +23,7 @@ import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatli
 import PropTypes from 'prop-types';
 import ColorPickerModal from '../components/ColorPickerModal';
 import useApplicationStore from '../hooks/useApplicationStore';
+import {NUMBER_OF_COLORS_PRO_COUNT} from '../libs/constants';
 
 export default function PaletteScreen({ navigation, route }) {
   const { pro, allPalettes, updatePalette, deleteColorFromPalette, addNewColorToPalette } =
@@ -105,10 +106,10 @@ export default function PaletteScreen({ navigation, route }) {
             logEvent('palette_screen_add_color');
             if (
               (Platform.OS === 'android' || Platform.OS === 'ios') &&
-              colors.length >= 4 &&
+              colors.length >= NUMBER_OF_COLORS_PRO_COUNT &&
               pro.plan == 'starter'
             ) {
-              notifyMessage('Upgrade to Pro to add more than 4 colors!');
+              notifyMessage('Upgrade to Pro to add more than ' + NUMBER_OF_COLORS_PRO_COUNT + ' colors!');
               navigation.navigate('ProVersion', { highlightFeatureId: 9 });
             } else {
               setIsColorPickerVisible(true);
