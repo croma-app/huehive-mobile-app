@@ -3541,7 +3541,7 @@ __metadata:
     react-native-gesture-handler: ^2.19.0
     react-native-get-random-values: ^1.11.0
     react-native-google-mobile-ads: ^14.2.5
-    react-native-iap: ^12.15.2
+    react-native-iap: ^12.15.7
     react-native-image-picker: ^7.1.2
     react-native-linear-gradient: ^2.8.3
     react-native-macos: ^0.75.4
@@ -10328,9 +10328,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-iap@npm:^12.15.2":
-  version: 12.15.3
-  resolution: "react-native-iap@npm:12.15.3"
+"react-native-iap@npm:^12.15.7":
+  version: 12.15.7
+  resolution: "react-native-iap@npm:12.15.7"
   peerDependencies:
     expo: ">=47.0.0"
     react: ">=16.13.1"
@@ -10338,7 +10338,7 @@ __metadata:
   peerDependenciesMeta:
     expo:
       optional: true
-  checksum: d10a60da888e7c6d7c98207e3e98365e4e5f9d2a5aba3c65822827dbca6f67235c0436e6c6f3461f60ab2698364b5c02d2964e9d98c631ce34f958aa0a3435d0
+  checksum: e9ce1ea347daf100e663979855183b163b33b378a8688552f024abd609b7fc90ce2456ad773b2f42b52e51a7183111c8f9e29ea344305f6f3ebf4d53f7ab2b7f
   languageName: node
   linkType: hard
 

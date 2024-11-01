@@ -43,7 +43,7 @@
     "react-native-gesture-handler": "^2.19.0",
     "react-native-get-random-values": "^1.11.0",
     "react-native-google-mobile-ads": "^14.2.5",
-    "react-native-iap": "^12.15.2",
+    "react-native-iap": "^12.15.7",
     "react-native-image-picker": "^7.1.2",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-macos": "^0.75.4",

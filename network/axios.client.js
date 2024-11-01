@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { retrieveUserSession } from '../libs/EncryptedStoreage';
 import Storage from '../libs/Storage';
-import { notifyMessage } from '../libs/Helpers';
+import { notifyMessage, sendClientError } from '../libs/Helpers';
 
 const axiosInstance = axios.create({
   baseURL: 'https://huehive.co/',
@@ -47,6 +47,7 @@ axiosInstance.interceptors.response.use(
     } else if (error.request) {
       notifyMessage('No response received from the server.');
     } else {
+      sendClientError('error_setting_up_request', JSON.stringify(error));
       notifyMessage('Error setting up the request:', error.message);
     }
 
