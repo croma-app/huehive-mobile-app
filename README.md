@@ -1,12 +1,13 @@
 ## [HueHive](https://huehive.co)
 
 #### [AppStore](https://apps.apple.com/in/app/huehive-color-palette-manager/id1596763657)
-#### [Playstore](https://play.google.com/store/apps/details?id=app.croma)
 
+#### [Playstore](https://play.google.com/store/apps/details?id=app.croma)
 
 ### Installation guide
 
 - Installation: `yarn`
+- Generate debug.keystore file using this command inside `cd android/app`. And run `keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000`.
 - Running on android: `yarn android`
 - Running on ios: `yarn ios`
 
