@@ -47,7 +47,7 @@ axiosInstance.interceptors.response.use(
     } else if (error.request) {
       notifyMessage('No response received from the server.');
     } else {
-      sendClientError('error_setting_up_request', JSON.stringify(error));
+      sendClientError('error_setting_up_request', error.toString());
       notifyMessage('Error setting up the request:', error.message);
     }
 

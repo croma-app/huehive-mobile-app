@@ -63,33 +63,25 @@ export default function App() {
         const urlParts = url.split('?');
         const path = urlParts[0].split('/');
         const colorsPart = path[path.length - 1];
-  
-        // Validate if colorsPart matches a hex color pattern (e.g., FFFFFF-123456)
-        const isValidPattern = /^([0-9A-Fa-f]{6})(-[0-9A-Fa-f]{6})*$/.test(colorsPart);
-  
-        if (isValidPattern) {
-          // Split the colors part by `-` to get the color codes
-          const colors = colorsPart.split('-');
-  
-          // Parse the query parameters
-          const queryParamsString = urlParts[1] || '';
-          const queryParams = {};
-          queryParamsString.split('&').forEach((param) => {
-            const [key, value] = param.split('=');
-            queryParams[key] = decodeURIComponent(value);
-          });
-  
-          const suggestedName = queryParams['name'];
-          navigationRef.navigate('SavePalette', {
-            colors: colors.map((color) => {
-              return { color: '#' + color };
-            }),
-            suggestedName: suggestedName,
-          });
-        } else {
-          // Open URL in the default browser if pattern does not match
-          Linking.openURL(url);
-        }
+
+        // Split the colors part by `-` to get the color codes
+        const colors = colorsPart.split('-');
+
+        // Parse the query parameters
+        const queryParamsString = urlParts[1] || '';
+        const queryParams = {};
+        queryParamsString.split('&').forEach((param) => {
+          const [key, value] = param.split('=');
+          queryParams[key] = decodeURIComponent(value);
+        });
+
+        const suggestedName = queryParams['name'];
+        navigationRef.navigate('SavePalette', {
+          colors: colors.map((color) => {
+            return { color: '#' + color };
+          }),
+          suggestedName: suggestedName
+        });
       } catch (error) {
         notifyMessage('Error parsing url: ' + error.message);
         navigationRef.navigate(ROUTE_NAMES.HOME);
