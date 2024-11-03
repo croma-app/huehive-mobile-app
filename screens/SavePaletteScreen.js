@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, StyleSheet, TextInput, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, TextInput, ScrollView, Platform } from 'react-native';
 import { PalettePreviewCard } from '../components/PalettePreviewCard';
 import Colors from '../constants/Styles';
 import CromaButton from '../components/CromaButton';
@@ -103,7 +103,7 @@ export default function SavePaletteScreen({ navigation, route }) {
           <TextDialog text={t('A palette with the same name already exists.')} />
         )}
       </ScrollView>
-      <AdBanner plan={pro.plan} />
+      {Platform.OS =='android' && <AdBanner plan={pro.plan} />}
     </View>
   );
 }

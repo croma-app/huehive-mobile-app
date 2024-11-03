@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Text,
   ImageBackground,
+  Platform,
 } from 'react-native';
 import Colors from '../constants/Styles';
 import React, { useState, useEffect, useRef } from 'react';
@@ -162,7 +163,7 @@ const ChatSessionScreen = (props) => {
             </>
           )}
           
-          { messages.length < 2 && <AdBanner plan={pro.plan} />}
+          { messages.length < 2 && Platform.OS == 'android' && <AdBanner plan={pro.plan} />}
 
         </View>
       </ImageBackground>

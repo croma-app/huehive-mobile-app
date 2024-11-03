@@ -5,7 +5,8 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  Text
+  Text,
+  Platform
 } from 'react-native';
 import { PaletteCard } from '../components/PaletteCard';
 
@@ -60,7 +61,7 @@ const MyPalettesScreen = function ({ navigation, route }) {
           })}
           <Spacer />
         </ScrollView>
-      <AdBanner plan={pro.plan} />
+      {Platform.OS=='android' && <AdBanner plan={pro.plan} />}
       </View>
     );
   }
