@@ -1,4 +1,3 @@
-// AdBanner.js
 import React, { useEffect, useState } from 'react';
 import { View, Platform } from 'react-native';
 import mobileAds, { BannerAd, BannerAdSize, TestIds, AdsConsent } from 'react-native-google-mobile-ads';
