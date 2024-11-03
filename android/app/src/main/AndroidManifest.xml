@@ -25,7 +25,7 @@
         <data
             android:host="huehive.co"
             android:scheme="https"
-            android:pathPrefix="/color_palettes/preview" />
+            android:pathPrefix="/p/" />
       </intent-filter>
       
       <intent-filter android:label="share">

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { retrieveUserSession } from '../libs/EncryptedStoreage';
+import { retrieveUserSession } from '../libs/EncryptedStorage';
 import Storage from '../libs/Storage';
 import { notifyMessage, sendClientError } from '../libs/Helpers';
 
@@ -15,7 +15,7 @@ axiosInstance.interceptors.request.use(async (config) => {
   const userAuthInfo = await retrieveUserSession();
   const userDeviceId = await Storage.getUserDeviceId();
 
-  if (!userDeviceId?.trim() || userAuthInfo?.email) {
+  if (!(userDeviceId?.trim() || userAuthInfo?.email)) {
     throw new Error('Device ID or auth is not defined, null, or empty.');
   }
 
@@ -29,30 +29,44 @@ axiosInstance.interceptors.request.use(async (config) => {
 });
 
 axiosInstance.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   (error) => {
-    // If the response status is not in the 2xx range
-    if (error.response) {
-      const status = error.response.status;
-      const errorMessage = error.response.data?.message || 'An error occurred';
+    let errorMessage = 'An unexpected error occurred';
 
-      // Handle different status codes here
-      if (status >= 400 && status < 500) {
-        notifyMessage(`Client error: ${errorMessage}`);
-      } else if (status >= 500) {
-        notifyMessage('Server error, please try again later.');
+    try {
+      if (error.response) {
+        const { status, data } = error.response;
+        
+        // Handle different status codes
+        if (status >= 400 && status < 500) {
+          errorMessage = data?.message || 'A client error occurred';
+          notifyMessage(errorMessage); // Single argument
+        } else if (status >= 500) {
+          notifyMessage('Server error, please try again later.');
+        }
+      } else if (error.request) {
+        notifyMessage('No response received from the server.');
+      } else {
+        // Fixed error message handling
+        sendClientError('error_setting_up_request', error.toString());
+        notifyMessage(`Error setting up the request: ${error.toString() || 'Unknown error'}`); // Properly formatted string
       }
-    } else if (error.request) {
-      notifyMessage('No response received from the server.');
-    } else {
-      sendClientError('error_setting_up_request', error.toString());
-      notifyMessage('Error setting up the request:', error.message);
+
+      // Log the full error for debugging
+      console.warn('Axios Error:', {
+        message: errorMessage,
+        originalError: error,
+        response: error.response,
+        request: error.request,
+      });
+
+    } catch (handlingError) {
+      // Fallback error handling
+      console.error('Error while handling axios error:', handlingError);
+      sendClientError('error_handling_axios_error','An unexpected error occurred' + handlingError);
     }
 
-    // Optionally, you can also return a custom error message or rethrow the error
-    return Promise.reject(errorMessage || 'An unexpected error occurred');
+    return Promise.reject(error);
   }
 );
 

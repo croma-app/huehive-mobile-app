@@ -3534,7 +3534,6 @@ __metadata:
     react-native-config: ^1.5.3
     react-native-document-picker: ^9.3.1
     react-native-draggable-flatlist: ^4.0.1
-    react-native-encrypted-storage: ^4.0.3
     react-native-exception-handler: ^2.10.10
     react-native-flash-message: ^0.4.2
     react-native-fs: ^2.20.0
@@ -10234,16 +10233,6 @@ __metadata:
   version: 1.0.0
   resolution: "react-native-elevation@npm:1.0.0"
   checksum: 988edf86b441459e65f5121b0f916087c94dc0fb4bf7a36da4718b633644dbf10313054208cc4758302fbaa7e1d7b99d29004efc937466ecd7d66c2372f47129
-  languageName: node
-  linkType: hard
-
-"react-native-encrypted-storage@npm:^4.0.3":
-  version: 4.0.3
-  resolution: "react-native-encrypted-storage@npm:4.0.3"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-  checksum: 9d2999c58559f1e4f66d1baf2c3edeff96cf42027900850d94c6bbea24ac9715047ce69bf6e8a73b68aff4508cf35dd88ac494ad5905933286ef3b75cd123e30
   languageName: node
   linkType: hard
 

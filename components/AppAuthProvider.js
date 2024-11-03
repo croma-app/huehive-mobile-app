@@ -10,7 +10,7 @@ import useUserData from '../hooks/useUserData';
 import { useNavigation } from '@react-navigation/native';
 import { PRIVATE_ROUTES } from '../libs/constants';
 import GoogleButton from './GoogleButton';
-import { storeUserSession } from '../libs/EncryptedStoreage';
+import { storeUserSession } from '../libs/EncryptedStorage';
 import { notifyMessage, sendClientError } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
 import { googleLogin } from '../network/login-and-signup';
@@ -24,7 +24,7 @@ const SCREEN_TYPES = {
 
 export const AuthForm = function () {
   const applicationState = useApplicationStore();
-  const { loadInitPaletteFromStore } = applicationState;
+  const { reloadPalettes } = applicationState;
   const { t } = useTranslation();
   const { loadUserData } = useUserData();
   const [screenType, setScreenType] = useState(SCREEN_TYPES.SIGN_UP);
@@ -60,7 +60,7 @@ export const AuthForm = function () {
       );
 
       await loadUserData();
-      loadInitPaletteFromStore();
+      reloadPalettes();
     } catch (error) {
       sendClientError('google_sign_in', error?.message || '', error);
       notifyMessage(t('Google login failed!' + error?.message || ''));

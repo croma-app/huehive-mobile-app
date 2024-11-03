@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { signUp } from '../network/login-and-signup';
-import { storeUserSession } from '../libs/EncryptedStoreage';
+import { storeUserSession } from '../libs/EncryptedStorage';
 import CromaButton from './CromaButton';
 import useUserData from '../hooks/useUserData';
 import { notifyMessage, sendClientError } from '../libs/Helpers';
@@ -21,7 +21,7 @@ const LOGIN_AND_SIGNUP_TEXT = {
 
 const SignUp = function ({ setScreenLogin }) {
   const applicationState = useApplicationStore();
-  const { loadInitPaletteFromStore } = applicationState;
+  const { reloadPalettes } = applicationState;
   const [email, setEmail] = useState('');
   const [fullname, setFullname] = useState('');
   const [password, setPassword] = useState('');
@@ -71,7 +71,7 @@ const SignUp = function ({ setScreenLogin }) {
         res.data.user.avatar_url
       );
       await loadUserData();
-      loadInitPaletteFromStore();
+      reloadPalettes();
     } catch (error) {
       console.log(error);
       sendClientError('signup_failed', error?.message || '', error);

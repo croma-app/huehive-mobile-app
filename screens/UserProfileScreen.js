@@ -5,7 +5,7 @@ import CromaButton from '../components/CromaButton';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import useUserData from '../hooks/useUserData';
-import { removeUserSession } from '../libs/EncryptedStoreage';
+import { removeUserSession } from '../libs/EncryptedStorage';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { ROUTE_NAMES } from '../libs/constants';
 import useApplicationStore from '../hooks/useApplicationStore';
@@ -17,7 +17,7 @@ import { AdsConsent, AdsConsentStatus } from 'react-native-google-mobile-ads';
 
 function UserProfile(props) {
   const applicationState = useApplicationStore();
-  const { loadInitPaletteFromStore } = applicationState;
+  const { reloadPalettes } = applicationState;
   const { userData, loadUserData } = useUserData();
   const { openAuthOverlay } = useAuth();
   const [consentInfo, setConsentInfo] = useState(false);
@@ -61,14 +61,14 @@ function UserProfile(props) {
     await logout();
     await removeUserSession();
     await loadUserData();
-    loadInitPaletteFromStore();
+    reloadPalettes();
     props.navigation.navigate(ROUTE_NAMES.HOME);
     try {
       await GoogleSignin.revokeAccess();
     } catch (error) {
       console.error(error);
     }
-  }, [loadInitPaletteFromStore, loadUserData, props.navigation]);
+  }, [reloadPalettes, loadUserData, props.navigation]);
 
   return (
     <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>

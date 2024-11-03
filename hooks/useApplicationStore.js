@@ -55,6 +55,12 @@ const useApplicationStore = create((set) => ({
     set({ allPalettes });
   },
 
+  reloadPalettes: async () => {
+    set({ isLoading: true });
+    const allPalettes = await useApplicationStore.getState().loadPalettes();
+    set({ allPalettes, isLoading: false });
+  },
+
   loadInitPaletteFromStore: async () => {
     set({ isLoading: true });
     const isUserAlreadyExits = await Storage.checkUserAlreadyExists();
