@@ -21,7 +21,7 @@ const LOGIN_AND_SIGNUP_TEXT = {
 
 const Login = function ({ setScreenSignup }) {
   const applicationState = useApplicationStore();
-  const { loadInitPaletteFromStore } = applicationState;
+  const { reloadPalettes } = applicationState;
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { t } = useTranslation();
@@ -59,7 +59,7 @@ const Login = function ({ setScreenSignup }) {
         res.data.user.avatar_url
       );
       await loadUserData();
-      loadInitPaletteFromStore();
+      reloadPalettes();
     } catch (error) {
       sendClientError('login_failed', error?.message || '', error);
       notifyMessage(t('Login failed: ' + error?.message));

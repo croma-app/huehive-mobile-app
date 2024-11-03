@@ -21,7 +21,7 @@ const LOGIN_AND_SIGNUP_TEXT = {
 
 const SignUp = function ({ setScreenLogin }) {
   const applicationState = useApplicationStore();
-  const { loadInitPaletteFromStore } = applicationState;
+  const { reloadPalettes } = applicationState;
   const [email, setEmail] = useState('');
   const [fullname, setFullname] = useState('');
   const [password, setPassword] = useState('');
@@ -71,7 +71,7 @@ const SignUp = function ({ setScreenLogin }) {
         res.data.user.avatar_url
       );
       await loadUserData();
-      loadInitPaletteFromStore();
+      reloadPalettes();
     } catch (error) {
       console.log(error);
       sendClientError('signup_failed', error?.message || '', error);

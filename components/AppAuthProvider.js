@@ -24,7 +24,7 @@ const SCREEN_TYPES = {
 
 export const AuthForm = function () {
   const applicationState = useApplicationStore();
-  const { loadInitPaletteFromStore } = applicationState;
+  const { reloadPalettes } = applicationState;
   const { t } = useTranslation();
   const { loadUserData } = useUserData();
   const [screenType, setScreenType] = useState(SCREEN_TYPES.SIGN_UP);
@@ -60,7 +60,7 @@ export const AuthForm = function () {
       );
 
       await loadUserData();
-      loadInitPaletteFromStore();
+      reloadPalettes();
     } catch (error) {
       sendClientError('google_sign_in', error?.message || '', error);
       notifyMessage(t('Google login failed!' + error?.message || ''));
