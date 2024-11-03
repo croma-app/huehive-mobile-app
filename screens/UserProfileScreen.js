@@ -5,7 +5,7 @@ import CromaButton from '../components/CromaButton';
 import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import useUserData from '../hooks/useUserData';
-import { removeUserSession } from '../libs/EncryptedStoreage';
+import { removeUserSession } from '../libs/EncryptedStorage';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { ROUTE_NAMES } from '../libs/constants';
 import useApplicationStore from '../hooks/useApplicationStore';

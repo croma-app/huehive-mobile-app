@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { signUp } from '../network/login-and-signup';
-import { storeUserSession } from '../libs/EncryptedStoreage';
+import { storeUserSession } from '../libs/EncryptedStorage';
 import CromaButton from './CromaButton';
 import useUserData from '../hooks/useUserData';
 import { notifyMessage, sendClientError } from '../libs/Helpers';

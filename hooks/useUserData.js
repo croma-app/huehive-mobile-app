@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { retrieveUserSession } from '../libs/EncryptedStoreage';
+import { retrieveUserSession } from '../libs/EncryptedStorage';
 
 const useUserData = create((set) => ({
   userData: undefined,

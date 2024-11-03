@@ -10,7 +10,7 @@ import useUserData from '../hooks/useUserData';
 import { useNavigation } from '@react-navigation/native';
 import { PRIVATE_ROUTES } from '../libs/constants';
 import GoogleButton from './GoogleButton';
-import { storeUserSession } from '../libs/EncryptedStoreage';
+import { storeUserSession } from '../libs/EncryptedStorage';
 import { notifyMessage, sendClientError } from '../libs/Helpers';
 import { useTranslation } from 'react-i18next';
 import { googleLogin } from '../network/login-and-signup';
