@@ -15,7 +15,7 @@ axiosInstance.interceptors.request.use(async (config) => {
   const userAuthInfo = await retrieveUserSession();
   const userDeviceId = await Storage.getUserDeviceId();
 
-  if (!userDeviceId?.trim() || userAuthInfo?.email) {
+  if (!(userDeviceId?.trim() || userAuthInfo?.email)) {
     throw new Error('Device ID or auth is not defined, null, or empty.');
   }
 
