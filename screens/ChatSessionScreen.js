@@ -7,9 +7,9 @@ import {
   TextInput,
   ActivityIndicator,
   Text,
-  ImageBackground,
-  Platform,
+  ImageBackground
 } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Colors from '../constants/Styles';
 import React, { useState, useEffect, useRef } from 'react';
 import { material } from 'react-native-typography';
@@ -19,7 +19,7 @@ import CromaButton from '../components/CromaButton';
 import useChatSession from '../hooks/useChatSession';
 import useApplicationStore from '../hooks/useApplicationStore';
 import GridActionButton from '../components/GridActionButton';
-import AdBanner from '../components/AdBanner';  // Import the new AdBanner component
+import AdBanner from '../components/AdBanner'; // Import the new AdBanner component
 
 const bgImage = require('../assets/images/colorful_background.jpg');
 
@@ -32,16 +32,21 @@ const ChatSessionScreen = (props) => {
     useChatSession(route.params?.messages);
 
   useEffect(() => {
-    logEvent('chat_session_screen');
+    logEvent('chat_session_follow_up_screen');
+    handleSendMessage(route.params.userQuery);
   }, []);
 
-  const handleSendMessage = async () => {
+  onTextChange = (text) => {
+    setInputText(text.match(/.{1,30}/g).join('\n'));
+  };
+
+  const handleSendMessage = async (userQuery) => {
     const message = {
       chat_session: {
         chat_session_type: 'color_palette',
         messages_attributes: [
           {
-            message: inputText,
+            message: userQuery || inputText,
             sender_type: 'user'
           }
         ]
@@ -57,13 +62,6 @@ const ChatSessionScreen = (props) => {
     setInputText('');
     scrollViewRef.current.scrollToEnd({ animated: true });
   };
-
-  useEffect(() => {
-    let interval;
-    return () => {
-      clearInterval(interval);
-    };
-  }, [messages]);
 
   function showUnlockPro() {
     return pro.plan === 'starter' && messages.length >= 2;
@@ -84,42 +82,16 @@ const ChatSessionScreen = (props) => {
                 ref={scrollViewRef}
                 style={styles.chat_container}
                 showsVerticalScrollIndicator={false}>
-                {messages.length === 0 ? (
-                  <View style={styles.searchContainer}>
-                    <Text style={styles.searchTitle}>
-                      Welcome to HueHive AI!
-                    </Text>
-                    <Text style={styles.searchSubtitle}>
-                      Start by generating a color palette for your next project.
-                    </Text>
-                    <View style={styles.searchInputContainer}>
-                      <TextInput
-                        style={styles.input}
-                        value={inputText}
-                        onChangeText={setInputText}
-                        placeholder='Create a color palette for...'
-                      />
-                      <TouchableOpacity
-                        disabled={inputText.trim() === ''}
-                        onPress={handleSendMessage}
-                        style={
-                          inputText.trim() === '' ? styles.disableGenerateButton : styles.generateButton
-                        }>
-                        <Text style={styles.textGenerate}> Generate </Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                ) : (
-                  messages.map((message, index) => (
-                    <ChatCard
-                      sender={message.sender_type}
-                      message={message.message}
-                      key={index}
-                      index={index}
-                      navigation={navigation}
-                    />
-                  ))
-                )}
+                {messages.map((message, index) => (
+                  <ChatCard
+                    sender={message.sender_type}
+                    message={message.message}
+                    key={message.id}
+                    index={index}
+                    navigation={navigation}
+                  />
+                ))}
+                <ActivityIndicator animating={isLoading} size="large" color="#ff7875" />
               </ScrollView>
 
               {error && (
@@ -128,8 +100,7 @@ const ChatSessionScreen = (props) => {
                   <Text style={styles.errorMessageText}>{error}</Text>
                 </View>
               )}
-              <ActivityIndicator animating={isLoading} size="large" color="#ff7875" />
-              
+
               {!showUnlockPro() && messages.length > 0 && (
                 <View style={styles.inputContainer}>
                   <TextInput
@@ -142,13 +113,15 @@ const ChatSessionScreen = (props) => {
                     disabled={isLoading || inputText.trim() === ''}
                     onPress={handleSendMessage}
                     style={
-                      isLoading || inputText.trim() === '' ? styles.disableSendButton : styles.sendButton
+                      isLoading || inputText.trim() === ''
+                        ? styles.disableSendButton
+                        : styles.sendButton
                     }>
                     <Text style={styles.textSend}> Send </Text>
                   </TouchableOpacity>
                 </View>
               )}
-              
+
               {showUnlockPro() && (
                 <CromaButton
                   style={{ backgroundColor: Colors.primary, margin: 10 }}
@@ -162,12 +135,8 @@ const ChatSessionScreen = (props) => {
               )}
             </>
           )}
-          
-          { messages.length < 2 && Platform.OS == 'android' && <AdBanner plan={pro.plan} />}
-
         </View>
       </ImageBackground>
-      <GridActionButton navigation={navigation} />
     </View>
   );
 };
@@ -209,33 +178,46 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   searchInputContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    width: '100%',
+    gap: 15,
+    marginTop: 10
   },
   input: {
-    flex: 1,
-    marginRight: 12,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
     borderWidth: 1,
     borderColor: 'gray',
     borderRadius: 8,
-    height: 40
+    width: '100%',
+    height: 40,
+    fontSize: 16
   },
   generateButton: {
-    padding: 8,
+    padding: 10,
+    paddingLeft: 25,
+    paddingRight: 25,
     backgroundColor: Colors.primary,
-    borderRadius: 8
+    borderRadius: 8,
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 5,
+    alignItems: 'center'
   },
   disableGenerateButton: {
-    padding: 8,
+    padding: 7,
+    paddingLeft: 25,
+    paddingRight: 25,
     backgroundColor: 'gray',
-    borderRadius: 8
+    borderRadius: 8,
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 5,
+    alignItems: 'center'
   },
   textGenerate: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center'
   },

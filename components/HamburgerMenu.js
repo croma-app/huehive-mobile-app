@@ -57,14 +57,14 @@ const HamburgerMenu = (props) => {
 
       <ScrollView>
         <View style={styles.menu}>
-        <TouchableOpacity
+          <TouchableOpacity
             style={styles.menuItem}
             onPress={async () => {
               logEvent('home');
               props.toggleSideMenu();
               props.navigation.reset({
                 index: 0,
-                routes: [{ name: ROUTE_NAMES.HOME }],
+                routes: [{ name: ROUTE_NAMES.HOME_SEARCH }]
               });
             }}>
             <View style={styles.menuItemView}>
@@ -100,20 +100,21 @@ const HamburgerMenu = (props) => {
               <Text style={styles.textAreaMenuItem}>{t('Explore Palettes')}</Text>
             </View>
           </TouchableOpacity>
-          {Platform.OS == 'ios' && <TouchableOpacity
-            style={styles.menuItem}
-            onPress={async () => {
-              logEvent('hm_palette_library');
-              navigate('PaletteLibrary');
-            }}>
-            <View style={styles.menuItemView}>
-              <View style={styles.menuIcon}>
-                <MaterialCommunityIcons name="palette-swatch-outline" style={styles.icon} />
+          {Platform.OS == 'ios' && (
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={async () => {
+                logEvent('hm_palette_library');
+                navigate('PaletteLibrary');
+              }}>
+              <View style={styles.menuItemView}>
+                <View style={styles.menuIcon}>
+                  <MaterialCommunityIcons name="palette-swatch-outline" style={styles.icon} />
+                </View>
+                <Text style={styles.textAreaMenuItem}>{t('Palette Library')}</Text>
               </View>
-              <Text style={styles.textAreaMenuItem}>{t('Palette Library')}</Text>
-            </View>
-          </TouchableOpacity>
-          }
+            </TouchableOpacity>
+          )}
           {
             <MenuLink
               id={'rate-us'}
@@ -123,7 +124,7 @@ const HamburgerMenu = (props) => {
                   : 'https://apps.apple.com/app/id1596763657?action=write-review'
               }
               icon={<MaterialIcons name="star-outline" style={styles.icon} />}>
-              {t('Rate us on ' + (Platform.OS == 'android' ? 'PlayStore' : "AppStore"))}
+              {t('Rate us on ' + (Platform.OS == 'android' ? 'PlayStore' : 'AppStore'))}
             </MenuLink>
           }
           <TouchableOpacity
@@ -152,7 +153,7 @@ const HamburgerMenu = (props) => {
               <Text style={[styles.textAreaMenuItem]}>{t('About us')}</Text>
             </View>
           </TouchableOpacity>
-          { Platform.OS == 'android' && // right now histories requires login. That's why enabling it in only android.
+          {Platform.OS == 'android' && ( // right now histories requires login. That's why enabling it in only android.
             <TouchableOpacity
               style={styles.menuItem}
               onPress={async () => {
@@ -166,8 +167,8 @@ const HamburgerMenu = (props) => {
                 <Text style={styles.textAreaMenuItem}>{t('Huehive AI chat history')}</Text>
               </View>
             </TouchableOpacity>
-          }
-          {(Platform.OS == 'android' && !userData) && (
+          )}
+          {Platform.OS == 'android' && !userData && (
             <TouchableOpacity
               style={styles.menuItem}
               onPress={async () => {
@@ -183,7 +184,7 @@ const HamburgerMenu = (props) => {
               </View>
             </TouchableOpacity>
           )}
-          {(Platform.OS == 'android') && (
+          {Platform.OS == 'android' && (
             <TouchableOpacity
               style={styles.menuItem}
               onPress={async () => {

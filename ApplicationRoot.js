@@ -1,7 +1,7 @@
-import React, { useState, useCallback, useEffect} from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { StyleSheet, View, TouchableOpacity, Linking, Platform, Animated } from 'react-native';
 import AboutUsScreen from './screens/AboutUsScreen';
-import ChatSessionScreen from './screens/ChatSessionScreen';
+import HomeSearchScreen from './screens/HomeSearchScreen.js';
 import ChatSessionHistoriesScreen from './screens/ChatSessionHistoriesScreen';
 import MyPalettesScreen from './screens/MyPalettesScreen.js';
 import Colors from './constants/Styles';
@@ -10,6 +10,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ColorDetailsScreen from './screens/ColorDetailScreen';
 import PalettesScreen from './screens/PalettesScreen';
 import SavePaletteScreen from './screens/SavePaletteScreen';
+import ChatSessionScreen from './screens/ChatSessionScreen';
 import ColorListScreen from './screens/ColorListScreen';
 import PaletteViewScreen from './screens/PaletteViewScreen.js';
 import PaletteEditScreen from './screens/PaletteEditScreen.js';
@@ -29,7 +30,7 @@ import UserProfile from './screens/UserProfileScreen.js';
 import useApplicationStore from './hooks/useApplicationStore.js';
 import ExplorePaletteScreen from './screens/ExplorePaletteScreen.js';
 import { notifyMessage } from './libs/Helpers.js';
-import FlashMessage from "react-native-flash-message";
+import FlashMessage from 'react-native-flash-message';
 import ShareMenu from 'react-native-share-menu';
 import Color from 'pigment/full';
 import { logEvent } from './libs/Helpers.js';
@@ -43,11 +44,11 @@ export default function App() {
   const { loadInitPaletteFromStore } = applicationState;
   const [isMenuOpen, setMenu] = useState(false);
   const navigationRef = useNavigationContainerRef();
-  useIAPConnection(function(error) {
+  useIAPConnection(function (error) {
     if (error) {
       // TODO: figure out a better way to handle this error and show user a way to retry, ask for help or continue.
-      notifyMessage("Error during purchase initialization. Purchase might not work. Please retry");
-    } 
+      notifyMessage('Error during purchase initialization. Purchase might not work. Please retry');
+    }
     loadInitPaletteFromStore(); // Still load the palettes. Specially simulator will always face this issue.
   });
 
@@ -84,7 +85,7 @@ export default function App() {
         });
       } catch (error) {
         notifyMessage('Error parsing url: ' + error.message);
-        navigationRef.navigate(ROUTE_NAMES.HOME);
+        navigationRef.navigate(ROUTE_NAMES.HOME_SEARCH);
       }
     },
     [navigationRef]
@@ -166,11 +167,21 @@ export default function App() {
                   }
                 }}>
                 <Stack.Screen
-                  name={ROUTE_NAMES.CHAT_SESSION}
-                  options={{ 
+                  name={ROUTE_NAMES.HOME_SEARCH}
+                  options={{
                     headerLeft: hamburgerMenuIcon,
-                    headerTitleContainerStyle: { left: 40 }, 
-                    title: t('HueHive AI') }}
+                    headerTitleContainerStyle: { left: 40 },
+                    title: t('HueHive AI')
+                  }}
+                  component={HomeSearchScreen}
+                />
+                <Stack.Screen
+                  name={ROUTE_NAMES.CHAT_SESSION}
+                  options={{
+                    headerLeft: hamburgerMenuIcon,
+                    headerTitleContainerStyle: { left: 40 },
+                    title: t('HueHive AI chat')
+                  }}
                   component={ChatSessionScreen}
                 />
                 <Stack.Screen
@@ -178,7 +189,7 @@ export default function App() {
                   options={() => {
                     return {
                       headerLeft: hamburgerMenuIcon,
-                      headerTitleContainerStyle: { left: 40 }, 
+                      headerTitleContainerStyle: { left: 40 },
                       title: t('My Palettes')
                     };
                   }}
@@ -189,7 +200,7 @@ export default function App() {
                   options={{ title: t('About us') }}
                   component={AboutUsScreen}
                 />
-                
+
                 <Stack.Screen
                   name={ROUTE_NAMES.CHAT_SESSION_HISTORIES}
                   options={{ title: t('Your chats') }}
@@ -238,7 +249,7 @@ export default function App() {
             </AppAuthProvider>
           </NavigationContainer>
         </View>
-        <FlashMessage floating={true} position={{bottom: 100}} />
+        <FlashMessage floating={true} position={{ bottom: 100 }} />
       </SideMenu>
     </GestureHandlerRootView>
   );
@@ -248,7 +259,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
   sideMenuIcon: {
     fontSize: 25,
