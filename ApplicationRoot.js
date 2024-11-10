@@ -10,7 +10,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ColorDetailsScreen from './screens/ColorDetailScreen';
 import PalettesScreen from './screens/PalettesScreen';
 import SavePaletteScreen from './screens/SavePaletteScreen';
-import ChatSessionFollowUpScreen from './screens/ChatSessionFollowUpScreen';
+import ChatSessionScreen from './screens/ChatSessionScreen';
 import ColorListScreen from './screens/ColorListScreen';
 import PaletteViewScreen from './screens/PaletteViewScreen.js';
 import PaletteEditScreen from './screens/PaletteEditScreen.js';
@@ -182,7 +182,7 @@ export default function App() {
                     headerTitleContainerStyle: { left: 40 },
                     title: t('HueHive AI chat')
                   }}
-                  component={ChatSessionFollowUpScreen}
+                  component={ChatSessionScreen}
                 />
                 <Stack.Screen
                   name={ROUTE_NAMES.MY_PALETTES}

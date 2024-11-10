@@ -23,7 +23,7 @@ import AdBanner from '../components/AdBanner'; // Import the new AdBanner compon
 
 const bgImage = require('../assets/images/colorful_background.jpg');
 
-const ChatSessionFollowUpScreen = (props) => {
+const ChatSessionScreen = (props) => {
   const { route, navigation } = props;
   const [inputText, setInputText] = useState('');
   const scrollViewRef = useRef();
@@ -268,4 +268,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ChatSessionFollowUpScreen;
+export default ChatSessionScreen;

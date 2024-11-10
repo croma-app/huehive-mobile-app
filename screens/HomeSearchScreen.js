@@ -56,7 +56,7 @@ const ChatSessionScreen = (props) => {
                 <TouchableOpacity
                   disabled={userQuery.trim() === ''}
                   onPress={() => {
-                    navigation.navigate('ChatSessionFollowUp', { userQuery: userQuery });
+                    navigation.navigate('ChatSession', { userQuery: userQuery });
                   }}
                   style={
                     userQuery.trim() === '' ? styles.disableGenerateButton : styles.generateButton

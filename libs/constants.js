@@ -1,8 +1,8 @@
 export const ROUTE_NAMES = {
   MY_PALETTES: 'MyPalettes',
   ABOUT_US: 'AboutUs',
-  HOME_SEARCH: 'HomeSearchScreen',
-  CHAT_SESSION: 'ChatSessionFollowUp',
+  HOME_SEARCH: 'HomeSearch',
+  CHAT_SESSION: 'ChatSession',
   CHAT_SESSION_HISTORIES: 'ChatSessionHistories',
   COLOR_DETAILS: 'ColorDetails',
   PALETTES: 'Palettes',
