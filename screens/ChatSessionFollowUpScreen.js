@@ -9,6 +9,7 @@ import {
   Text,
   ImageBackground
 } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Colors from '../constants/Styles';
 import React, { useState, useEffect, useRef } from 'react';
 import { material } from 'react-native-typography';
@@ -22,7 +23,7 @@ import AdBanner from '../components/AdBanner'; // Import the new AdBanner compon
 
 const bgImage = require('../assets/images/colorful_background.jpg');
 
-const ChatSessionScreen = (props) => {
+const ChatSessionFollowUpScreen = (props) => {
   const { route, navigation } = props;
   const [inputText, setInputText] = useState('');
   const scrollViewRef = useRef();
@@ -31,16 +32,21 @@ const ChatSessionScreen = (props) => {
     useChatSession(route.params?.messages);
 
   useEffect(() => {
-    logEvent('chat_session_screen');
+    logEvent('chat_session_follow_up_screen');
+    handleSendMessage(route.params.userQuery);
   }, []);
 
-  const handleSendMessage = async () => {
+  onTextChange = (text) => {
+    setInputText(text.match(/.{1,30}/g).join('\n'));
+  };
+
+  const handleSendMessage = async (userQuery) => {
     const message = {
       chat_session: {
         chat_session_type: 'color_palette',
         messages_attributes: [
           {
-            message: inputText,
+            message: userQuery || inputText,
             sender_type: 'user'
           }
         ]
@@ -56,13 +62,6 @@ const ChatSessionScreen = (props) => {
     setInputText('');
     scrollViewRef.current.scrollToEnd({ animated: true });
   };
-
-  useEffect(() => {
-    let interval;
-    return () => {
-      clearInterval(interval);
-    };
-  }, [messages]);
 
   function showUnlockPro() {
     return pro.plan === 'starter' && messages.length >= 2;
@@ -83,42 +82,15 @@ const ChatSessionScreen = (props) => {
                 ref={scrollViewRef}
                 style={styles.chat_container}
                 showsVerticalScrollIndicator={false}>
-                {messages.length === 0 ? (
-                  <View style={styles.searchContainer}>
-                    <Text style={styles.searchTitle}>Welcome to HueHive AI!</Text>
-                    <Text style={styles.searchSubtitle}>
-                      Start by generating a color palette for your next project.
-                    </Text>
-                    <View style={styles.searchInputContainer}>
-                      <TextInput
-                        style={styles.input}
-                        value={inputText}
-                        onChangeText={setInputText}
-                        placeholder="Create a color palette for..."
-                      />
-                      <TouchableOpacity
-                        disabled={inputText.trim() === ''}
-                        onPress={handleSendMessage}
-                        style={
-                          inputText.trim() === ''
-                            ? styles.disableGenerateButton
-                            : styles.generateButton
-                        }>
-                        <Text style={styles.textGenerate}> Generate </Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                ) : (
-                  messages.map((message, index) => (
-                    <ChatCard
-                      sender={message.sender_type}
-                      message={message.message}
-                      key={message.id}
-                      index={index}
-                      navigation={navigation}
-                    />
-                  ))
-                )}
+                {messages.map((message, index) => (
+                  <ChatCard
+                    sender={message.sender_type}
+                    message={message.message}
+                    key={message.id}
+                    index={index}
+                    navigation={navigation}
+                  />
+                ))}
               </ScrollView>
 
               {error && (
@@ -163,10 +135,6 @@ const ChatSessionScreen = (props) => {
               )}
             </>
           )}
-
-          {messages.length < 2 && Platform.OS == 'android' && <AdBanner plan={pro.plan} />}
-
-          {messages.length < 2 && <AdBanner plan={pro.plan} />}
         </View>
       </ImageBackground>
       <GridActionButton navigation={navigation} />
@@ -211,33 +179,46 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   searchInputContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    width: '100%',
+    gap: 15,
+    marginTop: 10
   },
   input: {
-    flex: 1,
-    marginRight: 12,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
     borderWidth: 1,
     borderColor: 'gray',
     borderRadius: 8,
-    height: 40
+    width: '100%',
+    height: 40,
+    fontSize: 16
   },
   generateButton: {
-    padding: 8,
+    padding: 10,
+    paddingLeft: 25,
+    paddingRight: 25,
     backgroundColor: Colors.primary,
-    borderRadius: 8
+    borderRadius: 8,
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 5,
+    alignItems: 'center'
   },
   disableGenerateButton: {
-    padding: 8,
+    padding: 7,
+    paddingLeft: 25,
+    paddingRight: 25,
     backgroundColor: 'gray',
-    borderRadius: 8
+    borderRadius: 8,
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 5,
+    alignItems: 'center'
   },
   textGenerate: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center'
   },
@@ -287,4 +268,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default ChatSessionScreen;
+export default ChatSessionFollowUpScreen;

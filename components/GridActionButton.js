@@ -8,7 +8,7 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  Platform,
+  Platform
 } from 'react-native';
 import Color from 'pigment/full';
 import RNColorThief from 'react-native-color-thief';
@@ -30,8 +30,7 @@ import useApplicationStore from '../hooks/useApplicationStore';
 import MultiColorView from './MultiColorView';
 import { ROUTE_NAMES } from '../libs/constants';
 
-
-const GridActionButton = ({ navigation}) => {
+const GridActionButton = ({ navigation }) => {
   const { t } = useTranslation();
   const [pickImageLoading, setPickImageLoading] = useState(false);
   const [isColorPickerVisible, setIsColorPickerVisible] = React.useState(false);
@@ -174,38 +173,38 @@ const GridActionButton = ({ navigation}) => {
           logEvent('chat_session_action_button');
           props.navigation.reset({
             index: 0,
-            routes: [{ name: ROUTE_NAMES.CHAT_SESSION }],
+            routes: [{ name: ROUTE_NAMES.HOME_SEARCH }]
           });
         }
       },
-      Platform.OS == 'android' ? (
-      pro.plan !== 'starter'
-        ? {
-            id: 6,
-            icon: <MaterialIcons name="create" size={20} />,
-            text1: t('Create palette'),
-            text2: t(' manually'),
-            onPress: () => {
-              logEvent('create_new_palette');
-              navigation.navigate('SavePalette');
+      Platform.OS == 'android'
+        ? pro.plan !== 'starter'
+          ? {
+              id: 6,
+              icon: <MaterialIcons name="create" size={20} />,
+              text1: t('Create palette'),
+              text2: t(' manually'),
+              onPress: () => {
+                logEvent('create_new_palette');
+                navigation.navigate('SavePalette');
+              }
             }
-          }
-        : {
-            id: 7,
-            icon: <FontAwesome5 name="unlock" size={20} />,
-            text1: t('Unlock'),
-            text2: t('Pro'),
-            onPress: () => {
-              logEvent('home_screen_pro_button');
-              navigation.navigate('ProVersion');
+          : {
+              id: 7,
+              icon: <FontAwesome5 name="unlock" size={20} />,
+              text1: t('Unlock'),
+              text2: t('Pro'),
+              onPress: () => {
+                logEvent('home_screen_pro_button');
+                navigation.navigate('ProVersion');
+              }
             }
-          }) : null
+        : null
     ].filter(Boolean)
   ];
   return (
     <>
-      <ActionButtonContainer
-        config={actionButtonConfig} />
+      <ActionButtonContainer config={actionButtonConfig} />
       <Modal
         visible={isColorPickerVisible}
         animationType="slide"
@@ -232,9 +231,9 @@ const GridActionButton = ({ navigation}) => {
           setSelectedImage(null);
           setAutomaticColors([]);
         }}>
-        {pickImageLoading && 
-            <ActivityIndicator size="large" color={Colors.primary} style={styles.loadingIndicator} />
-          }
+        {pickImageLoading && (
+          <ActivityIndicator size="large" color={Colors.primary} style={styles.loadingIndicator} />
+        )}
         <TouchableWithoutFeedback
           onPress={() => {
             setIsImagePickerModalVisible(false);
@@ -256,22 +255,23 @@ const GridActionButton = ({ navigation}) => {
                     <Text style={styles.nextButtonText}>{t('Next')}</Text>
                     <MaterialIcons name="arrow-forward" size={24} color={Color.primaryDark} />
                   </TouchableOpacity>
-                  {Platform.OS == 'android' && (<><View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center'
-                    }}>
-                    <Text style={{ backgroundColor: '#ccc', height: 1, flex: 1 }}> </Text>
-                    <Text style={{ marginHorizontal: 10 }}> {t('OR')}</Text>
-                    <Text style={{ backgroundColor: '#ccc', height: 1, flex: 1 }}> </Text>
-                  </View>
-                  <TouchableOpacity style={styles.pickColorsButton} onPress={handlePickColors}>
-                    <Text style={styles.pickColorsButtonText}>{t('Pick colors Manually')}</Text>
-                  </TouchableOpacity>
-                  </>
+                  {Platform.OS == 'android' && (
+                    <>
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center'
+                        }}>
+                        <Text style={{ backgroundColor: '#ccc', height: 1, flex: 1 }}> </Text>
+                        <Text style={{ marginHorizontal: 10 }}> {t('OR')}</Text>
+                        <Text style={{ backgroundColor: '#ccc', height: 1, flex: 1 }}> </Text>
+                      </View>
+                      <TouchableOpacity style={styles.pickColorsButton} onPress={handlePickColors}>
+                        <Text style={styles.pickColorsButtonText}>{t('Pick colors Manually')}</Text>
+                      </TouchableOpacity>
+                    </>
                   )}
                 </View>
-                  
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -319,7 +319,7 @@ const styles = {
     height: 120
   },
   imageExtractedColorPreview: {
-    margin: 16,
+    margin: 16
   },
   colorPickerModalContent: {
     backgroundColor: 'white',
@@ -333,7 +333,7 @@ const styles = {
   previewImage: {
     height: 150,
     resizeMode: 'contain',
-    marginHorizontal: 20,
+    marginHorizontal: 20
   },
   colorPreviewContainer: {
     display: 'flex',
@@ -349,7 +349,7 @@ const styles = {
   },
   pickColorsButton: {
     alignItems: 'center',
-    marginVertical: 8,
+    marginVertical: 8
   },
   pickColorsButtonText: {
     fontSize: 18,

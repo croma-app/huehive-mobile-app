@@ -27,7 +27,7 @@ function UserProfile(props) {
   }, []);
 
   const { t } = useTranslation();
-  
+
   useEffect(() => {
     GoogleSignin.configure({
       webClientId: '865618605576-j2tb9toevqc7tonmbp01dim1ddvod7r0.apps.googleusercontent.com',
@@ -40,7 +40,7 @@ function UserProfile(props) {
       const consentInfo = await AdsConsent.requestInfoUpdate();
       setConsentInfo(consentInfo);
     }
-    
+
     fetchConsentStatus();
   }, []);
 
@@ -62,7 +62,7 @@ function UserProfile(props) {
     await removeUserSession();
     await loadUserData();
     reloadPalettes();
-    props.navigation.navigate(ROUTE_NAMES.HOME);
+    props.navigation.navigate(ROUTE_NAMES.HOME_SEARCH);
     try {
       await GoogleSignin.revokeAccess();
     } catch (error) {
@@ -72,7 +72,7 @@ function UserProfile(props) {
 
   return (
     <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-      {userData && 
+      {userData && (
         <View style={[styles.logoutContainer]}>
           <Image style={styles.logo} source={{ uri: userData?.avatar_url }} />
           <Text style={styles.intro}>
@@ -90,9 +90,9 @@ function UserProfile(props) {
             {t('Logout')}
           </CromaButton>
         </View>
-      }
-      
-      {!userData && 
+      )}
+
+      {!userData && (
         <CromaButton
           style={{ backgroundColor: Colors.primary, width: '100%' }}
           textStyle={{ color: Colors.white }}
@@ -101,17 +101,15 @@ function UserProfile(props) {
           }}>
           {t('Sign In / Sign Up')}
         </CromaButton>
-      }
+      )}
 
-      { consentInfo.status == 'REQUIRED' && 
-      <TouchableOpacity
-        style={styles.consentButton}
-        onPress={handleAdConsent}>
-        <Text style={styles.consentText}>
-          {consentInfo.canRequestAds ? t('Withdraw Ad Consent') : t('Give Ad Consent')}
-        </Text>
-      </TouchableOpacity>
-      }
+      {consentInfo.status == 'REQUIRED' && (
+        <TouchableOpacity style={styles.consentButton} onPress={handleAdConsent}>
+          <Text style={styles.consentText}>
+            {consentInfo.canRequestAds ? t('Withdraw Ad Consent') : t('Give Ad Consent')}
+          </Text>
+        </TouchableOpacity>
+      )}
     </ScrollView>
   );
 }

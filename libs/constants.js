@@ -1,8 +1,8 @@
 export const ROUTE_NAMES = {
   MY_PALETTES: 'MyPalettes',
-  HOME: 'ChatSession',
   ABOUT_US: 'AboutUs',
-  CHAT_SESSION: 'ChatSession',
+  HOME_SEARCH: 'HomeSearchScreen',
+  CHAT_SESSION: 'ChatSessionFollowUp',
   CHAT_SESSION_HISTORIES: 'ChatSessionHistories',
   COLOR_DETAILS: 'ColorDetails',
   PALETTES: 'Palettes',
@@ -16,6 +16,6 @@ export const ROUTE_NAMES = {
 
 export const NUMBER_OF_COLORS_PRO_COUNT = 10;
 export const PRIVATE_ROUTES = new Set([
-  ROUTE_NAMES.CHAT_SESSION,
+  ROUTE_NAMES.HOME_SEARCH,
   ROUTE_NAMES.CHAT_SESSION_HISTORIES
 ]);
