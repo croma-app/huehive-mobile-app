@@ -7,8 +7,7 @@ import {
   TextInput,
   ActivityIndicator,
   Text,
-  ImageBackground,
-  Platform,
+  ImageBackground
 } from 'react-native';
 import Colors from '../constants/Styles';
 import React, { useState, useEffect, useRef } from 'react';
@@ -19,7 +18,7 @@ import CromaButton from '../components/CromaButton';
 import useChatSession from '../hooks/useChatSession';
 import useApplicationStore from '../hooks/useApplicationStore';
 import GridActionButton from '../components/GridActionButton';
-import AdBanner from '../components/AdBanner';  // Import the new AdBanner component
+import AdBanner from '../components/AdBanner'; // Import the new AdBanner component
 
 const bgImage = require('../assets/images/colorful_background.jpg');
 
@@ -86,9 +85,7 @@ const ChatSessionScreen = (props) => {
                 showsVerticalScrollIndicator={false}>
                 {messages.length === 0 ? (
                   <View style={styles.searchContainer}>
-                    <Text style={styles.searchTitle}>
-                      Welcome to HueHive AI!
-                    </Text>
+                    <Text style={styles.searchTitle}>Welcome to HueHive AI!</Text>
                     <Text style={styles.searchSubtitle}>
                       Start by generating a color palette for your next project.
                     </Text>
@@ -97,13 +94,15 @@ const ChatSessionScreen = (props) => {
                         style={styles.input}
                         value={inputText}
                         onChangeText={setInputText}
-                        placeholder='Create a color palette for...'
+                        placeholder="Create a color palette for..."
                       />
                       <TouchableOpacity
                         disabled={inputText.trim() === ''}
                         onPress={handleSendMessage}
                         style={
-                          inputText.trim() === '' ? styles.disableGenerateButton : styles.generateButton
+                          inputText.trim() === ''
+                            ? styles.disableGenerateButton
+                            : styles.generateButton
                         }>
                         <Text style={styles.textGenerate}> Generate </Text>
                       </TouchableOpacity>
@@ -114,7 +113,7 @@ const ChatSessionScreen = (props) => {
                     <ChatCard
                       sender={message.sender_type}
                       message={message.message}
-                      key={index}
+                      key={message.id}
                       index={index}
                       navigation={navigation}
                     />
@@ -129,7 +128,7 @@ const ChatSessionScreen = (props) => {
                 </View>
               )}
               <ActivityIndicator animating={isLoading} size="large" color="#ff7875" />
-              
+
               {!showUnlockPro() && messages.length > 0 && (
                 <View style={styles.inputContainer}>
                   <TextInput
@@ -142,13 +141,15 @@ const ChatSessionScreen = (props) => {
                     disabled={isLoading || inputText.trim() === ''}
                     onPress={handleSendMessage}
                     style={
-                      isLoading || inputText.trim() === '' ? styles.disableSendButton : styles.sendButton
+                      isLoading || inputText.trim() === ''
+                        ? styles.disableSendButton
+                        : styles.sendButton
                     }>
                     <Text style={styles.textSend}> Send </Text>
                   </TouchableOpacity>
                 </View>
               )}
-              
+
               {showUnlockPro() && (
                 <CromaButton
                   style={{ backgroundColor: Colors.primary, margin: 10 }}
@@ -162,9 +163,10 @@ const ChatSessionScreen = (props) => {
               )}
             </>
           )}
-          
-          { messages.length < 2 && Platform.OS == 'android' && <AdBanner plan={pro.plan} />}
 
+          {messages.length < 2 && Platform.OS == 'android' && <AdBanner plan={pro.plan} />}
+
+          {messages.length < 2 && <AdBanner plan={pro.plan} />}
         </View>
       </ImageBackground>
       <GridActionButton navigation={navigation} />
