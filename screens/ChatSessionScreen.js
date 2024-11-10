@@ -91,6 +91,7 @@ const ChatSessionScreen = (props) => {
                     navigation={navigation}
                   />
                 ))}
+                <ActivityIndicator animating={isLoading} size="large" color="#ff7875" />
               </ScrollView>
 
               {error && (
@@ -99,7 +100,6 @@ const ChatSessionScreen = (props) => {
                   <Text style={styles.errorMessageText}>{error}</Text>
                 </View>
               )}
-              <ActivityIndicator animating={isLoading} size="large" color="#ff7875" />
 
               {!showUnlockPro() && messages.length > 0 && (
                 <View style={styles.inputContainer}>
@@ -137,7 +137,6 @@ const ChatSessionScreen = (props) => {
           )}
         </View>
       </ImageBackground>
-      <GridActionButton navigation={navigation} />
     </View>
   );
 };
