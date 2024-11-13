@@ -28,10 +28,6 @@ const ChatSessionScreen = (props) => {
     logEvent('chat_session_follow_up_screen');
   }, []);
 
-  onTextChange = (text) => {
-    setUserQuery(text.match(/.{1,30}/g).join('\n'));
-  };
-
   return (
     <View style={styles.container}>
       <ImageBackground source={bgImage} style={styles.backgroundImage}>

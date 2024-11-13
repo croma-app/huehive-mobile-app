@@ -18,8 +18,6 @@ import ChatCard from '../components/ChatCard';
 import CromaButton from '../components/CromaButton';
 import useChatSession from '../hooks/useChatSession';
 import useApplicationStore from '../hooks/useApplicationStore';
-import GridActionButton from '../components/GridActionButton';
-import AdBanner from '../components/AdBanner'; // Import the new AdBanner component
 
 const bgImage = require('../assets/images/colorful_background.jpg');
 
@@ -35,10 +33,6 @@ const ChatSessionScreen = (props) => {
     logEvent('chat_session_follow_up_screen');
     handleSendMessage(route.params.userQuery);
   }, []);
-
-  onTextChange = (text) => {
-    setInputText(text.match(/.{1,30}/g).join('\n'));
-  };
 
   const handleSendMessage = async (userQuery) => {
     const message = {
@@ -101,7 +95,7 @@ const ChatSessionScreen = (props) => {
                 </View>
               )}
 
-              {!showUnlockPro() && messages.length > 0 && (
+              {true && (
                 <View style={styles.inputContainer}>
                   <TextInput
                     style={styles.input}
@@ -111,7 +105,9 @@ const ChatSessionScreen = (props) => {
                   />
                   <TouchableOpacity
                     disabled={isLoading || inputText.trim() === ''}
-                    onPress={handleSendMessage}
+                    onPress={() => {
+                      handleSendMessage();
+                    }}
                     style={
                       isLoading || inputText.trim() === ''
                         ? styles.disableSendButton
@@ -189,7 +185,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'gray',
     borderRadius: 8,
-    width: '100%',
+    flex: 1,
     height: 40,
     fontSize: 16
   },
