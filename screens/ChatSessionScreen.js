@@ -80,7 +80,6 @@ const ChatSessionScreen = (props) => {
                   <ChatCard
                     sender={message.sender_type}
                     message={message.message}
-                    key={message.id}
                     index={index}
                     navigation={navigation}
                   />
@@ -95,6 +94,7 @@ const ChatSessionScreen = (props) => {
                 </View>
               )}
 
+              {/* {!showUnlockPro() && messages.length > 0 && ( */}
               {true && (
                 <View style={styles.inputContainer}>
                   <TextInput
