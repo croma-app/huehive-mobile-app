@@ -9,7 +9,6 @@ import {
   Text,
   ImageBackground
 } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Colors from '../constants/Styles';
 import React, { useState, useEffect, useRef } from 'react';
 import { material } from 'react-native-typography';
@@ -94,8 +93,7 @@ const ChatSessionScreen = (props) => {
                 </View>
               )}
 
-              {/* {!showUnlockPro() && messages.length > 0 && ( */}
-              {true && (
+              { !showUnlockPro() && messages.length > 0 && (
                 <View style={styles.inputContainer}>
                   <TextInput
                     style={styles.input}
