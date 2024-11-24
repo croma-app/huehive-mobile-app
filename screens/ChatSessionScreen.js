@@ -30,28 +30,28 @@ const ChatSessionScreen = (props) => {
 
   useEffect(() => {
     logEvent('chat_session_follow_up_screen');
-    handleSendMessage(route.params.userQuery);
+    if (route.params.userQuery) {
+      logEvent('chat_session_create');
+      const message = {
+        chat_session: {
+          chat_session_type: 'color_palette',
+          messages_attributes: [
+            {
+              message: route.params.userQuery,
+              sender_type: 'user'
+            }
+          ]
+        }
+      };
+      createSession(message);
+    }
   }, []);
 
-  const handleSendMessage = async (userQuery) => {
+  const followUpQuery = async (userQuery) => {
     const message = {
-      chat_session: {
-        chat_session_type: 'color_palette',
-        messages_attributes: [
-          {
-            message: userQuery || inputText,
-            sender_type: 'user'
-          }
-        ]
-      }
+      message: userQuery
     };
-    if (messages.length === 0) {
-      logEvent('chat_session_create');
-      await createSession(message);
-    } else {
-      logEvent('chat_session_follow_up');
-      await followUpSession(messages[0].chat_session_id, message);
-    }
+    await followUpSession(messages[0].chat_session_id, { message });
     setInputText('');
     scrollViewRef.current.scrollToEnd({ animated: true });
   };
@@ -93,7 +93,7 @@ const ChatSessionScreen = (props) => {
                 </View>
               )}
 
-              { !showUnlockPro() && messages.length > 0 && (
+              {true && (
                 <View style={styles.inputContainer}>
                   <TextInput
                     style={styles.input}
@@ -104,7 +104,7 @@ const ChatSessionScreen = (props) => {
                   <TouchableOpacity
                     disabled={isLoading || inputText.trim() === ''}
                     onPress={() => {
-                      handleSendMessage();
+                      followUpQuery(inputText);
                     }}
                     style={
                       isLoading || inputText.trim() === ''

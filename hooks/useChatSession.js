@@ -8,10 +8,10 @@ const useChatSession = (initialMessages) => {
   const [isCreatingSession, setIsCreatingSession] = useState(false);
   const [error, setError] = useState();
 
-  const fetchNewMessages = async (chatSession, latestMessage) => {
+  const fetchNewMessages = async (chatSessionId, latestMessage) => {
     const interval = setInterval(async () => {
       try {
-        const messageResponse = await getChatSession(chatSession.data.id, latestMessage.id);
+        const messageResponse = await getChatSession(chatSessionId, latestMessage.id);
         if (messageResponse.data.length > 0) {
           clearInterval(interval);
           setMessages((prevMessages) => [...prevMessages, ...messageResponse.data]);
@@ -34,7 +34,7 @@ const useChatSession = (initialMessages) => {
       const chatSession = await createChatSession(message);
       const latestMessage = chatSession.data.messages[chatSession.data.messages.length - 1];
       setMessages([...messages, latestMessage]);
-      await fetchNewMessages(chatSession, latestMessage);
+      await fetchNewMessages(chatSession.data.id, latestMessage);
       return chatSession;
     } catch (error) {
       console.error('Error creating chat session', error);
@@ -51,11 +51,10 @@ const useChatSession = (initialMessages) => {
     setError(null);
 
     try {
-      const chatSession = await followUpChatSession(sessionId, message);
-      const latestMessage = chatSession.data.messages[chatSession.data.messages.length - 1];
+      const chatSessionRes = await followUpChatSession(sessionId, message);
+      const latestMessage = chatSessionRes.data;
       setMessages((prevMessages) => [...prevMessages, latestMessage]);
-      await fetchNewMessages(chatSession, latestMessage);
-      return chatSession;
+      await fetchNewMessages(sessionId, latestMessage);
     } catch (error) {
       console.error('Error following up chat session', error);
       setError(error.toString());
