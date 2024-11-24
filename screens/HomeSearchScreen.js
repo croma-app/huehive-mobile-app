@@ -53,6 +53,7 @@ const ChatSessionScreen = (props) => {
                   disabled={userQuery.trim() === ''}
                   onPress={() => {
                     navigation.navigate('ChatSession', { userQuery: userQuery });
+                    setUserQuery('');
                   }}
                   style={
                     userQuery.trim() === '' ? styles.disableGenerateButton : styles.generateButton

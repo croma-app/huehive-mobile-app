@@ -25,8 +25,15 @@ const ChatSessionScreen = (props) => {
   const [inputText, setInputText] = useState('');
   const scrollViewRef = useRef();
   const { pro } = useApplicationStore();
-  const { messages, isLoading, isCreatingSession, error, createSession, followUpSession } =
-    useChatSession(route.params?.messages);
+  const {
+    messages,
+    isLoading,
+    isCreatingSession,
+    setIsLoading,
+    error,
+    createSession,
+    followUpSession
+  } = useChatSession(route.params?.messages);
 
   useEffect(() => {
     logEvent('chat_session_follow_up_screen');
@@ -43,7 +50,12 @@ const ChatSessionScreen = (props) => {
           ]
         }
       };
-      createSession(message);
+      setIsLoading(true);
+      createSession(message)
+        .then(() => {})
+        .catch(() => {
+          setIsLoading(false);
+        });
     }
   }, []);
 
@@ -51,9 +63,14 @@ const ChatSessionScreen = (props) => {
     const message = {
       message: userQuery
     };
-    await followUpSession(messages[0].chat_session_id, { message });
-    setInputText('');
-    scrollViewRef.current.scrollToEnd({ animated: true });
+    setIsLoading(true);
+    try {
+      await followUpSession(messages[0].chat_session_id, { message });
+      setInputText('');
+      scrollViewRef.current.scrollToEnd({ animated: true });
+    } catch (error) {
+      setIsLoading(false);
+    }
   };
 
   function showUnlockPro() {
@@ -85,7 +102,12 @@ const ChatSessionScreen = (props) => {
                     navigation={navigation}
                   />
                 ))}
-                <ActivityIndicator animating={isLoading} size="large" color="#ff7875" />
+                <ActivityIndicator
+                  animating={isLoading}
+                  size="large"
+                  color="#ff7875"
+                  style={isLoading ? { marginBottom: 100 } : {}}
+                />
               </ScrollView>
 
               {error && (
