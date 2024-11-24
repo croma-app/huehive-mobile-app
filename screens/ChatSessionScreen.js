@@ -95,7 +95,7 @@ const ChatSessionScreen = (props) => {
                 </View>
               )}
 
-              {true && (
+              {!showUnlockPro() && messages.length > 0 && (
                 <View style={styles.inputContainer}>
                   <TextInput
                     style={styles.input}
