@@ -2,8 +2,7 @@ import { NativeModules, Platform, Alert, ToastAndroid } from 'react-native';
 import * as RNIap from 'react-native-iap';
 import { requestPurchase, getProducts } from 'react-native-iap';
 import { sendClientErrorAsync } from '../network/errors';
-import { showMessage } from "react-native-flash-message";
-
+import { showMessage } from 'react-native-flash-message';
 
 const isProduction = () => {
   // eslint-disable-next-line no-undef
@@ -65,15 +64,20 @@ const purchase = async function (setPurchase, currentPlan, toPlan) {
   try {
     const productSKU = planToSKUMapping[currentPlan][toPlan];
     if (!productSKU) {
-      throw new Error(`Product SKU is not defined for currentPlan: ${currentPlan} and toPlan: ${toPlan}`);
+      throw new Error(
+        `Product SKU is not defined for currentPlan: ${currentPlan} and toPlan: ${toPlan}`
+      );
     }
     await getProducts({ skus: [productSKU] });
-    const requestPurchaseParam = Platform.OS == 'android' ? {
-      skus: [productSKU],
-    } : {
-      sku: productSKU,
-      andDangerouslyFinishTransactionAutomaticallyIOS: true
-    };
+    const requestPurchaseParam =
+      Platform.OS == 'android'
+        ? {
+            skus: [productSKU]
+          }
+        : {
+            sku: productSKU,
+            andDangerouslyFinishTransactionAutomaticallyIOS: true
+          };
     await requestPurchase(requestPurchaseParam);
     await setPurchase(toPlan);
     logEvent('purchase_successful');
@@ -86,7 +90,7 @@ const purchase = async function (setPurchase, currentPlan, toPlan) {
       notifyMessage('Purchase cancelled ');
     } else {
       console.warn(err.code, err.message);
-      notifyError(`Purchase unsuccessful ${err.message}, Tap to dismiss`, {autoHide: false});
+      notifyError(`Purchase unsuccessful ${err.message}, Tap to dismiss`, { autoHide: false });
       logEvent('purchase_failed', err.message);
       sendClientError('purchase_failed', err.message + 'Error code: ' + err.code, err.stack);
     }
@@ -194,59 +198,6 @@ function notifyError(msg) {
   });
 }
 
-
-function extractHexColors1(text) {
-  let hexColors = [];
-  let regex = /([1-9]{1,}\. ([A-Z a-z]*?))?([ \-\(])*#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})/g;
-  let matches = text.matchAll(regex);
-  let hexSet = new Set();
-  for (let match of matches) {
-    let hex = '#' + match[4];
-    if (!hexSet.has(hex)) {
-      hexSet.add(hex);
-      let colorName = match[2]?.trim();
-      hexColors.push({ color: hex, name: colorName });
-    }
-  }
-  return hexColors;
-}
-
-function extractHexColors2(text) {
-  let hexColors = [];
-  let regex = /Color Name:\s+(.+?)\s+Hex Code:\s+#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})/g;
-  let matches = text.matchAll(regex);
-  let hexSet = new Set();
-  for (let match of matches) {
-    let hex = '#' + match[1];
-    if (!hexSet.has(hex)) {
-      hexSet.add(hex);
-      let colorName = match[0]?.trim();
-      hexColors.push({ color: hex, name: colorName });
-    }
-  }
-  return hexColors;
-}
-
-function extractHexColors(text) {
-  let extractedColors1 = extractHexColors1(text);
-  let extractedColors2 = extractHexColors2(text);
-  let combinedHexMap = {};
-  for (let color of extractedColors1) {
-    let hex = color.color;
-    combinedHexMap[hex] = color;
-  }
-  for (let color of extractedColors2) {
-    let hex = color.color;
-    if (hex in combinedHexMap) {
-      combinedHexMap[hex].name = combinedHexMap[hex].name || color.name;
-    } else {
-      combinedHexMap[hex] = color;
-    }
-  }
-  const match = text.match(/<\s*(.*?)\s*>/);
-  return { colors: Object.values(combinedHexMap), name: match ? match[1] : null };
-}
-
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -261,6 +212,5 @@ export {
   readRemoteConfig,
   planLabels,
   getPlanPrice,
-  extractHexColors,
   capitalizeFirstLetter
 };

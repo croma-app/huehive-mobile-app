@@ -1,7 +1,7 @@
 import axiosInstance from './axios.client';
 
-export const createChatSession = async (chatSession) => {
-  return axiosInstance.post('chat_sessions.json', chatSession);
+export const createChatSession = async (message) => {
+  return axiosInstance.post('chat_sessions.json', message);
 };
 
 export const getChatSession = async (chatSessionId, lastMessageId) => {
@@ -10,8 +10,8 @@ export const getChatSession = async (chatSessionId, lastMessageId) => {
   );
 };
 
-export const followUpChatSession = async (id, chatSession) => {
-  return axiosInstance.patch(`chat_sessions/${id}.json`, chatSession);
+export const followUpChatSession = async (id, message) => {
+  return axiosInstance.post(`chat_sessions/${id}/messages`, message);
 };
 
 export const getChatSessions = async () => {

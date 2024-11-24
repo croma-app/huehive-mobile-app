@@ -9,7 +9,6 @@ import {
   Text,
   ImageBackground
 } from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Colors from '../constants/Styles';
 import React, { useState, useEffect, useRef } from 'react';
 import { material } from 'react-native-typography';
@@ -18,8 +17,6 @@ import ChatCard from '../components/ChatCard';
 import CromaButton from '../components/CromaButton';
 import useChatSession from '../hooks/useChatSession';
 import useApplicationStore from '../hooks/useApplicationStore';
-import GridActionButton from '../components/GridActionButton';
-import AdBanner from '../components/AdBanner'; // Import the new AdBanner component
 
 const bgImage = require('../assets/images/colorful_background.jpg');
 
@@ -33,32 +30,28 @@ const ChatSessionScreen = (props) => {
 
   useEffect(() => {
     logEvent('chat_session_follow_up_screen');
-    handleSendMessage(route.params.userQuery);
+    if (route.params.userQuery) {
+      logEvent('chat_session_create');
+      const message = {
+        chat_session: {
+          chat_session_type: 'color_palette',
+          messages_attributes: [
+            {
+              message: route.params.userQuery,
+              sender_type: 'user'
+            }
+          ]
+        }
+      };
+      createSession(message);
+    }
   }, []);
 
-  onTextChange = (text) => {
-    setInputText(text.match(/.{1,30}/g).join('\n'));
-  };
-
-  const handleSendMessage = async (userQuery) => {
+  const followUpQuery = async (userQuery) => {
     const message = {
-      chat_session: {
-        chat_session_type: 'color_palette',
-        messages_attributes: [
-          {
-            message: userQuery || inputText,
-            sender_type: 'user'
-          }
-        ]
-      }
+      message: userQuery
     };
-    if (messages.length === 0) {
-      logEvent('chat_session_create');
-      await createSession(message);
-    } else {
-      logEvent('chat_session_follow_up');
-      await followUpSession(messages[0].chat_session_id, message);
-    }
+    await followUpSession(messages[0].chat_session_id, { message });
     setInputText('');
     scrollViewRef.current.scrollToEnd({ animated: true });
   };
@@ -86,8 +79,9 @@ const ChatSessionScreen = (props) => {
                   <ChatCard
                     sender={message.sender_type}
                     message={message.message}
-                    key={message.id}
+                    colors={message?.ai_generated_palette?.colors}
                     index={index}
+                    paletteName={message?.ai_generated_palette?.name}
                     navigation={navigation}
                   />
                 ))}
@@ -111,7 +105,9 @@ const ChatSessionScreen = (props) => {
                   />
                   <TouchableOpacity
                     disabled={isLoading || inputText.trim() === ''}
-                    onPress={handleSendMessage}
+                    onPress={() => {
+                      followUpQuery(inputText);
+                    }}
                     style={
                       isLoading || inputText.trim() === ''
                         ? styles.disableSendButton
@@ -189,7 +185,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'gray',
     borderRadius: 8,
-    width: '100%',
+    flex: 1,
     height: 40,
     fontSize: 16
   },
