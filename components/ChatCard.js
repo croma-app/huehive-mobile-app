@@ -1,13 +1,9 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { View, Text, Image } from 'react-native';
-import { extractHexColors } from '../libs/Helpers';
 import { PalettePreviewCard } from './PalettePreviewCard';
 
-const ChatCard = ({ sender, message, navigation }) => {
-  const palette = extractHexColors(message);
-  const colors = palette.colors;
-  const paletteName = palette.name;
+const ChatCard = ({ sender, message, navigation, colors, paletteName }) => {
   const tokens = message.split(/(```[\s\S]+?```)|(\n)/g);
 
   return (
@@ -58,7 +54,10 @@ const ChatCard = ({ sender, message, navigation }) => {
                       navigation.navigate('ColorList', { colors, suggestedName: paletteName });
                     }}
                     name={paletteName || ''}
-                    colors={colors}
+                    colors={colors.map((color) => {
+                      color.color = color.hex;
+                      return color;
+                    })}
                   />
                 </View>
               );

@@ -79,7 +79,9 @@ const ChatSessionScreen = (props) => {
                   <ChatCard
                     sender={message.sender_type}
                     message={message.message}
+                    colors={message?.ai_generated_palette?.colors}
                     index={index}
+                    paletteName={message?.ai_generated_palette?.name}
                     navigation={navigation}
                   />
                 ))}
