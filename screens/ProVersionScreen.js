@@ -87,6 +87,13 @@ export default function ProVersionScreen({ route }) {
       proPlus: true
     },
     {
+      id: 9,
+      feature: t('Add more than 4 colors to a palette'),
+      starter: false,
+      pro: true,
+      proPlus: true
+    },
+    {
       id: 10,
       feature: t('AI chat assistant to create palettes with unlimited messages'),
       starter: false,
