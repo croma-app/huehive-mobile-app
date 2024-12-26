@@ -6,8 +6,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 const GenerateBtn = ({ onGenerateWithAI, onGenerate, currentPlan }) => {
   const [showDropdown, setShowDropdown] = useState(false);
-  const [dropdownText, setDropdownText] = useState('Generate - AI');
-  const [useAI, setUseAI] = useState(false);
+  const [dropdownText, setDropdownText] = useState('Generate');
+  const [useAI, setUseAI] = useState(true);
   const [gradientAnimation] = useState(new Animated.Value(0));
   const [remainingAiGenerateCount, setRemainingAiGenerateCount] = useState(2);
 
