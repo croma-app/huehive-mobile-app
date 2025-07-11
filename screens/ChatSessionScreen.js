@@ -6,8 +6,7 @@ import {
   View,
   TextInput,
   ActivityIndicator,
-  Text,
-  ImageBackground
+  Text
 } from 'react-native';
 import Colors from '../constants/Styles';
 import React, { useState, useEffect, useRef } from 'react';
@@ -17,8 +16,7 @@ import ChatCard from '../components/ChatCard';
 import CromaButton from '../components/CromaButton';
 import useChatSession from '../hooks/useChatSession';
 import useApplicationStore from '../hooks/useApplicationStore';
-
-const bgImage = require('../assets/images/colorful_background.jpg');
+import LinearGradient from 'react-native-linear-gradient';
 
 const ChatSessionScreen = (props) => {
   const { route, navigation } = props;
@@ -79,8 +77,12 @@ const ChatSessionScreen = (props) => {
 
   return (
     <View style={styles.container}>
-      <ImageBackground source={bgImage} style={styles.backgroundImage}>
-        <View style={styles.bgImageOpecity}>
+      <LinearGradient
+        colors={['#E0EAFC', '#CFDEF3']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={styles.gradient}>
+        <View style={styles.contentContainer}>
           {isCreatingSession ? (
             <View style={styles.loadingContainer}>
               <ActivityIndicator animating={true} size="large" color="#ff7875" />
@@ -154,30 +156,26 @@ const ChatSessionScreen = (props) => {
             </>
           )}
         </View>
-      </ImageBackground>
+      </LinearGradient>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',
-    flexDirection: 'column',
-    backgroundColor: '#d6e4ff',
+    flex: 1,
+    backgroundColor: '#E0EAFC'
+  },
+  gradient: {
     flex: 1
+  },
+  contentContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)'
   },
   chat_container: {
     flex: 1,
     padding: 5
-  },
-  backgroundImage: {
-    flex: 1,
-    resizeMode: 'cover',
-    justifyContent: 'center'
-  },
-  bgImageOpecity: {
-    backgroundColor: 'rgba(255, 255, 255, 0.6)',
-    flex: 1
   },
   searchContainer: {
     flex: 1,
@@ -209,7 +207,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     flex: 1,
     height: 40,
-    fontSize: 16
+    fontSize: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)'
   },
   generateButton: {
     padding: 10,
