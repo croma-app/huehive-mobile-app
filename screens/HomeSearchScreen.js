@@ -5,23 +5,20 @@ import {
   View,
   TextInput,
   Text,
-  ImageBackground,
   Platform,
   NativeModules,
-  launchImageLibrary,
-  Modal
+  Modal,
+  Image
 } from 'react-native';
+import { launchImageLibrary } from 'react-native-image-picker';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Feather from 'react-native-vector-icons/Feather';
 import Colors from '../constants/Styles';
 import React, { useState, useEffect, useRef } from 'react';
 import { material } from 'react-native-typography';
-import { logEvent } from '../libs/Helpers';
+import { logEvent, notifyMessage } from '../libs/Helpers';
 import useApplicationStore from '../hooks/useApplicationStore';
-import GridActionButton from '../components/GridActionButton';
 import AdBanner from '../components/AdBanner';
 import RNColorThief from 'react-native-color-thief';
 import Color from 'pigment/full';
@@ -48,34 +45,46 @@ const ChatSessionScreen = (props) => {
   const [showTip, setShowTip] = useState(true);
 
   // --- Handlers for image palette extraction ---
-  const handleImageButton = async () => {
+  const pickImageResult = async () => {
     setPickImageLoading(true);
-    const result = await launchImageLibrary({ mediaType: 'photo', quality: 1 });
-    if (!result.didCancel && result.assets && result.assets[0]) {
-      setSelectedImage(result.assets[0]);
-      setIsImagePickerModalVisible(true);
-      try {
-        const pickedColors = await RNColorThief.getPalette(result.assets[0].uri, 6, 10, false);
-        setAutomaticColors(
-          pickedColors.map((colorThiefColor) => {
-            const hex = new Color(
-              'rgb(' +
-                colorThiefColor.r +
-                ', ' +
-                colorThiefColor.g +
-                ', ' +
-                colorThiefColor.b +
-                ')'
-            ).tohex();
-            return { color: hex };
-          })
-        );
-      } catch (error) {
-        // fallback: just use black if extraction fails
-        setAutomaticColors([{ color: '#000000' }]);
-      }
+    try {
+      const result = await launchImageLibrary({ mediaType: 'photo', quality: 1 });
+      return result;
+    } finally {
+      setPickImageLoading(false);
     }
-    setPickImageLoading(false);
+  };
+
+  const handleImageButton = async () => {
+    try {
+      const result = await pickImageResult();
+      if (!result.didCancel && result.assets && result.assets[0]) {
+        setSelectedImage(result.assets[0]);
+        setIsImagePickerModalVisible(true);
+        try {
+          const pickedColors = await RNColorThief.getPalette(result.assets[0].uri, 6, 10, false);
+          setAutomaticColors(
+            pickedColors.map((colorThiefColor) => {
+              const hex = new Color(
+                'rgb(' +
+                  colorThiefColor.r +
+                  ', ' +
+                  colorThiefColor.g +
+                  ', ' +
+                  colorThiefColor.b +
+                  ')'
+              ).tohex();
+              return { color: hex };
+            })
+          );
+        } catch (error) {
+          notifyMessage('Error while extracting colors - ' + error);
+          setAutomaticColors([{ color: '#000000' }]);
+        }
+      }
+    } catch (error) {
+      notifyMessage('Image selection failed.');
+    }
   };
   const handleImageModalNext = () => {
     navigation.navigate('ColorList', { colors: automaticColors });
@@ -248,7 +257,7 @@ const ChatSessionScreen = (props) => {
           onRequestClose={() => setIsColorPickerVisible(false)}>
           <TouchableOpacity style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.3)' }} activeOpacity={1} onPressOut={() => setIsColorPickerVisible(false)}>
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <View style={{ backgroundColor: 'white', borderRadius: 16, padding: 10, width: 320, maxHeight: 500 }}>
+              <View style={{ backgroundColor: 'white', borderRadius: 16, padding: 10, width: 320, height: 420, maxWidth: '90%', maxHeight: '80%', justifyContent: 'center' }}>
                 <ColorPickerModal onColorSelected={handleColorSelected} onClose={() => setIsColorPickerVisible(false)} />
               </View>
             </View>
