@@ -26,7 +26,6 @@ import ColorPickerModal from '../components/ColorPickerModal';
 import MultiColorView from '../components/MultiColorView';
 import LinearGradient from 'react-native-linear-gradient';
 
-const bgImage = require('../assets/images/colorful_background.jpg');
 
 const ChatSessionScreen = (props) => {
   const { navigation } = props;
