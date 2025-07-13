@@ -32,7 +32,7 @@
     "react-native": "^0.75.2",
     "react-native-animatable": "^1.4.0",
     "react-native-app-auth": "^8.0.0",
-    "react-native-color-thief": "https://github.com/croma-app/react-native-color-thief.git",
+    "react-native-color-thief": "https://github.com/croma-app/react-native-color-thief.git#commit=2c15774b9caac1bc1674b0ffa9b8af4f5fb1ef3a",
     "react-native-config": "^1.5.3",
     "react-native-document-picker": "^9.3.1",
     "react-native-draggable-flatlist": "^4.0.1",

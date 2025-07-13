@@ -3530,7 +3530,7 @@ __metadata:
     react-native: ^0.75.2
     react-native-animatable: ^1.4.0
     react-native-app-auth: ^8.0.0
-    react-native-color-thief: "https://github.com/croma-app/react-native-color-thief.git"
+    react-native-color-thief: "https://github.com/croma-app/react-native-color-thief.git#commit=2c15774b9caac1bc1674b0ffa9b8af4f5fb1ef3a"
     react-native-config: ^1.5.3
     react-native-document-picker: ^9.3.1
     react-native-draggable-flatlist: ^4.0.1
@@ -10158,13 +10158,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-color-thief@https://github.com/croma-app/react-native-color-thief.git":
+"react-native-color-thief@https://github.com/croma-app/react-native-color-thief.git#commit=2c15774b9caac1bc1674b0ffa9b8af4f5fb1ef3a":
   version: 0.3.5
-  resolution: "react-native-color-thief@https://github.com/croma-app/react-native-color-thief.git#commit=5cf0f9b39111d45a02f0075e6417eb6037328946"
+  resolution: "react-native-color-thief@https://github.com/croma-app/react-native-color-thief.git#commit=2c15774b9caac1bc1674b0ffa9b8af4f5fb1ef3a"
   peerDependencies:
     react: ^18.2.0
     react-native: ">=0.59.0 <1.0.x"
-  checksum: 5313168b2ba164746559ed36bd59aa675ca1273179aeebbb588419d322f3ce33f966353fdc51a6814197d3567c09d5cbfa3adb213850044b0a94705e6a3e7797
+  checksum: 85414ff810205a1096edff91db834315744f9154f64b199dcc6e20b93baa61f42fea0ca768c26b638d13a21b0b14327d69d0d74f22bd8e8588affa04fa17f103
   languageName: node
   linkType: hard
 
