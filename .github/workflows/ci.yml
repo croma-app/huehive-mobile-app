@@ -5,28 +5,18 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v1
         with:
           node-version: '18.x'
-
-      - name: Enable Corepack and set Yarn version
+      - name: Setup Yarn (v2 or later using Corepack)
         run: |
           corepack enable
           corepack prepare yarn@4.4.1 --activate
-
-      - name: Mark workspace as safe for Git
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
-      - name: Install dependencies (with clean cache)
+      - uses: actions/checkout@v2
+      - name: Install npm dependencies
         run: |
-          yarn cache clean
-          yarn install --immutable
+          yarn
 
-      - name: Debug Yarn pack.log if install fails
-        if: failure()
-        run: |
-          find /tmp -name "pack.log" -exec echo "Found pack.log at:" {} \; -exec cat {} \;
+
+
