@@ -27,7 +27,9 @@ const AdBanner = ({ plan }) => {
   }, []);
 
   // Return null if ads shouldn't be displayed
-  if (plan === 'proPlus' || !mobileAdConsent || Platform.OS !== 'android') {
+  if (
+    // plan === 'proPlus' || 
+    !mobileAdConsent || Platform.OS !== 'android') {
     return null;
   }
 
