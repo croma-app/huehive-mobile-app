@@ -8,7 +8,7 @@ const useApplicationStore = create((set) => ({
   deletedPalettes: {},
   isLoading: false,
   pro: {
-    plan: 'starter'
+    plan: 'proPlus' // starter, pro, proPlus, change to starter to disable automatic proPlus for limited time.
   },
   commonPalettes: [],
 
