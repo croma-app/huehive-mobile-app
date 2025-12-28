@@ -1,0 +1,13 @@
+diff --git a/android/CMakeLists.txt b/android/CMakeLists.txt
+index 78041e8f1a0b2c875b435494c967baffa2c8eb78..b029bfd4dbe94bfbfe8ada9275bb9b20b23321a6 100644
+--- a/android/CMakeLists.txt
++++ b/android/CMakeLists.txt
+@@ -18,7 +18,7 @@ add_compile_options(${folly_FLAGS})
+ 
+ string(APPEND CMAKE_CXX_FLAGS " -DREACT_NATIVE_MINOR_VERSION=${REACT_NATIVE_MINOR_VERSION} -DREANIMATED_VERSION=${REANIMATED_VERSION} -DHERMES_ENABLE_DEBUGGER=${HERMES_ENABLE_DEBUGGER}")
+ 
+-string(APPEND CMAKE_CXX_FLAGS " -fexceptions -fno-omit-frame-pointer -frtti -fstack-protector-all -std=c++${CMAKE_CXX_STANDARD} -Wall -Werror")
++string(APPEND CMAKE_CXX_FLAGS " -fexceptions -fno-omit-frame-pointer -frtti -fstack-protector-all -std=c++${CMAKE_CXX_STANDARD} -Wall -Werror -Wno-deprecated-this-capture")
+ 
+ if(${IS_NEW_ARCHITECTURE_ENABLED})
+     string(APPEND CMAKE_CXX_FLAGS " -DRCT_NEW_ARCH_ENABLED")

@@ -10457,6 +10457,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-reanimated@patch:react-native-reanimated@npm%3A3.15.0#./.yarn/patches/react-native-reanimated-npm-3.15.0-a4da9ca406.patch::locator=HueHive%40workspace%3A.":
+  version: 3.15.0
+  resolution: "react-native-reanimated@patch:react-native-reanimated@npm%3A3.15.0#./.yarn/patches/react-native-reanimated-npm-3.15.0-a4da9ca406.patch::version=3.15.0&hash=b598da&locator=HueHive%40workspace%3A."
+  dependencies:
+    "@babel/plugin-transform-arrow-functions": ^7.0.0-0
+    "@babel/plugin-transform-class-properties": ^7.0.0-0
+    "@babel/plugin-transform-classes": ^7.0.0-0
+    "@babel/plugin-transform-nullish-coalescing-operator": ^7.0.0-0
+    "@babel/plugin-transform-optional-chaining": ^7.0.0-0
+    "@babel/plugin-transform-shorthand-properties": ^7.0.0-0
+    "@babel/plugin-transform-template-literals": ^7.0.0-0
+    "@babel/plugin-transform-unicode-regex": ^7.0.0-0
+    "@babel/preset-typescript": ^7.16.7
+    convert-source-map: ^2.0.0
+    invariant: ^2.2.4
+  peerDependencies:
+    "@babel/core": ^7.0.0-0
+    react: "*"
+    react-native: "*"
+  checksum: 0ee946ba242576c714bb59b24d57451803a7e5ee1d7b24fc1d744bd5bf4ebf3a3a35b3b1537424e4343ecc24e278d1248712d7b62b0a73b20851788d63314216
+  languageName: node
+  linkType: hard
+
 "react-native-safe-area-context@npm:^4.10.9":
   version: 4.11.0
   resolution: "react-native-safe-area-context@npm:4.11.0"
